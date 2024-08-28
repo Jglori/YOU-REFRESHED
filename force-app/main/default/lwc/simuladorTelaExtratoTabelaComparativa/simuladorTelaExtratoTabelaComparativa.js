@@ -3,15 +3,15 @@ import calcularComparacao from '@salesforce/apex/ComparativoController.calcularC
 
 const colunas = [
     { label: 'Item', fieldName: 'item' }, 
-    { label: 'Tabela', fieldName: 'valorTabela', type: 'number' }, 
-    { label: 'Proposta', fieldName: 'valorProposta', type: 'number' },
-    { label: 'Diferença', fieldName: 'diferenca', type: 'number' } 
+    { label: 'Tabela', fieldName: 'valorTabela', type: 'text' }, 
+    { label: 'Proposta', fieldName: 'valorProposta', type: 'text' },
+    { label: 'Diferença', fieldName: 'diferenca', type: 'text' } 
 ];
 
 export default class SimuladorTelaExtratoTabelaComparativa extends LightningElement {
     @api propostasCliente = [];
     
-    @api idTabelaVenda = 'a0Gbe0000009kMzEAI'; 
+    @api idTabelaVenda;
 
     @track comparacaoResultados = [];
     @track colunas = colunas;
@@ -37,9 +37,9 @@ export default class SimuladorTelaExtratoTabelaComparativa extends LightningElem
 
                         const mappedItem = {
                             item: item.item,
-                            valorTabela: item.valorTabela,
-                            valorProposta: item.valorProposta,
-                            diferenca: item.diferenca
+                            valorTabela: this.formatCurrency(item.valorTabela),
+                            valorProposta: this.formatCurrency(item.valorProposta),
+                            diferenca: this.formatCurrency(item.diferenca)
                         };
 
                         console.log('Mapped Item:', mappedItem); 
@@ -54,5 +54,9 @@ export default class SimuladorTelaExtratoTabelaComparativa extends LightningElem
         } else {
             console.error('PropostasCliente ou idTabelaVenda nao existe');
         }
+    }
+
+    formatCurrency(value) {
+        return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value);
     }
 }

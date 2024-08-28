@@ -68,7 +68,7 @@ public class ComparativoService {
 
         // Captação após habita-se
         ComparacaoResultado captacaoAposHabiteSe  = new ComparacaoResultado();
-        captacaoAposHabiteSe.item = 'Captação apos habita-se';
+        captacaoAposHabiteSe.item = 'Captação apos habite-se';
         captacaoAposHabiteSe.valorTabela = 0.0; // Substitua com o campo correto
         captacaoAposHabiteSe.valorProposta = 0.0; // Substitua com o campo correto
         captacaoAposHabiteSe.diferenca = captacaoAposHabiteSe.valorTabela - captacaoAposHabiteSe.valorProposta;
