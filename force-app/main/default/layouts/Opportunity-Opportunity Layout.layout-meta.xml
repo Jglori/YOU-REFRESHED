@@ -295,10 +295,6 @@
         <relatedList>RelatedGroupsListOnRecord</relatedList>
     </relatedLists>
     <relatedLists>
-        <fields>NAME</fields>
-        <relatedList>Checklist_de_Documentos__c.Oportunidade__c</relatedList>
-    </relatedLists>
-    <relatedLists>
         <fields>MemberName</fields>
         <fields>OppAccessLevel</fields>
         <fields>TeamMemberRole</fields>
