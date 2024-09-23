@@ -22,17 +22,6 @@ public with sharing class LeadHelper {
         }
     }
 
-    public static void scheduleLeadChange(List<Lead> leadList, Map<Id, Lead> oldLeads){
-        // for(Lead ld : leadList){
-        //     if (oldLeads == null || ld.Status != oldLeads.get(ld.Id).Status) {
-        //         if(ld.DataHoraVencimento__c <> null) {
-        //             String sch = ld.DataHoraVencimento__c.Second()+ ' '+ld.DataHoraVencimento__c.Minute()+ ' '+ld.DataHoraVencimento__c.Hour()+' '+ld.DataHoraVencimento__c.day()+' '+ld.DataHoraVencimento__c.month()+' ?';
-        //             System.debug(sch);
-        //             System.schedule(ld.Name + DateTime.now() , sch, new ApplyVerSion(ld.Id));
-        //         }
-        //     }
-        // }
-    }
 
 
     private static void validateContactTasks(List<Lead> leads, Boolean isCompleted) {
@@ -63,7 +52,7 @@ public with sharing class LeadHelper {
         for (Lead lead : newLeads) {
             Lead oldLead = oldLeads.get(lead.Id);
             if (oldLead.Status.equalsIgnoreCase('Tentativa de contato') && lead.Status.equalsIgnoreCase('Contato Realizado')) {
-                if (!isTaskCreatedAndOpenForAttemptToContact(lead.Id) && !Test.isRunningTest()) {
+                if (!isTaskCreatedAndOpenForAttemptToContact(lead.Id)) {
                     lead.addError(Label.TentativaContato_LEAD);
                 }
             }else if (oldLead.Status.equalsIgnoreCase('Agendamento de Visita') && lead.Status.equalsIgnoreCase('Qualificação') &&
@@ -75,7 +64,7 @@ public with sharing class LeadHelper {
             }else if ((oldLead.Status.equalsIgnoreCase('Descartado') || oldLead.Status.equalsIgnoreCase('Lead Perdido(não trabalho)') ||
                   oldLead.Status.equalsIgnoreCase('Novo') || oldLead.Status.equalsIgnoreCase('Nutrindo') ||
                   oldLead.Status.equalsIgnoreCase('Tentativa de contato')) && lead.Status.equalsIgnoreCase('Agendamento de Visita')) {
-                  if(!Test.isRunningTest())lead.addError(Label.TentativaContato_LEAD);
+                  lead.addError(Label.TentativaContato_LEAD);
                   }else if ((lead.Status.equalsIgnoreCase('Qualificação') || oldLead.Status.equalsIgnoreCase('Conversão'))) {
                 if (!lead.LeadNaoVisitou__c && isEventCreatedForVisits(lead.Id)) {
                     lead.addError(Label.Agendamento_LEAD);
@@ -84,32 +73,31 @@ public with sharing class LeadHelper {
                 'Tentativa de contato', 'Contato Realizado', 'Agendamento de Visita'}).contains(oldLead.Status) && lead.Status == 'Conversão') {
                 lead.addError(Label.Conversao_LEAD);
             }
-        }
-    }
-    
-    public static void validateTaskCreation(List<Task> newTasks) {
-        Set<Id> leadIds = new Set<Id>();
-        for (Task task : newTasks) {
-            if (task.WhoId != null && task.WhoId.getSObjectType() == Lead.SObjectType) {
-                leadIds.add(task.WhoId);
-            }
-        }
-        if (!leadIds.isEmpty()) {
-            Map<Id, Lead> leads = new Map<Id, Lead>([SELECT Id, Status FROM Lead WHERE Id IN :leadIds]);
-            for (Task task : newTasks) {
-                if (task.WhoId != null && leads.containsKey(task.WhoId)) {
-                    Lead lead = leads.get(task.WhoId);
-                    if (isTaskCreationNotAllowedForTentativaContato(lead.Status, task.Subject)) {
-
-                        if(task.Subject == 'Reiteração'){
-                            continue;
-                        }
-                        if(!Test.isRunningTest()) task.addError('Só é permitido criar uma tarefa  quando o lead está nas fases Tentativa de Contato ou Contato Realizado.');
-                    }
+            if (lead.LeadNaoVisitou__c) {
+                Boolean canAdvance = checkPreviousPhaseValidations(oldLead.Status, lead.Status, lead.Id);
+                if (!canAdvance) {
+                    lead.addError(Label.TentativaContato_LEAD);
                 }
             }
         }
     }
+    
+
+    private static Boolean checkPreviousPhaseValidations(String oldStatus, String newStatus, Id leadId) {
+        if (oldStatus.equalsIgnoreCase('Tentativa de contato') && newStatus.equalsIgnoreCase('Contato Realizado')) {
+            return isTaskCreatedAndOpenForAttemptToContact(leadId);
+        }
+    
+        if (oldStatus.equalsIgnoreCase('Agendamento de Visita') && newStatus.equalsIgnoreCase('Qualificação')) {
+            return hasCompletedTaskForLead(leadId);
+        }
+  
+        if (newStatus.equalsIgnoreCase('Qualificação')) {
+            return !isEventCreatedForVisits(leadId);
+        }
+        return true;
+    }
+    
     
     private static Boolean isTaskCreationNotAllowedForTentativaContato(String leadStatus, String taskSubject) {
         Set<String> disallowedStatuses = new Set<String>{'Descartado', 'Lead Perdido(não trabalho)', 'Novo', 'Nutrindo','Agendamento de Visita','Qualificação'};
@@ -174,23 +162,6 @@ public with sharing class LeadHelper {
         return events.isEmpty(); // se estiver vazio a lista, retorna true
     }
 
-    // setPrimeiraIteracao
-    
-    public static void setPrimeiraIteracao(List<Lead> newLeads, Map<Id, Lead> oldLeads) {
-        for (Lead lead : newLeads) {
-            if (lead.PrimeiraInteracao__c == null) {
-                lead.PrimeiraInteracao__c = Date.today();
-            }
-        }
-    }
-
-    public static void setPrimeiroEmprrendimentoInteresse(List<Lead> newLeads, Map<Id, Lead> oldLeads) {
-        for (Lead lead : newLeads) {
-            if (lead.PrimeiroEmpreendimento__c == null) {
-                lead.PrimeiroEmpreendimento__c = lead.EmpreendimentoInteresse__c;
-            }
-        }
-    }
     
     // public static void checkAndUpdateLeadsWithTasks(List<Lead> newLeads, Map<Id, Lead> oldLeadMap) {
     //     List<Id> leadsWithTasks = new List<Id>();
@@ -234,7 +205,6 @@ public with sharing class LeadHelper {
             }
         }
         updateLeadFields(existingLead, params);
-        createTaskForReiteration(existingLead);
     }
 
     public static void verificarCampanhas(Id leadId){
@@ -276,40 +246,30 @@ public with sharing class LeadHelper {
         }
     }
 
-    public static void createTaskForReiteration(Lead lead) {
-        String lastName = lead.LastName;
-        String mobilePhone = lead.MobilePhone;
-        String phone = lead.Phone;
-        String email = lead.Email;
-        Id empreendimentoInteresse = lead.EmpreendimentoInteresse__c;
-        String nomeEmpreendimento = (lead.EmpreendimentoInteresse__r != null) ? lead.EmpreendimentoInteresse__r.name : 'N/A';
-        String leadSource = lead.LeadSource;
-        String status = lead.Status;
-        Datetime ltimaReiterao = (lead.ltima_Reitera_o__c != null) ? lead.ltima_Reitera_o__c : System.now();
-        Decimal quantidadeDeReiteracoes = (lead.QuantidadeDeReiteracoes__c != null) ? lead.QuantidadeDeReiteracoes__c : 0;
+   
+    public static void validateTaskCreation(List<Task> newTasks) {
+        Set<Id> leadIds = new Set<Id>();
+        for (Task task : newTasks) {
+            if (task.WhoId != null && task.WhoId.getSObjectType() == Lead.SObjectType) {
+                leadIds.add(task.WhoId);
+            }
+        }
+        if (!leadIds.isEmpty()) {
+            Map<Id, Lead> leads = new Map<Id, Lead>([SELECT Id, Status FROM Lead WHERE Id IN :leadIds]);
+            for (Task task : newTasks) {
+                if (task.WhoId != null && leads.containsKey(task.WhoId)) {
+                    Lead lead = leads.get(task.WhoId);
+                    if (isTaskCreationNotAllowedForTentativaContato(lead.Status, task.Subject)) {
 
-        List<Task> openTasks = [SELECT Id FROM Task WHERE WhoId = :lead.Id AND Status != 'Completed' AND Subject = 'Reiteração' LIMIT 1];
-
-        if (openTasks.isEmpty()) {
-            Task newTask = new Task(
-                WhoId = lead.Id,
-                Subject = 'Reiteração',
-                Status = 'Open',
-                ActivityDate = System.today().addDays(1),
-                Description = 'Reiteração do Lead. Nome: ' + lead.LastName 
-                    + ', Telefone: ' + lead.MobilePhone 
-                    + ', Email: ' + lead.Email 
-                    + ', Empreendimento de Interesse: ' + nomeEmpreendimento 
-                    + ', Origem do Lead: ' + lead.LeadSource 
-                    + ', Data e horário da interação: ' + lead.ltima_Reitera_o__c
-            );
-
-            insert newTask;
-            lead.ltima_Reitera_o__c = DateTime.now();
-            quantidadeDeReiteracoes += 1;
+                        if(task.Subject == 'Reiteração'){
+                            continue;
+                        }
+                        task.addError('Só é permitido criar uma tarefa  quando o lead está nas fases Tentativa de Contato ou Contato Realizado.');
+                    }
+                }
+            }
         }
     }
-  
 
     public static void setLeadSource(List<Lead> newLeads) {
         for (Lead newLead : newLeads) {
@@ -336,27 +296,26 @@ public with sharing class LeadHelper {
         }
     }
 
-    // public static void verificarReiteracao(List<Lead> leadsEntrando) {
-    //     for (Lead leadEntrando : leadsEntrando) {
-    //         List<Lead> potentialDuplicateLeads = [
-    //             SELECT Id, LastName, MobilePhone, Phone, Email, EmpreendimentoInteresse__c, LeadSource, Status , ltima_Reitera_o__c
-    //             , QuantidadeDeReiteracoes__c  , EmpreendimentoInteresse__r.name
-    //             FROM Lead
-    //             WHERE LastName = :leadEntrando.LastName
-    //             AND (
-    //                 MobilePhone = :leadEntrando.MobilePhone OR
-    //                 Phone = :leadEntrando.Phone OR
-    //                 Email = :leadEntrando.Email
-    //             )
-    //             LIMIT 1
-    //         ];
+    public static void verificarReiteracao(List<Lead> leadsEntrando) {
+        for (Lead leadEntrando : leadsEntrando) {
+            List<Lead> potentialDuplicateLeads = [
+                SELECT Id, LastName, MobilePhone, Phone, Email, EmpreendimentoInteresse__c, LeadSource, Status , ltima_Reitera_o__c
+                , QuantidadeDeReiteracoes__c  , EmpreendimentoInteresse__r.name
+                FROM Lead
+                WHERE LastName = :leadEntrando.LastName
+                AND (
+                    MobilePhone = :leadEntrando.MobilePhone OR
+                    Phone = :leadEntrando.Phone OR
+                    Email = :leadEntrando.Email
+                )
+                LIMIT 1
+            ];
 
-    //         if (!potentialDuplicateLeads.isEmpty()) {
-    //             leadEntrando.Reiteracao__c = true;
-    //             createTaskForReiteration(potentialDuplicateLeads.get(0));
-    //         }
-    //     }
-    // }
+            if (!potentialDuplicateLeads.isEmpty()) {
+                leadEntrando.Reiteracao__c = true;
+            }
+        }
+    }
         
     
     
@@ -367,168 +326,48 @@ public with sharing class LeadHelper {
             }
         }
     }
-
-    public static void verifyCNPJ(List<Lead> leads) {
-        for (Lead lead : leads) {
-            if (!String.isBlank(lead.CNPJ__c) && !ValidarCNPJ.validarcnpj(lead.CNPJ__c)) {
-                lead.addError('CNPJ inválido. Por favor, insira um CNPJ válido.');
-            }
+    public static void createTaskForReiteration(Lead leadExistente) {
+        // Consultar o Lead novamente com todos os campos necessários
+        leadExistente = [
+            SELECT Id, LastName, MobilePhone, Email, LeadSource, ltima_Reitera_o__c, QuantidadeDeReiteracoes__c 
+            FROM Lead 
+            WHERE Id = :leadExistente.Id 
+            LIMIT 1
+        ];
+    
+        // Verificar se já existe uma tarefa aberta e completar a existente
+        List<Task> tasksAbertas = [SELECT Id FROM Task WHERE WhoId = :leadExistente.Id AND Status = 'Open' LIMIT 1];
+        if (!tasksAbertas.isEmpty()) {
+            Task existingTask = tasksAbertas[0];
+            existingTask.Status = 'Completed'; // Marcar a tarefa existente como completada
+            update existingTask;
         }
+    
+        DateTime now = DateTime.now();
+        leadExistente.ltima_Reitera_o__c = now;
+        
+        if (leadExistente.QuantidadeDeReiteracoes__c == null) {
+            leadExistente.QuantidadeDeReiteracoes__c = 0;
+        }
+    
+        leadExistente.QuantidadeDeReiteracoes__c += 1;
+        update leadExistente;
+    
+        // Criar nova tarefa
+        Task newTask = new Task(
+            WhoId = leadExistente.Id,
+            Subject = 'Reiteração',
+            Status = 'Open',
+            ActivityDate = Date.today().addDays(1),
+            Description = 'Reiteração do Lead. Nome: ' + leadExistente.LastName 
+                + ', Telefone: ' + leadExistente.MobilePhone 
+                + ', Email: ' + leadExistente.Email 
+                + ', Origem do Lead: ' + leadExistente.LeadSource 
+                + ', Data e horário da interação: ' + DateTime.now().format('dd/MM/yyyy HH:mm:ss')
+        );
+    
+        insert newTask;
     }
-
-    public static void verifyCPF(List<Lead> leads) {
-        for (Lead lead : leads) {
-            if (!String.isBlank(lead.CPF__c) && !ValidarCPF.validarCPF(lead.CPF__c)) {
-                lead.addError('CPF inválido. Por favor, insira um CPF válido.');
-            }
-        }
-    }
-
-    public static void updateLeadConversionDate(List<Lead> newLeads, Map<Id, Lead> oldLeads) {
-        for (Lead lead : newLeads) {
-            if (lead.IsConverted && !oldLeads.get(lead.Id).IsConverted) {
-                lead.DataConversao__c = System.now();
-            }
-        }
-    }
-
-    public static void setInitialEnterpriseInterest(List<Lead> leads, Map<Id, Lead> oldLeads) {
-        for (Lead lead : leads) {
-            if (Trigger.isInsert) {
-                if (lead.MidiaOriginal__c == null) {
-                    lead.MidiaOriginal__c = lead.LeadSource;
-                }
-                if (lead.PrimeiroEmpreendimento__c == null) {
-                    lead.PrimeiroEmpreendimento__c = lead.EmpreendimentoInteresse__c;
-                }
-            } else if (Trigger.isUpdate) {
-                Lead oldLead = oldLeads.get(lead.Id);
-                if (oldLead.MidiaOriginal__c != null && oldLead.MidiaOriginal__c != lead.MidiaOriginal__c) {
-                    lead.MidiaOriginal__c = oldLead.LeadSource;
-                }
-                if (lead.PrimeiroEmpreendimento__c == null) {
-                    lead.PrimeiroEmpreendimento__c = lead.EmpreendimentoInteresse__c;
-                } else if (oldLead.PrimeiroEmpreendimento__c != null && oldLead.PrimeiroEmpreendimento__c != lead.PrimeiroEmpreendimento__c) {
-                    lead.PrimeiroEmpreendimento__c = oldLead.PrimeiroEmpreendimento__c;
-                }
-            }
-        }
-    }
-    public static void sendNotificationToUser(List<Lead> newLeads, Map<Id,Lead> mapOldLeads){
-        Map<Id,Id> contextLeads = new Map<Id,Id>();
-        Map<String,Id> setUsersToNotify = new Map<String,Id>();
-
-        for(Lead ld : newLeads){
-            if(mapOldLeads <> null){
-                Lead oldLead = mapOldLeads.get(ld.Id);
-                if(oldLead <> null){
-                    if(ld.Corretor__c <> null && !ld.Corretor__c.equals(oldLead.Corretor__c)){
-                        contextLeads.put(ld.Corretor__c, ld.Id);
-                    } else if(ld.CorretorContato__c <> null && !ld.CorretorContato__c.equals(oldLead.CorretorContato__c)){
-                        setUsersToNotify.put(ld.OwnerId, ld.Id);
-                    }
-                } 
-            }
-            else {
-                if(ld.Corretor__c <> null){
-                    contextLeads.put(ld.Corretor__c, ld.Id);
-                } else {
-                    setUsersToNotify.put(ld.OwnerId, ld.Id);
-                }
-            }
-        }
-
-       
-        for(ParticipanteRoleta__c member : ParticipanteRoletaSelector.obterParticipantesPorIds(contextLeads.keySet())){
-            setUsersToNotify.put(member.MembroEquipe__r.Usuario__c, contextLeads.get(member.Id));
-        }
-
-        if(!setUsersToNotify.isEmpty()){
-            for(Id corretorId : setUsersToNotify.keySet()){
-                DistribuirLeadsService.notifyUsers(new Set<String>{corretorId}, setUsersToNotify.get(corretorId));
-            }
-        }
-    }
-
-    public static void getContactFromCorretor(List<Lead> newLeads){
-        Map<Id,List<Lead>> contextLeads = new Map<Id,List<Lead>>();
-        for(Lead ld : newLeads){
-            if(ld.Corretor__c <> null){
-                if(contextLeads.containsKey(ld.Corretor__c)){
-                    contextLeads.get(ld.Corretor__c).add(ld);
-                } else {
-                    contextLeads.put(ld.Corretor__c, new List<Lead>{ld});
-                }
-            }
-        }
-
-        Set<String> setUsersToNotify = new Set<String>();
-        for(ParticipanteRoleta__c member : ParticipanteRoletaSelector.obterParticipantesPorIds(contextLeads.keySet())){
-            if(member.MembroEquipe__r.Usuario__c <> null && member.MembroEquipe__r.Usuario__r.ContactId <> null){
-                for(Lead lds : contextLeads.get(member.Id)){
-                    lds.CorretorContato__c = member.MembroEquipe__r.Usuario__r.ContactId;
-                }
-            }
-        }
-    }
-
-    public static void getContactFromOwner(List<Lead> newLeads){
-        Map<Id,List<Lead>> contextLeads = new Map<Id,List<Lead>>();
-        for(Lead ld : newLeads){
-            if(contextLeads.containsKey(ld.OwnerId)){
-                contextLeads.get(ld.OwnerId).add(ld);
-            } else {
-                contextLeads.put(ld.OwnerId, new List<Lead>{ld});
-            }
-        }
-
-
-        for (User us : UserSelector.obterUsuariosPorIds(contextLeads.keySet())){
-            for(Lead ld : contextLeads.get(us.Id)){
-                if(us.ContactId <> null){
-                    ld.CorretorContato__c = us.ContactId;
-                }
-            }
-        }
-       
-    }
-
-
-    public static void changeOppOwner(List<Lead> newLeads, Map<Id,Lead> mapOld){
-        Map<Id,Id> mapLeadOpp = new Map<Id,Id>();
-        Map<Id,Id> mapLeadUser = new Map<Id,Id>();
-        for (Lead ld : newLeads) {
-            Lead oldLead = mapOld.get(ld.Id);
-            if(ld.IsConverted && !oldLead.IsConverted){
-                mapLeadOpp.put(ld.Id, ld.ConvertedOpportunityId);
-                mapLeadUser.put(ld.Id, ld.OwnerId);
-            }
-        }
-
-        Map<Id,User> mapUser = new Map<Id,User>();
-        for(User us : UserSelector.getUserPorIds(mapLeadUser.values())){
-            mapUser.put(us.Id, us);
-        }
-
-        List<Opportunity> oppsToUpdate = new List<Opportunity>();
-
-        for(Id ldId : mapLeadOpp.keySet()) {
-            Id oppId = mapLeadOpp.get(ldId);
-            Id userId = mapLeadUser.get(ldId);
-
-            if(oppId <> null && userId <> null){
-                User us = mapUser.get(userId);
-                if(us <> null && us.Reportase__c <> null){
-                    Opportunity opp =  new Opportunity(Id = oppId, OwnerId = us.Reportase__c);
-                    oppsToUpdate.add(opp);
-                }
-            }
-           
-        }
-
-        if(!oppsToUpdate.isEmpty()){
-            Database.update(oppsToUpdate);
-        }
-    }
-
+    
+    
 }
