@@ -10,12 +10,12 @@
             <operation>equals</operation>
             <value>Corretor</value>
         </filterItems>
-        <infoMessage>Corretor: Tipo de registro do contato igual a Corretor</infoMessage>
+        <infoMessage>Corretor: Tipo de registro do contatoigual aCorretor</infoMessage>
         <isOptional>false</isOptional>
     </lookupFilter>
     <referenceTo>Contact</referenceTo>
     <relationshipLabel>Oportunidades</relationshipLabel>
-    <relationshipName>CorretorOportunidade</relationshipName> <!-- Nome único -->
+    <relationshipName>Oportunidades</relationshipName>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>
     <type>Lookup</type>
