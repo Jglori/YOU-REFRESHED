@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ImutabilidadeInformacoes</fullName>
+    <active>true</active>
+    <description>Sempre for novo ou houverem alterações</description>
+    <errorConditionFormula>AND(
+    ISNEW(),                             
+        ISCHANGED(LeadSource),
+        ISCHANGED(EmpreendimentoInteresse__c),  
+								ISCHANGED(Status)
+    )</errorConditionFormula>
+    <errorMessage>Alterações não foram salvas.</errorMessage>
+</ValidationRule>
