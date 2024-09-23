@@ -1,0 +1,27 @@
+<template>
+    <div class="slds-p-bottom_small">
+        <div class="search--max-width">
+            <lightning-input type="search" variant="label-hidden" placeholder="Filtre as roletas" onchange={handleFiltrar}></lightning-input>
+        </div>
+    </div>
+    <div class="datatable--height">
+        <lightning-datatable key-field="id" data={roletasLeads} columns={colunas} max-row-selection="1" onrowselection={getSelectedRows}>
+        </lightning-datatable>
+    </div>
+    <div class="slds-clearfix slds-p-top_medium">
+        <div class="slds-float_right">
+            <lightning-button label="Cancelar" class="slds-m-right_medium" onclick={handleCancelar}></lightning-button>
+            <lightning-button variant="brand" label="Distribuir" class="slds-m-right_medium" onclick={handleDistribuirLeads} icon-name="utility:fallback"></lightning-button>
+            <lightning-button variant="brand" label="Encaminhar para Corretor" onclick={distribuirCorretor} icon-name="utility:people" class="slds-m-right_xx-small"></lightning-button>
+        </div>
+    </div>
+  
+    <template if:true={isModalOpen}>
+        <c-distribuir-corretor-modal 
+            onclose={handleModalClose} 
+            onsalvar={handleSalvarCorretor} 
+            formulario={formulario}
+            onassociarcorretor={handleAssociarCorretor} 
+        ></c-distribuir-corretor-modal>
+    </template>
+  </template>

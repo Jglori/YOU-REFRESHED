@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Tipo__c</fullName>
+    <description>Indica o tipo de mensagem recebida, se textual ou mídia, por exemplo.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Indica o tipo de mensagem recebida, se textual ou mídia, por exemplo.</inlineHelpText>
+    <label>Tipo</label>
+    <length>255</length>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

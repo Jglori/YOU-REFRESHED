@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ValidacaoTelefoneResidencial</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+NOT(ISBLANK(PersonHomePhone)),
+NOT(REGEX(PersonHomePhone, &quot;[0-9]{10}&quot;))
+)</errorConditionFormula>
+    <errorDisplayField>PersonHomePhone</errorDisplayField>
+    <errorMessage>O campo &quot;Telefone Residencial&quot; deve ser preenchido no formato &quot;1125555555&quot;</errorMessage>
+</ValidationRule>

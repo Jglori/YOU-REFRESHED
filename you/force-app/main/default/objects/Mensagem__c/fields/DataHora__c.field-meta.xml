@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>DataHora__c</fullName>
+    <description>Indica a data e hora da chegada da mensagem no serviço externo.</description>
+    <inlineHelpText>Indica a data e hora da chegada da mensagem no serviço externo.</inlineHelpText>
+    <label>Data e hora</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>DateTime</type>
+</CustomField>

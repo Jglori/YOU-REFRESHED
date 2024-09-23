@@ -1,0 +1,11 @@
+.custom-container {
+    display: flex;
+    justify-content: center; /* Alinha o conteúdo horizontalmente no centro */
+    align-items: flex-start; /* Alinha o conteúdo verticalmente ao topo */
+    height: 100vh; /* Ajusta a altura do contêiner para a altura da tela */
+    margin: 0; /* Remove margens padrão */
+}
+
+.custom-form-container {
+    margin-top: 0; /* Remove qualquer margem superior padrão */
+}

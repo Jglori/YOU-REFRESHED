@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Posicao__c</fullName>
+    <description>Indica a posição do participante na fila para distribuição de leads.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Indica a posição do participante na fila para distribuição de leads.</inlineHelpText>
+    <label>Posição</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

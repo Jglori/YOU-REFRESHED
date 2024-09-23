@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PresencaValidada__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Indica se a presença do corretor foi validada pelo coordenador para recepção de leads.</description>
+    <inlineHelpText>Indica se a presença do corretor foi validada pelo coordenador para recepção de leads.</inlineHelpText>
+    <label>Presença validada</label>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

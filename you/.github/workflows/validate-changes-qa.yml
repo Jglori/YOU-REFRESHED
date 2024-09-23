@@ -1,0 +1,19 @@
+name: Validate Pull Request - QA
+
+on:
+  pull_request:
+    branches:
+      - qa
+    paths:
+      - 'force-app/**'
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Validate on QA
+        uses: jawills/sf-deploy@v1.0
+        with:
+          SFDX_AUTH_URL: ${{ secrets.AUTH_URL_QA }}
+          DRY_RUN: true
+          TEST_LEVEL: NoTestRun

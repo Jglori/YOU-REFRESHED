@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>VisitDeclinedReasonValidatio</fullName>
+    <active>false</active>
+    <description>Verifica se o campo: &quot;Lead não quis visitar empreendimento&quot; esta marcado e se o campo: &quot;Por que não quis visitar o empreendimento&quot; está vazio</description>
+    <errorConditionFormula>LeadNaoVisitou__c = true &amp;&amp; ISPICKVAL(PorqueNaoVisitou__c, &apos;&apos;)</errorConditionFormula>
+    <errorDisplayField>PorqueNaoVisitou__c</errorDisplayField>
+    <errorMessage>Preencha o campo: Por que não quis visitar o empreendimento</errorMessage>
+</ValidationRule>

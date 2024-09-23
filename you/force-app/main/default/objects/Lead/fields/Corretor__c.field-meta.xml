@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Corretor__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <description>Indica o corretor responsável pelo lead.</description>
+    <inlineHelpText>Indique o corretor responsável pelo lead.</inlineHelpText>
+    <label>Corretor (Roleta)</label>
+    <lookupFilter>
+        <active>true</active>
+        <errorMessage>O corretor deve pertencer à roleta do lead.</errorMessage>
+        <filterItems>
+            <field>ParticipanteRoleta__c.RoletaLeads__c</field>
+            <operation>equals</operation>
+            <valueField>$Source.RoletaLeads__c</valueField>
+        </filterItems>
+        <isOptional>false</isOptional>
+    </lookupFilter>
+    <referenceTo>ParticipanteRoleta__c</referenceTo>
+    <relationshipLabel>Leads</relationshipLabel>
+    <relationshipName>Leads</relationshipName>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Lookup</type>
+</CustomField>

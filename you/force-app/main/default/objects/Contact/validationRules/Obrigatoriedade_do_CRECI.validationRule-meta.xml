@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Obrigatoriedade_do_CRECI</fullName>
+    <active>false</active>
+    <errorConditionFormula>AND(
+    Corretor__c,
+    OR(
+        ISBLANK(CRECI__c),
+	ISBLANK(DatadeInscricao__c),			 
+        ISBLANK(EmissaoCertidaodeRegularidadeCRECI__c),
+ISPICKVAL(TipoCRECI__c, &quot;&quot;),        ISBLANK(DatadeVencimento__c)
+										)
+				
+)</errorConditionFormula>
+    <errorMessage>Todos os dados do CRECI precisam ser preenchidos.</errorMessage>
+</ValidationRule>

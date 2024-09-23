@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Step__c</fullName>
+    <label>Fase</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Descartado</fullName>
+                <default>false</default>
+                <label>Descartado</label>
+            </value>
+            <value>
+                <fullName>Não trabalhado</fullName>
+                <default>false</default>
+                <label>Não trabalhado</label>
+            </value>
+            <value>
+                <fullName>Novo</fullName>
+                <default>false</default>
+                <label>Novo</label>
+            </value>
+            <value>
+                <fullName>Nutrindo</fullName>
+                <default>false</default>
+                <label>Nutrindo</label>
+            </value>
+            <value>
+                <fullName>Tentativa de contato</fullName>
+                <default>false</default>
+                <label>Tentativa de contato</label>
+            </value>
+            <value>
+                <fullName>Contato realizado</fullName>
+                <default>false</default>
+                <label>Contato realizado</label>
+            </value>
+            <value>
+                <fullName>Agendamento de visita</fullName>
+                <default>false</default>
+                <label>Agendamento de visita</label>
+            </value>
+            <value>
+                <fullName>Qualificação</fullName>
+                <default>false</default>
+                <label>Qualificação</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

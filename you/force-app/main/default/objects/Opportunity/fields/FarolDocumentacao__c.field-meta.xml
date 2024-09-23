@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>FarolDocumentacao__c</fullName>
+    <externalId>false</externalId>
+    <formula>IMAGE(
+    CASE(
+        FarolChecklistDocumento__c,
+        &quot;Verde&quot;, &quot;/img/icon/contract_line_item24.png&quot;,
+        &quot;Azul&quot;, &quot;/img/icon/workOrderItem24.png&quot;,
+        &quot;Vermelho&quot;, &quot;/img/samples/color_red.gif&quot;,
+        &quot;&quot;
+    ),
+    &quot;Farol Documento&quot;,
+    15,
+    15
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Farol Documentacao</label>
+    <required>false</required>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

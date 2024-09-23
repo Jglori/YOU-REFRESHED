@@ -1,0 +1,31 @@
+.online-utility-icon {
+    --slds-c-icon-color-background: #2E844A;
+    --slds-c-icon-radius-border: 10rem;
+}
+
+.indisponivel-utility-icon {
+    --sds-c-icon-color-background: #FE9339;
+    --slds-c-icon-radius-border: 20rem;
+}
+
+.offline-utility-icon {
+    --sds-c-icon-color-background: #BA0517;
+    --slds-c-icon-radius-border: 20rem;
+
+}
+
+.clickable-text {
+   
+}
+
+.clickable-text :hover {
+    text-decoration: underline;
+    color: rgba(245, 122, 69, 1);
+    cursor: pointer;
+
+}
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

@@ -1,0 +1,20 @@
+.slds-custom-combobox {
+    background-color: #f3f4f6; 
+    padding: 0.5rem; 
+    border-radius: 0.25rem;
+    border: 1px solid #d8dde6; 
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.1); 
+    width: 100%; 
+}
+
+.slds-custom-combobox .slds-form-element__control {
+    padding: 0;
+}
+
+.slds-custom-combobox .slds-form-element__control .slds-combobox {
+    width: 100%; 
+}
+
+.slds-custom-combobox .slds-form-element__control .slds-combobox .slds-combobox__form-element {
+    width: 100%; 
+}

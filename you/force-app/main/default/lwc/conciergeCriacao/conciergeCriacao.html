@@ -1,0 +1,182 @@
+<template>
+    <template if:true={mostrarCampos}>
+        <div class="slds-form-element slds-p-around_medium">
+            <div class="slds-box slds-m-top_medium">
+
+                <!-- Nome completo -->
+                <template if:true={formulario.mostrarNome}>
+                    <div class="slds-form-element slds-p-bottom_small">
+                        <lightning-helptext 
+                            content="Nome com no mínimo 3 caracteres." 
+                            class="slds-m-bottom_small">
+                        </lightning-helptext>
+                        <lightning-input 
+                            label="Nome completo" 
+                            name="nome" 
+                            value={formulario.nome} 
+                            onchange={handleChange} 
+                            required 
+                            class="input-large">
+                        </lightning-input>
+                    </div>
+                </template>
+
+                <!-- Celular -->
+                <template if:true={formulario.mostrarCelular}>
+                    <div class="slds-form-element slds-p-bottom_small">
+                        <lightning-helptext 
+                            content="Celular válido com 11 dígitos, incluindo o código de área." 
+                            class="slds-m-bottom_small">
+                        </lightning-helptext>
+                        <lightning-input 
+                            label="Celular" 
+                            name="mobilePhone" 
+                            value={formulario.mobilePhone} 
+                            onchange={handleChange} 
+                            required 
+                            class="input-large">
+                        </lightning-input>
+                    </div>
+                </template>
+                
+                <!-- Telefone -->
+                <template if:true={formulario.mostrarTelefone}>
+                    <div class="slds-form-element slds-p-bottom_small">
+                        <lightning-helptext 
+                            content="Telefone válido com 10 dígitos, incluindo o código de área." 
+                            class="slds-m-bottom_small">
+                        </lightning-helptext>
+                        <lightning-input 
+                            label="Telefone" 
+                            name="phone" 
+                            value={formulario.phone} 
+                            onchange={handleChange} 
+                            required 
+                            class="input-large">
+                        </lightning-input>
+                    </div>
+                </template>
+                
+                <!-- Razão Social -->
+                <template if:true={formulario.mostrarRazaoSocial}>
+                    <div class="slds-form-element slds-p-bottom_small">
+                        <lightning-helptext 
+                            content="Razão Social com no mínimo 2 caracteres." 
+                            class="slds-m-bottom_small">
+                        </lightning-helptext>
+                        <lightning-input 
+                            label="Razão Social" 
+                            name="razaoSocial" 
+                            value={formulario.razaoSocial} 
+                            onchange={handleChange} 
+                            required 
+                            class="input-large">
+                        </lightning-input>
+                    </div>
+                </template>
+
+                <!-- Nome do representante -->
+                <template if:true={formulario.mostrarNomeRepresentante}>
+                    <div class="slds-form-element slds-p-bottom_small">
+                        <lightning-helptext 
+                            content="Nome do representante com no mínimo 3 caracteres." 
+                            class="slds-m-bottom_small">
+                        </lightning-helptext>
+                        <lightning-input 
+                            label="Nome do representante" 
+                            name="nomeRepresentante" 
+                            value={formulario.nomeRepresentante} 
+                            onchange={handleChange} 
+                            required 
+                            class="input-large">
+                        </lightning-input>
+                    </div>
+                </template>
+
+                <!-- Celular do representante -->
+                <template if:true={formulario.mostrarCelularRepresentante}>
+                    <div class="slds-form-element slds-p-bottom_small">
+                        <lightning-helptext 
+                            content="Celular válido com 11 dígitos, incluindo o código de área." 
+                            class="slds-m-bottom_small">
+                        </lightning-helptext>
+                        <lightning-input 
+                            label="Celular do representante" 
+                            name="celularRepresentante" 
+                            value={formulario.celularRepresentante} 
+                            onchange={handleChange} 
+                            required 
+                            class="input-large">
+                        </lightning-input>
+                    </div>
+                </template>
+
+                <!-- Email -->
+                <div class="slds-form-element slds-p-bottom_small">
+                    <lightning-helptext 
+                        content="Email válido no formato exemplo@dominio.com." 
+                        class="slds-m-bottom_small">
+                    </lightning-helptext>
+                    <lightning-input 
+                        label="Email" 
+                        name="email" 
+                        value={formulario.email} 
+                        onchange={handleChange} 
+                        required 
+                        class="input-large">
+                    </lightning-input>
+                </div>
+
+                <!-- Origem do lead -->
+                <div class="slds-form-element slds-p-bottom_small">
+                    <lightning-helptext 
+                        content="Selecione a origem do lead." 
+                        class="slds-m-bottom_small">
+                    </lightning-helptext>
+                    <lightning-combobox 
+                        label="Origem do lead" 
+                        options={origens} 
+                        name="origem" 
+                        value={formulario.origem} 
+                        onchange={handleChange}
+                        required>
+                        
+                    </lightning-combobox>
+                </div>
+
+                <!-- Canal de atendimento -->
+                <div class="slds-form-element slds-p-bottom_small">
+                    <lightning-helptext 
+                        content="Selecione o canal de atendimento." 
+                        class="slds-m-bottom_small">
+                    </lightning-helptext>
+                    <lightning-combobox 
+                        label="Canal de atendimento" 
+                        options={canais} 
+                        name="canal" 
+                        value={formulario.canal} 
+                        onchange={handleChange} 
+                        required>
+                    </lightning-combobox>
+                </div>
+
+            </div>
+
+            <div class="slds-clearfix slds-p-top_medium">
+                <div class="slds-float_right">
+                    <lightning-button 
+                        label="Cancelar" 
+                        class="slds-m-right_small" 
+                        onclick={handleCancelar}>
+                    </lightning-button>
+                    <lightning-button 
+                        variant="brand" 
+                        label="Criar" 
+                        icon-name="utility:fallback" 
+                        onclick={handleCriarLead}>
+                    </lightning-button>
+                </div>
+            </div>
+        </div>
+    </template>
+</template>

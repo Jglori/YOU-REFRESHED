@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ChequeEspecialBanco__c</fullName>
+    <label>Cheque Especial (Banco)</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Banco ABC</fullName>
+                <default>false</default>
+                <label>Banco ABC</label>
+            </value>
+            <value>
+                <fullName>Banco Original</fullName>
+                <default>false</default>
+                <label>Banco Original</label>
+            </value>
+            <value>
+                <fullName>Agibank</fullName>
+                <default>false</default>
+                <label>Agibank</label>
+            </value>
+            <value>
+                <fullName>Banco BMG</fullName>
+                <default>false</default>
+                <label>Banco BMG</label>
+            </value>
+            <value>
+                <fullName>Banco do Brasil</fullName>
+                <default>false</default>
+                <label>Banco do Brasil</label>
+            </value>
+            <value>
+                <fullName>Banco Inter</fullName>
+                <default>false</default>
+                <label>Banco Inter</label>
+            </value>
+            <value>
+                <fullName>Banco Pan</fullName>
+                <default>false</default>
+                <label>Banco Pan</label>
+            </value>
+            <value>
+                <fullName>Banrisul</fullName>
+                <default>false</default>
+                <label>Banrisul</label>
+            </value>
+            <value>
+                <fullName>BTG Pactual</fullName>
+                <default>false</default>
+                <label>BTG Pactual</label>
+            </value>
+            <value>
+                <fullName>Caixa Econômica Federal</fullName>
+                <default>false</default>
+                <label>Caixa Econômica Federal</label>
+            </value>
+            <value>
+                <fullName>Itaú Unibanco</fullName>
+                <default>false</default>
+                <label>Itaú Unibanco</label>
+            </value>
+            <value>
+                <fullName>Neon</fullName>
+                <default>false</default>
+                <label>Neon</label>
+            </value>
+            <value>
+                <fullName>Nubank</fullName>
+                <default>false</default>
+                <label>Nubank</label>
+            </value>
+            <value>
+                <fullName>Santander Brasil</fullName>
+                <default>false</default>
+                <label>Santander Brasil</label>
+            </value>
+            <value>
+                <fullName>Safra</fullName>
+                <default>false</default>
+                <label>Safra</label>
+            </value>
+            <value>
+                <fullName>Sofisa</fullName>
+                <default>false</default>
+                <label>Sofisa</label>
+            </value>
+            <value>
+                <fullName>XP Investmentos</fullName>
+                <default>false</default>
+                <label>XP Investmentos</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

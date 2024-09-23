@@ -1,0 +1,33 @@
+<template>
+    <div class="slds-form-element slds-box">
+        <template if:true={mostrarCamposFisica}>
+            <lightning-input data-name="nome" type="text" value={formulario.nome} label="Nome completo"
+                onchange={handleChange}></lightning-input>
+            <lightning-input data-name="celular" type="tel" value={formulario.celular} label="Celular"
+                onchange={handleChange} required class={celularErrorClass}
+                pattern="[0-9]{11}" data-error-message="Campo Celular é obrigatório e deve conter 11 dígitos"></lightning-input>
+            <template if:true={celularError}>
+                <div class="slds-text-color_error slds-m-top_xx-small">{celularErrorMessage}</div>
+            </template>
+        </template>
+        <template if:true={mostrarCamposJuridica}>
+            <lightning-input data-name="razaoSocial" type="text" value={formulario.razaoSocial} label="Razão Social"
+                onchange={handleChange}></lightning-input>
+            <lightning-input data-name="telefone" type="tel" value={formulario.telefone} label="Telefone"
+                onchange={handleChange} required class={telefoneErrorClass}
+                pattern="[0-9]{10}" data-error-message="Campo Telefone é obrigatório e deve conter 10 dígitos"></lightning-input>
+            <template if:true={telefoneError}>
+                <div class="slds-text-color_error slds-m-top_xx-small">{telefoneErrorMessage}</div>
+            </template>
+        </template>
+        <lightning-input data-name="email" type="email" value={formulario.email} label="Email"
+            onchange={handleChange} required class={emailErrorClass}></lightning-input>
+        <template if:true={emailError}>
+            <div class="slds-text-color_error slds-m-top_xx-small">{emailErrorMessage}</div>
+        </template>
+    </div>
+    <div class="slds-clearfix slds-p-top_medium">
+        <lightning-button variant="brand" label="Pesquisar" icon-name="utility:search" class="slds-float_right"
+            onclick={handleConsultarLeads}></lightning-button>
+    </div>
+</template>

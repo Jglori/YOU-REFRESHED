@@ -1,0 +1,14 @@
+<template>
+    <lightning-card>
+        <div class="slds-m-around_medium">
+            <lightning-combobox
+            name="tipoPessoa"
+            label="Tipo de Pessoa"
+            placeholder="Selecione um tipo"
+            options={tipoPessoaOptions}
+            value={selectedTipoPessoa}
+            onchange={handleTipoPessoaChange}>
+            </lightning-combobox>
+        </div>
+    </lightning-card>
+</template>

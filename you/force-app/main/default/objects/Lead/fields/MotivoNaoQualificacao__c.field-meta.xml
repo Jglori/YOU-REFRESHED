@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>MotivoNaoQualificacao__c</fullName>
+    <businessStatus>Active</businessStatus>
+    <description>Esse campo era chamado como &quot;motivo  da não qualificação&quot;  nas classes, porém precisou alterar a label para &quot;Motivo da Perda&quot;</description>
+    <inlineHelpText>Ao ser desqualificado ou perdido, o registro deverá apresentar um motivo</inlineHelpText>
+    <label>Motivo da Perda</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>SAC</fullName>
+                <default>false</default>
+                <label>SAC</label>
+            </value>
+            <value>
+                <fullName>LGPD</fullName>
+                <default>false</default>
+                <label>LGPD</label>
+            </value>
+            <value>
+                <fullName>Contato inexistente</fullName>
+                <default>false</default>
+                <label>Contato inexistente</label>
+            </value>
+            <value>
+                <fullName>Cliente sem interesse</fullName>
+                <default>false</default>
+                <label>Cliente sem interesse</label>
+            </value>
+            <value>
+                <fullName>Não atende</fullName>
+                <default>false</default>
+                <label>Não atende</label>
+            </value>
+            <value>
+                <fullName>Cliente perdido por falta de interação</fullName>
+                <default>false</default>
+                <label>Cliente perdido por falta de interação</label>
+            </value>
+            <value>
+                <fullName>Tentativa de contato excedida</fullName>
+                <default>false</default>
+                <label>Tentativa de contato excedida</label>
+            </value>
+            <value>
+                <fullName>Venda realizada</fullName>
+                <default>false</default>
+                <label>Venda realizada</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>
