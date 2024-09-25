@@ -63,7 +63,7 @@ public without sharing class ConciergeService {
     }
 
     public static List<Contact> buscarTodosCorretores() {
-        List<Contact> corretores = [SELECT Id, Apelido__c  FROM Contact WHERE RecordType.Name = 'Corretor' LIMIT 200];
+        List<Contact> corretores = [SELECT Id, Apelido__c  FROM Contact WHERE RecordType.Name = 'Corretor' AND StatusCorretor__c = 'Ativo' LIMIT 200];
         return corretores;
     }
 
@@ -168,6 +168,13 @@ public without sharing class ConciergeService {
     
         if (!String.isBlank(corretor)) {
             lead.CorretorContato__c = corretor;
+            User us = new User();
+
+            us = UserSelector.obterUsuariosPorContactIds(corretor);
+
+            if(us <> null){
+                lead.OwnerId  = us.Id;
+            }
             System.debug('Corretor associado: ' + corretor);
         }
     
@@ -287,6 +294,7 @@ public without sharing class ConciergeService {
                 'lastName' => nome
             };
     }
+
 
     @AuraEnabled
     public static void criarTaskReiteracao(String jsonData, Id roletaId) {
@@ -489,8 +497,6 @@ public without sharing class ConciergeService {
             throw new AuraHandledException('Erro ao criar a tarefa: ' + e.getMessage());
         }
     }
-    
-
     
     
 }
