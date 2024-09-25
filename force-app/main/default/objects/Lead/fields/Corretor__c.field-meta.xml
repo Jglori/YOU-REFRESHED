@@ -4,7 +4,7 @@
     <deleteConstraint>SetNull</deleteConstraint>
     <description>Indica o corretor responsável pelo lead.</description>
     <inlineHelpText>Indique o corretor responsável pelo lead.</inlineHelpText>
-    <label>Corretor (Roleta)</label>
+    <label>Corretor</label>
     <lookupFilter>
         <active>true</active>
         <errorMessage>O corretor deve pertencer à roleta do lead.</errorMessage>

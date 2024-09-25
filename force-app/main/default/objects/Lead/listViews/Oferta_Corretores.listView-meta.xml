@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ListView xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>Oferta_Correto</fullName>
+    <fullName>Oferta_Corretores</fullName>
     <columns>FULL_NAME</columns>
     <columns>LEAD.EMAIL</columns>
     <columns>LEAD.COMPANY</columns>
@@ -9,11 +9,6 @@
     <columns>LEAD.UNREAD</columns>
     <columns>LEAD.CREATED_DATE</columns>
     <columns>CORE.USERS.ALIAS</columns>
-    <filterScope>Mine</filterScope>
-    <filters>
-        <field>OfertaCorretor__c</field>
-        <operation>equals</operation>
-        <value>1</value>
-    </filters>
-    <label>Oferta Corretor</label>
+    <filterScope>Everything</filterScope>
+    <label>Oferta Corretores</label>
 </ListView>

@@ -2,12 +2,12 @@
 <ListView xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>TodaysLeads</fullName>
     <columns>FULL_NAME</columns>
-    <columns>LEAD.COMPANY</columns>
-    <columns>LEAD.STATE</columns>
-    <columns>LEAD.EMAIL</columns>
     <columns>LEAD.STATUS</columns>
-    <columns>LEAD.CREATED_DATE</columns>
-    <columns>CORE.USERS.ALIAS</columns>
+    <columns>LEAD.RECORDTYPE</columns>
+    <columns>DataHoraVencimento__c</columns>
+    <columns>FarolLead__c</columns>
+    <columns>CORE.USERS.FIRST_NAME</columns>
+    <columns>CORE.USERS.LAST_NAME</columns>
     <columns>LEAD.UNREAD</columns>
     <filterScope>Everything</filterScope>
     <filters>
@@ -15,5 +15,5 @@
         <operation>equals</operation>
         <value>TODAY</value>
     </filters>
-    <label>Today&apos;s Leads</label>
+    <label>Leads de hoje</label>
 </ListView>
