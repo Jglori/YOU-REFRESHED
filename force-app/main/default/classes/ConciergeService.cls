@@ -63,7 +63,7 @@ public without sharing class ConciergeService {
     }
 
     public static List<Contact> buscarTodosCorretores() {
-        List<Contact> corretores = [SELECT Id, Apelido__c  FROM Contact WHERE RecordType.Name = 'Corretor' AND StatusCorretor__c = 'Ativo' LIMIT 200];
+        List<Contact> corretores = [SELECT Id, Apelido__c  FROM Contact WHERE RecordType.Name = 'Corretor' LIMIT 200];
         return corretores;
     }
 
@@ -168,13 +168,6 @@ public without sharing class ConciergeService {
     
         if (!String.isBlank(corretor)) {
             lead.CorretorContato__c = corretor;
-            User us = new User();
-
-            us = UserSelector.obterUsuariosPorContactIds(corretor);
-
-            if(us <> null){
-                lead.OwnerId  = us.Id;
-            }
             System.debug('Corretor associado: ' + corretor);
         }
     
@@ -295,7 +288,6 @@ public without sharing class ConciergeService {
             };
     }
 
-
     @AuraEnabled
     public static void criarTaskReiteracao(String jsonData, Id roletaId) {
         // Deserializa o JSON em um mapa
@@ -311,9 +303,6 @@ public without sharing class ConciergeService {
         // Extrai os dados do lead
         Map<String, Object> leadData = (Map<String, Object>) params.get('lead');
     
-        // Verifica se nomeCorretor está no leadData
-        String nomeCorretor = (String) leadData.get('nomeCorretor');
-        
         // Verificação e processamento dos dados do lead
         String leadId = (String) leadData.get('id');
         if (String.isEmpty(leadId)) {
@@ -322,7 +311,7 @@ public without sharing class ConciergeService {
     
         Lead lead;
         try {
-            lead = [SELECT Id, LastName, MobilePhone, Email, EmpreendimentoInteresse__c, LeadSource, QuantidadeDeReiteracoes__c, Owner.Email, OwnerId , CorretorContato__c
+            lead = [SELECT Id, LastName, MobilePhone, Email,Phone , EmpreendimentoInteresse__c, CanalAtendimento__c, LeadSource, QuantidadeDeReiteracoes__c, OwnerId
                     FROM Lead WHERE Id = :leadId LIMIT 1];
         } catch (QueryException e) {
             throw new AuraHandledException('Lead não encontrado com o ID fornecido.');
@@ -340,40 +329,37 @@ public without sharing class ConciergeService {
             empreendimentoInteresse = 'Não informado';
         }
     
-        // Monta a descrição da tarefa de reiteração
-        String descricao = 'Reiteração do Lead. Nome: ' + (lead.LastName != null ? lead.LastName : 'Não informado')
-            + ', Telefone: ' + (lead.MobilePhone != null ? lead.MobilePhone : 'Não informado')
-            + ', Email: ' + (lead.Email != null ? lead.Email : 'Não informado')
-            + ', Empreendimento de Interesse: ' + empreendimentoInteresse
-            + ', Origem do Lead: ' + (lead.LeadSource != null ? lead.LeadSource : 'Não informado')
-            + ', Data e horário da interação: ' + DateTime.now().format('dd/MM/yyyy HH:mm:ss')
-            + ', Corretor: ' + (nomeCorretor != null ? nomeCorretor : 'Não informado');
-    
-        // Cria a tarefa de reiteração
+        // Criar a tarefa (Task) com os campos personalizados
         Task tarefaReiteracao = new Task(
-            WhoId = lead.CorretorContato__c,
+            WhoId = lead.Id,
             Subject = 'Reiteração',
-            Description = descricao,
             Status = 'Open',
-            ActivityDate = tomorrow.date()
+            ActivityDate = Date.today().addDays(1), // Ajuste para obter a data de amanhã
+            Telefone__c = lead.Phone != null ? lead.Phone : 'Não informado', // Campo personalizado
+            Nome_do_Lead__c = lead.LastName != null ? lead.LastName : 'Não informado',
+            Celular__c = lead.MobilePhone != null ? lead.MobilePhone : 'Não informado' ,
+            Origem_do_Lead__c = lead.LeadSource != null ? lead.LeadSource : 'Não informado', // Campo personalizado
+            Canal_de_Atendimento__c = lead.CanalAtendimento__c != null ? lead.CanalAtendimento__c : 'Não informado', // Campo personalizado
+            Email__c = lead.Email != null ? lead.Email : 'Não informado' // Campo personalizado
         );
+        
     
         try {
-            // Incrementa a quantidade de reiterações e atualiza o lead
+            // Atualiza o lead com a nova quantidade de reiterações
             lead.QuantidadeDeReiteracoes__c = (lead.QuantidadeDeReiteracoes__c != null ? lead.QuantidadeDeReiteracoes__c : 0) + 1;
             lead.ltima_Reitera_o__c = DateTime.now();
     
-            // Atualiza o roletaId se necessário
             if (roletaId != null) {
                 lead.RoletaLeads__c = roletaId;
             }
     
+            lead.Origem_Lead_Reiterado__c = lead.LeadSource;
             update lead;
     
-            // Insere a tarefa de reiteração
+            // Inserir a tarefa
             insert tarefaReiteracao;
     
-            // Envio de e-mail para o proprietário do lead
+            // Enviar email para o dono da tarefa (opcional)
             User taskOwner = [SELECT Email FROM User WHERE Id = :lead.OwnerId LIMIT 1];
             if (taskOwner != null) {
                 Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage();
@@ -383,7 +369,7 @@ public without sharing class ConciergeService {
                 Messaging.sendEmail(new List<Messaging.SingleEmailMessage>{email});
             }
     
-            // Envio de notificação personalizada
+            // Notificar o dono da tarefa via notificação (opcional)
             String notificationTitle = 'Nova Tarefa: Reiteração de Lead';
             String notificationBody = 'Olá! Seu cliente entrou novamente em contato com você! Verifique as TAREFAS do seu Lead e veja a reiteração.';
             Set<String> recipientsIds = new Set<String>{lead.OwnerId};
@@ -395,69 +381,83 @@ public without sharing class ConciergeService {
         }
     }
     
-    
     @AuraEnabled
     public static void criarTaskReiteracaoeAssociarCorretor(String jsonLead, Id corretorId) {
         // Deserializa o JSON em um mapa
         Map<String, Object> params = (Map<String, Object>) JSON.deserializeUntyped(jsonLead);
-    
+        
         System.debug('Parâmetros recebidos: ' + params);
-    
+        
         // Verifica se o 'lead' está presente e é um mapa
         if (params == null || !params.containsKey('lead') || !(params.get('lead') instanceof Map<String, Object>)) {
             throw new AuraHandledException('Dados do lead inválidos.');
         }
-    
+        
         // Extrai o mapa de dados do lead
         Map<String, Object> leadData = (Map<String, Object>) params.get('lead');
-    
+        
         // Extração dos dados específicos do lead
         String leadId = leadData.containsKey('id') ? (String) leadData.get('id') : null;
         String nomeCorretor = leadData.containsKey('nomeCorretor') ? (String) leadData.get('nomeCorretor') : null;
-    
+        
         // Verificação e processamento dos dados do lead
         if (String.isEmpty(leadId)) {
             throw new AuraHandledException('ID do lead não pode estar vazio.');
         }
-    
+        
         Lead lead;
         try {
-            lead = [SELECT Id, LastName, MobilePhone, Email, EmpreendimentoInteresse__c, LeadSource, QuantidadeDeReiteracoes__c, CorretorContato__c, OwnerId, ltima_Reitera_o__c  
+            lead = [SELECT Id, LastName, MobilePhone,Phone , Email, EmpreendimentoInteresse__c, CanalAtendimento__c, LeadSource, QuantidadeDeReiteracoes__c, CorretorContato__c, OwnerId, ltima_Reitera_o__c  
                     FROM Lead WHERE Id = :leadId LIMIT 1];
+            
+            System.debug('Corretor recebido ' + lead.CorretorContato__c);
+            System.debug('Id do corretor recebido ' + corretorId);
         } catch (QueryException e) {
             throw new AuraHandledException('Lead não encontrado com o ID fornecido.');
         }
-    
+        
         if (lead == null) {
             throw new AuraHandledException('Lead não encontrado.');
         }
-    
+        
+        // Determina o OwnerId da tarefa
+        Id ownerId;
+        if (corretorId != null) {
+            // Consulta o OwnerId do Contact baseado no corretorId
+            Contact corretorContato = [SELECT OwnerId FROM Contact WHERE RecordType.Name = 'Corretor' AND Id = :corretorId LIMIT 1];
+            ownerId = corretorContato.OwnerId;
+        } else {
+            // Se corretorId não estiver definido, usa o OwnerId do Lead
+            ownerId = lead.OwnerId;
+        }
+        
         DateTime tomorrow = System.now().addDays(1);
-    
+        
         String empreendimentoInteresse = leadData.containsKey('empreendimentoInteresse') ? (String) leadData.get('empreendimentoInteresse') : 'Não informado';
-    
-        String descricao = 'Reiteração do Lead. Nome: ' + (lead.LastName != null ? lead.LastName : 'Não informado')
-            + ', Telefone: ' + (lead.MobilePhone != null ? lead.MobilePhone : 'Não informado')
-            + ', Email: ' + (lead.Email != null ? lead.Email : 'Não informado')
-            + ', Empreendimento de Interesse: ' + empreendimentoInteresse
-            + ', Origem do Lead: ' + (lead.LeadSource != null ? lead.LeadSource : 'Não informado')
-            + ', Data e horário da interação: ' + DateTime.now().format('dd/MM/yyyy HH:mm:ss')
-            + ', Corretor: ' + (nomeCorretor != null ? nomeCorretor : 'Não informado');
-    
+        
+
+        
         Task tarefaReiteracao = new Task(
-            WhoId = lead.CorretorContato__c,
+            WhoId = lead.Id, 
             Subject = 'Reiteração',
-            Description = descricao,
             Status = 'Open',
-            ActivityDate = tomorrow.date()
+            Nome_do_Lead__c = lead.LastName != null ? lead.LastName : 'Não informado', // Campo personalizado
+            Origem_do_Lead__c = lead.LeadSource != null ? lead.LeadSource : 'Não informado', // Campo personalizado
+            Canal_de_Atendimento__c = lead.CanalAtendimento__c != null ? lead.CanalAtendimento__c : 'Não informado', // Campo personalizado
+            Email__c = lead.Email != null ? lead.Email : 'Não informado' ,
+            Celular__c = lead.MobilePhone != null ? lead.MobilePhone : 'Não informado' ,
+            ActivityDate = Date.today().addDays(1), // Ajuste para obter a data de amanhã
+            Telefone__c = lead.Phone != null ? lead.Phone : 'Não informado', // Campo personalizado
+            OwnerId = ownerId
         );
-    
+        
         try {
             // Incrementa a quantidade de reiterações em 1
             lead.QuantidadeDeReiteracoes__c = (lead.QuantidadeDeReiteracoes__c != null ? lead.QuantidadeDeReiteracoes__c : 0) + 1;
             
+            lead.Origem_Lead_Reiterado__c = lead.LeadSource;
             // Atualiza a data da última reiteração
-            lead.ltima_Reitera_o__c  = DateTime.now();
+            lead.ltima_Reitera_o__c = DateTime.now();
             
             // Define o corretor de contato
             lead.CorretorContato__c = corretorId;
@@ -467,27 +467,30 @@ public without sharing class ConciergeService {
         
             // Insere a tarefa de reiteração
             insert tarefaReiteracao;
-            
-            // Envio de e-mail para o proprietário do lead
-            User taskOwner = [SELECT Email FROM User WHERE Id = :lead.OwnerId LIMIT 1];
-           
+    
+            // Envio de e-mail para o corretor
+            User taskOwner = [SELECT Email FROM User WHERE Id = :ownerId LIMIT 1];
+            if (taskOwner != null) {
                 Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage();
                 email.setToAddresses(new List<String>{taskOwner.Email});
                 email.setSubject('Nova Tarefa: Reiteração de Lead');
                 email.setPlainTextBody('Olá! Seu cliente entrou novamente em contato com você! Verifique as TAREFAS do seu Lead e veja a reiteração.');
                 Messaging.sendEmail(new List<Messaging.SingleEmailMessage>{email});
+            }
             
-     
             // Envio de notificação personalizada
             String notificationTitle = 'Nova Tarefa: Reiteração de Lead';
             String notificationBody = 'Olá! Seu cliente entrou novamente em contato com você! Verifique as TAREFAS do seu Lead e veja a reiteração.';
-            Set<String> recipientsIds = new Set<String>{lead.OwnerId};
-     
+            Set<String> recipientsIds = new Set<String>{ownerId};
+            
             notifyUsers(recipientsIds, lead.Id, notificationTitle, notificationBody);
-     
+        
         } catch (DmlException e) {
             throw new AuraHandledException('Erro ao criar a tarefa: ' + e.getMessage());
         }
     }
+    
+
+    
     
 }

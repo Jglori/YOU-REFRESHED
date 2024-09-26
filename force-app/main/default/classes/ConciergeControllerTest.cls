@@ -57,7 +57,6 @@ public class ConciergeControllerTest {
     static void testCriarLead() {
         Test.startTest();
         Map<String, String> formulario = new Map<String, String>{
-            'nome' => 'Maria Oliveira',
             'FirstName' => 'Maria',
             'LastName' => 'Oliveira',
             'Email' => 'maria.oliveira@example.com',
@@ -69,7 +68,8 @@ public class ConciergeControllerTest {
         ConciergeController.criarLead(formulario);
         Test.stopTest();
         // Verificação
-        System.assertNotEquals(null, [SELECT Id FROM Lead WHERE Email = 'maria.oliveira@example.com' LIMIT 1]);
+        Lead createdLead = [SELECT Id FROM Lead WHERE Email = 'maria.oliveira@example.com' LIMIT 1];
+        System.assertNotEquals(null, createdLead);
     }
 
     @isTest
@@ -86,15 +86,17 @@ public class ConciergeControllerTest {
         };
         ConciergeController.atualizarLead(formulario);
         Test.stopTest();
+        // Verificação
+        Lead updatedLead = [SELECT FirstName, LastName FROM Lead WHERE Id = :lead.Id];
+        System.assertEquals('João Atualizado', updatedLead.FirstName);
+        System.assertEquals('Silva Atualizado', updatedLead.LastName);
     }
 
     @isTest
     static void testCriarTaskReiteracao() {
         Lead lead = [SELECT Id FROM Lead LIMIT 1];
         Test.startTest();
-        try {
-            ConciergeController.criarTaskReiteracao('{"someData":"value"}', lead.Id);
-        } catch(Exception ex){}
+        ConciergeController.criarTaskReiteracao('{"someData":"value"}', lead.Id);
         Test.stopTest();
         // Verificação - adicionar verificações conforme a lógica do método
     }
@@ -106,9 +108,7 @@ public class ConciergeControllerTest {
         insert corretor;
         
         Test.startTest();
-        try {
-            ConciergeController.criarTaskReiteracaoeAssociarCorretor('{"someData":"value"}', corretor.Id);
-        } catch(Exception ex){}
+        ConciergeController.criarTaskReiteracaoeAssociarCorretor('{"someData":"value"}', corretor.Id);
         Test.stopTest();
         // Verificação - adicionar verificações conforme a lógica do método
     }

@@ -58,17 +58,6 @@ public class ConciergeServiceTest {
             Status = 'Novo'
         );
         insert lead;
-
-        Lead lead2 = new Lead(
-            FirstName = 'Maria',
-            LastName = 'nuns',
-            Email = 'maria.oliveira123@example.com',
-            MobilePhone = '11987654388',
-            LeadSource = 'Instagram',
-            CanalAtendimento__c = 'Telefone',
-            Status = 'Novo'
-        );
-        insert lead2;
     
         // Criando um registro de RoletaLeads__c para usar no teste
         RoletaLeads__c roletaLead = new RoletaLeads__c(Name = 'Roleta Teste');
@@ -82,9 +71,7 @@ public class ConciergeServiceTest {
     
         // Executando o método a ser testado
         Test.startTest();
-        try {
-            ConciergeService.atualizarLead(formulario);
-        } catch (Exception ex){}
+        ConciergeService.atualizarLead(formulario);
         Test.stopTest();
     
         // Verificando se o campo RoletaLeads__c foi atualizado corretamente
@@ -148,9 +135,9 @@ public class ConciergeServiceTest {
         ConciergeService.criarTaskReiteracao(jsonLead, null);
         Test.stopTest();
         
-        // Task createdTask = [SELECT Id, Subject, Description FROM Task WHERE WhoId = :lead.Id AND Status = 'Open' LIMIT 1];
-        // System.assertNotEquals(null, createdTask, 'A tarefa deve ser criada.');
-        // System.assertEquals('Reiteração', createdTask.Subject, 'O assunto da tarefa deve ser Reiteração.');
+        Task createdTask = [SELECT Id, Subject, Description FROM Task WHERE WhoId = :lead.Id AND Status = 'Open' LIMIT 1];
+        System.assertNotEquals(null, createdTask, 'A tarefa deve ser criada.');
+        System.assertEquals('Reiteração', createdTask.Subject, 'O assunto da tarefa deve ser Reiteração.');
     }
 
     @isTest
@@ -186,11 +173,11 @@ public class ConciergeServiceTest {
         ConciergeService.criarTaskReiteracaoeAssociarCorretor(jsonLead, corretor.Id);
         Test.stopTest();
         
-        // Task createdTask = [SELECT Id, Subject, Description FROM Task WHERE WhoId = :lead.Id AND Status = 'Open' LIMIT 1];
-        // System.assertNotEquals(null, createdTask, 'A tarefa deve ser criada.');
-        // System.assertEquals('Reiteração', createdTask.Subject, 'O assunto da tarefa deve ser Reiteração.');
+        Task createdTask = [SELECT Id, Subject, Description FROM Task WHERE WhoId = :lead.Id AND Status = 'Open' LIMIT 1];
+        System.assertNotEquals(null, createdTask, 'A tarefa deve ser criada.');
+        System.assertEquals('Reiteração', createdTask.Subject, 'O assunto da tarefa deve ser Reiteração.');
 
-        // Lead updatedLead = [SELECT Id, CorretorContato__c FROM Lead WHERE Id = :lead.Id LIMIT 1];
-        // System.assertEquals(corretor.Id, updatedLead.CorretorContato__c, 'O corretor deve estar associado ao lead.');
+        Lead updatedLead = [SELECT Id, CorretorContato__c FROM Lead WHERE Id = :lead.Id LIMIT 1];
+        System.assertEquals(corretor.Id, updatedLead.CorretorContato__c, 'O corretor deve estar associado ao lead.');
     }
 }
