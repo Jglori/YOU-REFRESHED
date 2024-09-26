@@ -6,6 +6,7 @@ public class UserSelectorTest {
         // Criação de um perfil para o usuário
         Profile p = [SELECT Id FROM Profile WHERE Name = 'Usuário Padrão' LIMIT 1];
         
+        
         // Criação de um usuário de teste
         User usuario = new User(
             Alias = 'testusr',
