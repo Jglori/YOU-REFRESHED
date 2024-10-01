@@ -142,11 +142,6 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>Event.Canal_de_Atendimento__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
         <field>Event.Celular__c</field>
         <readable>true</readable>
     </fieldPermissions>

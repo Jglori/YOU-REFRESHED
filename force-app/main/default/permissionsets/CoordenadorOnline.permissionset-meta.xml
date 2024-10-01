@@ -457,11 +457,6 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
-        <field>Lead.Marked_for_Deletion__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
         <field>Lead.MidiaOriginal__c</field>
         <readable>true</readable>
     </fieldPermissions>

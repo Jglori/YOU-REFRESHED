@@ -802,36 +802,6 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>Checklist_de_Documentos__c.Contato__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>Checklist_de_Documentos__c.ContentDocumentId_c__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>Checklist_de_Documentos__c.Documenta_o__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>Checklist_de_Documentos__c.IsDelivered__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>Checklist_de_Documentos__c.Nome_do_Documento__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>Checklist_de_Documentos__c.Oportunidade__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
         <field>Comissao__c.Ativo__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -2649,15 +2619,6 @@
         <allowEdit>true</allowEdit>
         <allowRead>true</allowRead>
         <modifyAllRecords>true</modifyAllRecords>
-        <object>Checklist_de_Documentos__c</object>
-        <viewAllRecords>true</viewAllRecords>
-    </objectPermissions>
-    <objectPermissions>
-        <allowCreate>true</allowCreate>
-        <allowDelete>true</allowDelete>
-        <allowEdit>true</allowEdit>
-        <allowRead>true</allowRead>
-        <modifyAllRecords>true</modifyAllRecords>
         <object>Comissao__c</object>
         <viewAllRecords>true</viewAllRecords>
     </objectPermissions>
@@ -2846,10 +2807,6 @@
     </recordTypeVisibilities>
     <tabSettings>
         <tab>Bloco__c</tab>
-        <visibility>Visible</visibility>
-    </tabSettings>
-    <tabSettings>
-        <tab>Checklist_de_Documentos</tab>
         <visibility>Visible</visibility>
     </tabSettings>
     <tabSettings>
