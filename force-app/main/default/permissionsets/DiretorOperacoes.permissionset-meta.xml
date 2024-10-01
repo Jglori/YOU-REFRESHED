@@ -2619,15 +2619,6 @@
         <allowEdit>true</allowEdit>
         <allowRead>true</allowRead>
         <modifyAllRecords>true</modifyAllRecords>
-        <object>Checklist_de_Documentos__c</object>
-        <viewAllRecords>true</viewAllRecords>
-    </objectPermissions>
-    <objectPermissions>
-        <allowCreate>true</allowCreate>
-        <allowDelete>true</allowDelete>
-        <allowEdit>true</allowEdit>
-        <allowRead>true</allowRead>
-        <modifyAllRecords>true</modifyAllRecords>
         <object>Comissao__c</object>
         <viewAllRecords>true</viewAllRecords>
     </objectPermissions>
@@ -2807,10 +2798,6 @@
     </recordTypeVisibilities>
     <tabSettings>
         <tab>Bloco__c</tab>
-        <visibility>Visible</visibility>
-    </tabSettings>
-    <tabSettings>
-        <tab>Checklist_de_Documentos</tab>
         <visibility>Visible</visibility>
     </tabSettings>
     <tabSettings>
