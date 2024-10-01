@@ -1,36 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
-        <members>*</members>
-        <name>ApexClass</name>
+        <members>Quote.DiferencaNominalPorcentagem__c</members>
+        <members>Quote.DiferencaNominalReal__c</members>
+        <members>Quote.DiferencaVPLPorcentagem__c</members>
+        <members>Quote.DiferencaVPLReal__c</members>
+        <members>Quote.PorcentagemCaptacaoHabiteseProposta__c</members>
+        <members>Quote.PorcentagemCaptacaoHabiteseTabela__c</members>
+        <members>Quote.PorcentagemCaptacaoProposta__c</members>
+        <members>Quote.PorcentagemCaptacaoTabela__c</members>
+        <members>Quote.PrazoFinanciamentoProposta__c</members>
+        <members>Quote.PrazoFinanciamentoTabela__c</members>
+        <members>Quote.ValorNominalProposta__c</members>
+        <members>Quote.ValorNominalTabela__c</members>
+        <members>Quote.ValorTotalComissao__c</members>
+        <members>Quote.ValorTotalProposta__c</members>
+        <members>Quote.ValorVPLProposta__c</members>
+        <members>Quote.ValorVPLTabela__c</members>
+        <name>CustomField</name>
     </types>
-    <types>
-        <members>*</members>
-        <name>ApexComponent</name>
-    </types>
-    <types>
-        <members>*</members>
-        <name>ApexPage</name>
-    </types>
-    <types>
-        <members>*</members>
-        <name>ApexTestSuite</name>
-    </types>
-    <types>
-        <members>*</members>
-        <name>ApexTrigger</name>
-    </types>
-    <types>
-        <members>*</members>
-        <name>AuraDefinitionBundle</name>
-    </types>
-    <types>
-        <members>*</members>
-        <name>LightningComponentBundle</name>
-    </types>
-    <types>
-        <members>*</members>
-        <name>StaticResource</name>
-    </types>
-    <version>61.0</version>
+    <version>60.0</version>
 </Package>
