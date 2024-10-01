@@ -2337,96 +2337,6 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
-        <field>TabelaVendas__c.AcrescimoValorTotal__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>TabelaVendas__c.AntecipacaoAposHabiteSe__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>TabelaVendas__c.AntecipacaoAteHabiteSe__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>TabelaVendas__c.Ativa__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>TabelaVendas__c.Cotacao__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>TabelaVendas__c.DataFim__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>TabelaVendas__c.DataInclusao__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>TabelaVendas__c.DataInicial__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>TabelaVendas__c.DataInicio__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>TabelaVendas__c.DescontoNominalMoeda__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>TabelaVendas__c.DescontoNominalPorcentagem__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>TabelaVendas__c.Empreendimento__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>TabelaVendas__c.PeriodicidadeParcelaPos__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>TabelaVendas__c.PeriodicidadeParcela__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>TabelaVendas__c.Situacao__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>TabelaVendas__c.TaxaDescontoVPL__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>TabelaVendas__c.TaxaTP__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>TabelaVendas__c.UnidadesTabelaVendas__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
         <field>Task.ActivityDate</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -2508,8 +2418,6 @@
         <object>Case</object>
         <viewAllRecords>false</viewAllRecords>
     </objectPermissions>
-
-   
     <objectPermissions>
         <allowCreate>true</allowCreate>
         <allowDelete>false</allowDelete>
@@ -2528,7 +2436,6 @@
         <object>Contract</object>
         <viewAllRecords>false</viewAllRecords>
     </objectPermissions>
- 
     <objectPermissions>
         <allowCreate>true</allowCreate>
         <allowDelete>false</allowDelete>
@@ -2592,15 +2499,6 @@
         <object>RoletaLeads__c</object>
         <viewAllRecords>false</viewAllRecords>
     </objectPermissions>
-    <objectPermissions>
-        <allowCreate>true</allowCreate>
-        <allowDelete>false</allowDelete>
-        <allowEdit>false</allowEdit>
-        <allowRead>true</allowRead>
-        <modifyAllRecords>false</modifyAllRecords>
-        <object>TabelaVendas__c</object>
-        <viewAllRecords>false</viewAllRecords>
-    </objectPermissions>
     <recordTypeVisibilities>
         <recordType>Account.Conta</recordType>
         <visible>true</visible>
@@ -2653,7 +2551,6 @@
         <tab>Bloco__c</tab>
         <visibility>Visible</visibility>
     </tabSettings>
-   
     <tabSettings>
         <tab>Concierge</tab>
         <visibility>Visible</visibility>
@@ -2672,10 +2569,6 @@
     </tabSettings>
     <tabSettings>
         <tab>Simulador_de_Vendas</tab>
-        <visibility>Visible</visibility>
-    </tabSettings>
-    <tabSettings>
-        <tab>TabelaVendas__c</tab>
         <visibility>Visible</visibility>
     </tabSettings>
     <tabSettings>

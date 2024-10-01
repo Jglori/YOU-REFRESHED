@@ -4,10 +4,6 @@
         <apexClass>ConciergeController</apexClass>
         <enabled>true</enabled>
     </classAccesses>
-    <classAccesses>
-        <apexClass>ConciergeService</apexClass>
-        <enabled>true</enabled>
-    </classAccesses>
     <hasActivationRequired>false</hasActivationRequired>
     <label>Componente: Concierge</label>
     <tabSettings>
