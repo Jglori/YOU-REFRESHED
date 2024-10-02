@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GlobalValueSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customValue>
+        <fullName>Residencial</fullName>
+        <default>false</default>
+        <label>Residencial</label>
+    </customValue>
+    <customValue>
+        <fullName>Casa</fullName>
+        <default>false</default>
+        <label>Casa</label>
+    </customValue>
+    <customValue>
+        <fullName>Lote</fullName>
+        <default>false</default>
+        <label>Lote</label>
+    </customValue>
+    <customValue>
+        <fullName>Comercial</fullName>
+        <default>false</default>
+        <label>Comercial</label>
+    </customValue>
+    <masterLabel>Tipos de unidades</masterLabel>
+    <sorted>false</sorted>
+</GlobalValueSet>

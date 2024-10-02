@@ -3,6 +3,7 @@
     <fullName>SPE__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <description>SPE (Sociedade de Propósito Específico)</description>
+    <externalId>false</externalId>
     <label>SPE</label>
     <referenceTo>Account</referenceTo>
     <relationshipLabel>SPE</relationshipLabel>

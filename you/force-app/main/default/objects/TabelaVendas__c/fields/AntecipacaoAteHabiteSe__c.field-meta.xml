@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>AntecipacaoAteHabiteSe__c</fullName>
+    <externalId>false</externalId>
+    <formula>EXP(LN((1+ TaxaDescontoVPL__c ))*( PeriodicidadeParcela__c /12))-1</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <inlineHelpText>Taxa de antecipação até o habite-se por mês</inlineHelpText>
+    <label>Antecipação ATÉ o Habite-se</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>7</scale>
+    <trackTrending>false</trackTrending>
+    <type>Percent</type>
+</CustomField>

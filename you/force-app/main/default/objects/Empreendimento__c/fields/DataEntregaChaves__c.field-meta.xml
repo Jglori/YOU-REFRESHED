@@ -3,6 +3,7 @@
     <fullName>DataEntregaChaves__c</fullName>
     <description>Data da entrega das chaves
  do empreendimento</description>
+    <externalId>false</externalId>
     <label>Data da Entrega das Chaves</label>
     <required>false</required>
     <trackHistory>false</trackHistory>

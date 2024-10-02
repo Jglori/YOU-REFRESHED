@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<StandardValueSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <sorted>false</sorted>
+    <standardValue>
+        <fullName>Padrão</fullName>
+        <default>false</default>
+        <label>Padrão</label>
+    </standardValue>
+    <standardValue>
+        <fullName>Térreo</fullName>
+        <default>false</default>
+        <label>Térreo</label>
+    </standardValue>
+    <standardValue>
+        <fullName>Cobertura</fullName>
+        <default>false</default>
+        <label>Cobertura</label>
+    </standardValue>
+    <standardValue>
+        <fullName>PCD</fullName>
+        <default>false</default>
+        <label>PCD</label>
+    </standardValue>
+    <standardValue>
+        <fullName>Vaga Coberta</fullName>
+        <default>false</default>
+        <label>Vaga Coberta</label>
+    </standardValue>
+    <standardValue>
+        <fullName>Vaga Descoberta</fullName>
+        <default>false</default>
+        <label>Vaga Descoberta</label>
+    </standardValue>
+</StandardValueSet>

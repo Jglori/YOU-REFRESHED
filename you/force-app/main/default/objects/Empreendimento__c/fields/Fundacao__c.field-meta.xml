@@ -2,6 +2,7 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Fundacao__c</fullName>
     <description>Porcentagem de conclusão da Fundação</description>
+    <externalId>false</externalId>
     <label>Fundação</label>
     <precision>3</precision>
     <required>false</required>

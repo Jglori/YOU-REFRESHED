@@ -3,6 +3,7 @@
     <fullName>Empreendimento__c</fullName>
     <deleteConstraint>Restrict</deleteConstraint>
     <description>Deve ser preenchido com o empreeendimento corespondente.</description>
+    <externalId>false</externalId>
     <label>Empreendimento</label>
     <referenceTo>Empreendimento__c</referenceTo>
     <relationshipLabel>Blocos</relationshipLabel>

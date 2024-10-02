@@ -75,21 +75,6 @@
         </values>
     </picklistValues>
     <picklistValues>
-        <picklist>Situacao__c</picklist>
-        <values>
-            <fullName>Livre</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Reservada</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Vendida</fullName>
-            <default>false</default>
-        </values>
-    </picklistValues>
-    <picklistValues>
         <picklist>Status_ERP__c</picklist>
         <values>
             <fullName>%3C%3CStatus ERP%3E%3E</fullName>
@@ -99,7 +84,7 @@
     <picklistValues>
         <picklist>Status__c</picklist>
         <values>
-            <fullName>Livre</fullName>
+            <fullName>Disponivel</fullName>
             <default>false</default>
         </values>
         <values>

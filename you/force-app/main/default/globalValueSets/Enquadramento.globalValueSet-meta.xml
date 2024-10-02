@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GlobalValueSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customValue>
+        <fullName>HIS</fullName>
+        <default>false</default>
+        <label>HIS</label>
+    </customValue>
+    <customValue>
+        <fullName>HMP</fullName>
+        <default>false</default>
+        <label>HMP</label>
+    </customValue>
+    <customValue>
+        <fullName>R2V</fullName>
+        <default>false</default>
+        <label>R2V</label>
+    </customValue>
+    <masterLabel>Enquadramento</masterLabel>
+    <sorted>false</sorted>
+</GlobalValueSet>

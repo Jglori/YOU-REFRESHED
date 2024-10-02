@@ -3,6 +3,7 @@
     <fullName>DisponivelEspelho__c</fullName>
     <defaultValue>false</defaultValue>
     <description>Ao ser selecionado, deve deixar o empreendimento em questão disponivel e visivel.</description>
+    <externalId>false</externalId>
     <inlineHelpText>Indica se o  empreendimento será inserido na funcionalidade &apos;Espelho de Vendas&apos;.</inlineHelpText>
     <label>Disponível no espelho</label>
     <trackHistory>false</trackHistory>

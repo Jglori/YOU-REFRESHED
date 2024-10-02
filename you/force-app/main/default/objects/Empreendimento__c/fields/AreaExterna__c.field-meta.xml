@@ -2,6 +2,7 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>AreaExterna__c</fullName>
     <description>Porcentagem de conclusão da Área Externa</description>
+    <externalId>false</externalId>
     <label>Área Externa</label>
     <precision>3</precision>
     <required>false</required>

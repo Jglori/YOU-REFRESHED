@@ -3,6 +3,7 @@
     <fullName>Coeficiente__c</fullName>
     <defaultValue>1</defaultValue>
     <description>Coeficiente a ser aplicado nesta unidade para geração do valor comercial.</description>
+    <externalId>false</externalId>
     <inlineHelpText>Coeficiente a ser aplicado nesta unidade para geração do valor comercial.</inlineHelpText>
     <label>Coeficiente</label>
     <precision>18</precision>

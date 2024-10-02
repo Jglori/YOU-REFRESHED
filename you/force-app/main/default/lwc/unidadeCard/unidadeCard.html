@@ -1,0 +1,55 @@
+<template>
+    <template lwc:if={getUnidadeSelected}>
+        <div  class="slds-clearfix slds-p-around_small slds-grid slds-grid_vertical unidadeCard unidadeCardSelectec" data-id={unidade.id}  onclick={handleSelecionarUnidade} style={unidade.color}>
+            <!-- <lightning-input type="checkbox" class="slds-float_right"  name="unidadeSelected" checked={getUnidadeSelected} disabled></lightning-input>
+            -->
+            <div style="position: absolute; max-width: 40px; right: 0; top: 0;" class="slds-float_right">
+                <lightning-button-stateful
+                    icon-name-when-on="utility:check"
+                    variant="inverse"
+                    selected={getUnidadeSelected}
+                    disabled
+                    name="unidadeSelected">
+                </lightning-button-stateful>
+            </div>
+
+            <div class="slds-grid slds-grid_vertical slds-text-align_center" style="width: 100%;">
+                <span class="slds-text-heading_small" title={getUnidadeTipoUnidade}>{getUnidadeTipoUnidade}</span>
+                <span class="slds-text-body_regular"><b style="width: 100%; max-width: 100%; overflow-x: hidden; white-space: nowrap; text-overflow: ellipsis;" title={getUnidadeName}>{getUnidadeName}</b></span>
+            </div>
+
+            <div class="slds-grid slds-text-align_center"  style="display: grid; grid-template-columns: repeat(3, 1fr); grid-column-gap: 10px;">
+                <span class="slds-text-body_small" style="width: 100%; max-width: 100%; overflow-x: hidden; white-space: nowrap; text-overflow: ellipsis;"><b title={getUnidadePreco}>{getUnidadePreco}</b></span>
+                <span class="slds-text-body_small" style="width: 100%; max-width: 100%; overflow-x: hidden; white-space: nowrap; text-overflow: ellipsis;"><b title={getUnidadeMetrosQuadrados}>{getUnidadeMetrosQuadrados}</b></span>
+                <span class="slds-text-body_small" style="width: 100%; max-width: 100%; overflow-x: hidden; white-space: nowrap; text-overflow: ellipsis;"><b title={getUnidadeNumeroQuartos}>{getUnidadeNumeroQuartos}</b></span>
+            </div>
+        </div>
+    </template>
+
+    <template lwc:else>
+        <div  class="slds-clearfix slds-p-around_small slds-grid slds-grid_vertical unidadeCard" data-id={unidade.id}  onclick={handleSelecionarUnidade} style={unidade.color}>
+            <!-- <lightning-input type="checkbox" class="slds-float_right"  name="unidadeSelected" checked={getUnidadeSelected} disabled></lightning-input>
+            -->
+            <div style="position: absolute; max-width: 40px; right: 0; top: 0;" class="slds-float_right">
+                <lightning-button-stateful
+                    icon-name-when-on="utility:check"
+                    variant="inverse"
+                    selected={getUnidadeSelected}
+                    disabled
+                    name="unidadeSelected">
+                </lightning-button-stateful>
+            </div>
+
+            <div class="slds-grid slds-grid_vertical slds-text-align_center" style="width: 100%;">
+                <span class="slds-text-heading_small" title={getUnidadeTipoUnidade}>{getUnidadeTipoUnidade}</span>
+                <span class="slds-text-body_regular"><b style="width: 100%; max-width: 100%; overflow-x: hidden; white-space: nowrap; text-overflow: ellipsis;" title={getUnidadeName}>{getUnidadeName}</b></span>
+            </div>
+
+            <div class="slds-grid slds-text-align_center"  style="display: grid; grid-template-columns: repeat(3, 1fr); grid-column-gap: 10px;">
+                <span class="slds-text-body_small" style="width: 100%; max-width: 100%; overflow-x: hidden; white-space: nowrap; text-overflow: ellipsis;"><b title={getUnidadePreco}>{getUnidadePreco}</b></span>
+                <span class="slds-text-body_small" style="width: 100%; max-width: 100%; overflow-x: hidden; white-space: nowrap; text-overflow: ellipsis;"><b title={getUnidadeMetrosQuadrados}>{getUnidadeMetrosQuadrados}</b></span>
+                <span class="slds-text-body_small" style="width: 100%; max-width: 100%; overflow-x: hidden; white-space: nowrap; text-overflow: ellipsis;"><b title={getUnidadeNumeroQuartos}>{getUnidadeNumeroQuartos}</b></span>
+            </div>
+        </div>
+    </template>
+</template>

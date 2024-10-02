@@ -2,6 +2,7 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>OpcoesLazerDisponiveis__c</fullName>
     <description>Opções de lazer disponíveis</description>
+    <externalId>false</externalId>
     <label>Opções de Lazer Disponíveis</label>
     <required>false</required>
     <trackHistory>false</trackHistory>

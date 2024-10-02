@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <GlobalValueSet xmlns="http://soap.sforce.com/2006/04/metadata">
     <customValue>
-        <fullName>Livre</fullName>
+        <fullName>Disponivel</fullName>
         <default>false</default>
-        <label>Livre</label>
+        <label>Disponível</label>
     </customValue>
     <customValue>
         <fullName>Reservada</fullName>

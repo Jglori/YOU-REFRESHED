@@ -2,6 +2,7 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Bloco__c</fullName>
     <deleteConstraint>Restrict</deleteConstraint>
+    <externalId>false</externalId>
     <label>Bloco</label>
     <referenceTo>Bloco__c</referenceTo>
     <relationshipLabel>Unidades</relationshipLabel>
