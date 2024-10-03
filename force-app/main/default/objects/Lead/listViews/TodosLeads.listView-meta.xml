@@ -3,21 +3,17 @@
     <fullName>TodosLeads</fullName>
     <columns>FULL_NAME</columns>
     <columns>LEAD.STATUS</columns>
+    <columns>LEAD.RECORDTYPE</columns>
     <columns>DataHoraVencimento__c</columns>
     <columns>FarolLead__c</columns>
     <columns>EmpreendimentoInteresse__c</columns>
-    <columns>LEAD.LEAD_SOURCE</columns>
-    <columns>LEAD.EMAIL</columns>
-    <columns>LEAD.PHONE</columns>
     <columns>CORE.USERS.FIRST_NAME</columns>
     <columns>CORE.USERS.LAST_NAME</columns>
-    <columns>LEAD.CREATED_DATE</columns>
-    <columns>LEAD.RECORDTYPE</columns>
     <filterScope>Everything</filterScope>
     <filters>
         <field>LEAD.STATUS</field>
         <operation>equals</operation>
-        <value>Descartado,Lead Perdido(não trabalho),Novo,Nutrindo,Tentativa de contato,Contato Realizado,Agendamento de Visita,Qualificação,Conversão</value>
+        <value>Descartado,Lead Perdido(não trabalho),Novo,Nutrindo,Tentativa de contato,Contato Realizado,Contato_Realizado,Agendamento de Visita,Qualificação,Qualificacao,Conversão</value>
     </filters>
     <label>Todos os Leads</label>
 </ListView>
