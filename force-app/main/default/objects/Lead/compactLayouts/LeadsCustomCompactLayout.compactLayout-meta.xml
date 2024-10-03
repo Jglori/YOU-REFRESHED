@@ -2,13 +2,12 @@
 <CompactLayout xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>LeadsCustomCompactLayout</fullName>
     <fields>Name</fields>
-    <fields>Status</fields>
+    <fields>RecordTypeId</fields>
     <fields>DataHoraVencimento__c</fields>
+    <fields>Status</fields>
     <fields>FarolLead__c</fields>
     <fields>EmpreendimentoInteresse__c</fields>
     <fields>LeadSource</fields>
-    <fields>Email</fields>
     <fields>MobilePhone</fields>
-    <fields>OwnerId</fields>
     <label>Lista de Leads</label>
 </CompactLayout>
