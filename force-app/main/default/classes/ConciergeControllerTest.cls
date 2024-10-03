@@ -3,8 +3,6 @@ public class ConciergeControllerTest {
     
     @testSetup
     static void setup() {
-        // Configuração de dados para os testes
-        // Criar um Lead como exemplo
         Lead lead = new Lead(
             FirstName = 'João',
             LastName = 'Silva',

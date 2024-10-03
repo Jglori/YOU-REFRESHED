@@ -1,0 +1,377 @@
+.section-container {
+    display: flex;
+    flex-direction: column;
+}
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000; /* Certifique-se de que o z-index é alto o suficiente para aparecer sobre outros elementos */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.spinner-container {
+    z-index: 1001; /* Certifique-se de que o z-index é alto o suficiente para aparecer sobre o overlay */
+}
+.toast {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 10000;
+    animation: slideIn 0.5s forwards;
+}
+
+@keyframes slideIn {
+    from {
+        right: -300px;
+        opacity: 0;
+    }
+    to {
+        right: 10px;
+        opacity: 1;
+    }
+}
+
+
+.section {
+    margin-bottom: 20px;
+    border: 1px solid #dcdcdc; /* Adiciona borda para separar as seções */
+    border-radius: 5px; /* Borda arredondada */
+    padding: 10px; /* Espaçamento interno */
+}
+
+.listaDocumentos {
+    margin-left: 14px;
+    font-size: 1.5em;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-weight: bold;
+    margin-bottom: 15px; /* Espaçamento inferior para separar do conteúdo */
+}
+
+.document-container {
+    margin-bottom: 10px; /* Ajuste conforme necessário para o espaçamento desejado */
+}
+
+.document-row {
+    display: flex;
+    align-items: center; /* Alinha verticalmente os itens no centro */
+    padding: 10px; /* Espaçamento interno */
+    background-color: #f9f9f9; /* Cor de fundo do item */
+}
+
+.document-row lightning-icon {
+    margin-right: 10px; /* Espaçamento entre o ícone e o nome do documento */
+}
+
+.document-row span {
+    flex: 1; /* Faz com que o nome do documento ocupe o espaço disponível */
+    display: flex;
+    align-items: center; /* Alinha verticalmente o texto no centro *//* Define a fonte para o nome do documento */
+    font-size: 1.1em; /* Define o tamanho da fonte para o nome do documento */
+}
+
+.icon-and-buttons-container {
+    display: flex;
+    align-items: center; /* Alinha verticalmente os botões e ícones no centro */
+    margin-right: 10px; /* Espaçamento à direita */
+}
+
+.approval-icon-container {
+    display: flex;
+    align-items: center; /* Alinha verticalmente os ícones de aprovação no centro */
+}
+
+.delivery-date {
+    color: #0070d2; /* Cor para a data de entrega */
+    margin-left: 10px; /* Espaçamento à esquerda */
+}
+
+.warning-icon {
+    color: #ff6d60; /* Cor de advertência para ícone de aviso */
+}
+
+.document-row .delivery-date {
+    color: #888;
+    font-size: 0.9em;
+    margin-left: 10px;
+}
+
+.document-row lightning-button-icon {
+    margin-left: 10px; /* Espaçamento entre os botões */
+    --sds-c-button-icon-size: 2.5rem; /* Tamanho do botão */
+}
+
+.document-row .completed-icon {
+    color: green;
+    margin-left: 10px;
+}
+
+.icon-and-buttons-container {
+    margin-right: 10px; 
+    display: flex;
+    align-items: center; 
+}
+
+.completed-icon {
+    color: green;
+    margin-left: 5px;
+    height: 1.5rem; 
+    width: 1.5rem;
+}
+
+.slds-modal__container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9001; 
+}
+
+.approval-icon {
+    --sds-c-icon-size: 1rem;
+}
+
+input[type="file"] {
+    opacity: 0;
+    width: 0.1px;
+    height: 0.1px;
+    position: absolute;
+    overflow: hidden;
+    clip: rect(1px, 1px, 1px, 1px);
+}
+
+/* CSS do componente */
+
+.document-card-container {
+    border: 1px solid #d8dde6; /* Borda ao redor do card */
+    border-radius: 0.25rem; /* Arredondamento dos cantos */
+    padding: 1rem; /* Espaçamento interno do card */
+    background-color: #ffffff; /* Cor de fundo do card */
+}
+
+.document-card {
+    margin-bottom: 0.5rem; /* Espaçamento entre os documentos */
+}
+
+.icon-and-buttons-container {
+    display: flex;
+    align-items: center;
+}
+
+.approval-icon-container {
+    display: flex;
+    align-items: center;
+}
+
+.warning-icon {
+    color: #ff6d60; /* Cor de advertência para ícone de aviso */
+}
+
+.delivery-date {
+    color: #0070d2; /* Cor para a data de entrega */
+}
+
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
+    text-align: center;
+    font-size: 1.5em;
+    color: #999;
+}
+
+.empty-state lightning-icon {
+    margin-bottom: 20px;
+}
+/* No arquivo CSS do seu componente */
+
+.modal {
+    display: none; /* Oculta o modal por padrão */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.modal.slds-modal__open {
+    display: block; /* Mostra o modal quando a classe é adicionada */
+}
+
+.document-card {
+    margin: 10px;
+}
+
+.document-row {
+    align-items: center;
+}
+
+.icon-and-buttons-container {
+    display: flex;
+    align-items: center;
+}
+
+.approval-icon-container {
+    margin-left: 10px;
+}
+
+.warning-icon {
+    color: red;
+}
+
+.empty-state {
+    text-align: center;
+}
+/* Modal de Confirmação */
+.slds-modal__footer {
+    display: flex;
+    justify-content: flex-end; /* Alinha os botões ao final do modal */
+    gap: 10px; /* Adiciona espaço entre os botões */
+}
+
+/* Ajusta o tamanho dos botões */
+.slds-button {
+    margin-left: 0.5rem; /* Espaço à esquerda dos botões, se necessário */
+}
+
+/* Outras regras CSS */
+.section-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.section {
+    margin-bottom: 20px;
+    border: 1px solid #dcdcdc;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.listaDocumentos {
+    margin-left: 14px;
+    font-size: 1.5em;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.document-container {
+    margin-bottom: 10px;
+}
+
+.document-row {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background-color: #f9f9f9;
+}
+
+.document-row lightning-icon {
+    margin-right: 10px;
+}
+
+.document-row span {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    font-size: 1.1em;
+}
+
+.icon-and-buttons-container {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.approval-icon-container {
+    display: flex;
+    align-items: center;
+}
+
+.delivery-date {
+    color: #0070d2;
+    margin-left: 10px;
+}
+
+.warning-icon {
+    color: #ff6d60;
+}
+
+.document-row .delivery-date {
+    color: #888;
+    font-size: 0.9em;
+    margin-left: 10px;
+}
+
+.document-row lightning-button-icon {
+    margin-left: 10px;
+}
+
+.document-row .completed-icon {
+    color: green;
+    margin-left: 10px;
+}
+
+.completed-icon {
+    color: green;
+    margin-left: 5px;
+    height: 1.5rem;
+    width: 1.5rem;
+}
+
+.slds-modal__container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9001;
+}
+
+.approval-icon {
+    --sds-c-icon-size: 1rem;
+}
+
+input[type="file"] {
+    opacity: 0;
+    width: 0.1px;
+    height: 0.1px;
+    position: absolute;
+    overflow: hidden;
+    clip: rect(1px, 1px, 1px, 1px);
+}
+
+.document-card-container {
+    border: 1px solid #d8dde6;
+    border-radius: 0.25rem;
+    padding: 1rem;
+    background-color: #ffffff;
+}
+
+.document-card {
+    margin-bottom: 0.5rem;
+}
+
+.icon-and-buttons-container {
+    display: flex;
+    align-items: center;
+}
+
+.approval-icon-container {
+    margin-left: 10px;
+}
+
+.warning-icon {
+    color: red;
+}
+
+.empty-state {
+    text-align: center;
+}
