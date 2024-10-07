@@ -1265,11 +1265,7 @@
         <field>Lead.PorqueNaoVisitou__c</field>
         <readable>true</readable>
     </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>Lead.PrimeiraInteracao__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
+  
     <fieldPermissions>
         <editable>true</editable>
         <field>Lead.PrimeiroEmpreendimento__c</field>
