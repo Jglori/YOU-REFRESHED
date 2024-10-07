@@ -164,16 +164,7 @@
                 <identifier>RecordPrimeiroEmpreendimento_cField</identifier>
             </fieldInstance>
         </itemInstances>
-        <itemInstances>
-            <fieldInstance>
-                <fieldInstanceProperties>
-                    <name>uiBehavior</name>
-                    <value>none</value>
-                </fieldInstanceProperties>
-                <fieldItem>Record.PrimeiraInteracao__c</fieldItem>
-                <identifier>RecordPrimeiraInteracao_cField</identifier>
-            </fieldInstance>
-        </itemInstances>
+      
         <itemInstances>
             <fieldInstance>
                 <fieldInstanceProperties>
