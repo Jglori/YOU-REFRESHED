@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
-    <types>
+	    <types>
         <members>Quote.DiferencaNominalPorcentagem__c</members>
         <members>Quote.DiferencaNominalReal__c</members>
         <members>Quote.DiferencaVPLPorcentagem__c</members>
@@ -19,5 +19,25 @@
         <members>Quote.ValorVPLTabela__c</members>
         <name>CustomField</name>
     </types>
-    <version>60.0</version>
+	<types>
+		<members>Cota_o_P_gina_de_registro1</members>
+		<name>FlexiPage</name>
+	</types>
+	<types>
+		<members>Quote-Quote Layout</members>
+		<name>Layout</name>
+	</types>
+	<types>
+		<members>CotacaoCriacao</members>
+		<members>CotacaoEdicao</members>
+		<members>CotacaoEnviarAprovacao</members>
+		<members>CotacaoLeitura</members>
+		<members>CotacaoSincronizacao</members>
+		<name>PermissionSet</name>
+	</types>
+	<types>
+		<members>QuoteStatus</members>
+		<name>StandardValueSet</name>
+	</types>
+	<version>60.0</version>
 </Package>
