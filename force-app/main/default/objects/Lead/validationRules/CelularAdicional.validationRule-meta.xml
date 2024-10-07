@@ -3,8 +3,9 @@
     <fullName>CelularAdicional</fullName>
     <active>true</active>
     <errorConditionFormula>AND(
-NOT(ISBLANK( CelularAdicional__c )),
-NOT(REGEX(CelularAdicional__c, &quot;[0-9]{11}&quot;))
+  NOT(ISBLANK( CelularAdicional__c )),
+  NOT(REGEX(CelularAdicional__c, &quot;[0-9]{11}&quot;))
+
 )</errorConditionFormula>
     <errorDisplayField>CelularAdicional__c</errorDisplayField>
     <errorMessage>O campo &quot;Celular Adicional&quot; deve ser preenchido no formato &quot;11999999999&quot;</errorMessage>

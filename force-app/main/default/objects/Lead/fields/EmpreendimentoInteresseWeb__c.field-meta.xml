@@ -3,7 +3,7 @@
     <fullName>EmpreendimentoInteresseWeb__c</fullName>
     <description>Campo tipo texto sendo usado no Web-to-Lead</description>
     <externalId>false</externalId>
-    <label>Empreendimento de Interesse_OLD</label>
+    <label>Empreendimento de Interesse</label>
     <length>255</length>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>
