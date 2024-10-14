@@ -1,56 +1,36 @@
 <template>
-    <lightning-card title="Gerar Contrato" icon-name="standard:contract">
-        <div class="slds-p-around_medium">
-            <lightning-input
-                label="Status"
-                value={status}
-                disabled
-            ></lightning-input>
+    <div class="slds-p-around_medium">
+        <lightning-card title="Gerar Contrato" icon-name="standard:contract">
+            <lightning-input label="Status" value={status} disabled></lightning-input>
 
-            <lightning-input
-                type="date"
-                label="Data Início do Contrato"
-                value={dataInicioContrato}
-                disabled
-            ></lightning-input>
+            <lightning-input type="date" label="Data Início do Contrato" value={dataInicioContrato}
+                disabled></lightning-input>
 
-            <lightning-input
-                label="Nome da Conta"
-                value={nomeConta}
-                disabled
-            ></lightning-input>
+            <lightning-input label="Nome da Conta" value={nomeConta} disabled></lightning-input>
 
-            <lightning-input
-                type="date"
-                label="Data Envio para Assinatura"
-                value={dataEnvioParaAssinatura}
-                disabled
-            ></lightning-input>
+            <lightning-input type="date" label="Data Envio para Assinatura" value={dataEnvioParaAssinatura}
+                disabled></lightning-input>
 
-            <lightning-input
-                type="date"
-                label="Data da Assinatura do Cliente (DocuSign)"
-                value={dataAssinaturaCliente}
-                disabled
-            ></lightning-input>
+            <lightning-input type="date" label="Data da Assinatura do Cliente (DocuSign)" value={dataAssinaturaCliente}
+                disabled></lightning-input>
 
             <lightning-layout-item>
-                <label>Signatários</label>
+                <b>Signatários</b>
+
                 <ul>
-                    <template for:each={signatariosOptions} for:item="signatario">
-                        <li key={signatario.value}>{signatario.label}</li>
+                    <template for:each={signatarios} for:item="signatario">
+                        <li key={signatario.value}>{signatario.label} - {signatario.role}</li>
                     </template>
                 </ul>
             </lightning-layout-item>
 
-            <lightning-combobox
-                label="Template"
-                value={templateSelecionado}
-                options={templateOptions}
-                onchange={handleTemplate}
-            ></lightning-combobox>
-        </div>
+            <lightning-combobox name="template" label="Template:" value={templateSelecionado} placeholder="Selecione..."
+                options={templateOptions} onchange={handleTemplate}>
+            </lightning-combobox>
+
+        </lightning-card>
 
         <lightning-button label="Gerar Contrato" onclick={gerarContrato}></lightning-button>
-    </lightning-card>
+    </div>
+
 </template>

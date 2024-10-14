@@ -9,4 +9,14 @@ public with sharing class ContractController {
             return new Contract();
         }
     }
+
+    @AuraEnabled(cacheable=true)
+    public static List<OpportunityContactRole> rolesContatoOpp(String oppId){
+        if(!String.isEmpty(oppId) || oppId != null){
+            List<OpportunityContactRole> roles = ContractSelector.getRolesContatoOpp(oppId);
+            return !roles.isEmpty() ? roles : new List<OpportunityContactRole>();
+        }else{
+            return new List<OpportunityContactRole>();
+        }
+    }
 }

@@ -5,4 +5,8 @@ public with sharing class ContractSelector {
         FROM Contract WHERE Id IN (SELECT ContractId FROM Opportunity WHERE Id = :oppId)
         LIMIT 1];
     }
+
+    public static List<OpportunityContactRole> getRolesContatoOpp(String oppId) {
+        return [SELECT Id, ContactId, OpportunityId, Contact.Name, Contact.Email, Role FROM OpportunityContactRole WHERE OpportunityId = :oppId AND Role != null];
+    }
 }
