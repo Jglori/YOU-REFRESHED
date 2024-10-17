@@ -2,6 +2,7 @@ import { LightningElement, api, track } from 'lwc';
 import infoContrato from '@salesforce/apex/ContractController.infoContrato';
 import rolesContatoOpp from '@salesforce/apex/ContractController.rolesContatoOpp';
 import getTemplates from '@salesforce/apex/TemplateController.getTemplates';
+import retornarContratoGerado from '@salesforce/apex/ContractController.retornarContratoGerado';
 
 export default class ContratoForm extends LightningElement {
     @api recordId; 
@@ -61,7 +62,17 @@ export default class ContratoForm extends LightningElement {
         }
     }
 
+    async gerarContrato(){
+        try{
+            const res = await retornarContratoGerado({ oppId: this.recordId, templateId: this.templateSelecionado })
+            console.log(JSON.stringify(res));
+        } catch (error) {
+            console.error('Erro ao gerar contrato:', error.getMessage());
+        };
+    }
+
     handleTemplate(event) {
         this.templateSelecionado = event.detail.value;
+        console.log(this.templateSelecionado);
     }
 }

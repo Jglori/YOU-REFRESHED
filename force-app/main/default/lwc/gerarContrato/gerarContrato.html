@@ -29,8 +29,14 @@
             </lightning-combobox>
 
         </lightning-card>
+        
+        <template if:true={templateSelecionado}>
+            <lightning-button label="Gerar Contrato" onclick={gerarContrato}></lightning-button>       
+        </template>
 
-        <lightning-button label="Gerar Contrato" onclick={gerarContrato}></lightning-button>
+        <template if:false={templateSelecionado}>
+            <lightning-button label="Gerar Contrato" onclick={gerarContrato} disabled></lightning-button>       
+        </template>
     </div>
 
 </template>

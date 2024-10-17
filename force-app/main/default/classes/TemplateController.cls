@@ -6,7 +6,7 @@ public with sharing class TemplateController {
         List<TemplateDocumento__c> templates = TemplateSelector.getTemplates();
         
         if (!templates.isEmpty() && String.isNotBlank(oppId)) {
-            Opportunity opp = OpportunitySelector.getOppById(oppId);
+            Opportunity opp = (Opportunity) QueryHelper.selectAllFields('Opportunity', oppId);
             
             if (opp != null) {
                 for (TemplateDocumento__c template : templates) {

@@ -19,4 +19,18 @@ public with sharing class ContractController {
             return new List<OpportunityContactRole>();
         }
     }
+
+    @AuraEnabled(cacheable=true)
+    public static String retornarContratoGerado(String oppId, String templateId){
+        Opportunity opp = (Opportunity) QueryHelper.selectAllFields('Opportunity', oppId);
+        TemplateDocumento__c template = TemplateSelector.getTemplateById(templateId);
+        String contratoGerado;
+
+        if(opp != null || template != null){
+            contratoGerado = ContratoService.contratoText(opp, template);
+            return contratoGerado;
+        }
+
+        return contratoGerado != null ? contratoGerado : 'N/A';
+    }
 }
