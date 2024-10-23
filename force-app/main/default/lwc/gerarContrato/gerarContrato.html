@@ -1,0 +1,64 @@
+<template>
+    <div class="slds-p-around_medium">
+        <template if:true={statusIsGerado}>
+            <lightning-card title="Contrato da Oportunidade" icon-name="standard:contract">
+                <div class="slds-grid slds-m-around_medium">
+
+                    <div class="slds-m-right_small">
+                        <lightning-icon icon-name="doctype:pdf" size="small" alternative-text="PDF"></lightning-icon>
+                    </div>
+        
+                    <div class="slds-m-right_large slds-text-body_small">
+                        <span>{nomeContrato}</span>
+                    </div>
+        
+                    <div class="slds-grid slds-m-left_large">
+                        <lightning-button-icon icon-name="utility:preview" alternative-text="Visualizar Contrato" onclick={previewHandler} class="slds-m-right_medium" size="small"></lightning-button-icon>
+                        <lightning-button-icon icon-name="utility:download" alternative-text="Baixar Contrato" onclick={downloadHandler} size="small"></lightning-button-icon>
+                    </div>
+                </div>
+            </lightning-card>
+        </template>
+
+        <template if:false={statusIsGerado}>
+            <lightning-card title="Gerar Contrato" icon-name="standard:contract">
+                <lightning-input label="Status" value={status} disabled></lightning-input>
+
+                <lightning-input type="date" label="Data Início do Contrato" value={dataInicioContrato}
+                    disabled></lightning-input>
+
+                <lightning-input label="Nome da Conta" value={nomeConta} disabled></lightning-input>
+
+                <lightning-input type="date" label="Data Envio para Assinatura" value={dataEnvioParaAssinatura}
+                    disabled></lightning-input>
+
+                <lightning-input type="date" label="Data da Assinatura do Cliente (DocuSign)"
+                    value={dataAssinaturaCliente} disabled></lightning-input>
+
+                <lightning-layout-item>
+                    <b>Signatários</b>
+
+                    <ul>
+                        <template for:each={signatarios} for:item="signatario">
+                            <li key={signatario.value}>{signatario.label} - {signatario.role}</li>
+                        </template>
+                    </ul>
+                </lightning-layout-item>
+
+                <lightning-combobox name="template" label="Template:" value={templateSelecionado}
+                    placeholder="Selecione..." options={templateOptions} onchange={handleTemplate}>
+                </lightning-combobox>
+
+            </lightning-card>
+
+            <template if:true={templateSelecionado}>
+                <lightning-button label="Gerar Contrato" onclick={gerarContrato}></lightning-button>
+            </template>
+
+            <template if:false={templateSelecionado}>
+                <lightning-button label="Gerar Contrato" onclick={gerarContrato} disabled></lightning-button>
+            </template>
+        </template>
+    </div>
+
+</template>
