@@ -17,6 +17,7 @@ private class OpportunityDATest {
             IsActive=true,
             Status__c = 'Reservada'
         );
+        
         insert testProduct;
 
         PricebookEntry testPricebookEntry = new PricebookEntry(

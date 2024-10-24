@@ -49,7 +49,6 @@ public with sharing class OpportunityDA {
             FROM Opportunity
             WHERE Unidade__r.Id = :idProduto
         ];
-        
     }
     
 
