@@ -106,6 +106,7 @@ public class NotificacaoHelperTest {
             NumeroDeSuites__c = 1, 
             NumeroDeVagasIncorporadas__c = 1
         );
+        
         insert produtoTeste;
         
         
