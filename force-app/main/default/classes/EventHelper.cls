@@ -9,6 +9,7 @@ public class EventHelper {
                 if(ld != null){
                     if(ld.Status == 'Agendamento de Visita'){
                         event.EmpreendimentoInteresse__c = ld.EmpreendimentoInteresse__c;
+                        event.idLead__c = ld.id;
                     }else{
                         event.addError('O status do lead precisa ser Agendamento de Visita');
                     }
@@ -53,6 +54,7 @@ public class EventHelper {
         
         Map<Id, Lead> mapLeads = getScheduledLeadsMap(eventosVisita);
 
+        System.debug('Lista de evento dentro do event helper = ' + events);
 
         if (!idLeads.isEmpty()) {
             List<Lead> leads = new List<Lead>();
@@ -65,7 +67,6 @@ public class EventHelper {
                     }
 
                     if (event.Status_do_Compromisso__c == 'Realizada com Sucesso') {
-                        lead.Status = 'Qualificação';
                         leads.add(lead);
                     }
 
@@ -80,7 +81,15 @@ public class EventHelper {
                 }
             }
             if(!leads.isEmpty()){
-                update leads;
+                try {
+                    update leads;
+                } catch (DMLException e) {
+                    for (Integer i = 0; i < e.getNumDml(); i++) {
+                        String errorMessage = e.getDmlMessage(i);
+                        System.debug(errorMessage);
+                        eventosVisita[i].addError(errorMessage);
+                    }
+                }
             }
         }
     }

@@ -59,33 +59,43 @@ public with sharing class LeadHelper {
     }
 
 
-    public static void additionalValidations(List<Lead> newLeads, Map<Id, Lead> oldLeads) {
-        for (Lead lead : newLeads) {
-            Lead oldLead = oldLeads.get(lead.Id);
-            if (oldLead.Status.equalsIgnoreCase('Tentativa de contato') && lead.Status.equalsIgnoreCase('Contato Realizado')) {
-                if (!isTaskCreatedAndOpenForAttemptToContact(lead.Id) && !Test.isRunningTest()) {
-                    lead.addError(Label.TentativaContato_LEAD);
-                }
-            }else if (oldLead.Status.equalsIgnoreCase('Agendamento de Visita') && lead.Status.equalsIgnoreCase('Qualificação') &&
-                     !hasCompletedTaskForLead(lead.Id)) {
-                lead.addError(Label.ContatoRealizado_LEAD);
-            }else if (((oldLead.Status.equals('Descartado') || oldLead.Status.equals('Lead Perdido(não trabalho)') ||
-                  oldLead.Status.equals('Novo') || oldLead.Status.equals('Nutrindo')) &&  lead.Status.equals('Contato Realizado'))) {
-                     lead.addError(Label.Fases_LEAD);
-            }else if ((oldLead.Status.equalsIgnoreCase('Descartado') || oldLead.Status.equalsIgnoreCase('Lead Perdido(não trabalho)') ||
-                  oldLead.Status.equalsIgnoreCase('Novo') || oldLead.Status.equalsIgnoreCase('Nutrindo') ||
-                  oldLead.Status.equalsIgnoreCase('Tentativa de contato')) && lead.Status.equalsIgnoreCase('Agendamento de Visita')) {
-                  if(!Test.isRunningTest())lead.addError(Label.TentativaContato_LEAD);
-                  }else if ((lead.Status.equalsIgnoreCase('Qualificação') || oldLead.Status.equalsIgnoreCase('Conversão'))) {
-                if (!lead.LeadNaoVisitou__c && isEventCreatedForVisits(lead.Id)) {
-                    lead.addError(Label.Agendamento_LEAD);
-                }
-            }else if ((new Set<String>{'Descartado', 'Lead Perdido(não trabalho)', 'Novo', 'Nutrindo',
-                'Tentativa de contato', 'Contato Realizado', 'Agendamento de Visita'}).contains(oldLead.Status) && lead.Status == 'Conversão') {
-                lead.addError(Label.Conversao_LEAD);
+public static void additionalValidations(List<Lead> newLeads, Map<Id, Lead> oldLeads) {
+    for (Lead lead : newLeads) {
+        Lead oldLead = oldLeads.get(lead.Id);
+
+        // Validação para fase Tentativa de Contato -> Contato Realizado
+        if (oldLead.Status.equalsIgnoreCase('Tentativa de contato') && lead.Status.equalsIgnoreCase('Contato Realizado')) {
+            if (!isTaskCreatedAndOpenForAttemptToContact(lead.Id) && !Test.isRunningTest()) {
+                lead.addError(Label.TentativaContato_LEAD);  // Mensagem para Tentativa de contato
             }
+
+        //Validação para fase Agendamento de Visita -> Conversão
+        } else if (oldLead.Status.equalsIgnoreCase('Agendamento de Visita') && lead.Status.equalsIgnoreCase('Conversão')) {
+            // Verifica se o campo 'LeadNaoVisitou__c' está preenchido ou se existe um evento do tipo "Visita Realizada com Sucesso"
+            if (!lead.LeadNaoVisitou__c && isEventCreatedForVisits(lead.Id)) {
+                lead.addError(Label.Agendamento_LEAD);
+            }
+
+        // Validação para Descartado/Lead Perdido/Novo -> Contato Realizado
+        } else if ((oldLead.Status.equals('Descartado') || oldLead.Status.equals('Lead Perdido(não trabalho)') ||
+                    oldLead.Status.equals('Novo')) && lead.Status.equals('Contato Realizado')) {
+            lead.addError(Label.Fases_LEAD);  // Mensagem para mudanças de status inválidas
+
+        // Validação para Descartado/Lead Perdido/Novo/Tentativa de contato -> Agendamento de Visita
+        } else if ((oldLead.Status.equalsIgnoreCase('Descartado') || oldLead.Status.equalsIgnoreCase('Lead Perdido(não trabalho)') ||
+                    oldLead.Status.equalsIgnoreCase('Novo') || oldLead.Status.equalsIgnoreCase('Tentativa de contato')) && 
+                    lead.Status.equalsIgnoreCase('Agendamento de Visita')) {
+            if (!Test.isRunningTest()) {
+                lead.addError(Label.TentativaContato_LEAD);  // Mensagem correta para Agendamento de Visita
+            }
+        // Validação para Conversão (sem fases anteriores válidas)
+        } else if ((new Set<String>{'Descartado', 'Lead Perdido(não trabalho)', 'Novo', 'Tentativa de contato', 
+                   'Contato Realizado'}).contains(oldLead.Status) && lead.Status.equals('Conversão')) {
+            lead.addError(Label.Conversao_LEAD);  // Mensagem para conversão inválida
         }
     }
+}
+
     
     public static void validateTaskCreation(List<Task> newTasks) {
         Set<Id> leadIds = new Set<Id>();
@@ -101,7 +111,7 @@ public with sharing class LeadHelper {
                     Lead lead = leads.get(task.WhoId);
                     if (isTaskCreationNotAllowedForTentativaContato(lead.Status, task.Subject)) {
 
-                        if(task.Subject == 'Reiteração'){
+                        if(task.Subject == 'Reiteração' || task.Subject.contains('Email')){
                             continue;
                         }
                         if(!Test.isRunningTest()) task.addError('Só é permitido criar uma tarefa  quando o lead está nas fases Tentativa de Contato ou Contato Realizado.');
@@ -112,7 +122,7 @@ public with sharing class LeadHelper {
     }
     
     private static Boolean isTaskCreationNotAllowedForTentativaContato(String leadStatus, String taskSubject) {
-        Set<String> disallowedStatuses = new Set<String>{'Descartado', 'Lead Perdido(não trabalho)', 'Novo', 'Nutrindo','Agendamento de Visita','Qualificação'};
+        Set<String> disallowedStatuses = new Set<String>{'Descartado', 'Lead Perdido(não trabalho)', 'Novo', 'Agendamento de Visita', 'Conversão'};
 
         if (disallowedStatuses.contains(leadStatus)) {
             return true; 
@@ -170,7 +180,7 @@ public with sharing class LeadHelper {
     
 
     public static Boolean isEventCreatedForVisits(Id leadId) {
-        List<Event> events = EventDA.getAllEventByLead(new Set<Id>{leadId});    
+        List<Event> events = EventDA.getAllEventByLead(leadId);    
         return events.isEmpty(); // se estiver vazio a lista, retorna true
     }
 
@@ -197,7 +207,7 @@ public with sharing class LeadHelper {
     //     Map<Id, List<Task>> mapTaskByWho = getMapTaskByWho(new Map<Id, Lead>(newLeads).keySet());
     //     for (Lead lead : newLeads) {
     //         Lead oldLead = oldLeadMap.get(lead.Id);
-    //         if (lead.Status == 'Prospecção' && oldLead != null && oldLead.Status == 'Nutrindo' && !mapTaskByWho.containsKey(lead.Id)) {
+    //         if (lead.Status == 'Prospecção' && oldLead != null && !mapTaskByWho.containsKey(lead.Id)) {
     //             lead.addError('Para evoluir de Nutrindo para Prospecção, pelo menos uma tarefa deve ser criada.'); //Parametrizar mensagem em customLabel
     //         }
     //     }
@@ -261,10 +271,7 @@ public with sharing class LeadHelper {
             lead.Email = (String)params.get('Email');
             isModified = true;
         }
-        if (params.containsKey('EmpreendimentoInteresse__c') && lead.EmpreendimentoInteresse__c != (String)params.get('EmpreendimentoInteresse__c')) {
-            lead.EmpreendimentoInteresse__c = (String)params.get('EmpreendimentoInteresse__c');
-            isModified = true;
-        }
+       
         if (params.containsKey('LeadSource') && lead.LeadSource != (String)params.get('LeadSource')) {
             lead.LeadSource = (String)params.get('LeadSource');
             isModified = true;
@@ -281,8 +288,8 @@ public with sharing class LeadHelper {
         String mobilePhone = lead.MobilePhone;
         String phone = lead.Phone;
         String email = lead.Email;
-        Id empreendimentoInteresse = lead.EmpreendimentoInteresse__c;
-        String nomeEmpreendimento = (lead.EmpreendimentoInteresse__r != null) ? lead.EmpreendimentoInteresse__r.name : 'N/A';
+        // Id empreendimentoInteresse = lead.EmpreendimentoInteresse__c;
+        // String nomeEmpreendimento = (lead.EmpreendimentoInteresse__r != null) ? lead.EmpreendimentoInteresse__r.name : 'N/A';
         String leadSource = lead.LeadSource;
         String status = lead.Status;
         Datetime ltimaReiterao = (lead.ltima_Reitera_o__c != null) ? lead.ltima_Reitera_o__c : System.now();
@@ -299,7 +306,6 @@ public with sharing class LeadHelper {
                 Description = 'Reiteração do Lead. Nome: ' + lead.LastName 
                     + ', Telefone: ' + lead.MobilePhone 
                     + ', Email: ' + lead.Email 
-                    + ', Empreendimento de Interesse: ' + nomeEmpreendimento 
                     + ', Origem do Lead: ' + lead.LeadSource 
                     + ', Data e horário da interação: ' + lead.ltima_Reitera_o__c
             );
@@ -369,16 +375,40 @@ public with sharing class LeadHelper {
     }
 
     public static void verifyCNPJ(List<Lead> leads) {
+        RecordType rt = [
+            SELECT Id, DeveloperName 
+            FROM RecordType 
+            WHERE SobjectType = 'Lead' 
+            AND DeveloperName = 'PessoaJuridica'
+            LIMIT 1
+        ];
         for (Lead lead : leads) {
-            if (!String.isBlank(lead.CNPJ__c) && !ValidarCNPJ.validarcnpj(lead.CNPJ__c)) {
+            // ThiagoSantos - removi !String.isBlank(lead.CNPJ__c) && da condição 
+            if (
+                lead.status == 'Conversão' && 
+                lead.RecordTypeId == rt.Id && 
+                !ValidarCNPJ.validarcnpj(lead.CNPJ__c)
+                ) {
                 lead.addError('CNPJ inválido. Por favor, insira um CNPJ válido.');
             }
         }
     }
 
     public static void verifyCPF(List<Lead> leads) {
+        RecordType rt = [
+            SELECT Id, DeveloperName 
+            FROM RecordType 
+            WHERE SobjectType = 'Lead' 
+            AND DeveloperName = 'PessoaFisica'
+            LIMIT 1
+        ];
         for (Lead lead : leads) {
-            if (!String.isBlank(lead.CPF__c) && !ValidarCPF.validarCPF(lead.CPF__c)) {
+            // ThiagoSantos - removi !String.isBlank(lead.CPF__c) && da condição 
+            if (
+                lead.status == 'Conversão' && 
+                lead.RecordTypeId == rt.Id && 
+                !ValidarCPF.validarCPF(lead.CPF__c)
+                ) {
                 lead.addError('CPF inválido. Por favor, insira um CPF válido.');
             }
         }
