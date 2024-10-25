@@ -100,13 +100,12 @@ public class NotificacaoHelperTest {
             Enquadramento__c = 'HIS', 
             Status__c = 'Disponivel', 
             Andar__c = 10, 
-            ValorM2__c = 7000, 
+            ValorM2__c = 700.000, 
             Coeficiente__c = 100,
             NumeroQuartos__c = 2, 
             NumeroDeSuites__c = 1, 
             NumeroDeVagasIncorporadas__c = 1
         );
-        
         insert produtoTeste;
         
         

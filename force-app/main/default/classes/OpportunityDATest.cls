@@ -11,7 +11,15 @@ private class OpportunityDATest {
         );
         insert testOpportunity;
 
-        Product2 testProduct = new Product2(
+        Product2 testProduct = new Product2( 
+            AgenteFinanceiro__c = 'FII', 
+            Enquadramento__c = 'HIS', 
+            Andar__c = 10, 
+            ValorM2__c = 700.000, 
+            Coeficiente__c = 100,
+            NumeroQuartos__c = 2, 
+            NumeroDeSuites__c = 1, 
+            NumeroDeVagasIncorporadas__c = 1,
             Name='Test Product',
             NumeroDaUnidade__c = '8',
             IsActive=true,
