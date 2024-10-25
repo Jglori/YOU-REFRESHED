@@ -1,11 +1,11 @@
 import { LightningElement, api, track } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
-import { NavigationMixin } from 'lightning/navigation';
 import infoContrato from '@salesforce/apex/ContractController.infoContrato';
 import rolesContatoOpp from '@salesforce/apex/ContractController.rolesContatoOpp';
 import getTemplates from '@salesforce/apex/TemplateController.getTemplates';
 import retornarContratoGerado from '@salesforce/apex/ContractController.retornarContratoGerado';
 import obterPDFContrato from '@salesforce/apex/ContractController.obterPDFContrato';
+import { NavigationMixin } from 'lightning/navigation';
 
 export default class ContratoForm extends NavigationMixin(LightningElement) {
     @api recordId; 
@@ -17,38 +17,48 @@ export default class ContratoForm extends NavigationMixin(LightningElement) {
     @track templateOptions = [''];
     @track statusIsGerado = false;
     @track contrato;
+    @track contratoVazio = false; 
     contentDocumentId;
     nomeContrato;
     nomeConta;
     signatarios = [];
 
     connectedCallback() {
-        this.fetchContrato();
         this.fetchRoles();
+        this.fetchContrato();
     }
 
     async fetchContrato() {
         try {
             const templates = await getTemplates({ oppId: this.recordId });
             this.contrato = await infoContrato({ oppId: this.recordId });
-            this.nomeConta = this.contrato.Account.Name;
-            this.status = this.contrato.Status;
-            this.dataInicioContrato = this.contrato.StartDate;
-            this.dataEnvioParaAssinatura = this.contrato.DataEnvioParaAssinatura__c;
-            this.dataAssinaturaCliente = this.contrato.CustomerSignedDate;
+
+            console.log('templates: '+ JSON.stringify(templates));
+
+            console.log(JSON.stringify(this.contrato));   
+
+            if (this.contrato.AccountId != null) {
+                this.nomeConta = this.contrato.Account.Name != null ? this.contrato.Account.Name : 'N/A';
+                this.status = this.contrato.Status != null ? this.contrato.Status : 'N/A';
+                this.dataInicioContrato = this.contrato.StartDate != null ? this.contrato.StartDate : 'N/A';
+                this.dataEnvioParaAssinatura = this.contrato.DataEnvioParaAssinatura__c != null ? this.contrato.DataEnvioParaAssinatura__c : 'N/A';
+                this.dataAssinaturaCliente = this.contrato.CustomerSignedDate != null ? this.contrato.CustomerSignedDate : 'N/A'; 
+            } else {
+                this.contratoVazio = true;
+            }
 
             this.templateOptions = templates.map(template => ({
                 label: template.Name,
                 value: template.Id
             }));
 
-            if(templates.length == 0 || templates == null){
+            if (templates.length == 0 || templates == null) {
                 this.templateOptions = [{
-                    label: 'Nenhum template criado!',
+                    label: 'Nenhum template criado! Crie um a partir do empreendimento.',
                     value: ''
                 }];
-            }else{
-                if(this.status === 'Contrato Gerado') {
+            } else {
+                if (this.status === 'Contrato Gerado') {
                     this.statusIsGerado = true;
                     this.fetchContentVersion();    
                 }
@@ -73,17 +83,12 @@ export default class ContratoForm extends NavigationMixin(LightningElement) {
     }
 
     async gerarContrato() {
-        const content = await retornarContratoGerado({ oppId: this.recordId, templateId: this.templateSelecionado });
-        this.connectedCallback();
-
         try {
-            this.contentDocumentId = this.statusIsGerado ? content.ContentDocumentId : content.Id;
+            const content = await retornarContratoGerado({ oppId: this.recordId, templateId: this.templateSelecionado });
+            
+            this.contentDocumentId = content.ContentDocumentId;
             this.nomeContrato = content.Title;
-        } catch (error) {
-            console.error('Erro ao gerar contrato:', error);
-        }
-
-        if (this.contentDocumentId) {
+            
             this.dispatchEvent(
                 new ShowToastEvent({
                     title: 'Contrato Gerado',
@@ -91,8 +96,22 @@ export default class ContratoForm extends NavigationMixin(LightningElement) {
                     variant: 'success'
                 })
             );
+            
+            this.statusIsGerado = true;
+            await this.fetchContentVersion();
+            
+        } catch (error) {
+            console.error('Erro ao gerar contrato:', error);
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: 'Erro',
+                    message: 'Ocorreu um erro ao gerar o contrato. Verifique as informações da oportunidade e tente novamente.',
+                    variant: 'error'
+                })
+            );
         }
     }
+    
 
     previewHandler() {
         if (this.contentDocumentId) {

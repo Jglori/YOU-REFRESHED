@@ -10,6 +10,6 @@ public class QueryHelper {
         String query = 'SELECT ' + String.join(fieldNames, ',') + ' FROM ' + objectName + ' WHERE Id = :recordId';
         System.debug('Query gerada: ' + query);
 
-        return Database.query(query);
+        return Database.query(query) != null ? Database.query(query) : new List<SObject>();
     }
 }

@@ -4,7 +4,7 @@ public with sharing class ContractController {
     public static Contract infoContrato(String oppId){
         if(!String.isEmpty(oppId) || oppId != null){
             Contract ctt = ContractSelector.getContract(oppId);
-            return ctt != null ? ctt : new Contract();
+            return ctt.AccountId != null ? ctt : new Contract();
         }else{
             return new Contract();
         }
