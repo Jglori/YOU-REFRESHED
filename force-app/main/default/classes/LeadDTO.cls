@@ -30,7 +30,7 @@ public class LeadDTO {
         this.celular = camposLeadPorNomeAPI.containsKey('MobilePhone') ? lead.MobilePhone : null;
         this.email = camposLeadPorNomeAPI.containsKey('Email') ? lead.Email : null;
         this.status = camposLeadPorNomeAPI.containsKey('Status') ? lead.Status : null;
-        this.proprietario = camposLeadPorNomeAPI.containsKey('Owner.Name') ? lead.Owner.Name : null;
+        this.proprietario = (lead.Owner != null) ? lead.Owner.Name : null;
         this.inicioDialogo = camposLeadPorNomeAPI.containsKey('InicioDialogo__c') ? lead.InicioDialogo__c : null;
         this.fimDialogo = camposLeadPorNomeAPI.containsKey('FimDialogo__c') ? lead.FimDialogo__c : null;
         this.ultimaMensagem = camposLeadPorNomeAPI.containsKey('UltimaMensagem__c') ? lead.UltimaMensagem__c : null;

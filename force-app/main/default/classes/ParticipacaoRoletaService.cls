@@ -18,13 +18,16 @@ public without sharing class ParticipacaoRoletaService {
      * exibição da situação do usuário no Omnichannel.
      */
     @Future
-    private static void sincronizarParticipantesAsync(Set<Id> idsUsuarios) {
+    public static void sincronizarParticipantesAsync(Set<Id> idsUsuarios) {
         List<User> usuarios = UserSelector.obterUsuariosPorIds(idsUsuarios);
 
         if(usuarios.isEmpty()) { return; }
 
         sincronizarParticipantes(usuarios);
     }
+
+
+    
 
     private static void sincronizarParticipantes(List<User> usuarios) {
         List<MembroEquipe__c> membros = MembroEquipeSelector.obterMembrosPorIdsUsuarios(SObjectDomain.obterIds(usuarios));
@@ -33,19 +36,20 @@ public without sharing class ParticipacaoRoletaService {
         atualizarParticipantes(membros);
     }
 
-    private static void atualizarParticipantes(List<MembroEquipe__c> membros) {
+    public static void atualizarParticipantes(List<MembroEquipe__c> membros) {
         List<ParticipanteRoleta__c> participantesParaAtualizar = ParticipanteRoletaSelector.obterParticipantesPorIdsMembros(SObjectDomain.obterIds(membros));
 
         if(participantesParaAtualizar.isEmpty()) { return; }
 
         atualizarParticipantes(participantesParaAtualizar);
+        
     }
 
     /**
      * Método responsável pela atualização dos participantes das roletas a partir
      * da situação do usuário.
      */
-    private static void atualizarParticipantes(List<ParticipanteRoleta__c> participantes) {
+    public static void atualizarParticipantes(List<ParticipanteRoleta__c> participantes) {
         Map<Id,Id> mapParticipanteRoleta = new Map<Id,Id>(); 
         Set<Id> roletaIds =  new Set<Id>();
 
@@ -81,11 +85,32 @@ public without sharing class ParticipacaoRoletaService {
             }
         }
 
+        
         Database.update(participantesToUpd);
         Database.delete(participantesToDel);
     }
-
-    private static void criarParticipantes(List<MembroEquipe__c> membros) {
+    private static void ordenarPosicoes(List<ParticipanteRoleta__c> participantes) {
+        // Ordena os participantes pela posição atual (Posicao__c)
+        participantes.sort();
+        
+        // Atribui novas posições sequenciais
+        Integer novaPosicao = 1;
+        for (ParticipanteRoleta__c participante : participantes) {
+            participante.Posicao__c = novaPosicao;
+            novaPosicao++;
+        }
+    
+        // Exibe as novas posições junto com os nomes dos participantes
+        for (ParticipanteRoleta__c participante : participantes) {
+            System.debug('Id: ' + participante.Id + ', Nova Posição: ' + participante.Posicao__c);
+        }
+        
+        // Atualiza a lista de participantes no banco de dados
+        Database.update(participantes, false);
+    }
+    
+    
+    public static void criarParticipantes(List<MembroEquipe__c> membros) {
         List<RoletaLeads__c> roletasLeads = RoletaLeadsSelector.obterRoletasLeadsPorIdsMembros(SObjectDomain.obterIds(membros));
         Map<Id, List<RoletaLeads__c>> roletasPorIdMembroParaCriar = obterRoletasPorIdMembroParaCriar(membros, roletasLeads);
 
@@ -102,17 +127,63 @@ public without sharing class ParticipacaoRoletaService {
         List<MembroEquipe__c> membros,
         Map<Id, List<RoletaLeads__c>> roletasPorIdMembroParaCriar
     ) {
-        List<ParticipanteRoleta__c> participantes = new List<ParticipanteRoleta__c>();
+        List<ParticipanteRoleta__c> participantesParaInserir = new List<ParticipanteRoleta__c>();
+        List<ParticipanteRoleta__c> participantesParaAtualizar = new List<ParticipanteRoleta__c>();
+        
+        System.debug('Membros a serem processados: ' + membros);
+        
         for(MembroEquipe__c membro : membros) {
-            if(!roletasPorIdMembroParaCriar.containsKey(membro.Id)) { continue; }
-
-            participantes.addAll(obterParticipantesCriados(membro, roletasPorIdMembroParaCriar.get(membro.Id)));
+            if(!roletasPorIdMembroParaCriar.containsKey(membro.Id)) { 
+                continue; 
+            }
+    
+            List<ParticipanteRoleta__c> participantesCriados = obterParticipantesCriados(membro, roletasPorIdMembroParaCriar.get(membro.Id));
+            
+            // Separando participantes com Id (para atualização) e sem Id (para inserção)
+            for (ParticipanteRoleta__c participante : participantesCriados) {
+                if (participante.Id != null) {
+                    participantesParaAtualizar.add(participante);
+                   System.debug('Participantes para atualizar: ' + participantesParaAtualizar);
+                } else {
+                    participantesParaInserir.add(participante);
+                    System.debug('Participantes para inserir: ' + participantesParaInserir);
+                }
+            }
         }
-
-        if(participantes.isEmpty()) { return; }
-
-        Database.insert(participantes);
+    
+        // Insere novos participantes
+        if (!participantesParaInserir.isEmpty()) {
+            System.debug('Participantes para inserir: ' + participantesParaInserir);
+            
+            PegarUltimaPosicaoRoleta(participantesParaInserir);
+            Database.insert(participantesParaInserir);
+        }
+    
+        // Atualiza participantes existentes
+        if (!participantesParaAtualizar.isEmpty()) {
+            System.debug('Participantes para atualizar: ' + participantesParaAtualizar);
+            Database.update(participantesParaAtualizar);
+        }
     }
+    private static void PegarUltimaPosicaoRoleta(List<ParticipanteRoleta__c> participantes) {
+        // Consulta as posições dos participantes
+        List<ParticipanteRoleta__c> participantesAtualizados = [
+            SELECT Id, Posicao__c 
+            FROM ParticipanteRoleta__c 
+            WHERE Id IN :participantes
+        ];
+    
+        // Atualiza cada participante na lista original com a última posição
+        for (ParticipanteRoleta__c participante : participantes) {
+            for (ParticipanteRoleta__c participanteAtualizado : participantesAtualizados) {
+                if (participante.Id == participanteAtualizado.Id) {
+                    participante.Posicao__c = participanteAtualizado.Posicao__c;
+                    System.debug('Id do Participante: ' + participante.Id + ', Posição da Roleta: ' + participante.Posicao__c);
+                }
+            }
+        }
+    }
+    
     
     private static List<ParticipanteRoleta__c> obterParticipantesCriados(MembroEquipe__c membro, List<RoletaLeads__c> roletasLeads) {
         List<ParticipanteRoleta__c> participantesRoletaCriados = new List<ParticipanteRoleta__c>();
@@ -145,18 +216,66 @@ public without sharing class ParticipacaoRoletaService {
      * e saída atualizados de acordo com situação do usuário.
      */
     private static ParticipanteRoleta__c obterNovoParticipante(MembroEquipe__c membro, Id idRoletaLeads, List<ParticipanteRoleta__c> participanteRoleta) {
+
+      
+        System.debug('Participante da Roleta: ' + participanteRoleta);
+        System.debug('Membro da Equipe: ' + membro);
+        System.debug('Id da Roleta: ' + idRoletaLeads);
         ParticipanteRoleta__c participante = new ParticipanteRoleta__c(
             RoletaLeads__c = idRoletaLeads,
             MembroEquipe__c = membro.Id,
             Name = membro.Usuario__r.Name,
-            Posicao__c = (participanteRoleta == null) ? 1 : participanteRoleta.size() +1
+            Posicao__c = (participanteRoleta == null) ? 1 : participanteRoleta.size() + 1
         );
+    
+        System.debug('Posição atual do participante ' + participante.Posicao__c);
 
+        ordenarPosicoesParticipantesRoletas(idRoletaLeads , participanteRoleta);
         atualizarSituacaoParticipante(participante, membro.Usuario__r);
-
+    
         return participante;
     }
 
+
+    private static void ordenarPosicoesParticipantesRoletas(Id idRoletaLeads, List<ParticipanteRoleta__c> participantesRoleta) {
+        if (participantesRoleta == null || participantesRoleta.isEmpty()) {
+            return;
+        }
+    
+        // Criar um Map para armazenar os participantes com base no campo Posicao__c
+        Map<Decimal, ParticipanteRoleta__c> participantesMap = new Map<Decimal, ParticipanteRoleta__c>();
+        for (ParticipanteRoleta__c participante : participantesRoleta) {
+            participantesMap.put(participante.Posicao__c, participante);
+        }
+    
+        // Extrair as chaves do Map e ordená-las
+        List<Decimal> keys = new List<Decimal>(participantesMap.keySet());
+        keys.sort();
+    
+        // Criar uma lista ordenada de participantes
+        List<ParticipanteRoleta__c> participantesOrdenados = new List<ParticipanteRoleta__c>();
+        for (Decimal key : keys) {
+            participantesOrdenados.add(participantesMap.get(key));
+        }
+    
+        // Atribuir posições únicas a cada participante e atualizar diretamente a lista original
+        Integer posicao = 1;
+        for (ParticipanteRoleta__c participante : participantesOrdenados) {
+            // Atualiza a posição e, ao mesmo tempo, coloca a referência na lista original
+            participante.Posicao__c = posicao;
+            posicao++;
+        }
+    
+        // Atualiza a lista original com as novas posições
+        participantesRoleta.clear();
+        participantesRoleta.addAll(participantesOrdenados);
+    
+        // Atualiza a base de dados
+        Database.update(participantesRoleta, false);
+        System.debug('Participantes ordenados: ' + participantesRoleta);
+    }
+    
+    
     /**
      * Método responsável pela atualização dos horários de entrada e saída do usuário e
      * informações de disponibilidade do participante de acordo com a situação do usuário.
@@ -184,8 +303,32 @@ public without sharing class ParticipacaoRoletaService {
             }
         }
 
+        OrdenarParticipantesOffline(participante);
+        System.debug('participante na linha 306' + participante);
+
         return participante;
     }
+
+
+    public static void OrdenarParticipantesOffline(ParticipanteRoleta__c participante) {
+        // Fazer uma query para buscar todos os participantes da roleta que estão online e excluindo o participante atual
+        List<ParticipanteRoleta__c> participantes = [
+            SELECT Id, Name, Posicao__c, MembroEquipe__c, Participante_Vigente__c, 
+                   CargaRestante__c, Situacao__c, PausarDistribuicao__c, PresencaValidada__c
+            FROM ParticipanteRoleta__c
+            WHERE RoletaLeads__c = :participante.RoletaLeads__c
+                  AND Situacao__c = 'Online'
+                  AND Id != :participante.Id
+            ORDER BY Posicao__c ASC
+        ];
+    
+
+        ordenarPosicoesParticipantesRoletas(participante.RoletaLeads__c , participantes);
+        System.debug('Participantes na roleta (online): ' + participantes);
+    }
+    
+    
+    
 
     private static Integer obterTempoIndisponibilidadeEmMinutos(ParticipanteRoleta__c participante) {
         return participante.RegistroIndisponibilidade__c != null 

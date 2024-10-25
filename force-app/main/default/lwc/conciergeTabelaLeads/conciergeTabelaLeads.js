@@ -14,12 +14,14 @@ export default class ConciergeTabelaLeads extends LightningElement {
         this._leads = data;
         this.updateColumns(data);
     }
+    
 
     get leads() {
         return this._leads;
     }
 
     _leads;
+    
     selectedLead;
 
     colunas = [
@@ -30,6 +32,10 @@ export default class ConciergeTabelaLeads extends LightningElement {
         { label: "Proprietário", fieldName: "proprietario", type: "text" }
     ];
 
+    
+
+
+    
     updateColumns(data) {
         if (data && data.length > 0) {
             const sampleLead = data[0];
