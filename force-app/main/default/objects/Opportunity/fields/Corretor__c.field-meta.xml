@@ -2,20 +2,9 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Corretor__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
-    <label>Corretor</label>
-    <lookupFilter>
-        <active>true</active>
-        <filterItems>
-            <field>Contact.RecordTypeId</field>
-            <operation>equals</operation>
-            <value>Corretor</value>
-        </filterItems>
-        <infoMessage>Corretor: Tipo de registro do contato igual a Corretor</infoMessage>
-        <isOptional>false</isOptional>
-    </lookupFilter>
-    <referenceTo>Contact</referenceTo>
-    <relationshipLabel>Oportunidades</relationshipLabel>
-    <relationshipName>OportunidadesCorretor</relationshipName> <!-- Nome único -->
+    <label>Corretor (Usuário)</label>
+    <referenceTo>User</referenceTo>
+    <relationshipName>Oportunidades</relationshipName>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>
     <type>Lookup</type>
