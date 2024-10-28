@@ -103,15 +103,15 @@ public class ProdutoTriggerHandlerTest {
 
         Product2 produtoTeste = new Product2 (
             Name = 'produtoTeste', 
-            NumeroDaUnidade__c = '35', 
+            NumeroDaUnidade__c = 35, 
             Empreendimento__c = empreendimento.id, 
             Bloco__c = blocoTeste.id, 
             AgenteFinanceiro__c = 'FII', 
             Enquadramento__c = 'HIS', 
             Status__c = 'Disponivel', 
             Andar__c = 10, 
-            ValorM2__c = 700.000, 
-            Coeficiente__c = 100,
+            ValorM2__c = 700.00, 
+            Coeficiente__c = 0,
             NumeroQuartos__c = 2, 
             NumeroDeSuites__c = 1, 
             NumeroDeVagasIncorporadas__c = 1

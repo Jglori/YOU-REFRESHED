@@ -15,13 +15,13 @@ private class OpportunityDATest {
             AgenteFinanceiro__c = 'FII', 
             Enquadramento__c = 'HIS', 
             Andar__c = 10, 
-            ValorM2__c = 700.000, 
-            Coeficiente__c = 100,
+            ValorM2__c = 700.00, 
+            Coeficiente__c = 0,
             NumeroQuartos__c = 2, 
             NumeroDeSuites__c = 1, 
             NumeroDeVagasIncorporadas__c = 1,
             Name='Test Product',
-            NumeroDaUnidade__c = '8',
+            NumeroDaUnidade__c = 8,
             IsActive=true,
             Status__c = 'Reservada'
         );
