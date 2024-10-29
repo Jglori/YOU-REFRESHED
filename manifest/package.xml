@@ -14,9 +14,5 @@
 		<members>SorteioCoordenador</members>
 		<name>PermissionSet</name>
 	</types>
-	<types>
-		<members>Recepcionista</members>
-		<name>PermissionSetGroup</name>
-	</types>
 	<version>60.0</version>
 </Package>
