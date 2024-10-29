@@ -63,41 +63,47 @@ public without sharing class ConciergeService {
     }
 
    public static List<Contact> buscarTodosCorretores() { 
-        // Obter o usuário logado
-        User currentUser = [SELECT Id, Profile.Name, ContactId FROM User WHERE Id = :UserInfo.getUserId()];
-        
-        // Lista de contatos
-        List<Contact> corretores = new List<Contact>();
-    
-        // Verificar se o perfil do usuário é 'Corretor Comunidade'
-        if (currentUser.Profile.Name == 'Corretor Comunidade') {
-            // Buscar o contato associado ao usuário logado
-            corretores = [SELECT Id, Apelido__c FROM Contact WHERE RecordType.Name = 'Corretor' AND Id = :currentUser.ContactId LIMIT 1];
+    // Obter o usuário logado
+    User currentUser = [SELECT Id, Profile.Name, ContactId FROM User WHERE Id = :UserInfo.getUserId()]; 
+
+    // Lista de contatos
+    List<Contact> corretores = new List<Contact>(); 
+
+    // Verificar se o perfil do usuário é 'Corretor Comunidade'
+    if (currentUser.Profile.Name == 'Corretor Comunidade') { 
+        // Buscar o contato associado ao usuário logado
+        corretores = [SELECT Id, Apelido__c FROM Contact WHERE RecordType.Name = 'Corretor' AND Id = :currentUser.ContactId LIMIT 1]; 
+    } 
+    // Verificar se o perfil do usuário é 'Gerente Comunidade'
+    else if (currentUser.Profile.Name == 'Gerente Comunidade') { 
+        // Buscar todos os usuários que se reportam ao gerente logado
+        List<User> usersSobGerencia = [SELECT Id, ContactId FROM User WHERE Reportase__c = :currentUser.Id]; 
+
+        // Coletar os ContactIds dos usuários que se reportam ao gerente
+        Set<Id> contactIds = new Set<Id>(); 
+        for (User u : usersSobGerencia) { 
+            contactIds.add(u.ContactId); 
         } 
-        // Verificar se o perfil do usuário é 'Gerente Comunidade'
-        else if (currentUser.Profile.Name == 'Gerente Comunidade') {
-            // Buscar todos os usuários que se reportam ao gerente logado
-            List<User> usersSobGerencia = [SELECT Id, ContactId FROM User WHERE Reportase__c = :currentUser.Id];
-            
-            // Coletar os ContactIds dos usuários que se reportam ao gerente
-            Set<Id> contactIds = new Set<Id>();
-            for (User u : usersSobGerencia) {
-                contactIds.add(u.ContactId);
-            }
-            
-            // Buscar os contatos relacionados aos usuários sob a gerência do usuário logado
-            if (!contactIds.isEmpty()) {
-                corretores = [SELECT Id, Apelido__c FROM Contact WHERE RecordType.Name = 'Corretor' AND Id IN :contactIds];
-            }
+
+        // Buscar os contatos relacionados aos usuários sob a gerência do usuário logado
+        if (!contactIds.isEmpty()) { 
+            corretores = [SELECT Id, Apelido__c FROM Contact WHERE RecordType.Name = 'Corretor' AND Id IN :contactIds]; 
         } 
-        // Verificar se o perfil do usuário é 'Recepcionista Comunidade'
-        else if (currentUser.Profile.Name == 'Recepcionista Comunidade') {
-            // Buscar até 200 contatos com o RecordType 'Corretor'
-            corretores = [SELECT Id, Apelido__c FROM Contact WHERE RecordType.Name = 'Corretor' LIMIT 200];
-        }
-    
-        return corretores;
-    }
+    } 
+    // Verificar se o perfil do usuário é 'Recepcionista Comunidade'
+    else if (currentUser.Profile.Name == 'Recepcionista Comunidade') { 
+        corretores = [
+            SELECT Id, Apelido__c 
+            FROM Contact 
+            WHERE RecordType.Name = 'Corretor' 
+            AND Id IN (SELECT ContactId FROM User WHERE Situacao__c = 'Online') 
+            
+        ]; 
+    } 
+
+    return corretores; 
+}
+
 
 
     /*
@@ -235,7 +241,7 @@ public without sharing class ConciergeService {
             System.debug('CustomNotificationType NotificacaoPersonalizada not found');
         }
     }
-
+    
     // Método para criar tarefa de reiteração e notificar o proprietário
     public static void criarTarefaReiteracaoSeNecessario(Lead novoLead) {
         // Obter o lead existente com base no e-mail
@@ -299,6 +305,7 @@ public without sharing class ConciergeService {
             notifyUsers(recipientsIds, leadExistente.Id, notificationTitle, notificationBody);
         }
     } 
+
     
     public static Map<String, String> separarNomes(String nome) {
         return nome.contains(' ') 
@@ -404,9 +411,8 @@ public without sharing class ConciergeService {
             throw new AuraHandledException('Erro ao criar a tarefa: ' + e.getMessage());
         }
     }
-    
     @AuraEnabled
-   public static void criarTaskReiteracaoeAssociarCorretor(String jsonLead, Id corretorId) {
+    public static void criarTaskReiteracaoeAssociarCorretor(String jsonLead, Id corretorId) {
         // Deserializa o JSON em um mapa
         Map<String, Object> params = (Map<String, Object>) JSON.deserializeUntyped(jsonLead);
         
@@ -418,95 +424,95 @@ public without sharing class ConciergeService {
         
         Map<String, Object> leadData = (Map<String, Object>) params.get('lead');
         String leadId = leadData.containsKey('id') ? (String) leadData.get('id') : null;
-        
+    
         if (String.isEmpty(leadId)) {
             throw new AuraHandledException('ID do lead não pode estar vazio.');
         }
         
-        Lead lead;
-        try {
-            lead = [SELECT Id, LastName, MobilePhone, Phone, Email, EmpreendimentoInteresse__c, 
-                    CanalAtendimento__c, LeadSource, QuantidadeDeReiteracoes__c, 
-                    CorretorContato__c, OwnerId, ltima_Reitera_o__c, Status
-                    FROM Lead WHERE Id = :leadId LIMIT 1];
+        Lead lead = [SELECT Id, LastName, MobilePhone, Phone, Status, Email, EmpreendimentoInteresse__c, CanalAtendimento__c, LeadSource, QuantidadeDeReiteracoes__c, CorretorContato__c, OwnerId
+                     FROM Lead WHERE Id = :leadId LIMIT 1];
+        User usuarioAtivo = [SELECT Id, Situacao__c FROM User WHERE Id = :lead.OwnerId];
+        Contact corretor = [SELECT Id, Name, OwnerId FROM Contact WHERE Id = :corretorId LIMIT 1];
+    
+        Task tarefaReiteracao;
+    
+        if (usuarioAtivo.Situacao__c == 'Offline' && 
+            (lead.Status == 'Descartado' || lead.Status == 'Lead Perdido(não trabalho)')) {
+    
+            // Atualiza o status do lead para "Novo" e muda o OwnerId para o do corretor
+            lead.Status = 'Novo';
+            lead.OwnerId = corretor.OwnerId;
             
-            System.debug('Corretor recebido ' + lead.CorretorContato__c);
-            System.debug('Id do corretor recebido ' + corretorId);
-        } catch (QueryException e) {
-            throw new AuraHandledException('Lead não encontrado com o ID fornecido.');
-        }
-        
-        if (lead == null) {
-            throw new AuraHandledException('Lead não encontrado.');
-        }
-        
-        // Determina o OwnerId baseado no corretorId
-        Id ownerId;
-        if (corretorId != null) {
-            Contact corretorContato = [SELECT OwnerId FROM Contact WHERE RecordType.Name = 'Corretor' AND Id = :corretorId LIMIT 1];
-            ownerId = corretorContato.OwnerId;
+            update lead;
+            System.debug('Lead atualizado para "Novo" e OwnerId alterado para o do corretor.');
+    
+            // Cria uma tarefa de reiteração sem descrição
+            tarefaReiteracao = new Task(
+                WhoId = lead.Id, 
+                Subject = 'Reiteração',
+                Status = 'Open',
+                Nome_do_Lead__c = lead.LastName != null ? lead.LastName : 'Não informado',
+                Origem_do_Lead__c = lead.LeadSource != null ? lead.LeadSource : 'Não informado',
+                Canal_de_Atendimento__c = lead.CanalAtendimento__c != null ? lead.CanalAtendimento__c : 'Não informado',
+                Email__c = lead.Email != null ? lead.Email : 'Não informado',
+                Celular__c = lead.MobilePhone != null ? lead.MobilePhone : 'Não informado',
+                ActivityDate = Date.today().addDays(1),
+                Telefone__c = lead.Phone != null ? lead.Phone : 'Não informado',
+                OwnerId = lead.OwnerId
+            );
         } else {
-            ownerId = lead.OwnerId;
+            // Cria uma tarefa de reiteração com a descrição do corretor
+            tarefaReiteracao = new Task(
+                WhoId = lead.Id, 
+                Subject = 'Reiteração',
+                Status = 'Open',
+                Nome_do_Lead__c = lead.LastName != null ? lead.LastName : 'Não informado',
+                Origem_do_Lead__c = lead.LeadSource != null ? lead.LeadSource : 'Não informado',
+                Canal_de_Atendimento__c = lead.CanalAtendimento__c != null ? lead.CanalAtendimento__c : 'Não informado',
+                Email__c = lead.Email != null ? lead.Email : 'Não informado',
+                Celular__c = lead.MobilePhone != null ? lead.MobilePhone : 'Não informado',
+                ActivityDate = Date.today().addDays(1),
+                Telefone__c = lead.Phone != null ? lead.Phone : 'Não informado',
+                OwnerId = lead.OwnerId,
+                Description = 'Lead Atendido pelo corretor:\nNome do corretor: ' + corretor.Name
+            );
         }
-
-        try {
-            // Verifica o status do lead
-            if (lead.Status == 'Descartado' || lead.Status == 'Lead Perdido(não trabalho)') {
-                // Apenas atualiza o proprietário e o corretor do lead
-                lead.OwnerId = ownerId;
-                lead.CorretorContato__c = corretorId;
-                lead.Status = 'Novo'; //Adicionado
-                lead.Origem_Lead_Reiterado__c = lead.LeadSource;
-                lead.ltima_Reitera_o__c = DateTime.now();
-                update lead;
-                
-                // Envia notificação sobre a reativação do lead
-                String notificationTitle = 'Lead Reativado';
-                String notificationBody = 'O lead ' + lead.LastName + ' foi reativado e atribuído a você.';
-                Set<String> recipientsIds = new Set<String>{ownerId};
-                notifyUsers(recipientsIds, lead.Id, notificationTitle, notificationBody);
-            } else {
-                // Cria a tarefa de reiteração normalmente
-                Task tarefaReiteracao = new Task(
-                    WhoId = lead.Id, 
-                    Subject = 'Reiteração',
-                    Status = 'Open',
-                    Nome_do_Lead__c = lead.LastName != null ? lead.LastName : 'Não informado',
-                    Origem_do_Lead__c = lead.LeadSource != null ? lead.LeadSource : 'Não informado',
-                    Canal_de_Atendimento__c = lead.CanalAtendimento__c != null ? lead.CanalAtendimento__c : 'Não informado',
-                    Email__c = lead.Email != null ? lead.Email : 'Não informado',
-                    Celular__c = lead.MobilePhone != null ? lead.MobilePhone : 'Não informado',
-                    ActivityDate = Date.today().addDays(1),
-                    Telefone__c = lead.Phone != null ? lead.Phone : 'Não informado',
-                    OwnerId = ownerId
-                );
-                
-                // Atualiza o lead
-                lead.QuantidadeDeReiteracoes__c = (lead.QuantidadeDeReiteracoes__c != null ? lead.QuantidadeDeReiteracoes__c : 0) + 1;
-                lead.Origem_Lead_Reiterado__c = lead.LeadSource;
-                lead.ltima_Reitera_o__c = DateTime.now();
-                lead.CorretorContato__c = corretorId;
-                
-                update lead;
-                insert tarefaReiteracao;
-
-                // Envia email e notificação sobre a reiteração
-                User taskOwner = [SELECT Email FROM User WHERE Id = :ownerId LIMIT 1];
-                if (taskOwner != null) {
-                    Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage();
-                    email.setToAddresses(new List<String>{taskOwner.Email});
-                    email.setSubject('Nova Tarefa: Reiteração de Lead');
-                    email.setPlainTextBody('Olá! Seu cliente entrou novamente em contato com você! Verifique as TAREFAS do seu Lead e veja a reiteração.');
-                    Messaging.sendEmail(new List<Messaging.SingleEmailMessage>{email});
-                }
-                
-                String notificationTitle = 'Nova Tarefa: Reiteração de Lead';
-                String notificationBody = 'Olá! Seu cliente entrou novamente em contato com você! Verifique as TAREFAS do seu Lead e veja a reiteração.';
-                Set<String> recipientsIds = new Set<String>{ownerId};
-                notifyUsers(recipientsIds, lead.Id, notificationTitle, notificationBody);
+        
+        insert tarefaReiteracao;
+        System.debug('Tarefa de reiteração criada com sucesso.');
+        
+        // Envia um e-mail de notificação ao proprietário da tarefa
+        User taskOwner = [SELECT Email FROM User WHERE Id = :tarefaReiteracao.OwnerId LIMIT 1];
+        if (taskOwner != null) {
+            Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage();
+            email.setToAddresses(new List<String>{taskOwner.Email});
+            email.setPlainTextBody(
+                'Uma nova tarefa de reiteração foi criada para o lead: ' + lead.LastName + 
+                '.\n\nDetalhes da tarefa:\n' + 
+                'Status: Open\n' + 
+                'Data de Atividade: ' + tarefaReiteracao.ActivityDate + '\n' + 
+                'Descrição: ' + (tarefaReiteracao.Description != null ? tarefaReiteracao.Description : 'N/A') + '\n\n' + 
+                'Por favor, acesse o Salesforce para mais informações.'
+            );
+    
+            try {
+                Messaging.sendEmail(new Messaging.SingleEmailMessage[] { email });
+                System.debug('E-mail de notificação enviado para: ' + taskOwner.Email);
+            } catch (Exception e) {
+                System.debug('Erro ao enviar e-mail: ' + e.getMessage());
             }
-        } catch (DmlException e) {
-            throw new AuraHandledException('Erro ao processar o lead: ' + e.getMessage());
         }
+        
+        // Atualiza o contador de reiterações e outras informações no lead
+        lead.QuantidadeDeReiteracoes__c = (lead.QuantidadeDeReiteracoes__c != null ? lead.QuantidadeDeReiteracoes__c : 0) + 1;
+        lead.Origem_Lead_Reiterado__c = lead.LeadSource;
+        lead.ltima_Reitera_o__c = DateTime.now();
+        lead.CorretorContato__c = corretorId;
+    
+        update lead;
+        System.debug('Lead atualizado após reiteração.');
     }
+    
+    
+
  }

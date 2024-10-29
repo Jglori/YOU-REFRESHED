@@ -25,38 +25,66 @@ public without sharing class OmnichannelService {
     
         private static void adicionarLeadAoParticipante(Id idLead) {
             Lead lead = LeadDomain.obterLeadPorId(idLead);
+
+            System.debug('Lead ' + lead);
     
             adicionarLeadAoParticipante(lead);
     
             Database.update(lead.Corretor__r);
     
-           // setParticipantePosition(lead.Corretor__c, lead.RoletaLeads__c);
+            setParticipantePosition(lead.Corretor__c, lead.RoletaLeads__c);
         }
     
-        private static void setParticipantePosition(Id membro, Id roletaId){
-            List<ParticipanteRoleta__c> participantesToUpdte = new List<ParticipanteRoleta__c>();
-            List<ParticipanteRoleta__c>  participantes = ParticipanteRoletaSelector.obterParticipantesPorIdsRoleta(new Set<Id>{roletaId});
-            Map<Decimal, ParticipanteRoleta__c> mapPosition = new Map<Decimal,ParticipanteRoleta__c>();
-    
-            for(ParticipanteRoleta__c participante : participantes){
-                if(participante.MembroEquipe__c == membro){
-                    participante.Posicao__c = 9999999;
+        private static void setParticipantePosition(Id membro, Id roletaId) {
+            List<ParticipanteRoleta__c> participantesToUpdate = new List<ParticipanteRoleta__c>();
+            List<ParticipanteRoleta__c> participantes = ParticipanteRoletaSelector.obterParticipantesPorIdsRoleta(new Set<Id>{roletaId});
+        
+            // Mapeia as posições e remove o membro offline
+            Set<Decimal> occupiedPositions = new Set<Decimal>();
+            ParticipanteRoleta__c offlineParticipante = null;
+        
+            for (ParticipanteRoleta__c participante : participantes) {
+                // Se o participante for o membro offline, armazena para tratar depois
+                if (participante.MembroEquipe__c == membro) {
+                    offlineParticipante = participante;
+                    participante.Posicao__c = 9999999; // Marca o membro offline
+                } else {
+                    occupiedPositions.add(participante.Posicao__c);
                 }
-                mapPosition.put(participante.Posicao__c, participante);
             }
-    
-            List<Decimal> sortPositions = new List<Decimal>(mapPosition.keyset());
-            for(Integer newPosition = 0; newPosition < sortPositions.size(); newPosition++){
-                ParticipanteRoleta__c part = mapPosition.get(sortPositions[newPosition]);
-                part.Posicao__c = newPosition + 1;
-                participantesToUpdte.add(part);
+        
+            // Atribui novas posições
+            Decimal currentPosition = 1;
+            for (ParticipanteRoleta__c participante : participantes) {
+                // Se o participante não for o offline, atribui uma nova posição
+                if (participante.Posicao__c != 9999999) {
+                    // Encontra a próxima posição disponível
+                    while (occupiedPositions.contains(currentPosition)) {
+                        currentPosition++;
+                    }
+                    participante.Posicao__c = currentPosition;
+                    occupiedPositions.add(currentPosition);
+                    currentPosition++;
+                    participantesToUpdate.add(participante);
+                }
             }
-    
-            if(!participantesToUpdte.isEmpty()){
-                update participantesToUpdte;
+        
+            // Se houver um participante offline, atribui a última posição
+            if (offlineParticipante != null) {
+                offlineParticipante.Posicao__c = 9999999; // Posiciona offline no final
+                participantesToUpdate.add(offlineParticipante);
             }
-    
+        
+            // Atualiza os participantes, se houver alterações
+            if (!participantesToUpdate.isEmpty()) {
+                try {
+                    update participantesToUpdate;
+                } catch (DmlException e) {
+                    System.debug('Erro ao atualizar participantes: ' + e.getMessage());
+                }
+            }
         }
+        
     
         private static void adicionarLeadAoParticipante(Lead lead) {
             switch on lead.CanalAtendimento__c {
@@ -70,6 +98,8 @@ public without sharing class OmnichannelService {
                     lead.Corretor__r.QuantidadeLeadsWhatsApp__c = (lead.Corretor__r.QuantidadeLeadsWhatsApp__c <> null ? 0 : lead.Corretor__r.QuantidadeLeadsWhatsApp__c) + 1;
                 }
                 when 'Telefone' {
+                    System.debug('lead.Corretor__r.QuantidadeLeadsTelefone__c'+lead.Corretor__c);
+                    System.debug('lead.Corretor__r.QuantidadeLeadsTelefone__c'+lead.Corretor__r.QuantidadeLeadsTelefone__c);
                     lead.Corretor__r.QuantidadeLeadsTelefone__c = (lead.Corretor__r.QuantidadeLeadsTelefone__c <> null ? 0 : lead.Corretor__r.QuantidadeLeadsTelefone__c) + 1;
                 }
                 when 'Loja' {
@@ -201,11 +231,14 @@ public without sharing class OmnichannelService {
            
             public static void notificarPeloChatter(Id leadId, Id userId) {
                 Lead lead = [SELECT Id, FirstName, LastName FROM Lead WHERE Id = :leadId];
+                System.debug('Lead no metodo notificarPeloChatter' +lead );
                 User user = [SELECT Id, Name FROM User WHERE Id = :userId];
+                System.debug('User no metodo notificarPeloChatter' + user);
+                System.debug('User' + user);
                 FeedItem post = new FeedItem();
                 post.ParentId = lead.Id;
                 post.Body = user.Name + ' aceitou o lead ' + lead.FirstName + ' ' + lead.LastName + '.';
-                post.Type = 'LinkPost';
+                post.Type = 'LinkPost';	
                 insert post;
             }
             

@@ -89,7 +89,7 @@ public without sharing class ParticipacaoRoletaService {
         Database.update(participantesToUpd);
         Database.delete(participantesToDel);
     }
-    private static void ordenarPosicoes(List<ParticipanteRoleta__c> participantes) {
+    public static void ordenarPosicoes(List<ParticipanteRoleta__c> participantes) {
         // Ordena os participantes pela posição atual (Posicao__c)
         participantes.sort();
         
@@ -123,13 +123,13 @@ public without sharing class ParticipacaoRoletaService {
      * Método responsável pela criação dos participantes das roletas a partir da 
      * situação do usuário recebido.
      */
-    private static void criarParticipantes(
+    public static void criarParticipantes(
         List<MembroEquipe__c> membros,
         Map<Id, List<RoletaLeads__c>> roletasPorIdMembroParaCriar
     ) {
         List<ParticipanteRoleta__c> participantesParaInserir = new List<ParticipanteRoleta__c>();
         List<ParticipanteRoleta__c> participantesParaAtualizar = new List<ParticipanteRoleta__c>();
-        
+        	
         System.debug('Membros a serem processados: ' + membros);
         
         for(MembroEquipe__c membro : membros) {
@@ -165,7 +165,7 @@ public without sharing class ParticipacaoRoletaService {
             Database.update(participantesParaAtualizar);
         }
     }
-    private static void PegarUltimaPosicaoRoleta(List<ParticipanteRoleta__c> participantes) {
+    public static void PegarUltimaPosicaoRoleta(List<ParticipanteRoleta__c> participantes) {
         // Consulta as posições dos participantes
         List<ParticipanteRoleta__c> participantesAtualizados = [
             SELECT Id, Posicao__c 
@@ -178,7 +178,6 @@ public without sharing class ParticipacaoRoletaService {
             for (ParticipanteRoleta__c participanteAtualizado : participantesAtualizados) {
                 if (participante.Id == participanteAtualizado.Id) {
                     participante.Posicao__c = participanteAtualizado.Posicao__c;
-                    System.debug('Id do Participante: ' + participante.Id + ', Posição da Roleta: ' + participante.Posicao__c);
                 }
             }
         }
@@ -215,7 +214,7 @@ public without sharing class ParticipacaoRoletaService {
      * Método responsável pela obtenção de participante da roleta com campos de entrada
      * e saída atualizados de acordo com situação do usuário.
      */
-    private static ParticipanteRoleta__c obterNovoParticipante(MembroEquipe__c membro, Id idRoletaLeads, List<ParticipanteRoleta__c> participanteRoleta) {
+    public static ParticipanteRoleta__c obterNovoParticipante(MembroEquipe__c membro, Id idRoletaLeads, List<ParticipanteRoleta__c> participanteRoleta) {
 
       
         System.debug('Participante da Roleta: ' + participanteRoleta);
@@ -237,7 +236,7 @@ public without sharing class ParticipacaoRoletaService {
     }
 
 
-    private static void ordenarPosicoesParticipantesRoletas(Id idRoletaLeads, List<ParticipanteRoleta__c> participantesRoleta) {
+    public static void ordenarPosicoesParticipantesRoletas(Id idRoletaLeads, List<ParticipanteRoleta__c> participantesRoleta) {
         if (participantesRoleta == null || participantesRoleta.isEmpty()) {
             return;
         }
@@ -280,7 +279,7 @@ public without sharing class ParticipacaoRoletaService {
      * Método responsável pela atualização dos horários de entrada e saída do usuário e
      * informações de disponibilidade do participante de acordo com a situação do usuário.
      */
-    private static ParticipanteRoleta__c atualizarSituacaoParticipante(ParticipanteRoleta__c participante, User usuario) {
+    public static ParticipanteRoleta__c atualizarSituacaoParticipante(ParticipanteRoleta__c participante, User usuario) {
         switch on usuario.Situacao__c {
             when 'Online' {
                 participante.Entrada__c = System.now();
@@ -330,7 +329,7 @@ public without sharing class ParticipacaoRoletaService {
     
     
 
-    private static Integer obterTempoIndisponibilidadeEmMinutos(ParticipanteRoleta__c participante) {
+    public static Integer obterTempoIndisponibilidadeEmMinutos(ParticipanteRoleta__c participante) {
         return participante.RegistroIndisponibilidade__c != null 
             ? Integer.valueOf((System.now().getTime() - participante.RegistroIndisponibilidade__c.getTime()) / 1000 / 60)
             : null;

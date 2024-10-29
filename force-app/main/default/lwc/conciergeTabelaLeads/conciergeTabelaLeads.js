@@ -64,6 +64,7 @@ export default class ConciergeTabelaLeads extends LightningElement {
     connectedCallback() {
         console.log('Leads em concierge tabela leads', this.leads);
         this.showLeadAlreadyRegisteredToast();
+        
     }
 
     showLeadAlreadyRegisteredToast() { 
