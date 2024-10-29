@@ -2,6 +2,7 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>RegistroIndisponibilidade__c</fullName>
     <description>Registra a data e hora que o status do participante foi alterado para &quot;Indisponível&apos;.</description>
+    <externalId>false</externalId>
     <label>Registro de indisponibilidade</label>
     <required>false</required>
     <trackHistory>true</trackHistory>

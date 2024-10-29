@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Motivo_da_visita_n_o_realizada__c</fullName>
+    <externalId>false</externalId>
     <label>Motivo da visita não realizada</label>
     <required>false</required>
     <type>Picklist</type>

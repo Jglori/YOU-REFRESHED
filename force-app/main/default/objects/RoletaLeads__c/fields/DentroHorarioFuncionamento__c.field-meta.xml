@@ -3,6 +3,7 @@
     <fullName>DentroHorarioFuncionamento__c</fullName>
     <description>Indica se a roleta está dentro do horário de funcionamento ou não, considerando
 		dias da semana.</description>
+    <externalId>false</externalId>
     <formula>AND(
 		OR(
 		AND(WEEKDAY(TODAY()) = 1, INCLUDES(DiasSemana__c, &apos;Domingo&apos;)),

@@ -3,6 +3,7 @@
     <fullName>PresencaValidada__c</fullName>
     <defaultValue>false</defaultValue>
     <description>Indica se a presença do corretor foi validada pelo coordenador para recepção de leads.</description>
+    <externalId>false</externalId>
     <inlineHelpText>Indica se a presença do corretor foi validada pelo coordenador para recepção de leads.</inlineHelpText>
     <label>Presença validada</label>
     <trackHistory>true</trackHistory>
