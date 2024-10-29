@@ -3,6 +3,7 @@
     <fullName>Equipe__c</fullName>
     <deleteConstraint>Restrict</deleteConstraint>
     <description>Indica a equipe responsável pelo atendimento dos leads distribuídos para a roleta.</description>
+    <externalId>false</externalId>
     <label>Equipe</label>
     <referenceTo>Equipe__c</referenceTo>
     <relationshipName>RoletasLeads</relationshipName>

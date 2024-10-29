@@ -2,6 +2,7 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Entrada__c</fullName>
     <description>Indica o momento de entrada do participante da roleta.</description>
+    <externalId>false</externalId>
     <label>Entrada</label>
     <required>false</required>
     <trackHistory>true</trackHistory>

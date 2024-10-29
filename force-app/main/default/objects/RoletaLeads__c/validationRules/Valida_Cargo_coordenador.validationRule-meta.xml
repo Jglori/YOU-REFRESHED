@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Valida_Cargo_coordenador</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+    NOT(ISBLANK(Coordenador__c)),
+    OR(
+        ISPICKVAL(Coordenador__r.Cargo__c, &quot;CORRETOR ONLINE&quot;),
+        ISPICKVAL(Coordenador__r.Cargo__c, &quot;CORRETOR SALÃO&quot;),
+        ISPICKVAL(Coordenador__r.Cargo__c, &quot;CORRETOR PARCEIRO&quot;),
+        ISPICKVAL(Coordenador__r.Cargo__c, &quot;GERENTE SALÃO&quot;),
+        ISPICKVAL(Coordenador__r.Cargo__c, &quot;GERENTE PARCEIRO&quot;),
+        ISPICKVAL(Coordenador__r.Cargo__c, &quot;SUPERINTENDENTE&quot;),
+        ISPICKVAL(Coordenador__r.Cargo__c, &quot;DIRETOR GERAL&quot;),
+        ISPICKVAL(Coordenador__r.Cargo__c, &quot;IMOBILIÁRIA (House)&quot;),
+        ISPICKVAL(Coordenador__r.Cargo__c, &quot;IMOBILIÁRIA PARCEIRA&quot;),
+        ISPICKVAL(Coordenador__r.Cargo__c, &quot;&quot;)
+    )
+)</errorConditionFormula>
+    <errorMessage>Apenas usuários com cargo de Coordenador podem ser adicionados neste campo. Por favor, selecione um usuário com o cargo apropriado.</errorMessage>
+</ValidationRule>

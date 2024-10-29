@@ -3,6 +3,7 @@
     <fullName>DiasSemana__c</fullName>
     <description>Indica em quais dias da semana podem ser realizadas distribuições de lead para a
         roleta</description>
+    <externalId>false</externalId>
     <inlineHelpText>Selecione os dias da semana para a distribuição de leads na roleta.</inlineHelpText>
     <label>Dias da semana</label>
     <required>false</required>

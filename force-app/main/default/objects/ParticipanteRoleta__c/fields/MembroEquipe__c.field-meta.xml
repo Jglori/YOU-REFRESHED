@@ -3,6 +3,7 @@
     <fullName>MembroEquipe__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <description>Indica qual membro da equipe participou da roleta.</description>
+    <externalId>false</externalId>
     <label>Membro da equipe</label>
     <referenceTo>MembroEquipe__c</referenceTo>
     <relationshipName>ParticipantesRoleta</relationshipName>

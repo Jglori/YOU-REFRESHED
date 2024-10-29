@@ -3,6 +3,7 @@
     <fullName>PausarDistribuicao__c</fullName>
     <defaultValue>false</defaultValue>
     <description>Indica se a distribuição de leads está pausada para este participante ou não.</description>
+    <externalId>false</externalId>
     <inlineHelpText>Indique se a distribuição de leads está pausada para este participante ou não.</inlineHelpText>
     <label>Pausar distribuição</label>
     <trackHistory>true</trackHistory>

@@ -2,6 +2,7 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Saida__c</fullName>
     <description>Indica o momento de saída do participante da roleta.</description>
+    <externalId>false</externalId>
     <label>Saída</label>
     <required>false</required>
     <trackHistory>true</trackHistory>

@@ -2,6 +2,7 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>CanaisAtendimento__c</fullName>
     <description>Filtra os leads por canal de atendimento para distribuição na roleta.</description>
+    <externalId>false</externalId>
     <label>Canais de atendimento</label>
     <required>false</required>
     <trackFeedHistory>true</trackFeedHistory>
