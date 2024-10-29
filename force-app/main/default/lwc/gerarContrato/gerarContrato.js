@@ -57,13 +57,12 @@ export default class ContratoForm extends NavigationMixin(LightningElement) {
                     label: 'Nenhum template criado! Crie um a partir do empreendimento.',
                     value: ''
                 }];
-            } else {
-                if (this.status === 'Contrato Gerado') {
-                    this.statusIsGerado = true;
-                    this.fetchContentVersion();    
-                }
             }
 
+            if (this.status === 'Contrato Gerado') {
+                this.statusIsGerado = true;
+                this.fetchContentVersion();    
+            }
         } catch (error) {
             console.error('Erro ao buscar contrato:', error);
         }

@@ -67,4 +67,21 @@ public class ContratoService {
 
         return text;
     }
+
+    public static void atualizarPrazoAssinatura(List<Contract> contratos) {
+        List<Contract> contratosToUpdate = new List<Contract>();
+        Date diaAtual = Date.today();
+
+        for (Contract contrato : contratos) {
+            if (contrato.Status == 'Em Assinatura') {
+                diaAtual = diaAtual.addDays(5);
+                contrato.PrazoAssinatura__c = diaAtual;
+                contratosToUpdate.add(contrato);
+            }
+        }
+
+        if (!contratosToUpdate.isEmpty()) {
+            update contratosToUpdate;
+        }
+    }
 }
