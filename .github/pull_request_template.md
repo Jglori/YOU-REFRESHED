@@ -30,8 +30,9 @@ Abaixo está a lista de classes de teste que precisam ser executadas para valida
 
 ---
 
-# 📅 Revisão Pós-Validação
-- Revisão realizada por: @WillDantasJPG @Jglori
+## 📝 Revisores da PR
+👤 @WillDantasJPG
+👤 @Jglori
 
 ---
 
