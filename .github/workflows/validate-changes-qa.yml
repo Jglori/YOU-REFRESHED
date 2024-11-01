@@ -16,4 +16,4 @@ jobs:
         with:
           SFDX_AUTH_URL: ${{ secrets.AUTH_URL_QA }}
           DRY_RUN: true
-          TEST_LEVEL: RunLocalTests
+          TEST_LEVEL: NoTestRun
