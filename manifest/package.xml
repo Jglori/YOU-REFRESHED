@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
 	<types>
-		<members>Activity</members>
-		<members>ParticipanteRoleta__c</members>
-		<members>RoletaLeads__c</members>
-		<name>CustomObject</name>
+		<members>Opportunity.Bloco__c</members>
+		<name>CustomField</name>
 	</types>
 	<types>
-		<members>RoletaLeadsPage</members>
-		<name>FlexiPage</name>
-	</types>
-	<types>
-		<members>SorteioCoordenador</members>
+		<members>Oportunidade_Alterar_Propietario</members>
+		<members>Oportunidade_Criar</members>
+		<members>Oportunidade_Editar</members>
+		<members>Oportunidade_Excluir</members>
 		<name>PermissionSet</name>
 	</types>
 	<version>60.0</version>
