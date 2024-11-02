@@ -61,7 +61,7 @@
         <name>detailTabContent</name>
         <type>Facet</type>
     </flexiPageRegions>
-    <flexiPageRegions>
+    <!-- <flexiPageRegions>
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
@@ -96,7 +96,7 @@
         </itemInstances>
         <name>Facet-caf04990-cb18-42e9-b4ea-900294338aac</name>
         <type>Facet</type>
-    </flexiPageRegions>
+    </flexiPageRegions> -->
     <flexiPageRegions>
         <itemInstances>
             <componentInstance>
@@ -316,12 +316,12 @@
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
-        <itemInstances>
+        <!-- <itemInstances>
             <componentInstance>
                 <componentName>gerarContrato</componentName>
                 <identifier>c_gerarContrato</identifier>
             </componentInstance>
-        </itemInstances>
+        </itemInstances> -->
         <name>Facet-jnk7g4il1ii</name>
         <type>Facet</type>
     </flexiPageRegions>

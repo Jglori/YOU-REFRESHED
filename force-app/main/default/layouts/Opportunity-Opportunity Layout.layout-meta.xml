@@ -237,13 +237,6 @@
         </quickActionListItems>
     </quickActionList>
     <relatedLists>
-        <fields>ContactName</fields>
-        <fields>Role</fields>
-        <fields>IsPrimary</fields>
-        <fields>PorcentagemParticipacao__c</fields>
-        <relatedList>RelatedContactRoleList</relatedList>
-    </relatedLists>
-    <relatedLists>
         <excludeButtons>AddProduct</excludeButtons>
         <excludeButtons>EditAllProduct</excludeButtons>
         <excludeButtons>MultiAdd</excludeButtons>
