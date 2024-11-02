@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>Um template de notificação será configurado para informar o início do processo de aprovação ao responsável pela cotação e ao aprovador.</description>
+    <encodingKey>UTF-8</encodingKey>
+    <name>Início Processo</name>
+    <style>none</style>
+    <subject>Início do processo de aprovação</subject>
+    <type>text</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>
