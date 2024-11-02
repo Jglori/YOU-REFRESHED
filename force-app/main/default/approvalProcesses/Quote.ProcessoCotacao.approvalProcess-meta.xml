@@ -51,12 +51,12 @@
         </action>
     </finalApprovalActions> -->
     <finalApprovalRecordLock>true</finalApprovalRecordLock>
-    <finalRejectionActions>
+    <!-- <finalRejectionActions>
         <action>
             <name>StatusReprovado</name>
             <type>FieldUpdate</type>
         </action>
-    </finalRejectionActions>
+    </finalRejectionActions> -->
     <finalRejectionRecordLock>false</finalRejectionRecordLock>
     <!-- <initialSubmissionActions>
         <action>
