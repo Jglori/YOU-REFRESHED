@@ -44,12 +44,12 @@
             <value>Simulação</value>
         </criteriaItems>
     </entryCriteria>
-    <finalApprovalActions>
+    <!-- <finalApprovalActions>
         <action>
             <name>StatusAprovado</name>
             <type>FieldUpdate</type>
         </action>
-    </finalApprovalActions>
+    </finalApprovalActions> -->
     <finalApprovalRecordLock>true</finalApprovalRecordLock>
     <finalRejectionActions>
         <action>
