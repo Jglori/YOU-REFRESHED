@@ -58,12 +58,12 @@
         </action>
     </finalRejectionActions>
     <finalRejectionRecordLock>false</finalRejectionRecordLock>
-    <initialSubmissionActions>
+    <!-- <initialSubmissionActions>
         <action>
             <name>EmAprovacao</name>
             <type>FieldUpdate</type>
         </action>
-    </initialSubmissionActions>
+    </initialSubmissionActions> -->
     <label>Processo da Cotação</label>
     <nextAutomatedApprover>
         <useApproverFieldOfRecordOwner>false</useApproverFieldOfRecordOwner>

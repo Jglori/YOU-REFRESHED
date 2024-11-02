@@ -76,6 +76,8 @@
         <name>relatedListTabContent</name>
         <type>Facet</type>
     </flexiPageRegions>
+    
+    <!-- Comentando a parte do simuladorDeVendas -->
     <flexiPageRegions>
         <itemInstances>
             <componentInstance>
@@ -86,6 +88,8 @@
         <name>Facet-69a6066e-95e0-427d-9946-f604264e8036</name>
         <type>Facet</type>
     </flexiPageRegions>
+    <!-- Fim do comentário -->
+
     <flexiPageRegions>
         <itemInstances>
             <componentInstance>
