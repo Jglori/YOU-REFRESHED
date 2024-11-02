@@ -413,7 +413,7 @@
                 <identifier>flexipage_tabset</identifier>
             </componentInstance>
         </itemInstances>
-        <itemInstances>
+        <!-- <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
                     <name>parentFieldApiName</name>
@@ -438,7 +438,7 @@
                 <componentName>force:relatedListSingleContainer</componentName>
                 <identifier>force_relatedListSingleContainer9</identifier>
             </componentInstance>
-        </itemInstances>
+        </itemInstances> -->
         <mode>Replace</mode>
         <name>main</name>
         <type>Region</type>
