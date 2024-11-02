@@ -180,12 +180,6 @@
                 <identifier>force_relatedListSingleContainer8</identifier>
             </componentInstance>
         </itemInstances>
-        <itemInstances>
-            <componentInstance>
-                <componentName>equipeVendasOpp</componentName>
-                <identifier>c_equipeVendasOpp</identifier>
-            </componentInstance>
-        </itemInstances>
         <name>Facet-ad9f17fe-72a0-4b91-8cc0-a6ae03cb07cc</name>
         <type>Facet</type>
     </flexiPageRegions>
@@ -348,20 +342,6 @@
                 </componentInstanceProperties>
                 <componentName>flexipage:tab</componentName>
                 <identifier>detailTab</identifier>
-            </componentInstance>
-        </itemInstances>
-        <itemInstances>
-            <componentInstance>
-                <componentInstanceProperties>
-                    <name>body</name>
-                    <value>Facet-caf04990-cb18-42e9-b4ea-900294338aac</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
-                    <name>title</name>
-                    <value>Checklist de Documentos</value>
-                </componentInstanceProperties>
-                <componentName>flexipage:tab</componentName>
-                <identifier>flexipage_tab11</identifier>
             </componentInstance>
         </itemInstances>
         <itemInstances>

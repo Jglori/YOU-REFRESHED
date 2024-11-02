@@ -237,13 +237,6 @@
         </quickActionListItems>
     </quickActionList>
     <relatedLists>
-        <fields>NAME</fields>
-        <fields>NomeComprador__c</fields>
-        <fields>Status__c</fields>
-        <fields>DataVencimento__c</fields>
-        <relatedList>AnaliseCredito__c.Opportunity__c</relatedList>
-    </relatedLists>
-    <relatedLists>
         <fields>ContactName</fields>
         <fields>Role</fields>
         <fields>IsPrimary</fields>
