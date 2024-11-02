@@ -1,9 +1,0 @@
-[{!Quote.Name}] acabou de ser enviada para aprovação.
-
-Segue as informações da cotação [{!Quote.Name}]:
-
-Nome da cotação: {!Quote.Name}
-
-Número da cotação: {!Quote.QuoteNumber}
-
-Link para acessar diretamente a cotação: {!Quote.Link}

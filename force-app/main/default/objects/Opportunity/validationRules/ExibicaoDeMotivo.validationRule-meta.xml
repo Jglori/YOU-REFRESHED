@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ExibicaoDeMotivo</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+    ISPICKVAL(StatusDo1Pagamento__c, &quot;Desistência&quot;),
+    ISBLANK(MotivoDaDesistencia__c)
+)</errorConditionFormula>
+    <errorMessage>O campo motivo da desistência se torna obrigatório quando o status do pagamento é desistência</errorMessage>
+</ValidationRule>

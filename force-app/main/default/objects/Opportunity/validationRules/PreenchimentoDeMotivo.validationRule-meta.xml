@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>PreenchimentoDeMotivo</fullName>
+    <active>true</active>
+    <errorConditionFormula>OR(
+   AND(
+   ISPICKVAL(StatusDo1Pagamento__c, &quot;Não Pago&quot;),
+   NOT(ISBLANK(MotivoDaDesistencia__c))
+
+ ), AND(
+   ISPICKVAL(StatusDo1Pagamento__c, &quot;Pago&quot;),
+    NOT(ISBLANK(MotivoDaDesistencia__c))
+ )
+)</errorConditionFormula>
+    <errorDisplayField>MotivoDaDesistencia__c</errorDisplayField>
+    <errorMessage>O campo motivo da desistência só pode ser preenchido quando o status do pagamento for desistência</errorMessage>
+</ValidationRule>
