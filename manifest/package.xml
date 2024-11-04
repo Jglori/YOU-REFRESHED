@@ -1,11 +1,39 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
-	 <types>
-        <members>Opportunity.MotivoDaDesistencia__c</members> <!-- Adicionando o campo aqui -->
-        <members>Opportunity.StatusDo1Pagamento__c</members> <!-- Adicionando o campo aqui -->
-        <members>Opportunity.ValorTotalComJuros__c</members> <!-- Adicionando o campo aqui -->
-        <members>Opportunity.ValorTotalComMulta__c</members> <!-- Adicionando o campo aqui -->
-        <name>CustomField</name>
+    <types>
+        <members>ParametrizarCriteriosController</members>
+        <members>ParametrizarCriteriosControllerTest</members>
+        <members>ParametrizarCriteriosService</members>
+        <members>ParametrizarCriteriosServiceTest</members>
+        <name>ApexClass</name>
     </types>
-	<version>60.0</version>
+    <types>
+        <members>ConjuntoCriteriosAnalise__c</members>
+        <name>CustomObject</name>
+    </types>
+    <types>
+        <members>ConjuntoCriteriosAnalise__c</members>
+        <name>CustomTab</name>
+    </types>
+    <types>
+        <members>FlexiConjuntoCriterioAnalise</members>
+        <name>FlexiPage</name>
+    </types>
+    <types>
+        <members>VariacoesLimiteBloqueio</members>
+        <name>GlobalValueSet</name>
+    </types>
+    <types>
+        <members>paremetrizarCriteriosAnalise</members>
+        <name>LightningComponentBundle</name>
+    </types>
+    <types>
+        <members>ConjuntoCriteriosAnalise__c.All</members>
+        <name>ListView</name>
+    </types>
+    <types>
+        <members>ConjuntoCriterios</members>
+        <name>PermissionSet</name>
+    </types>
+    <version>60.0</version>
 </Package>

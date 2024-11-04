@@ -1,0 +1,15 @@
+.custom-grid {
+    margin-top: 20px;
+}
+
+.custom-grid p {
+    font-weight: bold;
+}
+
+.custom-grid .slds-col {
+    padding: 5px;
+}
+
+.custom-highlight-err{
+    border: 2px solid red !important
+}
