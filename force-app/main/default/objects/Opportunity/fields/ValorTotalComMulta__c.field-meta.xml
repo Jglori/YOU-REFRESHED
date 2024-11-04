@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>ValorTotalComMulta__c</fullName>
+    <externalId>false</externalId>
     <formula>Amount * 1.02</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <inlineHelpText>Acresenta 2% no valor do produto</inlineHelpText>
