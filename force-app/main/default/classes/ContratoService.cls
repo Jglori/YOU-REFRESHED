@@ -2,7 +2,7 @@ public class ContratoService {
     public static String contratoText(Opportunity opp, TemplateDocumento__c template) {
         String text = template.ConteudoTemplate__c;
 
-        Empreendimento__c emp = EmpreendimentoSelector.getEmpreendimentoById(opp.Empreendimento__c);
+        Empreendimento__c emp = (Empreendimento__c) QueryHelper.selectAllFields('Empreendimento__c', opp.Empreendimento__c);
         Account conta = (Account) QueryHelper.selectAllFields('Account', opp.AccountId);
         Product2 prd = (Product2) QueryHelper.selectAllFields('Product2', opp.Unidade__c);
         Bloco__c bloco = (Bloco__c) QueryHelper.selectAllFields('Bloco__c', prd.Bloco__c);
