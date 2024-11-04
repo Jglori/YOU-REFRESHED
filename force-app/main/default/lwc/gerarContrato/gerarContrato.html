@@ -1,9 +1,17 @@
 <template>
-    <div class="slds-p-around_medium">
-        <template if:true={statusIsGerado}>
-            <lightning-card title="Contrato da Oportunidade" icon-name="standard:contract">
-                <div class="slds-grid slds-m-around_medium">
+    <template if:true={isLoading}>
+        <div>
+            <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+        </div>
+    </template>
 
+    <template if:false={isLoading}>
+
+    <div class="slds-p-around_medium">
+        
+        <template if:true={statusIsGerado}>
+            <lightning-card title="Contrato Gerado" icon-name="standard:contract">
+                <div class="slds-grid slds-m-around_medium">
                     <div class="slds-m-right_small">
                         <lightning-icon icon-name="doctype:pdf" size="small" alternative-text="PDF"></lightning-icon>
                     </div>
@@ -12,14 +20,32 @@
                         <span>{nomeContrato}</span>
                     </div>
 
-                    <div class="slds-grid slds-m-left_large">
-                        <lightning-button-icon icon-name="utility:preview" alternative-text="Visualizar Contrato"
-                            onclick={previewHandler} class="slds-m-right_medium" size="small">
-                        </lightning-button-icon>
+                    <div class="slds-grid slds-m-left_large slds-align_absolute-center">
 
-                        <lightning-button-icon icon-name="utility:download" alternative-text="Baixar Contrato"
-                            onclick={downloadHandler} size="small">
-                        </lightning-button-icon>
+                        <div class="slds-m-right_medium">
+                            <lightning-button-icon icon-name="utility:preview" alternative-text="Visualizar Contrato"
+                                onclick={previewHandler} size="small">
+                            </lightning-button-icon>
+                        </div>
+
+                        <div class="slds-m-right_medium">
+                            <lightning-button-icon icon-name="utility:download" alternative-text="Baixar Contrato"
+                                onclick={downloadHandler} size="small">
+                            </lightning-button-icon>
+                        </div>
+
+                        <template if:false={statusIsAssinado}>
+                            <div>
+                                <lightning-button label="Assinar" variant="brand" onclick={signHandler}>
+                                </lightning-button>
+                            </div>
+                        </template>
+
+                        <template if:true={statusIsAssinado}>
+                            <div>
+                                <lightning-button label="Assinado" variant="success" disabled></lightning-button>
+                            </div>
+                        </template>
                     </div>
                 </div>
             </lightning-card>
@@ -48,26 +74,26 @@
                     <lightning-input type="date" label="Data da Assinatura do Cliente (DocuSign)"
                         value={dataAssinaturaCliente} disabled></lightning-input>
 
-                    <br/>
+                    <br />
 
                     <template if:true={signatarios}>
                         <lightning-layout-item>
                             <b>Signatários</b>
-    
+
                             <ul>
                                 <template for:each={signatarios} for:item="signatario">
                                     <li key={signatario.value}>{signatario.label} - {signatario.role}</li>
                                 </template>
                             </ul>
                         </lightning-layout-item>
-                        
-                        <br/>
+
+                        <br />
                     </template>
 
 
                     <template if:false={signatarios}>
                         <p>Nenhum signatário encontrado.</p>
-                        <br/>
+                        <br />
                     </template>
 
 
@@ -75,7 +101,7 @@
                         placeholder="Selecione..." options={templateOptions} onchange={handleTemplate}>
                     </lightning-combobox>
 
-                    <br/>
+                    <br />
 
                     <template if:true={templateSelecionado}>
                         <lightning-button label="Gerar Contrato" onclick={gerarContrato}></lightning-button>

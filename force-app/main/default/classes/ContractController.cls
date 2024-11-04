@@ -1,5 +1,5 @@
-    public with sharing class ContractController {
-        
+public with sharing class ContractController {
+    
     @AuraEnabled(cacheable=true)
     public static Contract infoContrato(String oppId){
         Contract ctt = ContractSelector.getContract(oppId);
@@ -14,6 +14,54 @@
         }else{
             return new List<OpportunityContactRole>();
         }
+    }
+    
+    @AuraEnabled
+    public static void assinarContrato(String oppId){
+        String subject;
+        String body;
+
+        try {
+            Contract ctt = ContractSelector.getContract(oppId);
+            
+            if(ctt != null){
+                ctt.Status = 'Ativo';
+                ctt.CustomerSignedDate = Date.today();
+                
+                if(ctt.CustomerSignedDate < ctt.PrazoAssinatura__c){
+                    subject = 'Seu contrato está ativo';
+                    body = 'O contrato foi assinado dentro do prazo.';
+                }else{
+                    subject = 'Contrato assinado fora do prazo';
+                    body = 'O contrato foi assinado fora do prazo.';
+                }
+                
+                List<OpportunityContactRole> contactRoles = ContractSelector.getRolesContatoOpp(oppId);
+                
+                for(OpportunityContactRole role : contactRoles){
+                    Contact cttRole = role.Contact;
+                    if (cttRole.Email != null) {
+                        Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();
+                        mail.setToAddresses(new String[] { cttRole.Email });
+                        mail.setSubject(subject);
+                        mail.setPlainTextBody(body);
+                        Messaging.sendEmail(new Messaging.SingleEmailMessage[] { mail });
+                    }
+                    
+                    FeedItem feedItem = new FeedItem();
+                    feedItem.ParentId = oppId;
+                    feedItem.Body = body;
+                    insert feedItem;
+                }
+                
+                update ctt;
+            }else{
+                throw new AuraHandledException('Contrato não encontrado');
+            }
+        } catch (Exception e) {
+            throw new AuraHandledException('Erro ao assinar contrato');
+        }
+        
     }
     
     @AuraEnabled

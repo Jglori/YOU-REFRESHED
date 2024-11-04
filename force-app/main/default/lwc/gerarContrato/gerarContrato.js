@@ -5,6 +5,7 @@ import rolesContatoOpp from '@salesforce/apex/ContractController.rolesContatoOpp
 import getTemplates from '@salesforce/apex/TemplateController.getTemplates';
 import retornarContratoGerado from '@salesforce/apex/ContractController.retornarContratoGerado';
 import obterPDFContrato from '@salesforce/apex/ContractController.obterPDFContrato';
+import assinarContrato from '@salesforce/apex/ContractController.assinarContrato';
 import { NavigationMixin } from 'lightning/navigation';
 
 export default class ContratoForm extends NavigationMixin(LightningElement) {
@@ -16,6 +17,8 @@ export default class ContratoForm extends NavigationMixin(LightningElement) {
     @track templateSelecionado;
     @track templateOptions = [''];
     @track statusIsGerado = false;
+    @track statusIsAssinado = false;
+    @track isLoading = false;
     @track contrato;
     @track contratoVazio = false; 
     contentDocumentId;
@@ -29,6 +32,8 @@ export default class ContratoForm extends NavigationMixin(LightningElement) {
     }
 
     async fetchContrato() {
+        this.isLoading = true;
+
         try {
             const templates = await getTemplates({ oppId: this.recordId });
             this.contrato = await infoContrato({ oppId: this.recordId });
@@ -59,16 +64,21 @@ export default class ContratoForm extends NavigationMixin(LightningElement) {
                 }];
             }
 
-            if (this.status === 'Contrato Gerado') {
+            if (this.status === 'Contrato Gerado' || this.status === 'Ativo') {
                 this.statusIsGerado = true;
+                this.statusIsAssinado = true;
                 this.fetchContentVersion();    
             }
         } catch (error) {
             console.error('Erro ao buscar contrato:', error);
+        } finally{
+            this.isLoading = false;
         }
     }
 
     async fetchRoles() {
+        this.isLoading = true;
+
         try {
             const roles = await rolesContatoOpp({ oppId: this.recordId });
             this.signatarios = roles.map(role => ({
@@ -78,10 +88,14 @@ export default class ContratoForm extends NavigationMixin(LightningElement) {
             }));
         } catch (error) {
             console.error('Erro ao buscar roles:', error);
+        } finally{
+            this.isLoading = false;
         }
     }
 
     async gerarContrato() {
+        this.isLoading = true;
+
         try {
             const content = await retornarContratoGerado({ oppId: this.recordId, templateId: this.templateSelecionado });
             
@@ -108,9 +122,33 @@ export default class ContratoForm extends NavigationMixin(LightningElement) {
                     variant: 'error'
                 })
             );
+        } finally{
+            this.isLoading = false;
         }
     }
-    
+
+    async signHandler(){
+        this.isLoading = true;
+
+        try {
+            await assinarContrato({ oppId: this.recordId });
+            
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: 'Contrato Assinado',
+                    message: 'Contrato assinado com sucesso',
+                    variant: 'success'
+                })
+            );
+
+            this.statusIsAssinado = true;
+        } catch (error) {
+            console.error('Erro ao assinar o contrato:', error);
+        } finally{
+            this.isLoading = false;
+        }
+        
+    }
 
     previewHandler() {
         if (this.contentDocumentId) {
@@ -135,6 +173,7 @@ export default class ContratoForm extends NavigationMixin(LightningElement) {
     }
 
     async fetchContentVersion() {
+        this.isLoading = true;
         try {
             const contentVersion = await obterPDFContrato({ oppId: this.recordId });
             if (contentVersion) {
@@ -143,6 +182,8 @@ export default class ContratoForm extends NavigationMixin(LightningElement) {
             }
         } catch (error) {
             console.error('Erro ao buscar ContentVersion:', error);
+        } finally{
+            this.isLoading = false;
         }
     }
 

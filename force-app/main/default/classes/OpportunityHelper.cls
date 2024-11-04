@@ -161,6 +161,33 @@ public with sharing class OpportunityHelper {
             opp.FarolChecklistDocumento__c = 'Vermelho';
         }
     }
+
+    public static void verificarProibirConferencia(List<Opportunity> opps){
+        Set<Id> oppsForaDoPrazo = new Set<Id>();
+        Set<Id> oppsEmConferencia = new Set<Id>();
+
+        for(Opportunity opp : opps){
+            if(opp.StageName == 'Conferência'){
+                oppsEmConferencia.add(opp.Id);
+            }
+        }
+
+        List<Contract> ctts = ContractSelector.getContractsByOpp(oppsEmConferencia);
+
+        for(Contract ctt : ctts){
+            if(ctt.Status == 'Em Assinatura' && ctt.PrazoAssinatura__c < Date.today()){
+                oppsForaDoPrazo.add(ctt.Oportunidade__c);
+            }
+        }
+
+        if(!oppsForaDoPrazo.isEmpty()){
+            for(Opportunity opp : opps){
+                if(oppsForaDoPrazo.contains(opp.Id)){
+                    opp.addError('Não é possível avançar para a fase de Conferência, pois a assinatura do contrato está atrasada.');
+                }
+            }
+        }
+    }
     
 
 }

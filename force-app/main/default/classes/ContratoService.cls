@@ -84,4 +84,22 @@ public class ContratoService {
             update contratosToUpdate;
         }
     }
+
+    public static void evitarGeracaoMultipla(List<Contract> contracts){
+        Set<Id> oppIds = new Set<Id>();
+
+        for(Contract ctt : contracts){
+            oppIds.add(ctt.Oportunidade__c);
+        }
+
+        List<Contract> contratos = ContractSelector.getContractsByOpp(oppIds);
+
+        if(!contratos.isEmpty()){
+            for(Contract ctt : contracts){
+                if(ctt.Status == 'Contrato Gerado'){
+                    ctt.addError('Já existe um contrato gerado para esta oportunidade.');
+                }
+            }
+        }
+    }
 }
