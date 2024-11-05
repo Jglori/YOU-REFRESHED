@@ -1,21 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
 	<types>
-		<members>ContractController</members>
-		<members>ContractControllerTest</members>
-		<members>ContractSelector</members>
-		<members>ContractTriggerHandler</members>
-		<members>ContratoService</members>
-		<members>ContratoServiceTest</members>
-		<members>GerarContratoController</members>
-		<members>GerarContratoControllerTest</members>
-		<members>OpportunityHelper</members>
-		<members>OpportunityTriggerHandler</members>
-		<name>ApexClass</name>
+		<members>ContratoPDF</members>
+		<name>ApexPage</name>
 	</types>
 	<types>
-		<members>gerarContrato</members>
-		<name>LightningComponentBundle</name>
+		<members>Contract.DataEnvioAssinatura__c</members>
+		<members>Contract.Oportunidade__c</members>
+		<members>Contract.PrazoAssinatura__c</members>
+		<members>Contract.Template__c</members>
+		<name>CustomField</name>
 	</types>
 	<version>60.0</version>
 </Package>
