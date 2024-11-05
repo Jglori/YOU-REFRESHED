@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
 	<types>
-		<members>TemplateController</members>
-		<members>TemplateControllerTest</members>
-		<members>TemplateDocumentoTriggerHandler</members>
-		<members>TemplateSelector</members>
+		<members>ContractController</members>
+		<members>ContractControllerTest</members>
+		<members>ContractSelector</members>
+		<members>ContractTriggerHandler</members>
+		<members>ContratoService</members>
+		<members>ContratoServiceTest</members>
+		<members>GerarContratoController</members>
+		<members>GerarContratoControllerTest</members>
+		<members>OpportunityHelper</members>
+		<members>OpportunityTriggerHandler</members>
 		<name>ApexClass</name>
 	</types>
 	<types>
-		<members>TemplateDocumento__c</members>
-		<name>CustomObject</name>
-	</types>
-	<types>
-		<members>templateDocumentos</members>
+		<members>gerarContrato</members>
 		<name>LightningComponentBundle</name>
 	</types>
 	<version>60.0</version>
