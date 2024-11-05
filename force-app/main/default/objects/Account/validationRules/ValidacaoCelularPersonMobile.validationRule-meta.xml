@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ValidacaoCelularPersonMobile</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+NOT(ISBLANK(PersonMobilePhone)),
+NOT(REGEX(PersonMobilePhone, &quot;[0-9]{11}&quot;))
+
+)</errorConditionFormula>
+    <errorDisplayField>CelularJuridico__c</errorDisplayField>
+    <errorMessage>O campo &quot;Celular&quot; deve ser preenchido no formato &quot;11999999999&quot;</errorMessage>
+</ValidationRule>

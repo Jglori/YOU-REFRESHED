@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>EditionProbability</fullName>
+    <active>true</active>
+    <description>O campo Probabilidade não pode ser editado.-</description>
+    <errorConditionFormula>ISCHANGED(Probability)</errorConditionFormula>
+    <errorMessage>O campo Probabilidade não pode ser editado.</errorMessage>
+</ValidationRule>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ValidacaoTelefoneAssistente</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+NOT(ISBLANK(PersonAssistantPhone)),
+NOT(REGEX(PersonAssistantPhone, &quot;[0-9]{10}&quot;))
+)</errorConditionFormula>
+    <errorDisplayField>PersonAssistantPhone</errorDisplayField>
+    <errorMessage>O campo &quot;Telefone do Assistente&quot; deve ser preenchido no formato &quot;11999999999&quot;</errorMessage>
+</ValidationRule>

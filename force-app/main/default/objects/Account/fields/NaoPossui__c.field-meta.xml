@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>NaoPossui__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Possui dependentes ou não</description>
+    <label>Não Possui</label>
+    <trackFeedHistory>false</trackFeedHistory>
+    <type>Checkbox</type>
+</CustomField>

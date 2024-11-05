@@ -1,0 +1,38 @@
+/* Lista geral */
+.slds-list_dotted {
+    list-style-type: none;
+    padding: 0; /* Remove padding padrão */
+    margin: 0; /* Remove margin padrão */
+}
+
+/* Itens da lista */
+.slds-list__item {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 1rem; /* Adiciona padding para espaçamento interno */
+    margin-bottom: 0.5rem; /* Adiciona margem inferior para espaçamento entre itens */
+    border: 1px solid #d8dde6; /* Adiciona uma borda sutil para separar os itens */
+    border-radius: 0.25rem; /* Arredonda os cantos da borda */
+    background-color: #ffffff; /* Cor de fundo branca */
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* Adiciona sombra leve para profundidade */
+}
+
+/* Ajuste do botão de rádio dentro da lista */
+.corretor-radio {
+    margin-right: 0.5rem; /* Espaçamento entre o botão de rádio e o nome do corretor */
+}
+
+/* Nome do corretor */
+.corretor-name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: calc(100% - 2rem); /* Garante que o texto não ultrapasse a largura do item */
+    cursor: pointer; /* Muda o cursor para um ponteiro ao passar o mouse sobre o nome */
+    display: inline-block; /* Garante que o nome do corretor não ultrapasse a largura do item */
+}
+
+/* Espaçamento entre o campo de pesquisa e os itens da lista */
+.search-input {
+    margin-bottom: 1rem; /* Ajuste o valor conforme necessário para o espaçamento desejado */
+}

@@ -1,0 +1,30 @@
+.content-container {
+    position: relative; /* Define o container como relativo para posicionar o botão absolutamente dentro dele */
+    padding: 1rem;
+}
+
+.main-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: calc(100% - 3rem); /* Ajusta a altura do conteúdo principal para deixar espaço para o botão */
+    text-align: center;
+}
+
+.icon {
+    margin-bottom: 1rem;
+}
+
+.message {
+    font-size: 1.5rem; /* Tamanho da fonte ajustado para mais destaque */
+    font-weight: 600; /* Deixar o texto em negrito */
+    color: #333; /* Cor do texto ajustada para um cinza escuro */
+    line-height: 1.5;
+}
+
+.search-button {
+    position: absolute; /* Posiciona o botão de forma absoluta dentro do container */
+    bottom: 1rem; /* Distância do fundo do card */
+    right: 1rem; /* Distância da borda direita do card */
+}

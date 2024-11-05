@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Motivo_da_visita_n_o_realizada__c</fullName>
+    <label>Motivo da visita não realizada</label>
+    <required>false</required>
+    <type>Picklist</type>
+    <valueSet>
+        <controllingField>Status</controllingField>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Não está em momento de compra</fullName>
+                <default>false</default>
+                <label>Não está em momento de compra</label>
+            </value>
+            <value>
+                <fullName>Fora da cidade</fullName>
+                <default>false</default>
+                <label>Fora da cidade</label>
+            </value>
+            <value>
+                <fullName>Sem disponibilidade</fullName>
+                <default>false</default>
+                <label>Sem disponibilidade</label>
+            </value>
+            <value>
+                <fullName>Status</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>N/A</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

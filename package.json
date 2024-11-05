@@ -37,8 +37,5 @@
     "**/{aura,lwc}/**/*.js": [
       "eslint"
     ]
-  },
-  "dependencies": {
-    "salesforce-app": "file:"
   }
 }

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Status__c</fullName>
+    <description>Status da unidade</description>
+    <label>Status</label>
+    <required>true</required>
+    <trackHistory>false</trackHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Livre</fullName>
+                <default>false</default>
+                <label>Livre</label>
+            </value>
+            <value>
+                <fullName>Reservada</fullName>
+                <default>false</default>
+                <label>Reservada</label>
+            </value>
+            <value>
+                <fullName>Vendida</fullName>
+                <default>false</default>
+                <label>Vendida</label>
+            </value>
+            <value>
+                <fullName>&lt;&lt;LISTAR STATUS&gt;&gt;</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>&lt;&lt;LISTAR STATUS&gt;&gt;</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

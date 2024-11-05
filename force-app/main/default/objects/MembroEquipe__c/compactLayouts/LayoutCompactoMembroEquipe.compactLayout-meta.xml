@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CompactLayout xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>LayoutCompactoMembroEquipe</fullName>
+    <fields>Usuario__c</fields>
+    <fields>Equipe__c</fields>
+    <label>Layout compacto do membro da equipe</label>
+</CompactLayout>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>DentroHorarioFuncionamento__c</fullName>
+    <description>Indica se a roleta está dentro do horário de funcionamento ou não, considerando
+		dias da semana.</description>
+    <formula>AND(
+		OR(
+		AND(WEEKDAY(TODAY()) = 1, INCLUDES(DiasSemana__c, &apos;Domingo&apos;)),
+		AND(WEEKDAY(TODAY()) = 2, INCLUDES(DiasSemana__c, &apos;Segunda-feira&apos;)),
+		AND(WEEKDAY(TODAY()) = 3, INCLUDES(DiasSemana__c, &apos;Terça-feira&apos;)),
+		AND(WEEKDAY(TODAY()) = 4, INCLUDES(DiasSemana__c, &apos;Quarta-feira&apos;)),
+		AND(WEEKDAY(TODAY()) = 5, INCLUDES(DiasSemana__c, &apos;Quinta-feira&apos;)),
+		AND(WEEKDAY(TODAY()) = 6, INCLUDES(DiasSemana__c, &apos;Sexta-feira&apos;)),
+		AND(WEEKDAY(TODAY()) = 7, INCLUDES(DiasSemana__c, &apos;Sábado&apos;))
+		),
+		(NOW() - (3/24)) &gt;= (DATETIMEVALUE(TEXT(YEAR(TODAY())) + &apos;-&apos; + TEXT(MONTH(TODAY())) + &apos;-&apos; + TEXT(DAY(TODAY())) + &apos; &apos; + TEXT(HOUR(HoraInicio__c)) + &apos;:&apos; + TEXT(MINUTE(HoraInicio__c)) + &apos;:00&apos;)),
+		(NOW() - (3/24)) &lt;= (DATETIMEVALUE(TEXT(YEAR(TODAY())) + &apos;-&apos; + TEXT(MONTH(TODAY())) + &apos;-&apos; + TEXT(DAY(TODAY())) + &apos; &apos; + TEXT(HOUR(HoraFim__c)) + &apos;:&apos; + TEXT(MINUTE(HoraFim__c)) + &apos;:00&apos;))
+		)</formula>
+    <inlineHelpText>Indica se a roleta está dentro do horário de funcionamento ou não, considerando
+		dias da semana.</inlineHelpText>
+    <label>Dentro do horário de funcionamento?</label>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

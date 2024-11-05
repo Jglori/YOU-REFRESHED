@@ -1,0 +1,23 @@
+<template>
+    <lightning-card>
+        <div class="content-container">
+            <div class="main-content">
+                <lightning-icon 
+                    icon-name="standard:goals" 
+                    alternative-text="goals" 
+                    size="large" 
+                    title="goals"
+                    class="icon">
+                </lightning-icon>
+                <p class="message">{message}</p>
+            </div>
+            <lightning-button 
+                variant="brand"
+                label="Pesquisar" 
+                icon-name="utility:search" 
+                class="search-button"
+                onclick={handlePesquisar}>
+            </lightning-button>
+        </div>
+    </lightning-card>
+</template>

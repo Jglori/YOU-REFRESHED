@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <deploymentStatus>Deployed</deploymentStatus>
+    <description>Evento para receber mensagens do WhatsApp</description>
+    <eventType>HighVolume</eventType>
+    <label>Evento WhatsApp</label>
+    <pluralLabel>Eventos WhatsApp</pluralLabel>
+    <publishBehavior>PublishImmediately</publishBehavior>
+</CustomObject>
