@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>Reportase__c</fullName>
-    <label>Reporta-se à</label>
-    <relationshipName>HierarquiaCargo</relationshipName>
-    <restrictedAdminField>false</restrictedAdminField>
-    <trackFeedHistory>false</trackFeedHistory>
-    <type>Hierarchy</type>
-</CustomField>
