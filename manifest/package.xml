@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
 	<types>
+		<members>ContractController</members>
+		<members>ContractControllerTest</members>
+		<members>ContractSelector</members>
+		<members>ContractTriggerHandler</members>
 		<members>ContratoService</members>
 		<members>ContratoServiceTest</members>
 		<members>GerarContratoController</members>
+		<members>GerarContratoControllerTest</members>
 		<members>QueryHelper</members>
 		<members>TemplateController</members>
 		<members>TemplateControllerTest</members>
@@ -14,6 +19,17 @@
 	<types>
 		<members>ContratoPDF</members>
 		<name>ApexPage</name>
+	</types>
+	<types>
+		<members>Contract</members>
+		<members>TemplateDocumento__c</members>
+		<name>CustomObject</name>
+	</types>
+	<types>
+		<members>Empreendimento__c-Layout de Empreendimento</members>
+		<members>Opportunity-Opportunity Layout</members>
+		<members>TemplateDocumento__c-Layout de Templates de Documentos</members>
+		<name>Layout</name>
 	</types>
 	<types>
 		<members>gerarContrato</members>
