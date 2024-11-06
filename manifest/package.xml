@@ -5,6 +5,7 @@
 		<members>TemplateControllerTest</members>
 		<members>TemplateDocumentoTriggerHandler</members>
 		<members>TemplateSelector</members>
+			<members>QueryHelper</members>
 		<name>ApexClass</name>
 	</types>
 	<types>
