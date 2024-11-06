@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>CelularAdicional2__c</fullName>
-    <description>Celular Adicional 2</description>
-    <label>Celular Adicional 2</label>
-    <required>false</required>
-    <trackFeedHistory>false</trackFeedHistory>
-    <type>Phone</type>
-</CustomField>
