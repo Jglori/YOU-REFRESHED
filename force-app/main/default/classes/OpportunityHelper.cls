@@ -64,9 +64,9 @@ public with sharing class OpportunityHelper {
 
             if (oldOpp != null && oldOpp.StageName == 'Ficha Cadastral') {
                 if (newOpp.StageName == 'Pré-análise') {
-                    if (newOpp.FarolChecklistDocumento__c == 'Vermelho') {
-                        newOpp.addError('Na fase de Ficha Cadastral, precisamos preencher todos os documentos obrigatórios no Checklist de documentos!');
-                    }
+/*                     if (newOpp.FarolChecklistDocumento__c == 'Vermelho' || !Approval.isLocked(newOpp.Id)) {
+                        newOpp.addError('É necessário preencher todos os documentos obrigatórios no checklist ou solicitar a aprovação do superior.');
+                    } */
                 } else if (validStagesAfterFichaCadastral.contains(newOpp.StageName)) {
                     if (oldOpp.StageName != 'Pré-análise') {
                         newOpp.addError('Não é permitido avançar diretamente para a fase ' + newOpp.StageName + ' sem ter passado pela fase "Pré-análise".');
@@ -110,39 +110,24 @@ public with sharing class OpportunityHelper {
     }
 
     public static void handlePreAnaliseForAnaliseCredito(List<Opportunity> newOpps) {
-        
         Set<Id> oppIds = new Set<Id>();
         for (Opportunity opp : newOpps) {
             oppIds.add(opp.Id);
-        }    
-
-        Map<Id, Integer> mapAnalisesRelacionadas = new Map<Id, Integer>();
-        List<AggregateResult> aggregateResults = [
-            SELECT COUNT(Id) quantidade, Opportunity__c 
-            FROM AnaliseCredito__c 
-            WHERE Opportunity__c IN :oppIds
-            GROUP BY Opportunity__c
-        ];
-
-        System.debug(aggregateResults);
-
-        for (AggregateResult ag : aggregateResults) {
-            Id oppId = (Id) ag.get('Opportunity__c');
-            Integer quantidade = (Integer) ag.get('quantidade');
-            mapAnalisesRelacionadas.put(oppId, quantidade);
         }
-
+        Map<Id, Integer> mapAnalisesRelacionadas = OpportunityDA.getAnaliseCreditoCountByOpportunity(oppIds);
         System.debug(mapAnalisesRelacionadas);
-
+    
         for (Opportunity newOpp : newOpps) {
             Integer pos = comparePosition('Pré-análise', newOpp.StageName);
             Integer quantidadeAnalises = mapAnalisesRelacionadas.get(newOpp.Id);
-            System.debug(quantidadeAnalises);  
-            if (pos < 0 && quantidadeAnalises == 0) {
+            System.debug(quantidadeAnalises);
+            
+            if (pos < 0 && (quantidadeAnalises == null || quantidadeAnalises == 0)) {
                 newOpp.addError('Por favor, associe uma Análise de Crédito para avançar de fase.');
             }
         }
-    }   
+    }
+    
 
     private static Integer comparePosition(String fstPosition, String sndPosition) {
         Integer fstValue = 0;

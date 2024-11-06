@@ -47,12 +47,12 @@ public with sharing class ContractController {
                         mail.setPlainTextBody(body);
                         Messaging.sendEmail(new Messaging.SingleEmailMessage[] { mail });
                     }
-                    
-                    FeedItem feedItem = new FeedItem();
-                    feedItem.ParentId = oppId;
-                    feedItem.Body = body;
-                    insert feedItem;
                 }
+                
+                FeedItem feedItem = new FeedItem();
+                feedItem.ParentId = oppId;
+                feedItem.Body = body;
+                insert feedItem;
                 
                 update ctt;
             }else{

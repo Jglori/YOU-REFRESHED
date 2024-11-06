@@ -102,4 +102,36 @@ public class ContratoService {
             }
         }
     }
+  
+    public static void verificaPrazoAssinatura(List<Contract> contracts){
+        List<Messaging.SingleEmailMessage> emails = new List<Messaging.SingleEmailMessage>();
+        List<FeedItem> chatterPosts = new List<FeedItem>();
+
+        for(Contract ctt : contracts){
+            List<OpportunityContactRole> roles = ContractSelector.getRolesContatoOpp(ctt.Oportunidade__c);
+
+            if(ctt.PrazoAssinatura__c < Date.today() && ctt.Status == 'Em Assinatura'){
+                
+                for(OpportunityContactRole role : roles){
+                    Contact cttRole = role.Contact;
+                    if (cttRole.Email != null) {
+                        Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();
+                        mail.setToAddresses(new String[] { cttRole.Email });
+                        mail.setSubject('Prazo de Assinatura Expirado! ');
+                        mail.setPlainTextBody('O prazo de assinatura para o contrato foi expirado. Favor procurar um responsável.');
+                        emails.add(mail);
+                    }
+                }
+
+                FeedItem post = new FeedItem();
+                post.ParentId = ctt.Oportunidade__c;
+                post.Body = 'O prazo de assinatura para o contrato expirou. Favor verificar com o responsável.';
+                chatterPosts.add(post);
+            }
+        }
+
+        Messaging.sendEmail(emails);
+        insert chatterPosts;
+    }
+  
 }
