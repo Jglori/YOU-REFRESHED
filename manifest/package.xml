@@ -1,116 +1,36 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
-        <members>EventoWhatsApp__e.MessageId__c</members>
-        <members>EventoWhatsApp__e.MessageText__c</members>
-        <members>IntegracaoWhatsapp__mdt.FaseMensagem__c</members>
-        <members>IntegracaoWhatsapp__mdt.IdDoNumeroDoWhatsappBusiness__c</members>
-        <members>IntegracaoWhatsapp__mdt.MensagemAutomatica__c</members>
-        <members>IntegracaoWhatsapp__mdt.NumeroDoWhatsappBusiness__c</members>
-        <members>IntegracaoWhatsapp__mdt.SegredoDoAplicativo__c</members>
-        <members>IntegracaoWhatsapp__mdt.TokenDeVerificacaoDoWebhook__c</members>
-        <members>IntegracaoWhatsapp__mdt.Token_de_Acesso__c</members>
-        <members>Lead.ChaveExternaWhatsApp__c</members>
-        <members>Lead.FimDialogo__c</members>
-        <members>Lead.InicioDialogo__c</members>
-        <members>Lead.UltimaMensagem__c</members>
-        <members>Mensagem__c.Certificado__c</members>
-        <members>Mensagem__c.ChaveExternaCliente__c</members>
-        <members>Mensagem__c.ChaveExternaMidia__c</members>
-        <members>Mensagem__c.ChaveExterna__c</members>
-        <members>Mensagem__c.CodigoStatus__c</members>
-        <members>Mensagem__c.Conteudo__c</members>
-        <members>Mensagem__c.CorpoRequisicao__c</members>
-        <members>Mensagem__c.DataHora__c</members>
-        <members>Mensagem__c.De__c</members>
-        <members>Mensagem__c.NomeArquivo__c</members>
-        <members>Mensagem__c.Status__c</members>
-        <members>Mensagem__c.TipoMidia__c</members>
-        <members>Mensagem__c.Tipo__c</members>
-        <members>Mensagem__c.URLMidia__c</members>
-        <name>CustomField</name>
-    </types>
-    <types>
-        <members>ConfiguracaoWhatsApp__mdt</members>
-        <members>EventoWhatsApp__e</members>
-        <members>IntegracaoWhatsapp__mdt</members>
-        <name>CustomObject</name>
-    </types>
-    <types>
-        <members>Mensagem__c.All</members>
-        <name>ListView</name>
-    </types>
-    <types>
-        <members>Mensagem__c.WhatsApp</members>
-        <name>RecordType</name>
-    </types>
-    <types>
-        <members>ContentDistributionDomain</members>
-        <members>ContentDistributionSelector</members>
-        <members>ContentDocumentLinkController</members>
-        <members>ContentDocumentLinkDomain</members>
-        <members>ContentDocumentLinkSelector</members>
-        <members>ContentDocumentLinkService</members>
-        <members>ContentDocumentLinkTriggerHandler</members>
-        <members>ContentVersionDomain</members>
-        <members>ContentVersionSelector</members>
-        <members>ContentVersionTriggerHandler</members>
-        <members>ContentVersionTriggerHandlerTest</members>
-        <members>InicializarArquivosService</members>
-        <members>LeadDTO</members>
-        <members>LeadDTOTest</members>
-        <members>LeadDomain</members>
-        <members>LeadSelector</members>
-        <members>LeadSelectorTest</members>
-        <members>LeadTriggerHandler</members>
-        <members>MensagemDTO</members>
-        <members>MensagemSelector</members>
-        <members>OrganizationSelector</members>
-        <members>WhatsAppCallout</members>
-        <members>WhatsAppCalloutTest</members>
-        <members>WhatsAppController</members>
-        <members>WhatsAppService</members>
-        <members>WhatsAppServiceTest</members>
-        <members>WhatsAppWebhook</members>
-        <members>WhatsappHttpMock</members>
-        <members>WhatsAppControllerTest</members>
+        <members>*</members>
         <name>ApexClass</name>
     </types>
     <types>
-        <members>ConfiguracaoWhatsApp.ConfiguracaoWhatsApp</members>
-        <members>IntegracaoWhatsapp.POCWhatsapp</members>
-        <name>CustomMetadata</name>
+        <members>*</members>
+        <name>ApexComponent</name>
     </types>
     <types>
-        <members>PaginaMensagem</members>
-        <name>FlexiPage</name>
+        <members>*</members>
+        <name>ApexPage</name>
     </types>
     <types>
-        <members>Mensagem__c-Layout de Mensagem</members>
-        <name>Layout</name>
+        <members>*</members>
+        <name>ApexTestSuite</name>
     </types>
     <types>
-        <members>whatsApp</members>
-        <members>templateModal</members>
-         <members>whatsAppMensagem</members>
+        <members>*</members>
+        <name>ApexTrigger</name>
+    </types>
+    <types>
+        <members>*</members>
+        <name>AuraDefinitionBundle</name>
+    </types>
+    <types>
+        <members>*</members>
         <name>LightningComponentBundle</name>
     </types>
     <types>
-        <members>MensagemEscrita</members>
-        <members>MensagemSomenteLeitura</members>
-        <name>PermissionSet</name>
+        <members>*</members>
+        <name>StaticResource</name>
     </types>
-    <types>
-        <members>ClriaLeadsWhast</members>
-        <name>Flow</name>
-    </types>
-    <types>
-        <members>ReceivedTextMessageWhatsApp</members>
-        <name>CustomSite</name>
-    </types>
-    <types>
-        <members>Mensagem__c</members>
-        <name>CustomTab</name>
-    </types>
-    <version>59.0</version>
+    <version>61.0</version>
 </Package>

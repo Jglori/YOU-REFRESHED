@@ -138,8 +138,6 @@ public without sharing class LeadSelector {
                        '    MobilePhone, ' +
                        '    Email, ' +
                        '    Status, ' +
-                       '    Owner.Name, ' +
-                       '    CorretorContato__r.Name, ' + // Campo de relacionamento adicionado
                        '    InicioDialogo__c, ' +
                        '    FimDialogo__c, ' +
                        '    UltimaMensagem__c, ' +
