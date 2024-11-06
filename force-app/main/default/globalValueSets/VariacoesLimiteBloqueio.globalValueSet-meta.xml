@@ -15,7 +15,7 @@
         <default>false</default>
         <label>Não for igual</label>
     </customValue>
-    <description>Define o valor esperado, validando o valores da proposta</description>
+    <description>Define o valor esperado, validando os valores da proposta</description>
     <masterLabel>Variações do Limite para Bloqueio</masterLabel>
     <sorted>true</sorted>
 </GlobalValueSet>
