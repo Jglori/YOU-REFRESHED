@@ -1,0 +1,493 @@
+<template>
+    <article class="slds-card">
+        <div class="slds-card__header slds-grid">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                <div class="slds-media__figure">
+                    <span class="slds-icon_container">
+                        <lightning-icon icon-name="standard:social"></lightning-icon>
+                    </span>
+                </div>
+                <div class="slds-media__body">
+                    <h2 class="slds-card__header-title">
+                        <span>Parametrização da Análise da Proposta</span>
+                    </h2>
+                    <h3>
+                        <span>Paremetrize aqui os valores que serão usados na análise da proposta x tabela</span>
+                    </h3>
+                </div>
+            </header>
+        </div>
+    </article>
+
+    <!-- Tabela de Parametrização -->
+    <div class="slds-grid slds-wrap custom-grid">
+        <div class="slds-col slds-size_1-of-4 slds-p-horizontal_medium">
+            <p><B>Criterio</B></p>
+        </div>
+        <div class="slds-col slds-size_1-of-4 slds-p-horizontal_medium">
+            <p><b>Limite da Tabela</b></p>
+        </div>
+        <div class="slds-col slds-size_1-of-4 slds-p-horizontal_medium">
+            <p><b>Variação do Limite para Bloqueio</b></p>
+        </div>
+        <div class="slds-col slds-size_1-of-4 slds-p-horizontal_medium"></div>
+
+        <!-- Valor Nominal -->
+        
+        <div class="slds-col slds-size_1-of-4 slds-p-horizontal_medium">
+            <lightning-input value="Valor Nominal (Diferença Tabela - Proposta)" disabled></lightning-input>
+        </div>
+        <div class="slds-col slds-size_1-of-4 slds-p-horizontal_medium">
+            <lightning-input 
+                value={valorNominalDisplay} 
+                onfocus={retirarPorcentagemNominal} 
+                onblur={adicionarPorcentagemNominal} 
+                onchange={handleMudancaNominal} 
+                step="0.01"
+                class="custom-input"
+                disabled={bloqueioInputNominal}>
+            </lightning-input>
+        </div>
+        <div class="slds-col slds-size_1-of-4 slds-p-horizontal_medium">
+            <lightning-combobox 
+                options={limiteOptions}
+                value={variacaoNominal}
+                onchange={handleMudancaLimiteNominal}>
+            </lightning-combobox>
+        </div>
+        <div class="slds-col slds-size_1-of-4 slds-p-top_medium">
+            <lightning-helptext content="Porcentagem da Diferença entre o Valor Nominal da tabela e Proposta"></lightning-helptext>
+        </div>
+        
+        <!-- Valor VPL -->
+        
+        <div class="slds-col slds-size_1-of-4 slds-p-horizontal_medium">
+            <lightning-input value="Valor VPL (Diferença Tabela - Proposta)" disabled></lightning-input>
+        </div>
+        <div class="slds-col slds-size_1-of-4 slds-p-horizontal_medium">
+            <lightning-input
+                value={valorVplDisplay}
+                onfocus={retirarPorcentagemVpl}
+                onblur={adicionarPorcentagemVpl}
+                onchange={handleMudancaVpl}
+                step="0.01"
+                class="custom-input"
+                disabled={bloqueioInputVpl}>
+            </lightning-input>
+        </div>
+        <div class="slds-col slds-size_1-of-4 slds-p-horizontal_medium">
+            <lightning-combobox 
+                options={limiteOptions}
+                value={variacaoVpl}
+                onchange={handleMudancaLimiteVPL}>
+            </lightning-combobox>
+        </div>
+        <div class="slds-col slds-size_1-of-4 slds-p-top_medium">
+            <lightning-helptext content="Porcentagem da Diferença entre o Valor VPL da tabela e Proposta"></lightning-helptext>
+        </div>
+
+        <!-- Valor M² -->
+        
+        <div class="slds-col slds-size_1-of-4 slds-p-horizontal_medium">
+            <lightning-input value="Valor M² (Diferença Tabela - Proposta)" disabled></lightning-input>
+        </div>
+        <div class="slds-col slds-size_1-of-4 slds-p-horizontal_medium">
+            <lightning-input
+                value={valorMetroDisplay}
+                onfocus={retirarPorcentagemMetro}
+                onblur={adicionarPorcentagemMetro}
+                onchange={handleMudancaMetro}
+                step="0.01"
+                class="custom-input"
+                disabled={bloqueioInputMetro}>
+            </lightning-input>
+        </div>
+        <div class="slds-col slds-size_1-of-4 slds-p-horizontal_medium">
+            <lightning-combobox 
+                options={limiteOptions}
+                value={variacaoMetro}
+                onchange={handleMudancaLimiteMetro}>
+            </lightning-combobox>
+        </div>
+        <div class="slds-col slds-size_1-of-4 slds-p-top_medium">
+            <lightning-helptext content="Porcentagem da Diferença entre o Valor do M² da tabela e Proposta"></lightning-helptext>
+        </div>
+
+        <!-- Prazo Financiamento -->
+        
+        <div class="slds-col slds-size_1-of-4 slds-p-horizontal_medium">
+            <lightning-input value="Prazo Financiamento" disabled></lightning-input>
+        </div>
+        <div class="slds-col slds-size_1-of-4 slds-p-horizontal_medium">
+            <lightning-input
+                value={valorPrazoDisplay}
+                onblur={handleMudancaPrazo}
+                class="custom-input"
+                type="number"
+                disabled={bloqueioInputPrazo}>
+            </lightning-input>
+        </div>
+        <div class="slds-col slds-size_1-of-4 slds-p-horizontal_medium">
+            <lightning-combobox 
+                options={limiteOptions}
+                value={variacaoPrazo}
+                onchange={handleMudancaLimitePrazo}>
+            </lightning-combobox>
+        </div>
+        <div class="slds-col slds-size_1-of-4 slds-p-top_medium">
+            <lightning-helptext content="Quantidade de meses de Financiamento"></lightning-helptext>
+        </div>
+
+        <!-- % de Captação à vista -->
+
+        <div class="slds-col slds-size_1-of-4 slds-p-horizontal_medium">
+            <lightning-input value="% de captação à vista (Ato + Sinal)" disabled></lightning-input>
+        </div>
+        <div class="slds-col slds-size_1-of-4 slds-p-horizontal_medium">
+            <lightning-input
+                value={valorCaptacaoVistaDisplay}
+                onchange={handleMudancaCaptacaoVista}
+                onfocus={retirarPorcentagemCaptacaoVista}
+                onblur={adicionarPorcentagemCaptacaoVista}
+                step="0.01"
+                class="custom-input"
+                disabled={bloqueioInputCapVista}>
+            </lightning-input>
+        </div>
+        <div class="slds-col slds-size_1-of-4 slds-p-horizontal_medium">
+            <lightning-combobox 
+                options={limiteOptions}
+                value={variacaoCaptacaoVista}
+                onchange={handleMudancaLimiteCapVista}>
+            </lightning-combobox>
+        </div>
+        <div class="slds-col slds-size_1-of-4 slds-p-top_medium">
+            <lightning-helptext content="Porcentagem da Proposta em relação ao valor da Tabela"></lightning-helptext>
+        </div>
+
+        <!-- % de captação PÓS habita-se -->
+
+        <div class="slds-col slds-size_1-of-4 slds-p-horizontal_medium">
+            <lightning-input value="% de captação PÓS habita-se" disabled></lightning-input>
+        </div>
+        <div class="slds-col slds-size_1-of-4 slds-p-horizontal_medium">
+            <lightning-input
+                value={valorCaptacaoPosDisplay}
+                onchange={handleMudancaCaptacaoPos}
+                onfocus={retirarPorcentagemCaptacaoPos}
+                onblur={adicionarPorcentagemCaptacaoPos}
+                step="0.01"
+                class="custom-input"
+                disabled={bloqueioInputPos}>
+            </lightning-input>
+        </div>
+        <div class="slds-col slds-size_1-of-4 slds-p-horizontal_medium">
+            <lightning-combobox 
+                options={limiteOptions}
+                value={variacaoCaptacaoPos}
+                onchange={handleMudancaLimiteCapPos}>
+            </lightning-combobox>
+        </div>
+        <div class="slds-col slds-size_1-of-4 slds-p-top_medium">
+            <lightning-helptext content="Porcentagem da Proposta em relação ao valor da Tabela"></lightning-helptext>
+        </div>
+
+        <!-- % de captação mensal -->
+
+        <div class="slds-col slds-size_1-of-4 slds-p-horizontal_medium">
+            <lightning-input value="% de captação mensal" disabled></lightning-input>
+        </div>
+        <div class="slds-col slds-size_1-of-4 slds-p-horizontal_medium">
+            <lightning-input
+                value={valorMensalDisplay}
+                onchange={handleMudancaMensal}
+                onfocus={retirarPorcentagemMensal}
+                onblur={adicionarPorcentagemMensal}
+                step="0.01"
+                class="custom-input"
+                disabled={bloqueioInputMensal}>
+            </lightning-input>
+        </div>
+        <div class="slds-col slds-size_1-of-4 slds-p-horizontal_medium">
+            <lightning-combobox 
+                options={limiteOptions}
+                value={variacaoCaptacaoMensal}
+                onchange={handleMudancaLimiteMensal}>
+            </lightning-combobox>
+        </div>
+        <div class="slds-col slds-size_1-of-4 slds-p-top_medium">
+            <lightning-helptext content="Porcentagem da Proposta em relação ao valor da Tabela"></lightning-helptext>
+        </div>
+    </div>
+    <br>
+    <template if:true={displayTeste}>
+        <div>
+            <h2 class="slds-card__header-title">
+                <span><b>Tabela de TESTE para validação da Proposta</b></span>
+            </h2>
+            <h3>
+                <span>Insira seus valores nos campos da Proposta e Tabela para testar os limites da Tabela parametrizada acima</span>
+            </h3>
+        </div>
+        <br>
+    
+        <!-- tabela de teste -->
+        <div class="slds-grid slds-wrap custom-grid">
+            <div class="slds-col slds-size_1-of-6 slds-p-horizontal_medium">
+                <p><B>Criterio</B></p>
+            </div>
+            <div class="slds-col slds-size_1-of-6 slds-p-horizontal_medium">
+                <p><b>Tabela</b></p>
+            </div>
+            <div class="slds-col slds-size_1-of-6 slds-p-horizontal_medium">
+                <p><b>Proposta</b></p>
+            </div>
+            <div class="slds-col slds-size_1-of-6 slds-p-horizontal_medium">
+                <P><b>Δ</b></P>
+            </div>
+            <div class="slds-col slds-size_1-of-6 slds-p-horizontal_medium">
+                <p><b>Δ%</b></p>
+            </div>
+            <div class="slds-col slds-size_1-of-6 slds-p-horizontal_medium">
+                <P><b>Limite da Tabela</b></P>
+            </div>
+    
+            <!-- Valor Nominal -->
+            
+            <div class="slds-col slds-size_1-of-6 slds-p-horizontal_medium">
+                <lightning-input value="Valor Nominal (Diferença Tabela - Proposta)" disabled></lightning-input>
+            </div>
+            <div class="slds-col slds-size_1-of-6 slds-p-horizontal_medium">
+                <lightning-input 
+                    value={valorNominalTabelaTeste}
+                    type="number"
+                    formatter="currency"
+                    onblur={salvarValorNominalTab}>
+                </lightning-input>
+            </div>
+            <div class="slds-col slds-size_1-of-6 slds-p-horizontal_medium">
+                <lightning-input
+                    value={valorNominalPropostaTeste}
+                    type="number"
+                    formatter="currency"
+                    onblur={salvarValorNominalProp}>
+                </lightning-input>
+            </div>
+            <div class="slds-col slds-size_1-of-6 slds-p-horizontal_medium">
+                <lightning-input value={diferencaNominal} disabled></lightning-input>
+            </div>
+            <div class="slds-col slds-size_1-of-6 slds-p-horizontal_medium">
+                <lightning-input value={diferencaNominalPorcentagem} disabled></lightning-input>
+            </div>
+            <div class="slds-col slds-size_1-of-6 slds-p-horizontal_medium">
+                <div class="slds-form-element slds-p-top_medium">
+                    <div class="slds-form-element__control">
+                        <input type="text" id="input-nominal" value={valorNominalDisplay} style={corVarialNominal} class="slds-input" disabled/>
+                    </div>
+                </div>
+            </div>
+
+            <!-- valor VPL -->
+
+            <div class="slds-col slds-size_1-of-6 slds-p-horizontal_medium">
+                <lightning-input value="Valor VPL (Diferença Tabela - Proposta)" disabled></lightning-input>
+            </div>
+            <div class="slds-col slds-size_1-of-6 slds-p-horizontal_medium">
+                <lightning-input 
+                    value={valorVplTabelaTeste}
+                    type="number"
+                    formatter="currency"
+                    onblur={salvarValorVplTab}>
+                </lightning-input>
+            </div>
+            <div class="slds-col slds-size_1-of-6 slds-p-horizontal_medium">
+                <lightning-input
+                    value={valorVplPropostaTeste}
+                    type="number"
+                    formatter="currency"
+                    onblur={salvarValorVplProp}>
+                </lightning-input>
+            </div>
+            <div class="slds-col slds-size_1-of-6 slds-p-horizontal_medium">
+                <lightning-input value={diferencaVpl} disabled></lightning-input>
+            </div>
+            <div class="slds-col slds-size_1-of-6 slds-p-horizontal_medium">
+                <lightning-input value={diferencaVplPorcentagem} disabled></lightning-input>
+            </div>
+            <div class="slds-col slds-size_1-of-6 slds-p-horizontal_medium">
+                <div class="slds-form-element slds-p-top_medium">
+                    <div class="slds-form-element__control">
+                        <input type="text" id="input-vpl" value={valorVplDisplay} style={corVarialVpl} class="slds-input" disabled/>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Metro² -->
+            
+            <div class="slds-col slds-size_1-of-6 slds-p-horizontal_medium">
+                <lightning-input value="Valor M² (Diferença Tabela - Proposta)" disabled></lightning-input>
+            </div>
+            <div class="slds-col slds-size_1-of-6 slds-p-horizontal_medium">
+                <lightning-input
+                    value={valorMetroTabelaTeste}
+                    type="number"
+                    formatter="currency"
+                    onblur={salvarValorMetroTab}>
+                </lightning-input>
+            </div>
+            <div class="slds-col slds-size_1-of-6 slds-p-horizontal_medium">
+                <lightning-input
+                    value={valorMetroPropostaTeste}
+                    type="number"
+                    formatter="currency"
+                    onblur={salvarValorMetroProp}>
+                </lightning-input>
+            </div>
+            <div class="slds-col slds-size_1-of-6 slds-p-horizontal_medium">
+                <lightning-input value={diferencaMetro} disabled></lightning-input>
+            </div>
+            <div class="slds-col slds-size_1-of-6 slds-p-horizontal_medium">
+                <lightning-input value={diferencaMetroPorcentagem} disabled></lightning-input>
+            </div>
+            <div class="slds-col slds-size_1-of-6 slds-p-horizontal_medium">
+                <div class="slds-form-element slds-p-top_medium">
+                    <div class="slds-form-element__control">
+                        <input type="text" id="input-metro" value={valorMetroDisplay} style={corVarialMetro} class="slds-input" disabled/>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Prazo Financiamento -->
+
+            <div class="slds-col slds-size_1-of-6 slds-p-horizontal_medium">
+                <lightning-input value="Prazo Financiamento" disabled></lightning-input>
+            </div>
+            <div class="slds-col slds-size_1-of-6 slds-p-horizontal_medium">
+                <lightning-input
+                    value={valorPrazoTabelaTeste}
+                    type="number"
+                    onblur={salvarValorPrazoTab}>
+                </lightning-input>
+            </div>
+            <div class="slds-col slds-size_1-of-6 slds-p-horizontal_medium">
+                <lightning-input
+                    value={valorPrazoPropostaTeste}
+                    type="number"
+                    onblur={salvarValorPrazoProp}>
+                </lightning-input>
+            </div>
+            <div class="slds-col slds-size_1-of-6 slds-p-horizontal_medium">
+                <!-- <lightning-input value="0" type="number" disabled></lightning-input> -->
+            </div>
+            <div class="slds-col slds-size_1-of-6 slds-p-horizontal_medium">
+                <!-- <lightning-input value="0" type="number" disabled></lightning-input> -->
+            </div>
+            <div class="slds-col slds-size_1-of-6 slds-p-horizontal_medium">
+                <div class="slds-form-element slds-p-top_medium">
+                    <div class="slds-form-element__control">
+                        <input type="text" id="input-prazo" value={valorPrazoDisplay} style={corVarialPrazo} class="slds-input" disabled/>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Captação à Vista -->
+            
+            <div class="slds-col slds-size_1-of-6 slds-p-horizontal_medium">
+                <lightning-input value="% de captação à vista (Ato + Sinal)" disabled></lightning-input>
+            </div>
+            <div class="slds-col slds-size_1-of-6 slds-p-horizontal_medium">
+                <lightning-input
+                    value={adicionarPorcentagemCapVistaTabela}
+                    onblur={salvarValorCapVistaTab}>
+                </lightning-input>
+            </div>
+            <div class="slds-col slds-size_1-of-6 slds-p-horizontal_medium">
+                <lightning-input
+                    value={adicionarPorcentagemCapVistaProposta}
+                    onblur={salvarValorCapVistaProp}>
+                </lightning-input>
+            </div>
+            <div class="slds-col slds-size_1-of-6 slds-p-horizontal_medium">
+                <!-- <lightning-input value="0" type="number" disabled></lightning-input> -->
+            </div>
+            <div class="slds-col slds-size_1-of-6 slds-p-horizontal_medium">
+                <!-- <lightning-input value="0" type="number" disabled></lightning-input> -->
+            </div>
+            <div class="slds-col slds-size_1-of-6 slds-p-horizontal_medium">
+                <div class="slds-form-element slds-p-top_medium">
+                    <div class="slds-form-element__control">
+                        <input type="text" id="input-vista" value={limiteTesteCapVista} style={corVarialCapVista} class="slds-input" disabled/>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Captação Pos habita-se -->
+
+            <div class="slds-col slds-size_1-of-6 slds-p-horizontal_medium">
+                <lightning-input value="% de captação PÓS habita-se" disabled></lightning-input>
+            </div>
+            <div class="slds-col slds-size_1-of-6 slds-p-horizontal_medium">
+                <lightning-input
+                    value={AdicionarPorcentagemCapPosTabela}
+                    onblur={salvarValorCapPosTab}>
+                </lightning-input>
+            </div>
+            <div class="slds-col slds-size_1-of-6 slds-p-horizontal_medium">
+                <lightning-input
+                    value={AdicionarPorcentagemCapPosProposta}
+                    onblur={salvarValorCapPosProp}>
+                </lightning-input>
+            </div>
+            <div class="slds-col slds-size_1-of-6 slds-p-horizontal_medium">
+                <!-- <lightning-input value="0" type="currency" disabled></lightning-input> -->
+            </div>
+            <div class="slds-col slds-size_1-of-6 slds-p-horizontal_medium">
+                <!-- <lightning-input value="0" type="currency" disabled></lightning-input> -->
+            </div>
+            <div class="slds-col slds-size_1-of-6 slds-p-horizontal_medium">
+                <div class="slds-form-element slds-p-top_medium">
+                    <div class="slds-form-element__control">
+                        <input type="text" id="input-Pos" value={limiteTesteCapPos} style={corVarialPos} class="slds-input" disabled/>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Captação Mensal -->
+
+            <div class="slds-col slds-size_1-of-6 slds-p-horizontal_medium">
+                <lightning-input value="% de captação mensal" disabled></lightning-input>
+            </div>
+            <div class="slds-col slds-size_1-of-6 slds-p-horizontal_medium">
+                <lightning-input
+                    value={AdicionarPorcentagemCapMensalTabela}
+                    onblur={salvarValorCapMensalTab}>
+                </lightning-input>
+            </div>
+            <div class="slds-col slds-size_1-of-6 slds-p-horizontal_medium">
+                <lightning-input
+                    value={AdicionarPorcentagemCapMensalProposta}
+                    onblur={salvarValorCapMensalProp}>
+                </lightning-input>
+            </div>
+            <div class="slds-col slds-size_1-of-6 slds-p-horizontal_medium">
+                <!-- <lightning-input value="0" type="number" disabled></lightning-input> -->
+            </div>
+            <div class="slds-col slds-size_1-of-6 slds-p-horizontal_medium">
+                <!-- <lightning-input value="0" type="number" disabled></lightning-input> -->
+            </div>
+            <div class="slds-col slds-size_1-of-6 slds-p-horizontal_medium">
+                <div class="slds-form-element slds-p-top_medium">
+                    <div class="slds-form-element__control">
+                        <input type="text" id="input-Mensal" value={limiteTesteCapMensal} style={corVarialMensal} class="slds-input" disabled/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+    </template>
+    <div class="slds-grid slds-grid_align-end slds-p-horizontal_large">
+        <lightning-button onclick={displayTest} label="Testar" variant="brand-outline" class="slds-p-horizontal_medium"></lightning-button>
+        <lightning-button onclick={limparCampos} label="Cancelar" variant="brand-outline"></lightning-button>
+        <lightning-button onclick={salvarConjuntoCriterios} label="Salvar" variant="Brand" class="slds-p-horizontal_medium"></lightning-button>
+    </div>
+</template>
