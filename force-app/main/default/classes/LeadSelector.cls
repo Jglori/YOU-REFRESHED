@@ -111,25 +111,25 @@ public without sharing class LeadSelector {
         ];
     }
 
-    public static List<Lead> obterLeadsPorInformacoesConcierge(String nomeCompleto, String celular, String email) {
-        return Database.query(
-            'SELECT ' +
-            '    Name, ' +
-            '    FirstName, ' +
-            '    LastName, ' +
-            '    MobilePhone, ' +
-            '    Email, ' +
-            '    Status, ' +
-            '    LeadSource, ' +
-            '    CanalAtendimento__c, ' +
-            '    Owner.Name ' +
-            'FROM Lead ' +
-            'WHERE ' +
-            '    (Name LIKE \'%' + nomeCompleto + '%\' AND Name != null) OR ' +
-            '    (MobilePhone = :celular AND MobilePhone != null) OR ' +
-            '    (Email = :email AND Email != null)'
-        );
-    }
+    // public static List<Lead> obterLeadsPorInformacoesConcierge(String nomeCompleto, String celular, String email) {
+    //     return Database.query(
+    //         'SELECT ' +
+    //         '    Name, ' +
+    //         '    FirstName, ' +
+    //         '    LastName, ' +
+    //         '    MobilePhone, ' +
+    //         '    Email, ' +
+    //         '    Status, ' +
+    //         '    LeadSource, ' +
+    //         '    CanalAtendimento__c, ' +
+    //         '    Owner.Name ' +
+    //         'FROM Lead ' +
+    //         'WHERE ' +
+    //         '    (Name LIKE \'%' + nomeCompleto + '%\' AND Name != null) OR ' +
+    //         '    (MobilePhone = :celular AND MobilePhone != null) OR ' +
+    //         '    (Email = :email AND Email != null)'
+    //     );
+    // }
 
     public static List<Lead> obterLeadsPorInformacoesConcierge(String celular, String email, Boolean isJuridica, String phone) {
         String query = 'SELECT ' +
@@ -139,44 +139,25 @@ public without sharing class LeadSelector {
                        '    Email, ' +
                        '    Status, ' +
                        '    Owner.Name, ' +
-                       '    CorretorContato__r.Name, ' + 
+                       '    CorretorContato__r.Name, ' + // Campo de relacionamento adicionado
                        '    InicioDialogo__c, ' +
                        '    FimDialogo__c, ' +
                        '    UltimaMensagem__c, ' +
                        '    Phone, ' +
-                       '    CreatedDate, ' +
-                       '    CelularAdicional1__c, ' +
-                       '    CelularAdicional2__c, ' +
-                       '    CelularComercialAdicional__c, ' +
-                       '    EmailAdicional__c ' +
+                       '    CreatedDate ' +
                        'FROM Lead ' +
                        'WHERE ';
-            
+
         if (isJuridica) {
-            query += '((Phone = :phone) OR ' +
-                     '((MobilePhone = :celular) OR ' +
-                     '(CelularAdicional__c = :celular) OR ' +
-                     '(CelularAdicional1__c = :celular) OR ' +
-                     '(CelularAdicional2__c = :celular) OR ' +
-                     '(CelularComercialAdicional__c = :celular) OR ' +
-                     '(Email = :email ) OR ' +  
-                     '(EmailAdicional__c = :email))';
+            query += '(Phone = :phone AND Phone != null) OR ' +
+                     '(Email = :email AND Email != null)';
         } else {
-            query += '((MobilePhone = :celular) OR ' +
-                     '(CelularAdicional__c = :celular) OR ' +
-                     '(CelularAdicional1__c = :celular) OR ' +
-                     '(CelularAdicional2__c = :celular) OR ' +
-                     '(CelularComercialAdicional__c = :celular) OR ' +
-                     '(Email = :email) OR ' +  
-                     '(EmailAdicional__c = :email))';
+            query += '(MobilePhone = :celular AND MobilePhone != null) OR ' +
+                     '(Email = :email AND Email != null)';
         }
-        
+
         return Database.query(query);
     }
-    
-    
-    
-    
 
     public static Lead obterMobilePhoneLead(String idLead) {
         return [
