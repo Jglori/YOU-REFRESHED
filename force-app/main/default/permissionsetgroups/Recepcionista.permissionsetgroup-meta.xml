@@ -5,7 +5,6 @@
     <permissionSets>ComponenteConcierge</permissionSets>
     <permissionSets>EnviarEmail</permissionSets>
     <permissionSets>Lead_Alterar_propriet_rio</permissionSets>
-    <permissionSets>Lead_Somente_leitura</permissionSets>
     <permissionSets>MensagemSomenteLeitura</permissionSets>
     <permissionSets>Omnichannel_Leitura</permissionSets>
     <permissionSets>Opp_Editar</permissionSets>

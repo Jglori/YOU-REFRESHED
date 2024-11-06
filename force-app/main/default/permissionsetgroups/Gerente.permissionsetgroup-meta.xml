@@ -8,7 +8,6 @@
     <permissionSets>Contato_Editar</permissionSets>
     <permissionSets>EmpreendimentoLeitura</permissionSets>
     <permissionSets>EnviarEmail</permissionSets>
-    <permissionSets>Lead_Somente_leitura</permissionSets>
     <permissionSets>MensagemSomenteLeitura</permissionSets>
     <permissionSets>OppAcessoTotal</permissionSets>
     <permissionSets>Pain_is_e_Relat_rios</permissionSets>

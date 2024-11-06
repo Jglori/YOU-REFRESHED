@@ -9,7 +9,6 @@
     <permissionSets>Lead_Alterar_propriet_rio</permissionSets>
     <permissionSets>Lead_Converter</permissionSets>
     <permissionSets>Lead_Editar</permissionSets>
-    <permissionSets>Lead_Somente_leitura</permissionSets>
     <permissionSets>MembroEquipeLeitura</permissionSets>
     <permissionSets>MensagemSomenteLeitura</permissionSets>
     <permissionSets>Pain_is_e_Relat_rios</permissionSets>
