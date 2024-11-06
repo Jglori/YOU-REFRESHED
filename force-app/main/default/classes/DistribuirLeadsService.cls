@@ -38,6 +38,7 @@ public without sharing class DistribuirLeadsService {
         List<ParticipanteRoleta__c> participantesOnline = new List<ParticipanteRoleta__c>();
         for(ParticipanteRoleta__c participante : participantes) {
             if(participante.Situacao__c != 'Online') { continue; }
+            if(!participante.PresencaValidada__c) { continue; } //adicionado para validação
             if(participante.CargaRestante__c <= 0) { continue; }
             if(participante.PausarDistribuicao__c) { continue; }
             if(participante.MembroEquipe__r.ExigeValidacaoCoordenador__c && !participante.PresencaValidada__c) { continue; }
