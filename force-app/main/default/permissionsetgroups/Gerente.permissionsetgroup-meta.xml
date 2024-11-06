@@ -8,7 +8,6 @@
     <permissionSets>Contato_Editar</permissionSets>
     <permissionSets>EmpreendimentoLeitura</permissionSets>
     <permissionSets>EnviarEmail</permissionSets>
-    <permissionSets>EquipeCorretores</permissionSets>
     <permissionSets>Lead_Somente_leitura</permissionSets>
     <permissionSets>MensagemSomenteLeitura</permissionSets>
     <permissionSets>OppAcessoTotal</permissionSets>
