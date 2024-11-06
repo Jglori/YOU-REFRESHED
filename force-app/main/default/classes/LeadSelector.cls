@@ -79,7 +79,7 @@ public without sharing class LeadSelector {
     public static List<Lead> obterLeadsPorChavesExternasClientes(Set<String> chavesClientes){
         return [
                 SELECT
-                    haveExternaWhatsApp__c
+                    ChaveExternaWhatsApp__c
                 FROM Lead 
                 WHERE ChaveExternaWhatsApp__c IN :chavesClientes
             ];
