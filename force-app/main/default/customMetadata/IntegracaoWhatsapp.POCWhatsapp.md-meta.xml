@@ -8,7 +8,7 @@
     </values>
     <values>
         <field>IdDoNumeroDoWhatsappBusiness__c</field>
-        <value xsi:type="xsd:string">134864133033957</value>
+        <value xsi:type="xsd:string">484699278058382</value>
     </values>
     <values>
         <field>MensagemAutomatica__c</field>
@@ -16,11 +16,11 @@
     </values>
     <values>
         <field>NumeroDoWhatsappBusiness__c</field>
-        <value xsi:type="xsd:string">5516982018151</value>
+        <value xsi:type="xsd:string">5511995871036</value>
     </values>
     <values>
         <field>SegredoDoAplicativo__c</field>
-        <value xsi:type="xsd:string">c179a4d1a25af9364183306263bf1220</value>
+        <value xsi:type="xsd:string">fe96d8f5467c71c4b53ee907f7184b01</value>
     </values>
     <values>
         <field>TokenDeVerificacaoDoWebhook__c</field>
@@ -28,6 +28,6 @@
     </values>
     <values>
         <field>Token_de_Acesso__c</field>
-        <value xsi:type="xsd:string">EAASDDhdKbZAwBO7tAJuRBhWfZAA2PL3kjzsLkmZBCNwlz11gv3uyrIuOINqEe4Kk3ZCz6OErl7Cxu0HXigqfPjfeIx4ZCETjd6h0mgsYVwelGmCZBaB8l1JcCnVZAa0Kmq7FmPZBfFdk8VIfy1fQf9sq1KIHJVoNKrmAAeRMZBLc52V87NFXIfJJ1H0kMsjA95XcL</value>
+        <value xsi:type="xsd:string">EAANsSOrChtIBO7CnY2LuXQZB5O7X2ZBxZBYxYVFq6PpwjStYA5vQvf019KK0y6ZBCNgCpoOlWbsPX8BndpLdLWQDU7LwmoH5bb9kPqVE9Jdw2z49uplqtwXTZCbJP6kng4f8ZCo2m8vE6ZBdZAthR7GjUzakTIhAFdAO0I4NNoMWjnERJFAcFZC7u9YldmwMKMWLDPQZDZD</value>
     </values>
 </CustomMetadata>

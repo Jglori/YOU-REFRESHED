@@ -35,6 +35,8 @@ public without sharing class LeadSelector {
                 Name,
                 Email,
                 CanalAtendimento__c,
+                OwnerId,
+                Owner.Name,
                 CreatedDate,
                 Corretor__r.CargaRestante__c
             FROM Lead
@@ -62,6 +64,7 @@ public without sharing class LeadSelector {
                 InicioDialogo__c,
                 FimDialogo__c,
                 UltimaMensagem__c,
+                EmpreendimentoInteresse__c,
                 Corretor__r.QuantidadeLeadsFaleConosco__c,
                 Corretor__r.QuantidadeLeadsChat__c,
                 Corretor__r.QuantidadeLeadsWhatsApp__c,
@@ -74,7 +77,12 @@ public without sharing class LeadSelector {
     }
 
     public static List<Lead> obterLeadsPorChavesExternasClientes(Set<String> chavesClientes){
-        return [SELECT ChaveExternaWhatsApp__c FROM Lead WHERE ChaveExternaWhatsApp__c IN :chavesClientes];
+        return [
+                SELECT
+                    haveExternaWhatsApp__c
+                FROM Lead 
+                WHERE ChaveExternaWhatsApp__c IN :chavesClientes
+            ];
     }
     
     public static List<Lead> obterLeadsPorInformacoesConcierge(String nomeCompleto, String celular, String email) {
@@ -127,6 +135,14 @@ public without sharing class LeadSelector {
         }
     
         return Database.query(query);
+    }    
+
+    public static Lead obterMobilePhoneLead(String idLead) {
+        return [
+            SELECT MobilePhone 
+            FROM Lead 
+            WHERE Id = :idLead
+        ];
     }
     
       public static Lead obterInfosTemplatePadrao(String idLead){
@@ -135,7 +151,8 @@ public without sharing class LeadSelector {
                 MobilePhone,
                 FirstName,
                 Owner.Name,
-                EmpreendimentoInteresse__c
+                EmpreendimentoInteresse__c,
+                ChaveExternaWhatsApp__c
             FROM Lead WHERE Id = :idLead
             ];
     }
