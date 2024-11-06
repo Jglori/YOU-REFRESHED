@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GlobalValueSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customValue>
+        <fullName>Abaixo do limite</fullName>
+        <default>false</default>
+        <label>Abaixo do limite</label>
+    </customValue>
+    <customValue>
+        <fullName>Acima do limite</fullName>
+        <default>false</default>
+        <label>Acima do limite</label>
+    </customValue>
+    <customValue>
+        <fullName>Não for igual</fullName>
+        <default>false</default>
+        <label>Não for igual</label>
+    </customValue>
+    <description>Define o valor esperado, validando o valores da proposta</description>
+    <masterLabel>Variações do Limite para Bloqueio</masterLabel>
+    <sorted>true</sorted>
+</GlobalValueSet>
