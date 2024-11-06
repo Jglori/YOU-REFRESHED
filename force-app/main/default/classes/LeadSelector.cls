@@ -111,25 +111,25 @@ public without sharing class LeadSelector {
         ];
     }
 
-    // public static List<Lead> obterLeadsPorInformacoesConcierge(String nomeCompleto, String celular, String email) {
-    //     return Database.query(
-    //         'SELECT ' +
-    //         '    Name, ' +
-    //         '    FirstName, ' +
-    //         '    LastName, ' +
-    //         '    MobilePhone, ' +
-    //         '    Email, ' +
-    //         '    Status, ' +
-    //         '    LeadSource, ' +
-    //         '    CanalAtendimento__c, ' +
-    //         '    Owner.Name ' +
-    //         'FROM Lead ' +
-    //         'WHERE ' +
-    //         '    (Name LIKE \'%' + nomeCompleto + '%\' AND Name != null) OR ' +
-    //         '    (MobilePhone = :celular AND MobilePhone != null) OR ' +
-    //         '    (Email = :email AND Email != null)'
-    //     );
-    // }
+    public static List<Lead> obterLeadsPorInformacoesConcierge(String nomeCompleto, String celular, String email) {
+        return Database.query(
+            'SELECT ' +
+            '    Name, ' +
+            '    FirstName, ' +
+            '    LastName, ' +
+            '    MobilePhone, ' +
+            '    Email, ' +
+            '    Status, ' +
+            '    LeadSource, ' +
+            '    CanalAtendimento__c, ' +
+            '    Owner.Name ' +
+            'FROM Lead ' +
+            'WHERE ' +
+            '    (Name LIKE \'%' + nomeCompleto + '%\' AND Name != null) OR ' +
+            '    (MobilePhone = :celular AND MobilePhone != null) OR ' +
+            '    (Email = :email AND Email != null)'
+        );
+    }
 
     public static List<Lead> obterLeadsPorInformacoesConcierge(String celular, String email, Boolean isJuridica, String phone) {
         String query = 'SELECT ' +
@@ -143,20 +143,12 @@ public without sharing class LeadSelector {
                        '    UltimaMensagem__c, ' +
                        '    Phone, ' +
                        '    CreatedDate ' +
-                       'FROM Lead ' +
-                       'WHERE ';
-
-        if (isJuridica) {
-            query += '(Phone = :phone AND Phone != null) OR ' +
-                     '(Email = :email AND Email != null)';
-        } else {
-            query += '(MobilePhone = :celular AND MobilePhone != null) OR ' +
-                     '(Email = :email AND Email != null)';
-        }
-
+                       'FROM Lead';
+    
+        // Executa a query
         return Database.query(query);
     }
-
+    
     public static Lead obterMobilePhoneLead(String idLead) {
         return [
             SELECT MobilePhone 
