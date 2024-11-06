@@ -15,9 +15,8 @@ private class DistribuirLeadsServiceTest {
 
         Id perfilAdministradorSistema = [SELECT Id FROM Profile WHERE Name = 'Administrador do sistema' OR Name = 'System Administrator'].id;
 		
-        Contact ctt = new Contact(LastName = 'jorge',DatadeVencimento__c = Date.Today() ,CPF__c = '05809969054' );
+        Contact ctt = new Contact(LastName = 'jorge',DatadeVencimento__c = Date.Today());
         insert ctt;
-        
         update ctt;
         
         List<User> usuarios = new List<User>{
@@ -87,8 +86,7 @@ private class DistribuirLeadsServiceTest {
             Company = 'porao',
             Status = 'Novo',
             CanalAtendimento__c = 'Whatsapp',
-            Email = 'e@gmail.com',
-            CPF__c = '38942342884'
+            Email = 'e@gmail.com'
         );
         insert lead;
     }
@@ -124,19 +122,18 @@ private class DistribuirLeadsServiceTest {
         LeadSelector.obterLeadsPorInformacoesConcierge('raposo', '', 'e@gmail.com'); 
         LeadSelector.obterLeadsPorInformacoesConcierge('', 'e@gmail.com', false, ''); 
         LeadSelector.obterInfosTemplatePadrao(lead.Id); 
-        
+
         RoletaLeadsSelector.obterRoletasLeadsPorIdsMembros(new Set<Id>{usuario.Id});
         RoletaLeadsSelector.obterRoletasLeadsPorIdsUsuarios(new Set<Id>{usuario.Id});
         RoletaLeadsSelector.obterRoletasLeadsVigentes();
         
-        
         ParticipanteRoletaDomain.obterParticipantesPorIdMembro(participantes);
         ParticipanteRoletaDomain.obterParticipantesPorIdRoleta(participantes);
-        
+
         ParticipanteRoletaSelector.obterParticipantesPorIdsMembros(new Set<Id>{usuario.Id});
         ParticipanteRoletaSelector.obterParticipantesPorUserID(usuario.Id);
         ParticipanteRoletaSelector.obterParticipantesPorIdsRoleta(new Set<Id>{roleta[0].Id});
-        
+
         MembroEquipeSelector.obterMembrosPorId(new Set<Id>{lead.Id});
 
         // Assert.areEqual(lead.Corretor__c, usuario.Id, 'Lead distribuído corretamente');
