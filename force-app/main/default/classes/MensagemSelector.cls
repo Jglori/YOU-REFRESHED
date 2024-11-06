@@ -39,7 +39,8 @@ public without sharing class MensagemSelector {
                 TipoMidia__c,
                 URLMidia__c
             FROM Mensagem__c
-            WHERE ChaveExternaCliente__c IN :chavesExternasClientes
+            WHERE ChaveExternaCliente__c = :chavesExternasClientes
+            ORDER BY DataHora__c ASC
         ];
     }
 }

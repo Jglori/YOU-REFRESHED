@@ -1,18 +1,22 @@
 public without sharing class InicializarArquivosService {
-    /**
-     * Método responsável pela distribuição de arquivos recém inseridos para
-     * possibilitar visualização externa de forma pública quando necessário.
-     */
     public static void distribuirArquivos(List<ContentVersion> arquivos) {
         List<ContentDistribution> distribuicoesArquivos = new List<ContentDistribution>();
         for(ContentVersion arquivo : arquivos) {
-            distribuicoesArquivos.add(obterDistribuicaoArquivo(arquivo));
+            // Verifique se já existe um ContentDistribution com o mesmo ContentVersionId
+            List<ContentDistribution> distribuicoesExistentes = [
+                SELECT Id FROM ContentDistribution WHERE ContentVersionId = :arquivo.Id
+            ];
+
+            if (distribuicoesExistentes.isEmpty()) {
+                distribuicoesArquivos.add(obterDistribuicaoArquivo(arquivo));
+            } else {
+                System.debug('ContentDistribution já existe para o ContentVersionId: ' + arquivo.Id);
+            }
         }
 
         if(distribuicoesArquivos.isEmpty()) { return; }
-        if(!test.isRunningTest()){
-            insert distribuicoesArquivos;
-        }
+
+        insert distribuicoesArquivos;
     }
 
     private static ContentDistribution obterDistribuicaoArquivo(ContentVersion arquivo) {

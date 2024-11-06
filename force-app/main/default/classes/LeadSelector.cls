@@ -1,7 +1,9 @@
 public without sharing class LeadSelector {
+    
     public static List<Lead> obterLeadsParaDistribuir() {
         return [
             SELECT
+                Id,
                 Name,
                 CanalAtendimento__c,
                 RoletaLeads__c,
@@ -20,30 +22,57 @@ public without sharing class LeadSelector {
                 UltimaMensagem__c
             FROM Lead
             WHERE Corretor__c = null
-            AND Status = 'Nutrindo'
         ];
     }
+    
     public static List<Lead> obterLeadsPorIdsProprietarios(Set<Id> idsProprietarios) {
-        return [SELECT Name, Email, CreatedDate 
-        FROM Lead 
-        WHERE status NOT IN ('Lead Perdido(não trabalho)', 'Conversão', 'Descartado')
-        AND OwnerId IN :idsProprietarios];
+        return [
+            SELECT 
+                Name, 
+                Email, 
+                CreatedDate, 
+                OwnerId, 
+                Owner.Name
+            FROM Lead 
+            WHERE status NOT IN ('Lead Perdido(não trabalho)', 'Conversão', 'Descartado')
+            AND OwnerId IN :idsProprietarios
+        ];
     }
+    
+    public static List<Lead> obterLeadsPorIdsCorretores(Set<Id> idsCorretores) {
+        return [
+            SELECT 
+                Name, 
+                Email 
+            FROM Lead 
+            WHERE Corretor__c IN :idsCorretores
+        ];
+    }
+    
     public static List<Lead> obterLeadsPorIdsUsuarios(Set<Id> idsCorretores) {
         return [
             SELECT
                 Name,
                 Email,
                 CanalAtendimento__c,
+                OwnerId,
+                Owner.Name,
                 CreatedDate,
                 Corretor__r.CargaRestante__c
             FROM Lead
             WHERE
-                Corretor__r.MembroEquipe__r.Usuario__c IN :idsCorretores AND
-                OwnerId NOT IN :idsCorretores
+                Corretor__r.MembroEquipe__r.Usuario__c IN :idsCorretores 
+                AND OwnerId NOT IN :idsCorretores
         ];
     }
+    
     public static List<Lead> obterLeadsPorIds(Set<Id> idsLeads) {
+        Lead lead = [
+            SELECT EmpreendimentoInteresse__r.Name 
+            FROM Lead 
+            WHERE Id = :idsLeads
+        ];
+    
         return [
             SELECT
                 Name,
@@ -62,6 +91,7 @@ public without sharing class LeadSelector {
                 InicioDialogo__c,
                 FimDialogo__c,
                 UltimaMensagem__c,
+                EmpreendimentoInteresse__c,
                 Corretor__r.QuantidadeLeadsFaleConosco__c,
                 Corretor__r.QuantidadeLeadsChat__c,
                 Corretor__r.QuantidadeLeadsWhatsApp__c,
@@ -73,25 +103,26 @@ public without sharing class LeadSelector {
         ];
     }
 
-    public static List<Lead> obterLeadsPorChavesExternasClientes(Set<String> chavesClientes){
-        return [SELECT ChaveExternaWhatsApp__c FROM Lead WHERE ChaveExternaWhatsApp__c IN :chavesClientes];
+    public static List<Lead> obterLeadsPorChavesExternasClientes(Set<String> chavesClientes) {
+        return [
+            SELECT ChaveExternaWhatsApp__c 
+            FROM Lead 
+            WHERE ChaveExternaWhatsApp__c IN :chavesClientes
+        ];
     }
-    
+
     public static List<Lead> obterLeadsPorInformacoesConcierge(String nomeCompleto, String celular, String email) {
         return Database.query(
             'SELECT ' +
-            '    Id, ' +
             '    Name, ' +
+            '    FirstName, ' +
+            '    LastName, ' +
             '    MobilePhone, ' +
             '    Email, ' +
             '    Status, ' +
-            '    Owner.Name, ' +
-            '    CorretorContato__r.Name, ' +
-            '    InicioDialogo__c, ' +
-            '    FimDialogo__c, ' +
-            '    UltimaMensagem__c, ' +
-            '    CreatedDate, ' +
-            '    Phone ' +
+            '    LeadSource, ' +
+            '    CanalAtendimento__c, ' +
+            '    Owner.Name ' +
             'FROM Lead ' +
             'WHERE ' +
             '    (Name LIKE \'%' + nomeCompleto + '%\' AND Name != null) OR ' +
@@ -99,7 +130,6 @@ public without sharing class LeadSelector {
             '    (Email = :email AND Email != null)'
         );
     }
-
 
     public static List<Lead> obterLeadsPorInformacoesConcierge(String celular, String email, Boolean isJuridica, String phone) {
         String query = 'SELECT ' +
@@ -109,34 +139,63 @@ public without sharing class LeadSelector {
                        '    Email, ' +
                        '    Status, ' +
                        '    Owner.Name, ' +
-                       '    CorretorContato__r.Name, ' +
+                       '    CorretorContato__r.Name, ' + 
                        '    InicioDialogo__c, ' +
                        '    FimDialogo__c, ' +
                        '    UltimaMensagem__c, ' +
+                       '    Phone, ' +
                        '    CreatedDate, ' +
-                       '    Phone ' +
+                       '    CelularAdicional1__c, ' +
+                       '    CelularAdicional2__c, ' +
+                       '    CelularComercialAdicional__c, ' +
+                       '    EmailAdicional__c ' +
                        'FROM Lead ' +
                        'WHERE ';
-    
+            
         if (isJuridica) {
-            query += '(Phone = :phone AND Phone != null) OR ' +
-                     '(Email = :email AND Email != null)';
+            query += '((Phone = :phone) OR ' +
+                     '((MobilePhone = :celular) OR ' +
+                     '(CelularAdicional__c = :celular) OR ' +
+                     '(CelularAdicional1__c = :celular) OR ' +
+                     '(CelularAdicional2__c = :celular) OR ' +
+                     '(CelularComercialAdicional__c = :celular) OR ' +
+                     '(Email = :email ) OR ' +  
+                     '(EmailAdicional__c = :email))';
         } else {
-            query += '(MobilePhone = :celular AND MobilePhone != null) OR ' +
-                     '(Email = :email AND Email != null)';
+            query += '((MobilePhone = :celular) OR ' +
+                     '(CelularAdicional__c = :celular) OR ' +
+                     '(CelularAdicional1__c = :celular) OR ' +
+                     '(CelularAdicional2__c = :celular) OR ' +
+                     '(CelularComercialAdicional__c = :celular) OR ' +
+                     '(Email = :email) OR ' +  
+                     '(EmailAdicional__c = :email))';
         }
-    
+        
         return Database.query(query);
     }
     
-      public static Lead obterInfosTemplatePadrao(String idLead){
+    
+    
+    
+
+    public static Lead obterMobilePhoneLead(String idLead) {
+        return [
+            SELECT MobilePhone 
+            FROM Lead 
+            WHERE Id = :idLead
+        ];
+    }
+
+    public static Lead obterInfosTemplatePadrao(String idLead) {
         return [
             SELECT 
                 MobilePhone,
                 FirstName,
                 Owner.Name,
-                EmpreendimentoInteresse__c
-            FROM Lead WHERE Id = :idLead
-            ];
+                EmpreendimentoInteresse__c,
+                ChaveExternaWhatsApp__c
+            FROM Lead 
+            WHERE Id = :idLead
+        ];
     }
 }
