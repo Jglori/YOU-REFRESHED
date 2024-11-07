@@ -1,39 +1,30 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
-        <members>ParametrizarCriteriosController</members>
-        <members>ParametrizarCriteriosControllerTest</members>
-        <members>ParametrizarCriteriosService</members>
-        <members>ParametrizarCriteriosServiceTest</members>
-        <name>ApexClass</name>
+        <members>*</members>
+        <name>Network</name>
     </types>
     <types>
-        <members>ConjuntoCriteriosAnalise__c</members>
-        <name>CustomObject</name>
+        <members>*</members>
+        <name>SiteDotCom</name>
     </types>
     <types>
-        <members>ConjuntoCriteriosAnalise__c</members>
-        <name>CustomTab</name>
+        <members>*</members>
+        <name>NavigationMenu</name>
     </types>
     <types>
-        <members>FlexiConjuntoCriterioAnalise</members>
-        <name>FlexiPage</name>
+        <members>*</members>
+        <name>ExperienceBundle</name>
     </types>
     <types>
-        <members>VariacoesLimiteBloqueio</members>
-        <name>GlobalValueSet</name>
+        <members>Diretor Geral Comunidade</members>
+        <members>Superintendente Comunidade</members>
+        <name>Profile</name>
     </types>
     <types>
-        <members>paremetrizarCriteriosAnalise</members>
-        <name>LightningComponentBundle</name>
+        <members>DiretorGeral</members>
+        <members>Superintendente</members>
+        <name>PermissionSetGroup</name>
     </types>
-    <types>
-        <members>ConjuntoCriteriosAnalise__c.All</members>
-        <name>ListView</name>
-    </types>
-    <types>
-        <members>ConjuntoCriterios</members>
-        <name>PermissionSet</name>
-    </types>
-    <version>60.0</version>
+    <version>57.0</version>
 </Package>

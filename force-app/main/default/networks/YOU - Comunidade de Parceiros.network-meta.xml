@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Network xmlns="http://soap.sforce.com/2006/04/metadata">
+    <allowInternalUserLogin>false</allowInternalUserLogin>
+    <allowMembersToFlag>false</allowMembersToFlag>
+    <changePasswordTemplate>unfiled$public/CommunityChangePasswordEmailTemplate</changePasswordTemplate>
+    <communityRoles/>
+    <disableReputationRecordConversations>false</disableReputationRecordConversations>
+    <emailSenderAddress>lbarboza@youinc.com.br</emailSenderAddress>
+    <emailSenderName>YOU - Comunidade de Parceiros</emailSenderName>
+    <enableApexCDNCaching>false</enableApexCDNCaching>
+    <enableCustomVFErrorPageOverrides>false</enableCustomVFErrorPageOverrides>
+    <enableDirectMessages>true</enableDirectMessages>
+    <enableExperienceBundleBasedSnaOverrideEnabled>true</enableExperienceBundleBasedSnaOverrideEnabled>
+    <enableGuestChatter>false</enableGuestChatter>
+    <enableGuestFileAccess>true</enableGuestFileAccess>
+    <enableGuestMemberVisibility>true</enableGuestMemberVisibility>
+    <enableImageOptimizationCDN>true</enableImageOptimizationCDN>
+    <enableInvitation>false</enableInvitation>
+    <enableKnowledgeable>false</enableKnowledgeable>
+    <enableMemberVisibility>true</enableMemberVisibility>
+    <enableNicknameDisplay>true</enableNicknameDisplay>
+    <enablePrivateMessages>false</enablePrivateMessages>
+    <enableReputation>false</enableReputation>
+    <enableShowAllNetworkSettings>false</enableShowAllNetworkSettings>
+    <enableSiteAsContainer>true</enableSiteAsContainer>
+    <enableTalkingAboutStats>true</enableTalkingAboutStats>
+    <enableTopicAssignmentRules>true</enableTopicAssignmentRules>
+    <enableTopicSuggestions>false</enableTopicSuggestions>
+    <enableUpDownVote>false</enableUpDownVote>
+    <forgotPasswordTemplate>unfiled$public/CommunityForgotPasswordEmailTemplate</forgotPasswordTemplate>
+    <gatherCustomerSentimentData>false</gatherCustomerSentimentData>
+    <headlessForgotPasswordTemplate>unfiled$public/CommunityHeadlessForgotPasswordTemplate</headlessForgotPasswordTemplate>
+    <networkMemberGroups>
+        <permissionSet>et4ae5__ExactTarget_Integration_Admin</permissionSet>
+        <permissionSet>et4ae5__ExactTarget_Integration</permissionSet>
+        <permissionSet>et4ae5__DMTracking</permissionSet>
+        <permissionSet>SorteioEscrita</permissionSet>
+        <permissionSet>RoletaLeadsSomenteLeitura</permissionSet>
+        <permissionSet>RoletaLeadsEscrita</permissionSet>
+        <permissionSet>et4ae5__Marketing_Cloud_System_User</permissionSet>
+        <permissionSet>et4ae5__Marketing_Cloud_Connector_Partner_Community_User</permissionSet>
+        <permissionSet>ParticipanteRoletaSomenteLeitura</permissionSet>
+        <permissionSet>sfdcInternalInt__sfdc_activityplatform</permissionSet>
+        <permissionSet>MensagemSomenteLeitura</permissionSet>
+        <permissionSet>MensagemEscrita</permissionSet>
+        <permissionSet>ParticipanteRoletaEscrita</permissionSet>
+        <permissionSet>MembroEquipeLeitura</permissionSet>
+        <permissionSet>MembroEquipeEscrita</permissionSet>
+        <permissionSet>EquipeSomenteLeitura</permissionSet>
+        <permissionSet>EquipeEscrita</permissionSet>
+        <permissionSet>DestribuicaoLeads</permissionSet>
+        <permissionSet>ComponenteConcierge</permissionSet>
+        <permissionSet>Admin</permissionSet>
+        <permissionSet>UsuarioMarketingGrupoPermicoes</permissionSet>
+        <permissionSet>Controle_de_SLA</permissionSet>
+        <permissionSet>Omnichannel_Leitura</permissionSet>
+        <permissionSet>TaskEvent_Acesso_total</permissionSet>
+        <permissionSet>Componente_de_Endere_o</permissionSet>
+        <permissionSet>Lead_Editar</permissionSet>
+        <permissionSet>ContaContato_Acesso_na_Convers_o</permissionSet>
+        <permissionSet>Opp_Acesso_na_Convers_o</permissionSet>
+        <permissionSet>EmpreendimentoInteresse_Acesso</permissionSet>
+        <permissionSet>Lead_Alterar_propriet_rio</permissionSet>
+        <permissionSet>Pain_is_e_Relat_rios</permissionSet>
+        <permissionSet>Lead_Converter</permissionSet>
+        <permissionSet>GestaoCreditoFinanceiro</permissionSet>
+        <permissionSet>JuridicoVendasComercial</permissionSet>
+        <permissionSet>GerenteParcerias</permissionSet>
+        <permissionSet>CoordenadorOnline</permissionSet>
+        <permissionSet>CoordenadorProduto</permissionSet>
+        <permissionSet>CMO</permissionSet>
+        <permissionSet>GerenteOperacoes</permissionSet>
+        <permissionSet>CoordMktDigital</permissionSet>
+        <permissionSet>Participantes_da_Roleta_Exibir_Minha_participa_o</permissionSet>
+        <permissionSet>GestaoCrm</permissionSet>
+        <permissionSet>SuperintendenteVendasSalaoOnline</permissionSet>
+        <permissionSet>GerenteComercialBackoffice</permissionSet>
+        <permissionSet>AnalistaMktDigital</permissionSet>
+        <permissionSet>CoordMktOffline</permissionSet>
+        <permissionSet>GestaoAssociados</permissionSet>
+        <permissionSet>DiretorComercial</permissionSet>
+        <permissionSet>SuperintendenteVendasParcerias</permissionSet>
+        <permissionSet>FluxoCorretor</permissionSet>
+        <permissionSet>ExecutarSorteio</permissionSet>
+        <profile>admin</profile>
+        <profile>partner community user</profile>
+        <profile>partner community login user</profile>
+        <profile>corretor comunidade</profile>
+        <profile>corretor salão</profile>
+        <profile>corretor online</profile>
+        <profile>coordenador comunidade</profile>
+        <profile>gerente comunidade</profile>
+        <profile>recepcionista comunidade</profile>
+        <profile>Superintendente Comunidade</profile>
+    </networkMemberGroups>
+    <networkPageOverrides>
+        <changePasswordPageOverrideSetting>Standard</changePasswordPageOverrideSetting>
+        <forgotPasswordPageOverrideSetting>Designer</forgotPasswordPageOverrideSetting>
+        <homePageOverrideSetting>Designer</homePageOverrideSetting>
+        <loginPageOverrideSetting>Designer</loginPageOverrideSetting>
+        <selfRegProfilePageOverrideSetting>Designer</selfRegProfilePageOverrideSetting>
+    </networkPageOverrides>
+    <picassoSite>YOU_Comunidade_de_Parceiros1</picassoSite>
+    <selfRegistration>false</selfRegistration>
+    <sendWelcomeEmail>true</sendWelcomeEmail>
+    <site>YOU_Comunidade_de_Parceiros</site>
+    <siteArchiveStatus>NotArchived</siteArchiveStatus>
+    <status>Live</status>
+    <tabs>
+        <defaultTab>home</defaultTab>
+        <standardTab>Chatter</standardTab>
+    </tabs>
+    <urlPathPrefix>parceiros</urlPathPrefix>
+    <welcomeTemplate>unfiled$public/CommunityWelcomeEmailTemplate</welcomeTemplate>
+</Network>

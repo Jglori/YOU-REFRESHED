@@ -1,0 +1,11 @@
+{
+  "activeViewId" : "80320333-9cc9-4d6f-a5e7-c015262e7a8c",
+  "appPageId" : "c887584e-f884-4234-884f-c032fcf46c96",
+  "configurationTags" : [ ],
+  "id" : "a5f400db-1b84-48d3-9e21-12cfd281869c",
+  "label" : "Participante da roleta Lista",
+  "objectApiName" : "ParticipanteRoleta__c",
+  "routeType" : "list-a0X",
+  "type" : "route",
+  "urlPrefix" : "participanteroleta"
+}

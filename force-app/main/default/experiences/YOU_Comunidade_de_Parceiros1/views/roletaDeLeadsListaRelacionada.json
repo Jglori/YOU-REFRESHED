@@ -1,0 +1,39 @@
+{
+  "appPageId" : "c887584e-f884-4234-884f-c032fcf46c96",
+  "componentName" : "siteforce:sldsOneColLayout",
+  "dataProviders" : [ ],
+  "id" : "c838b4b3-36c1-469f-a90d-2fba54506f0d",
+  "label" : "Roleta de leads Lista relacionada",
+  "regions" : [ {
+    "id" : "5a0e67cf-1b30-40b8-9044-22c72484d2a2",
+    "regionName" : "header",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "customTitle" : "",
+        "parentRecordId" : "{!recordId}",
+        "relatedListName" : "ParticipantesRoleta__r",
+        "showBreadCrumbs" : false,
+        "showCustomTitle" : false,
+        "showManualRefreshButton" : true,
+        "showRowNumbers" : true
+      },
+      "componentName" : "forceCommunity:relatedList",
+      "id" : "bbd9bf0f-b88a-4064-9d16-59ad8356a6e0",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "5fccc5f7-33a9-4fa2-ad5d-cfaabd4ce4a2",
+    "regionName" : "content",
+    "type" : "region"
+  }, {
+    "id" : "93af2843-7ebd-47a6-8c92-e53c99268504",
+    "regionName" : "footer",
+    "type" : "region"
+  } ],
+  "themeLayoutType" : "Inner",
+  "type" : "view",
+  "viewType" : "relatedlist-a0Y"
+}

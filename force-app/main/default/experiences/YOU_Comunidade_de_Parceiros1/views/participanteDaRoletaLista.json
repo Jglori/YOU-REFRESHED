@@ -1,0 +1,46 @@
+{
+  "appPageId" : "c887584e-f884-4234-884f-c032fcf46c96",
+  "componentName" : "siteforce:sldsOneColLayout",
+  "dataProviders" : [ ],
+  "id" : "80320333-9cc9-4d6f-a5e7-c015262e7a8c",
+  "label" : "Participante da roleta Lista",
+  "regions" : [ {
+    "id" : "a46f35ee-bc4d-480f-9f89-59d4dd03fae3",
+    "regionName" : "header",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "enableInlineEdit" : false,
+        "filterName" : "Minhas_Participacoes",
+        "layout" : "FULL",
+        "pageSize" : 25,
+        "scope" : "ParticipanteRoleta__c",
+        "showActionBar" : false,
+        "showChartsPanel" : false,
+        "showDisplay" : "grid",
+        "showFilterPanel" : true,
+        "showImageIcon" : true,
+        "showManualRefreshButton" : true,
+        "showObjectName" : false,
+        "showPinnedList" : true,
+        "showSearchBar" : false
+      },
+      "componentName" : "forceCommunity:objectHome",
+      "id" : "6ad733f8-f884-49c3-b7ea-49cffbfaf9e7",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "585e3739-96e0-49fb-8723-083974ba6c72",
+    "regionName" : "content",
+    "type" : "region"
+  }, {
+    "id" : "7c039872-785b-4ac3-9a09-580db2246401",
+    "regionName" : "footer",
+    "type" : "region"
+  } ],
+  "themeLayoutType" : "Inner",
+  "type" : "view",
+  "viewType" : "list-a0X"
+}

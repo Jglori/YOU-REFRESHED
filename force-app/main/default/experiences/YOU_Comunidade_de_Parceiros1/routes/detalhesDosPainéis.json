@@ -1,0 +1,10 @@
+{
+  "activeViewId" : "d4ddbd6e-8e0b-4a4d-aefd-a7f9650958ae",
+  "appPageId" : "c887584e-f884-4234-884f-c032fcf46c96",
+  "configurationTags" : [ ],
+  "id" : "621ff068-cb71-4703-ab81-fce63a99ce7e",
+  "label" : "Detalhes dos painéis",
+  "routeType" : "detail-01Z",
+  "type" : "route",
+  "urlPrefix" : "dashboard"
+}

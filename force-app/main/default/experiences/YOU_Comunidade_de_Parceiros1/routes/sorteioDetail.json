@@ -1,0 +1,11 @@
+{
+  "activeViewId" : "f4daba43-a78b-447f-aadc-ccf5da487cac",
+  "appPageId" : "c887584e-f884-4234-884f-c032fcf46c96",
+  "configurationTags" : [ ],
+  "id" : "338b766e-04e5-4904-974f-f5fd70a3d820",
+  "label" : "Sorteio Detail",
+  "objectApiName" : "Sorteio__c",
+  "routeType" : "detail-a0Z",
+  "type" : "route",
+  "urlPrefix" : "sorteio"
+}

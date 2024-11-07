@@ -1,0 +1,11 @@
+{
+  "activeViewId" : "353972c1-e81f-44e2-807d-d87e0a7d8a6f",
+  "appPageId" : "c887584e-f884-4234-884f-c032fcf46c96",
+  "configurationTags" : [ ],
+  "id" : "25ab9aa3-5c13-4675-a6a4-c7bbc55e881e",
+  "label" : "Equipe List",
+  "objectApiName" : "Equipe__c",
+  "routeType" : "list-a0U",
+  "type" : "route",
+  "urlPrefix" : "equipe"
+}
