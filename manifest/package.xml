@@ -1,39 +1,155 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
-        <members>ParametrizarCriteriosController</members>
-        <members>ParametrizarCriteriosControllerTest</members>
-        <members>ParametrizarCriteriosService</members>
-        <members>ParametrizarCriteriosServiceTest</members>
+        <members>ChecklistDA</members>
+        <members>ChecklistDATest</members>
+        <members>ChecklistHelper</members>
+        <members>ChecklistHelperTest</members>
+        <members>ChecklistTriggerHandler</members>
+        <members>ChecklistTriggerHandlerTest</members>
+        <members>ContractController</members>
+        <members>ContractControllerTest</members>
+        <members>ContractSelector</members>
+        <members>ContractTriggerHandler</members>
+         <members>ContratoService</members>
+        <members>ContratoServiceTest</members>
+        <members>GerarContratoController</members>
+        <members>GerarContratoControllerTest</members>
+        <members>OpportunityDA</members>
+        <members>OpportunityDATest</members>
+        <members>OpportunityHelper</members>
+        <members>OpportunityHelperTest</members>
+        <members>OpportunityTriggerHandler</members>
+        <members>OpportunityTriggerHandlerTest</members>
+        <members>AnaliseCreditoHelper</members>
+        <members>AnaliseCreditoHelperTest</members>
+        <members>AnaliseCreditoTriggerHandler</members>
+        <members>ChecklistController</members>
+        <members>ChecklistControllerTest</members>
+        <members>DocumentController</members>
+        <members>DocumentControllerTest</members>
+        <members>DocumentacaoDA</members>
+        <members>DocumentacaoHelper</members>
+        <members>DocumentacaoHelperTest</members>
+        <members>DocumentacaoTriggerHandler</members>
+        <members>DocumentacaoTriggerHandlerTest</members>
         <name>ApexClass</name>
     </types>
     <types>
-        <members>ConjuntoCriteriosAnalise__c</members>
+        <members>ContratoPDF</members>
+        <name>ApexPage</name>
+    </types>
+    <types>
+        <members>AnaliseCreditoTrigger</members>
+        <members>ChecklistTrigger</members>
+        <members>OpportunityTrigger</members>
+        <members>QuoteLineItemTrigger</members>
+        <members>QuoteSyncTrigger</members>
+        <members>QuoteTrigger</members>
+        <members>DocumentacaoTrigger</members>
+        <name>ApexTrigger</name>
+    </types>
+    <types>
+        <members>AnaliseCredito__c</members>
+        <members>Checklist_de_Documentos__c</members>
+        <members>Documentacao__c</members>
+        <members>Documento__mdt</members>
+         <members>Contract</members>
+        <members>Opportunity-Opportunity Layout</members>
         <name>CustomObject</name>
     </types>
     <types>
-        <members>ConjuntoCriteriosAnalise__c</members>
-        <name>CustomTab</name>
+        <members>AnaliseCredito__c.AnaliseCreditoCompactLayout</members>
+        <name>CompactLayout</name>
     </types>
     <types>
-        <members>FlexiConjuntoCriterioAnalise</members>
-        <name>FlexiPage</name>
+        <members>Opportunity-Opportunity Layout</members>
+        <members>AnaliseCredito__c-Análise de Crédito Layout</members>
+        <members>AnaliseCredito__c-Análise de Crédito Layout</members> 
+        <members>Checklist_de_Documentos__c-Checklist de Documentos Layout</members>
+        <members>Documentacao__c-Documentação Layout</members>
+        <members>Documento__mdt-Documento %28Configuracao%29 Layout</members>
+        <name>Layout</name>
     </types>
     <types>
-        <members>VariacoesLimiteBloqueio</members>
-        <name>GlobalValueSet</name>
-    </types>
-    <types>
-        <members>paremetrizarCriteriosAnalise</members>
+        <members>gerarContrato</members>
+        <members>checklistDocumentos</members>
+        <members>documentChecklist</members>
+        <members>listaDocumentosChecklist</members>
         <name>LightningComponentBundle</name>
     </types>
     <types>
-        <members>ConjuntoCriteriosAnalise__c.All</members>
-        <name>ListView</name>
+        <members>Opportunity.ProcessoAprovacaoChecklist</members>
+        <name>ApprovalProcess</name>
     </types>
     <types>
-        <members>ConjuntoCriterios</members>
+        <members>unfiled$public/AprovacaoChecklistDocumentos</members>
+        <name>EmailTemplate</name>
+    </types>
+    <types>
+        <members>*</members>
+        <name>PostTemplate</name>
+    </types>
+    <types>
+        <members>AnaliseCredito__c.Bloco__c</members>
+        <members>AnaliseCredito__c.ComprometimentoRenda__c</members>
+        <members>AnaliseCredito__c.DataAnalise__c</members>
+        <members>AnaliseCredito__c.DataNascimento__c</members>
+        <members>AnaliseCredito__c.DataVencimento__c</members>
+        <members>AnaliseCredito__c.DetalhesParecerCredito__c</members>
+        <members>AnaliseCredito__c.Empreendimento__c</members>
+        <members>AnaliseCredito__c.NomeComprador__c</members>
+        <members>AnaliseCredito__c.Opportunity__c</members>
+        <members>AnaliseCredito__c.Outros__c</members>
+        <members>AnaliseCredito__c.RemuneracaoMensalLiquido__c</members>
+        <members>AnaliseCredito__c.RendaNecessariaFGTS__c</members>
+        <members>AnaliseCredito__c.RendaNecessariaFinanciamento__c</members>
+        <members>AnaliseCredito__c.SaldoFGTS__c</members>
+        <members>AnaliseCredito__c.ScoreSerasa__c</members>
+        <members>AnaliseCredito__c.Status__c</members>
+        <members>AnaliseCredito__c.TotalFGTS__c</members>
+        <members>AnaliseCredito__c.TotalRendaCompradores__c</members>
+        <members>AnaliseCredito__c.TotalRendaValorAplicado__c</members>
+        <members>AnaliseCredito__c.UnidadeTabelaVendas__c</members>
+        <members>AnaliseCredito__c.UtilizaAto__c</members>
+        <members>AnaliseCredito__c.ValorAplicado__c</members>
+        <members>AnaliseCredito__c.ValorFinanciamentoFGTS__c</members>
+        <members>AnaliseCredito__c.ValorFinanciamentoProposta__c</members>
+        <members>Documento.CPF</members>
+        <members>Documento.CPF_Outro</members>
+        <members>Documento.CPF_Procurador</members>
+        <members>Documento.Comprovante_Renda_Procurador</members>
+        <members>Documento.Comprovante_de_Renda</members>
+        <members>Documento.Conta_Luz_Procurador</members>
+        <members>Documento.Conta_de_gua</members>
+        <members>Documento.RG</members>
+        <members>Documento.RG_Outro</members>
+        <members>Documento.RG_cliente</members>
+        <members>Documento.RG_procurador</members>
+        <members>Documento.Serasa_Procurador</members>
+        <members>Documento.Titulo_Eleitor_Procurador</members>
+        <name>CustomField</name>
+    </types>
+    <types>
+        <members>AnaliseCredito__c</members>
+        <name>CustomTab</name>
+    </types>
+    <types>
+        <members>AnaliseCredito</members>
+        <members>Checklist_de_Documentos</members>
+        <members>PaginaDocumentacao</members>
+        <members>Templates_de_Documentos</members>
+         <members>Oportunidade_P_gina_de_registro1</members>
+        <name>FlexiPage</name>
+    </types>
+    <types>
+        <members>AnaliseCredito_Edit</members>
+        <members>AnaliseCredito_Read</members>
         <name>PermissionSet</name>
+    </types>
+    <types>
+        <members>AnaliseCredito__c.Analise_de_Credito</members>
+        <name>RecordType</name>
     </types>
     <version>60.0</version>
 </Package>

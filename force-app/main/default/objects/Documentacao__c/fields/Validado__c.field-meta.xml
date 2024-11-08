@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Validado__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Descreve se o documento foi ou está validado ou não.</description>
+    <externalId>false</externalId>
+    <label>Validado</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>
