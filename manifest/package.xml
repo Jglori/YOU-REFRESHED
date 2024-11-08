@@ -33,6 +33,19 @@
         <members>DocumentacaoHelperTest</members>
         <members>DocumentacaoTriggerHandler</members>
         <members>DocumentacaoTriggerHandlerTest</members>
+        <members>QuoteDA</members>
+        <members>QuoteHelper</members>
+        <members>QuoteLineTriggerHandler</members>
+        <members>QuoteSyncTriggerHandler</members>
+        <members>QuoteTriggerHandler</members>
+        <members>SalesTeamController</members>
+         <members>QuoteDATest</members>
+        <members>QuoteHelperTest</members>
+        <members>QuoteTriggerHandlerTest</members>
+        <members>QuoteLineTriggerHandlerTest</members>
+        <members>QuoteSyncTriggerHandlerTest</members>
+        <members>QuoteTriggerHandlerTest</members>
+        <members>SalesTeamControllerTest</members>
         <name>ApexClass</name>
     </types>
     <types>

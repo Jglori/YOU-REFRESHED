@@ -21,7 +21,8 @@ public class GerarContratoControllerTest {
          Product2 testProduct = new Product2(
             Name='Test Product',
             NumeroDaUnidade__c = 8,
-            IsActive=true,
+            IsActive= true,
+            Status__c = 'Reservada',
             Bloco__c = bloco.Id            
         );
         insert testProduct;
