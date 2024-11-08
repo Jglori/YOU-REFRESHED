@@ -2,6 +2,7 @@
   "activeViewId" : "85cb45f9-765e-45fb-a653-cea401f247ef",
   "appPageId" : "c887584e-f884-4234-884f-c032fcf46c96",
   "configurationTags" : [ ],
+  "devName" : "Dashboard_List",
   "id" : "7a26ccd7-8790-42a0-9060-28a0c7ff19fe",
   "label" : "Lista de painéis",
   "routeType" : "list-01Z",

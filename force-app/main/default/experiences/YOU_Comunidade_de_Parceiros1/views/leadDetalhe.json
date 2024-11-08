@@ -217,9 +217,7 @@
         "type" : "region"
       }, {
         "components" : [ {
-          "componentAttributes" : {
-            "recordId" : "{!recordId}"
-          },
+          "componentAttributes" : { },
           "componentName" : "c:whatsApp",
           "id" : "16eec2e3-38ec-46af-991d-18a985a0ed02",
           "renderPriority" : "NEUTRAL",

@@ -2,6 +2,7 @@
   "activeViewId" : "69e26b4e-f534-489b-b4e1-812b07437ccd",
   "appPageId" : "c887584e-f884-4234-884f-c032fcf46c96",
   "configurationTags" : [ ],
+  "devName" : "Conta_Lista_relacionada__c",
   "id" : "c2a2c2d7-48d6-4801-95a7-f26af3462013",
   "label" : "Conta Lista relacionada",
   "routeType" : "relatedlist-001",

@@ -2,6 +2,7 @@
   "activeViewId" : "d7e0b642-8380-4cfd-b3ff-1d6f44ca251c",
   "appPageId" : "c887584e-f884-4234-884f-c032fcf46c96",
   "configurationTags" : [ ],
+  "devName" : "Lead_Detalhe__c",
   "id" : "4cf5b203-962b-4384-9bdc-a4be7968794f",
   "label" : "Lead Detalhe",
   "routeType" : "detail-00Q",

@@ -2,6 +2,7 @@
   "activeViewId" : "a01cc3a3-9158-4dbd-9ec8-42e6a516d302",
   "appPageId" : "c887584e-f884-4234-884f-c032fcf46c96",
   "configurationTags" : [ ],
+  "devName" : "Conta_Lista__c",
   "id" : "ea94cead-5397-4c0d-a55c-bd1715451d4f",
   "label" : "Conta Lista",
   "routeType" : "list-001",

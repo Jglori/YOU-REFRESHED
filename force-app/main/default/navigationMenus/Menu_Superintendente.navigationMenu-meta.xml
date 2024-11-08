@@ -11,7 +11,7 @@
         <type>SalesforceObject</type>
     </navigationMenuItem>
     <navigationMenuItem>
-        <label>Conciergi</label>
+        <label>Concierge</label>
         <position>2</position>
         <publiclyAvailable>false</publiclyAvailable>
         <target>/concierge</target>
