@@ -8,10 +8,15 @@ public class TestDataFactory {
         return analise;
     }
 
-    public static Checklist_de_Documentos__c gerarChecklistDocumentos(Opportunity opportunity, Documentacao__c documentacao, Contact contact) {
+    public static Checklist_de_Documentos__c gerarChecklistDocumentos(Opportunity opportunity, Documentacao__c documentacao) {
         Checklist_de_Documentos__c checklist = new Checklist_de_Documentos__c();
         checklist.Oportunidade__c = opportunity.Id;
         checklist.Documenta_o__c = documentacao.Id;
+        return checklist;
+    }
+
+    public static Checklist_de_Documentos__c gerarChecklistDocumentos(Opportunity opportunity, Documentacao__c documentacao, Contact contact) {
+        Checklist_de_Documentos__c checklist = gerarChecklistDocumentos(opportunity, documentacao);
         checklist.Contato__c = contact.Id;
         return checklist;
     }
