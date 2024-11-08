@@ -8,6 +8,10 @@
     <picklistValues>
         <picklist>CanalAtendimento__c</picklist>
         <values>
+            <fullName>Cadastro Manual</fullName>
+            <default>false</default>
+        </values>
+        <values>
             <fullName>Chat</fullName>
             <default>false</default>
         </values>
@@ -17,6 +21,10 @@
         </values>
         <values>
             <fullName>Loja</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Oferta Corretor</fullName>
             <default>false</default>
         </values>
         <values>
@@ -418,6 +426,57 @@
         </values>
         <values>
             <fullName>Masculino</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>SubProduto__c</picklist>
+        <values>
+            <fullName>Core Pinheiros %E2%80%93 Health</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Core Pinheiros %E2%80%93 Home</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Core Pinheiros %E2%80%93 Hotel</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Eleva Harmonia Studios</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Moema Signature Studios by You%2Cinc</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Moma Moema Residencial</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Moma Moema Studios</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Oscar Freire Studios Boutique by You%2Cinc</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Park Mariana Exclusive by You%2Cinc</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Park Mariana Life by You%2Cinc</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Studios Alto by You%2Cinc Paraíso</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Studios Casa Jardins by You%2Cinc</fullName>
             <default>false</default>
         </values>
     </picklistValues>

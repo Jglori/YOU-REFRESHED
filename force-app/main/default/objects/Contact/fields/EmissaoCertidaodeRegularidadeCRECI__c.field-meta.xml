@@ -4,6 +4,7 @@
     <description>Deve ser preenchido
 com a data de emissão de regularidade do
 CRECI.</description>
+    <externalId>false</externalId>
     <label>Emissão Certidão de Regularidade CRECI</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

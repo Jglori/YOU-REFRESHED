@@ -7,7 +7,6 @@
     <disableReputationRecordConversations>false</disableReputationRecordConversations>
     <emailSenderAddress>lbarboza@youinc.com.br</emailSenderAddress>
     <emailSenderName>YOU - Comunidade de Parceiros</emailSenderName>
-    <embeddedLoginEnabled>false</embeddedLoginEnabled>
     <enableApexCDNCaching>false</enableApexCDNCaching>
     <enableCustomVFErrorPageOverrides>false</enableCustomVFErrorPageOverrides>
     <enableDirectMessages>true</enableDirectMessages>

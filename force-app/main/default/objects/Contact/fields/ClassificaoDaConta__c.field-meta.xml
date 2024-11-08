@@ -2,6 +2,7 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>ClassificaoDaConta__c</fullName>
     <description>Campo que contém a classificação da conta</description>
+    <externalId>false</externalId>
     <label>Classificação da Conta</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

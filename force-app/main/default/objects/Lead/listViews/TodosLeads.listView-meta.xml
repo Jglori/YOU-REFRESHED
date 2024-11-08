@@ -15,9 +15,9 @@
     <columns>LEAD.RECORDTYPE</columns>
     <filterScope>Everything</filterScope>
     <filters>
-        <field>LEAD.STATUS</field>
+        <field>LEAD.RECORDTYPE</field>
         <operation>equals</operation>
-        <value>Descartado,Lead Perdido(não trabalho),Novo,Nutrindo,Tentativa de contato,Contato Realizado,Agendamento de Visita,Qualificação,Conversão</value>
+        <value>Lead.PessoaJuridica</value>
     </filters>
     <label>Todos os Leads</label>
 </ListView>

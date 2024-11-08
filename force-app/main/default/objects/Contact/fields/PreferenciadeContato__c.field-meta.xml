@@ -5,6 +5,7 @@
 selecionado apenas uma
 das opções de preferência
 de contato.</description>
+    <externalId>false</externalId>
     <label>Preferência de Contato</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

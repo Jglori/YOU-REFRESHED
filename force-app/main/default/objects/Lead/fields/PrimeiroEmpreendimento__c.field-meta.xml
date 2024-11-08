@@ -3,6 +3,7 @@
     <fullName>PrimeiroEmpreendimento__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <description>Primeiro Empreendimeno de Interesse do Lead</description>
+    <externalId>false</externalId>
     <inlineHelpText>Primeiro Empreendimeno de Interesse do Lead</inlineHelpText>
     <label>Primeiro Empreendimento de Interesse</label>
     <referenceTo>Empreendimento__c</referenceTo>

@@ -14,9 +14,9 @@
     <columns>LEAD.CREATED_DATE</columns>
     <filterScope>Everything</filterScope>
     <filters>
-        <field>LEAD.STATUS</field>
+        <field>LEAD.RECORDTYPE</field>
         <operation>equals</operation>
-        <value>Lead Perdido</value>
+        <value>Lead.PessoaJuridica</value>
     </filters>
     <label>Novo</label>
 </ListView>

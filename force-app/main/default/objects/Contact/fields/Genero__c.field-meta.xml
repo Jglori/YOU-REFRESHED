@@ -2,6 +2,7 @@
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Genero__c</fullName>
     <description>genero  da conta</description>
+    <externalId>false</externalId>
     <label>Gênero</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>

@@ -5,7 +5,7 @@
 com o RG do contato.</description>
     <externalId>false</externalId>
     <label>RG</label>
-    <length>9</length>
+    <length>255</length>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>
     <type>Text</type>

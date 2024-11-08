@@ -27,14 +27,6 @@
         <default>true</default>
     </values>
     <values>
-        <fullName>Nutrindo</fullName>
-        <default>false</default>
-    </values>
-    <values>
-        <fullName>Qualificação</fullName>
-        <default>false</default>
-    </values>
-    <values>
         <fullName>Tentativa de contato</fullName>
         <default>false</default>
     </values>

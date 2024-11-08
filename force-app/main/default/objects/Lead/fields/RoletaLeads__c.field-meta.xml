@@ -3,6 +3,7 @@
     <fullName>RoletaLeads__c</fullName>
     <deleteConstraint>SetNull</deleteConstraint>
     <description>Indica a roleta de leads para onde o lead foi distribuído.</description>
+    <externalId>false</externalId>
     <inlineHelpText>Indica a roleta de leads para onde o lead foi distribuído.</inlineHelpText>
     <label>Roleta de leads</label>
     <referenceTo>RoletaLeads__c</referenceTo>

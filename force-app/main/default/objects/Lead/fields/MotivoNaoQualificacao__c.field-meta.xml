@@ -3,11 +3,12 @@
     <fullName>MotivoNaoQualificacao__c</fullName>
     <businessStatus>Active</businessStatus>
     <description>Esse campo era chamado como &quot;motivo  da não qualificação&quot;  nas classes, porém precisou alterar a label para &quot;Motivo da Perda&quot;</description>
+    <externalId>false</externalId>
     <inlineHelpText>Ao ser desqualificado ou perdido, o registro deverá apresentar um motivo</inlineHelpText>
     <label>Motivo da Perda</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>
-    <trackHistory>false</trackHistory>
+    <trackHistory>true</trackHistory>
     <type>Picklist</type>
     <valueSet>
         <valueSetDefinition>

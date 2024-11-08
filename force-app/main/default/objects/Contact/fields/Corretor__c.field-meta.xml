@@ -3,6 +3,7 @@
     <fullName>Corretor__c</fullName>
     <defaultValue>false</defaultValue>
     <description>Selecionar se for corretor.</description>
+    <externalId>false</externalId>
     <label>Corretor</label>
     <trackFeedHistory>false</trackFeedHistory>
     <type>Checkbox</type>

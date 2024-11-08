@@ -9,7 +9,7 @@ CRECI.</description>
 de Corretores de
 Imóveis.</inlineHelpText>
     <label>CRECI</label>
-    <length>6</length>
+    <length>255</length>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>
     <type>Text</type>

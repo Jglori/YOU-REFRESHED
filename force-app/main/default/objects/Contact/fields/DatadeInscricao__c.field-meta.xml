@@ -4,6 +4,7 @@
     <description>Deve ser preenchido 
 com a data de inscrição do 
 CRECI</description>
+    <externalId>false</externalId>
     <label>Data de Inscrição</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>
