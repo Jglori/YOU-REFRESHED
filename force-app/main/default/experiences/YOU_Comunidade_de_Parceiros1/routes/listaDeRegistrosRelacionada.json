@@ -2,6 +2,7 @@
   "activeViewId" : "6dde88ee-5ab9-4bcc-a904-41da145f7285",
   "appPageId" : "c887584e-f884-4234-884f-c032fcf46c96",
   "configurationTags" : [ ],
+  "devName" : "Related_Record_List",
   "id" : "d506b14f-86d0-4057-b756-0231ad17319a",
   "label" : "Lista de registros relacionada",
   "pageAccess" : "UseParent",

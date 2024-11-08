@@ -2,6 +2,7 @@
   "activeViewId" : "b27d7160-1aca-49c0-86a9-c56dd5bb68d1",
   "appPageId" : "c887584e-f884-4234-884f-c032fcf46c96",
   "configurationTags" : [ ],
+  "devName" : "Sorteio_List__c",
   "id" : "c05ce367-9fdb-4d75-8d7f-dc080fa94345",
   "label" : "Sorteio List",
   "objectApiName" : "Sorteio__c",

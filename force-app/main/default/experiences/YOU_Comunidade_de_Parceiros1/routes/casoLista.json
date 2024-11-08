@@ -2,6 +2,7 @@
   "activeViewId" : "d72d1061-ce04-43eb-8911-ceecf83739e2",
   "appPageId" : "c887584e-f884-4234-884f-c032fcf46c96",
   "configurationTags" : [ ],
+  "devName" : "Caso_Lista",
   "id" : "d1f44600-a5e3-4861-8a7a-3ab5635bf97f",
   "label" : "Caso Lista",
   "routeType" : "list-500",

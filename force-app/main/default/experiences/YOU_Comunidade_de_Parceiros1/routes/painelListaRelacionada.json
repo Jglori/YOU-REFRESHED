@@ -2,6 +2,7 @@
   "activeViewId" : "75eb8945-0c83-48fe-a389-c255a3393a71",
   "appPageId" : "c887584e-f884-4234-884f-c032fcf46c96",
   "configurationTags" : [ ],
+  "devName" : "Painel_Lista_relacionada",
   "id" : "67609a87-8b73-4215-b2b7-643956ad9650",
   "label" : "Painel Lista relacionada",
   "routeType" : "relatedlist-01Z",

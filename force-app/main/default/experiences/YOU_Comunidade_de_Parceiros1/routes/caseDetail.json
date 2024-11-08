@@ -2,6 +2,7 @@
   "activeViewId" : "eb90e51b-fcd8-4da1-8401-9269a8657cc6",
   "appPageId" : "c887584e-f884-4234-884f-c032fcf46c96",
   "configurationTags" : [ ],
+  "devName" : "Case_Detail",
   "id" : "2c9db363-a5c2-4c77-a7d7-36df9a359bdf",
   "label" : "Case Detail",
   "routeType" : "detail-500",

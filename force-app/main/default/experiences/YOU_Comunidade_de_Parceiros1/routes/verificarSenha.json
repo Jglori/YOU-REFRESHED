@@ -2,6 +2,7 @@
   "activeViewId" : "3139e223-61b6-4fda-afea-df41cabac938",
   "appPageId" : "ae3a04b3-4769-4b21-b1d3-bc334806743d",
   "configurationTags" : [ ],
+  "devName" : "Check_Password",
   "id" : "57081e77-aff5-4353-a708-9ced6c378c5a",
   "label" : "Verificar senha",
   "routeType" : "check-password",
