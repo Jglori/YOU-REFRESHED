@@ -24,8 +24,8 @@
     <referrerPolicyOriginWhenCrossOrigin>true</referrerPolicyOriginWhenCrossOrigin>
     <selfRegPage>CommunitiesSelfReg</selfRegPage>
     <serverIsDown>SNA_PIG5g_sf_default_cdn_YOU_Comunidade_de_Parceiros1</serverIsDown>
-    <siteAdmin>lbarboza@you</siteAdmin>
-    <siteGuestRecordDefaultOwner>lbarboza@you</siteGuestRecordDefaultOwner>
+    <!-- <siteAdmin>giulia.carmona@you.qa</siteAdmin>
+    <siteGuestRecordDefaultOwner>giulia.carmona@you.qa</siteGuestRecordDefaultOwner> -->
     <siteType>ChatterNetwork</siteType>
     <urlPathPrefix>parceiros</urlPathPrefix>
 </CustomSite>

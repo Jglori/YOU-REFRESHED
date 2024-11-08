@@ -5,7 +5,7 @@
     <changePasswordTemplate>unfiled$public/CommunityChangePasswordEmailTemplate</changePasswordTemplate>
     <communityRoles/>
     <disableReputationRecordConversations>false</disableReputationRecordConversations>
-    <emailSenderAddress>lbarboza@youinc.com.br</emailSenderAddress>
+   <emailSenderAddress>no-reply@exemplo.com</emailSenderAddress>
     <emailSenderName>YOU - Comunidade de Parceiros</emailSenderName>
     <enableApexCDNCaching>false</enableApexCDNCaching>
     <enableCustomVFErrorPageOverrides>false</enableCustomVFErrorPageOverrides>
