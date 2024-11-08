@@ -18,17 +18,17 @@ public class ContractControllerTest {
         Contact cont = new Contact(FirstName = 'Contato', LastName = 'Teste', AccountId = acc.Id, CPF__c = '88637869092');
         insert cont;
 
-        Contract ctt = new Contract(Name = 'Contrato Teste', AccountId = acc.Id, Status = 'Rascunho');
-        insert ctt;
-
         List<Opportunity> oppsTeste = new List<Opportunity>();
 
-        Opportunity opp = new Opportunity(Name = 'Oportunidade de Teste', Empreendimento__c = emp.Id, StageName = 'Negociação', CloseDate = Date.today(), ContractId = ctt.Id);
+        Opportunity opp = new Opportunity(Name = 'Oportunidade de Teste', Empreendimento__c = emp.Id, StageName = 'Negociação', CloseDate = Date.today());
         oppsTeste.add(opp);
 
-        Opportunity opp2 = new Opportunity(Name = 'Oportunidade de Teste 2', Empreendimento__c = emp.Id, StageName = 'Negociação', CloseDate = Date.today(), ContractId = ctt.Id);
+        Opportunity opp2 = new Opportunity(Name = 'Oportunidade de Teste 2', Empreendimento__c = emp.Id, StageName = 'Negociação', CloseDate = Date.today());
         oppsTeste.add(opp2);
         insert oppsTeste;
+        
+         Contract ctt = new Contract(Name = 'Contrato Teste', AccountId = acc.Id, Status = 'Rascunho', Oportunidade__c = opp.Id);
+        insert ctt;
 
         OpportunityContactRole oppRole = new OpportunityContactRole(OpportunityId = opp.Id, Role = 'Comprador', ContactId = cont.Id);
         insert oppRole;
@@ -67,6 +67,18 @@ public class ContractControllerTest {
         Test.stopTest();
 
         System.assertNotEquals(null, contVersion);
+    }
+
+    @isTest
+    static void testAssinarContrato(){
+        Opportunity opp = [SELECT Id FROM Opportunity WHERE Name = 'Oportunidade de Teste' LIMIT 1];
+
+        Test.startTest();
+        ContractController.assinarContrato(opp.Id);
+        Test.stopTest();
+
+        Contract ctt = [SELECT Id, Status FROM Contract WHERE Oportunidade__c = :opp.Id];
+        System.assertEquals('Ativo', ctt.Status);
     }
 
 

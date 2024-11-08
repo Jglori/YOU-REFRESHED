@@ -8,6 +8,14 @@ public class TestDataFactory {
         return analise;
     }
 
+    public static Checklist_de_Documentos__c gerarChecklistDocumentos(Opportunity opportunity, Documentacao__c documentacao, Contact contact) {
+        Checklist_de_Documentos__c checklist = new Checklist_de_Documentos__c();
+        checklist.Oportunidade__c = opportunity.Id;
+        checklist.Documenta_o__c = documentacao.Id;
+        checklist.Contato__c = contact.Id;
+        return checklist;
+    }
+
     //Registros objetos padrão
     public static Account gerarConta(){
         Account conta = new Account();
@@ -24,12 +32,17 @@ public class TestDataFactory {
         return conta;
     }
 
-    public static Contact gerarContato(Account conta) {
+    public static Contact gerarContato() {
         Contact contato = new Contact();
-        contato.AccountId = conta.Id;
         contato.FirstName = 'Elera';
         contato.LastName = 'Teste';
         contato.Email = 'teste.dev@elera.io';
+        return contato;
+    }
+
+    public static Contact gerarContato(Account conta) {
+        Contact contato = gerarContato();
+        contato.AccountId = conta.Id;
         return contato;
     }
 
@@ -46,6 +59,14 @@ public class TestDataFactory {
         cotacao.Pricebook2Id = Test.getStandardPricebookId();
         cotacao.OpportunityId = oportunidade.Id; 
         return cotacao;
+    }
+
+    public static Documentacao__c gerarDocumentacao() {
+        Documentacao__c documentacao = new Documentacao__c();
+        documentacao.Name = 'Documento test';
+        documentacao.Obrigatorio__c = true;
+        documentacao.Entregue__c = false;
+        return documentacao;
     }
 
     public static Lead gerarLead() {
@@ -66,18 +87,10 @@ public class TestDataFactory {
     public static Product2 gerarProduto(){
         Product2 produto = new Product2();
         produto.Name = 'Produto de Teste';
-        produto.NumeroDaUnidade__c = 777;
-        produto.AgenteFinanceiro__c = 'SPE';
-        produto.Enquadramento__c = 'HIS';
-        produto.Status__c = 'Reservada';
-        produto.Andar__c = 4;
-        produto.Coeficiente__c = 100.00;
-        produto.ValorM2__c = 120000.00;
-        produto.NumeroQuartos__c = 3;
-        produto.NumeroDeSuites__c = 4;
-        produto.NumeroDeVagasIncorporadas__c = 3;
         produto.ProductCode = 'Teste-1';
         produto.isActive = true;
+        produto.NumeroDaUnidade__c = 777;
+        produto.Status__c = 'Reservada';
         produto.ValorM2__C = 8;
         produto.ExternalId = '10';
         return produto;
