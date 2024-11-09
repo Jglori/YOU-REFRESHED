@@ -78,6 +78,7 @@ public with sharing class OpportunityHelper {
         }
     }
 
+    @TestVisible
     private static boolean hasProducts(Id opportunityId) {
         try {
             List<OpportunityLineItem> lineItems = OpportunityDA.getOpportunityLineItems(opportunityId);
@@ -86,7 +87,8 @@ public with sharing class OpportunityHelper {
             return false;
         }
     }
-
+    
+    @TestVisible
     private static boolean hasBuyers(Id opportunityId) {
         try {
             List<OpportunityContactRole> contactRoles = OpportunityDA.getOpportunityContactRoles(opportunityId);
@@ -95,6 +97,7 @@ public with sharing class OpportunityHelper {
             return false;
         }
     }
+    
 
     public static void handleBeforeUpdate(List<Opportunity> newOpps, Map<Id, Opportunity> oldOpps) {
         for (Opportunity newOpp : newOpps) {
