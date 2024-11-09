@@ -1,0 +1,104 @@
+<template>
+    <lightning-card>
+        <h1 class="listaDocumentos">Lista de Documentos</h1>
+        <div class="slds-p-around_medium">
+            <!-- Se houver documentos -->
+            <template if:true={hasDocuments}>
+                <div class="document-card-container slds-box slds-box_xx-small slds-m-bottom_medium">
+                    <!-- Lista de Documentos -->
+                    <div class="document-list">
+                        <template for:each={documents} for:item="doc">
+                            <div key={doc.id} class="document-card slds-box slds-box_xx-small slds-m-bottom_small">
+                                <div class="document-row slds-grid slds-grid_align-spread">
+                                    <!-- Informações do Documento -->
+                                    <div class="slds-grid slds-grid_align-start">
+                                        <lightning-icon icon-name="standard:document" alternative-text="document" size="large" title="document"></lightning-icon>
+                                        <span>{doc.label}</span>
+                                    </div>
+                                    <!-- Ações do Documento -->
+                                    <div class="slds-grid slds-grid_align-end">
+                                        <div class="icon-and-buttons-container">
+                                            <!-- Se o documento estiver concluído -->
+                                            <template if:true={doc.completed}>
+                                            <lightning-button-icon icon-name="utility:delete" alternative-text="Delete" title="Deletar" data-id={doc.id} data-nome-id={doc.label} onclick={deletarArquivo}></lightning-button-icon>
+                                            </template>
+                                            <template if:false={doc.completed}>
+                                            <lightning-button-icon icon-name="utility:upload" alternative-text="Upload" title="Upload"  data-id={doc.id} data-nome-id={doc.label} data-obrigatorio={doc.obrigatorio} onclick={handleUploadClick}></lightning-button-icon>
+                                            </template>
+                                            <lightning-button-icon icon-name="utility:preview" alternative-text="View" title="Visualizar Documento" data-id={doc.id} data-nome-id={doc.label} onclick={handleViewClick}></lightning-button-icon>
+                                            <lightning-button-icon icon-name="utility:download" alternative-text="Download" title="Download" data-id={doc.id} data-nome-id={doc.label} onclick={handleDownloadClick}></lightning-button-icon>
+                                        </div>
+                                        <div class="approval-icon-container">
+                                            <template if:true={doc.completed}>
+                                                <lightning-icon icon-name="standard:task2" alternative-text="task2" size="medium" title="task2"></lightning-icon>
+                                            </template>
+                                            <template if:false={doc.completed}>
+                                                <lightning-icon icon-name="utility:warning" alternative-text="Warning" size="medium" class="warning-icon"></lightning-icon>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </template>
+            <!-- Se não houver documentos -->
+            <template if:false={hasDocuments}>
+                <div class="empty-state">
+                    <lightning-icon icon-name="utility:travel_and_places" alternative-text="No Documents" size="large"></lightning-icon>
+                    <p>Nenhum documento entregue</p>
+                </div>
+            </template>
+        </div>
+
+        <!-- Input de Arquivo Oculto -->
+        <input type="file" id="fileInput" style="opacity: 0; width: 0.1px; height: 0.1px; position: absolute; overflow: hidden; clip: rect(1px, 1px, 1px, 1px);" onchange={handleFileChange}/>
+
+        <!-- Modal de Confirmação -->
+        <div class={modalClass}>
+            <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" onclick={handleCancelClick}>
+                        <lightning-icon icon-name="utility:close" alternative-text="Close" size="small"></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <div class="slds-modal__header">
+                        <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate" tabindex="-1">Documento: {selectedDocumentText}</h1>
+                    </div>
+                    <div class="slds-modal__content slds-p-around_medium">
+                       {texto}
+                    </div>
+                    <div class="slds-modal__footer">
+                        <lightning-button variant="neutral" label="Cancelar" onclick={handleCancelClick}></lightning-button>
+                        <lightning-button variant="brand" label={tipoModal} onclick={handleSaveOptional}>{tipoModal}</lightning-button>
+                    </div>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+        </div>
+
+        
+        
+
+        <!-- Spinner -->
+        <template if:true={isLoading}>
+            <div class="overlay">
+                <div class="spinner-container">
+                    <div class="slds-spinner_container">
+                        <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative">
+                          <span class="slds-assistive-text">Loading</span>
+                          <div class="slds-spinner__dot-a"></div>
+                          <div class="slds-spinner__dot-b"></div>
+                          
+                          <!-- additional element to show the text under the spinner -->
+                          <p class="slds-spinner-text"></p>
+                        </div>
+                      </div>
+                </div>
+            </div>
+        </template>
+
+        
+    </lightning-card>
+</template>
