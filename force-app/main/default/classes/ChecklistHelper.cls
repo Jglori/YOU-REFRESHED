@@ -80,4 +80,12 @@ public class ChecklistHelper {
             update opportunitiesToUpdate;
         }
     }
+
+    public static List<Checklist_de_Documentos__c> getWithDocsByOpp(Set<Id> ids) {
+        List<Checklist_de_Documentos__c> checklists = ChecklistDA.getWithDocumentsByOpportunity(ids);
+        if (checklists.isEmpty()) {
+            throw new IllegalArgumentException('Nenhuma Checklist encontrada! Parâmetro inválido.');
+        }
+        return checklists;
+    } 
 }
