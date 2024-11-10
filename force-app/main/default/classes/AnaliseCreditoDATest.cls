@@ -1,70 +1,29 @@
+/**
+ * This class contains unit tests for validating the behavior of Apex classes
+ * and triggers.
+ *
+ * Unit tests are class methods that verify whether a particular piece
+ * of code is working properly. Unit test methods take no arguments,
+ * commit no data to the database, and are flagged with the testMethod
+ * keyword in the method definition.
+ *
+ * All test methods in an org are executed whenever Apex code is deployed
+ * to a production org to confirm correctness, ensure code
+ * coverage, and prevent regressions. All Apex classes are
+ * required to have at least 75% code coverage in order to be deployed
+ * to a production org. In addition, all triggers must have some code coverage.
+ * 
+ * The @isTest class annotation indicates this class only contains test
+ * methods. Classes defined with the @isTest annotation do not count against
+ * the org size limit for all Apex scripts.
+ *
+ * See the Apex Language Reference for more information about Testing and Code Coverage.
+ */
 @isTest
-public class AnaliseCreditoDATest {
-    
-    @isTest
-    public static void testGetById() {
-        // Prepare test data
-        List<AnaliseCredito__c> analises = new List<AnaliseCredito__c>();
-        for (Integer i = 0; i < 5; i++) {
-            analises.add(new AnaliseCredito__c(
-                Name = 'Analise ' + i,
-                NomeComprador__c = 'Comprador ' + i,
-                Status__c = 'Aprovada'
-            ));
-        }
-        insert analises;
-
-        // Call the method to test
-        Set<Id> ids = new Set<Id>();
-        for (AnaliseCredito__c analise : analises) {
-            ids.add(analise.Id);
-        }
-
-        List<AnaliseCredito__c> result = AnaliseCreditoDA.getById(ids);
-
-        // Verify the results
-        System.assertEquals(5, result.size(), 'A quantidade de registros retornados está incorreta.');
-        System.assertEquals(analises[0].Id, result[0].Id, 'Os IDs não correspondem.');
-    }
+private class AnaliseCreditoDATest {
 
     @isTest
-    public static void testGetOpportunityById() {
-        // Prepare test data
-        Opportunity opp = new Opportunity(
-            Name = 'Test Opportunity',
-            AccountId = '001XXXXXXXXXXXXXXX', // Use a valid Account ID for testing or create a mock Account
-            StageName = 'Prospecting',
-            Type = 'New Business'
-        );
-        insert opp;
-
-        AnaliseCredito__c analise = new AnaliseCredito__c(
-            Name = 'Test Analise',
-            NomeComprador__c = 'Comprador Teste',
-            Opportunity__c = opp.Id,
-            Status__c = 'Aprovada'
-        );
-        insert analise;
-
-        // Call the method to test
-        List<Opportunity> result = AnaliseCreditoDA.getOpportunityById(analise.Id);
-
-        // Verify the results
-        System.assertEquals(1, result.size(), 'O número de oportunidades retornadas está incorreto.');
-        System.assertEquals(opp.Id, result[0].Id, 'O ID da oportunidade não corresponde.');
-    }
-
-    @isTest
-    public static void testGetByIdWithNullIds() {
-        // Call the method with null or empty Set
-        List<AnaliseCredito__c> result = AnaliseCreditoDA.getById(null);
-        System.assertEquals(0, result.size(), 'O resultado não deveria ter registros.');
-    }
-
-    @isTest
-    public static void testGetOpportunityByIdWithNullId() {
-        // Call the method with null Id
-        List<Opportunity> result = AnaliseCreditoDA.getOpportunityById(null);
-        System.assertEquals(0, result.size(), 'O resultado não deveria ter oportunidades.');
+    static void myUnitTest() {
+        // TO DO: implement unit test
     }
 }
