@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ValorJuros__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(  
+	AND(  
+	TEXT(StatusDo1Pagamento__c) = &apos;Não Pago&apos;,  
+	DataDeVencimento__c &lt; TODAY()  
+	),  
+  
+	(Amount * EXP(LN(1.01) * ABS(FLOOR((TODAY() - DataDeVencimento__c) /1)))) - Amount,0
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <inlineHelpText>Acrescenta 1% diariamente do valor total</inlineHelpText>
+    <label>Valor do Juros</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <type>Currency</type>
+</CustomField>

@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>ValorTotalComJuros__c</fullName>
+    <fullName>ValorFinal__c</fullName>
     <externalId>false</externalId>
     <formula>IF(
-    CloseDate &gt;= TODAY(),
-    Amount * EXP(
-        LN(1.01) * 
-        ABS(FLOOR((TODAY() - CloseDate) / 30))
-    ),
-    0
+  OR(
+    ValorMulta__c &gt; 0,
+    ValorJuros__c &gt; 0
+  ), 
+  Amount + ValorMulta__c + ValorJuros__c,
+  Amount
+  
 )</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
-    <inlineHelpText>Acrescenta 1% ao mês do valor total</inlineHelpText>
-    <label>Valor Total com Juros</label>
+    <inlineHelpText>Valor do produto com a multa e o juros incluso</inlineHelpText>
+    <label>Valor Final</label>
     <precision>18</precision>
     <required>false</required>
     <scale>2</scale>
