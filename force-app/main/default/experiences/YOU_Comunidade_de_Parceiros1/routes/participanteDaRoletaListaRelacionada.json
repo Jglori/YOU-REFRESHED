@@ -1,0 +1,12 @@
+{
+  "activeViewId" : "c8dcc209-3953-4fe1-a89c-10e922c94a8e",
+  "appPageId" : "c887584e-f884-4234-884f-c032fcf46c96",
+  "configurationTags" : [ ],
+  "devName" : "Participante_da_roleta_Lista_relacionada__c",
+  "id" : "035b8bf9-d0ef-4d9f-a823-713e9fe2fcff",
+  "label" : "Participante da roleta Lista relacionada",
+  "objectApiName" : "ParticipanteRoleta__c",
+  "routeType" : "relatedlist-a0X",
+  "type" : "route",
+  "urlPrefix" : "participanteroleta"
+}

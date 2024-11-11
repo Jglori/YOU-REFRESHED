@@ -1,0 +1,31 @@
+{
+  "appPageId" : "c887584e-f884-4234-884f-c032fcf46c96",
+  "componentName" : "siteforce:sldsOneColLayout",
+  "dataProviders" : [ ],
+  "id" : "85cb45f9-765e-45fb-a653-cea401f247ef",
+  "label" : "Lista de painéis",
+  "regions" : [ {
+    "id" : "2bee1866-11df-414e-b0f7-59d340bcae9e",
+    "regionName" : "header",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : { },
+      "componentName" : "forceCommunity:dashboardList",
+      "id" : "069fa709-dd20-4be6-8998-b96d4199d1fb",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "fbd43288-60f2-4617-a516-4ac893f65c57",
+    "regionName" : "content",
+    "type" : "region"
+  }, {
+    "id" : "97f67f66-3867-41a1-a2c8-9c58df90634f",
+    "regionName" : "footer",
+    "type" : "region"
+  } ],
+  "themeLayoutType" : "Inner",
+  "type" : "view",
+  "viewType" : "list-01Z"
+}

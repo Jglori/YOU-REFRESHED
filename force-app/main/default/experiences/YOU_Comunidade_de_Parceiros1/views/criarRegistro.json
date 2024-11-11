@@ -1,0 +1,34 @@
+{
+  "appPageId" : "c887584e-f884-4234-884f-c032fcf46c96",
+  "componentName" : "siteforce:sldsOneColLayout",
+  "dataProviders" : [ ],
+  "id" : "03899a26-5d85-4e26-8b29-b67186f202f7",
+  "label" : "Criar registro",
+  "regions" : [ {
+    "id" : "de725864-8294-424f-bcf5-3ab8156b1e3e",
+    "regionName" : "header",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "actionApiName" : "{!actionApiName}",
+        "isMicrobatch" : false
+      },
+      "componentName" : "forceCommunity:createRecordForm",
+      "id" : "353d2a54-3fe1-49c7-a243-4ded0bc12cd1",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "8faa85c0-121c-4ba5-87de-42e3000c5eb5",
+    "regionName" : "content",
+    "type" : "region"
+  }, {
+    "id" : "369d2166-f414-4b41-a57a-21399fbb3f73",
+    "regionName" : "footer",
+    "type" : "region"
+  } ],
+  "themeLayoutType" : "Inner",
+  "type" : "view",
+  "viewType" : "createrecord"
+}

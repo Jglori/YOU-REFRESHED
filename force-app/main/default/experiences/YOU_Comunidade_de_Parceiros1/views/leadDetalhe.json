@@ -1,0 +1,223 @@
+{
+  "appPageId" : "c887584e-f884-4234-884f-c032fcf46c96",
+  "componentName" : "siteforce:sldsTwoCol84SidebarFeaturedLayout",
+  "dataProviders" : [ ],
+  "id" : "d7e0b642-8380-4cfd-b3ff-1d6f44ca251c",
+  "label" : "Lead Detalhe",
+  "regions" : [ {
+    "components" : [ {
+      "componentAttributes" : {
+        "recordId" : "{!recordId}"
+      },
+      "componentName" : "forceCommunity:recordHeadline",
+      "id" : "466daa33-4e72-4aea-8eb8-eefc2cee24c3",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    }, {
+      "componentAttributes" : {
+        "recordId" : "{!recordId}"
+      },
+      "componentName" : "forceCommunity:pathAssistant",
+      "id" : "a76fecbd-aa71-45fa-ac66-6bd6f598be1b",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "7c805cc9-b2b8-4e85-9dc4-b18974a983f8",
+    "regionName" : "header",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "tabsetConfig" : {
+          "UUID" : "a1240650-717a-4a88-8dac-998c91cb3f0a",
+          "activeTab" : "",
+          "tabs" : [ {
+            "UUID" : "d4422836-06c3-4eb3-a288-c7d3ce7863e6",
+            "allowGuestUser" : true,
+            "locked" : false,
+            "seedComponents" : [ ],
+            "tabKey" : "1",
+            "tabName" : "Detalhes"
+          }, {
+            "UUID" : "5d459daa-39df-4d18-9609-305b2e6109e8",
+            "allowGuestUser" : false,
+            "locked" : false,
+            "seedComponents" : [ ],
+            "tabKey" : "2",
+            "tabName" : "Atividades"
+          } ],
+          "useOverflowMenu" : true
+        }
+      },
+      "componentName" : "forceCommunity:tabLayout",
+      "id" : "a1240650-717a-4a88-8dac-998c91cb3f0a",
+      "regions" : [ {
+        "components" : [ {
+          "componentAttributes" : {
+            "recordId" : "{!recordId}"
+          },
+          "componentName" : "forceCommunity:recordDetail",
+          "id" : "edd97813-63c2-4d1d-a5ce-8ec96704784e",
+          "renderPriority" : "NEUTRAL",
+          "renditionMap" : { },
+          "type" : "component"
+        } ],
+        "id" : "d4422836-06c3-4eb3-a288-c7d3ce7863e6",
+        "regionLabel" : "Detalhes",
+        "regionName" : "1",
+        "renditionMap" : { },
+        "type" : "region"
+      }, {
+        "components" : [ {
+          "componentAttributes" : {
+            "recordId" : "{!recordId}",
+            "showLegacyActivityComposer" : false
+          },
+          "componentName" : "forceCommunity:activityPanel",
+          "id" : "9babc784-71ed-4656-ba71-6a394f55aa84",
+          "renderPriority" : "NEUTRAL",
+          "renditionMap" : { },
+          "type" : "component"
+        } ],
+        "id" : "5d459daa-39df-4d18-9609-305b2e6109e8",
+        "regionLabel" : "Atividades",
+        "regionName" : "2",
+        "renditionMap" : { },
+        "type" : "region"
+      } ],
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "a105a38a-1e42-4d34-ae89-986ba70d597e",
+    "regionName" : "content",
+    "type" : "region"
+  }, {
+    "id" : "c0835818-d570-406f-b206-f4b9916a9c08",
+    "regionName" : "footer",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "customHeadTags" : "",
+        "description" : "",
+        "title" : "{!Record._Object}: {!Record._Title}"
+      },
+      "componentName" : "forceCommunity:seoAssistant",
+      "id" : "06980603-d46b-4627-8ac8-2bdac1200fce",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "c5a6f0d3-b2aa-42d5-b171-09705377da60",
+    "regionName" : "sfdcHiddenRegion",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "relatedListApiName" : "Histories",
+        "relatedListComponentOverride" : "GRID",
+        "width" : "MEDIUM"
+      },
+      "componentName" : "forceCommunity:responsiveRelatedListSingle",
+      "id" : "ff501862-e9bc-40d5-80d2-46ca9e4f277a",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "45a2be34-8de9-4d1e-ad53-5fe2719e57b7",
+    "regionName" : "sidebar",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "tabsetConfig" : {
+          "UUID" : "e895bf0c-bcca-474f-b7d7-89bfcebf2bd5",
+          "activeTab" : "",
+          "tabs" : [ {
+            "UUID" : "e57568e9-570a-4f97-9840-50aea673712d",
+            "allowGuestUser" : false,
+            "locked" : false,
+            "seedComponents" : [ ],
+            "tabKey" : "1",
+            "tabName" : "Residencial"
+          }, {
+            "UUID" : "a8c8abf8-b17e-4c64-8ecd-0b25556a2e81",
+            "allowGuestUser" : false,
+            "locked" : false,
+            "seedComponents" : [ ],
+            "tabKey" : "2",
+            "tabName" : "Comercial"
+          } ],
+          "useOverflowMenu" : true
+        }
+      },
+      "componentName" : "forceCommunity:tabLayout",
+      "id" : "e895bf0c-bcca-474f-b7d7-89bfcebf2bd5",
+      "regions" : [ {
+        "components" : [ {
+          "componentAttributes" : {
+            "apresentarBotaoSalvar" : true,
+            "apresentarValores" : true,
+            "campoBairro" : "Bairro__c",
+            "campoCEP" : "CEP__c",
+            "campoCidade" : "Cidade__c",
+            "campoComplemento" : "Complemento__c",
+            "campoLogradouro" : "Logradouro__c",
+            "campoNumero" : "Numero__c",
+            "campoPais" : "Pais__c",
+            "campoUF" : "UF__c",
+            "objectApiName" : "Lead",
+            "recordId" : "{!recordId}"
+          },
+          "componentName" : "c:endereco",
+          "id" : "20d59d08-6339-4b1d-91b0-fdcdf4ada268",
+          "renderPriority" : "NEUTRAL",
+          "renditionMap" : { },
+          "type" : "component"
+        } ],
+        "id" : "e57568e9-570a-4f97-9840-50aea673712d",
+        "regionLabel" : "Residencial",
+        "regionName" : "1",
+        "renditionMap" : { },
+        "type" : "region"
+      }, {
+        "components" : [ {
+          "componentAttributes" : {
+            "apresentarBotaoSalvar" : true,
+            "apresentarValores" : true,
+            "campoBairro" : "BairroComercial__c",
+            "campoCEP" : "CEP_Comercial__c",
+            "campoCidade" : "CidadeComercial__c",
+            "campoComplemento" : "ComplementoComercial__c",
+            "campoLogradouro" : "LogradouroComercial__c",
+            "campoNumero" : "NumeroComercial__c",
+            "campoUF" : "UFComercial__c",
+            "objectApiName" : "Lead",
+            "recordId" : "{!recordId}"
+          },
+          "componentName" : "c:endereco",
+          "id" : "a195259a-9fda-4322-ba2b-1b97d7d4a750",
+          "renderPriority" : "NEUTRAL",
+          "renditionMap" : { },
+          "type" : "component"
+        } ],
+        "id" : "a8c8abf8-b17e-4c64-8ecd-0b25556a2e81",
+        "regionLabel" : "Comercial",
+        "regionName" : "2",
+        "renditionMap" : { },
+        "type" : "region"
+      } ],
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "bf78d9b1-3e1a-4a80-9122-44436d0e9ebe",
+    "regionName" : "featured",
+    "type" : "region"
+  } ],
+  "themeLayoutType" : "Inner",
+  "type" : "view",
+  "viewType" : "detail-00Q"
+}

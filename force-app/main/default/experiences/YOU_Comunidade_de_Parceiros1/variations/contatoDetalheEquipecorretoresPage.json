@@ -1,0 +1,13 @@
+{
+  "componentVariants" : [ {
+    "id" : "7a29e809-f7c7-4902-89fc-9289cbd17106",
+    "propertyOverrides" : {
+      "activeViewId" : "e8f769f2-e4d9-4085-8c2f-e25578b8a262"
+    },
+    "targetId" : "e1b14523-0b73-4cf7-8b34-4ec617f42c53",
+    "type" : "componentVariant"
+  } ],
+  "developerName" : "Contato_Detalhe_equipecorretores_Page",
+  "id" : "527d470d-2549-4e6f-bf55-f4d3285024a4",
+  "type" : "experienceVariation"
+}

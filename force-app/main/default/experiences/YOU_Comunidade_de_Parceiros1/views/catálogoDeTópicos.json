@@ -1,0 +1,54 @@
+{
+  "appPageId" : "c887584e-f884-4234-884f-c032fcf46c96",
+  "componentName" : "siteforce:sldsOneColLayout",
+  "dataProviders" : [ ],
+  "id" : "bf7694c3-1117-4aaa-9280-ec2526da75ab",
+  "label" : "Catálogo de tópicos",
+  "regions" : [ {
+    "components" : [ {
+      "componentAttributes" : { },
+      "componentName" : "c:concierge",
+      "id" : "ed45cc5a-3d28-4913-8abd-f5dd93ca2435",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "14ba69f5-7dbf-4a51-85c6-bd54885fe38b",
+    "regionName" : "header",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : { },
+      "componentName" : "forceCommunity:topicCatalog",
+      "id" : "372e7ae4-a082-4853-81c1-f38ad18a1c8b",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "a8530965-0d33-4fa7-babc-2f9cd46c67c6",
+    "regionName" : "content",
+    "type" : "region"
+  }, {
+    "id" : "e5e16b30-618d-461a-9230-18a0719424ce",
+    "regionName" : "footer",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "customHeadTags" : "",
+        "description" : "",
+        "title" : "Catálogo de tópicos"
+      },
+      "componentName" : "forceCommunity:seoAssistant",
+      "id" : "45e3c895-fe18-4d66-93f7-78425705f568",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "e3bd855f-7674-493b-a963-f3193e30d0b2",
+    "regionName" : "sfdcHiddenRegion",
+    "type" : "region"
+  } ],
+  "themeLayoutType" : "Inner",
+  "type" : "view",
+  "viewType" : "topic-catalog"
+}

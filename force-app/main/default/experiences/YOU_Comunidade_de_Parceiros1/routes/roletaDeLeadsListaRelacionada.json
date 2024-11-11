@@ -1,0 +1,12 @@
+{
+  "activeViewId" : "c838b4b3-36c1-469f-a90d-2fba54506f0d",
+  "appPageId" : "c887584e-f884-4234-884f-c032fcf46c96",
+  "configurationTags" : [ ],
+  "devName" : "Roleta_de_leads_Lista_relacionada__c",
+  "id" : "0ed2ce9b-f259-462e-8df0-e93016ba1556",
+  "label" : "Roleta de leads Lista relacionada",
+  "objectApiName" : "RoletaLeads__c",
+  "routeType" : "relatedlist-a0Y",
+  "type" : "route",
+  "urlPrefix" : "roletaleads"
+}
