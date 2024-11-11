@@ -11,11 +11,12 @@
   }, {
     "components" : [ {
       "componentAttributes" : {
-        "height" : "485",
-        "recordId" : "01ZHu000001ebHwMAI"
+        "showCreateNewCalendar" : false,
+        "showOtherCalendars" : false,
+        "showSidebar" : true
       },
-      "componentName" : "forceCommunity:dashboard",
-      "id" : "5cb50ec6-03b6-4772-963f-a6ece0026a57",
+      "componentName" : "forceCommunity:calendar",
+      "id" : "60efc8d5-fa11-46f4-b584-104f08b5ad14",
       "renderPriority" : "NEUTRAL",
       "renditionMap" : { },
       "type" : "component"
