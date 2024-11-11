@@ -1,0 +1,11 @@
+{
+  "activeViewId" : "1eb830d6-0b7d-45be-83b9-c165a55e7610",
+  "appPageId" : "c887584e-f884-4234-884f-c032fcf46c96",
+  "configurationTags" : [ ],
+  "devName" : "Tarefa_Detalhe__c",
+  "id" : "bb0b0f18-89a8-4ec9-ac30-79da669b2549",
+  "label" : "Tarefa Detalhe",
+  "routeType" : "detail-00T",
+  "type" : "route",
+  "urlPrefix" : "task"
+}

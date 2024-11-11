@@ -1,0 +1,15 @@
+{
+  "componentVariants" : [ {
+    "id" : "3caea4dd-5334-42a2-86fa-5edc0f2fe894",
+    "propertyOverrides" : {
+      "componentAttributes" : {
+        "NavigationMenuEditorRefresh" : "Menu_Superintendente"
+      }
+    },
+    "targetId" : "42e47e89-4f27-4c9e-981b-188999afc042",
+    "type" : "componentVariant"
+  } ],
+  "developerName" : "Default_Menu_de_navegao_3_Component_Properties",
+  "id" : "218d406c-fb91-4e5f-87a8-fe7699158467",
+  "type" : "experienceVariation"
+}
