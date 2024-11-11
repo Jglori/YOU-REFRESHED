@@ -149,13 +149,6 @@
             "seedComponents" : [ ],
             "tabKey" : "2",
             "tabName" : "Comercial"
-          }, {
-            "UUID" : "513f827d-99c4-495f-8a92-a744379fd668",
-            "allowGuestUser" : false,
-            "locked" : false,
-            "seedComponents" : [ ],
-            "tabKey" : "18411",
-            "tabName" : "WhatsApp"
           } ],
           "useOverflowMenu" : true
         }
@@ -213,20 +206,6 @@
         "id" : "a8c8abf8-b17e-4c64-8ecd-0b25556a2e81",
         "regionLabel" : "Comercial",
         "regionName" : "2",
-        "renditionMap" : { },
-        "type" : "region"
-      }, {
-        "components" : [ {
-          "componentAttributes" : { },
-          "componentName" : "c:whatsApp",
-          "id" : "16eec2e3-38ec-46af-991d-18a985a0ed02",
-          "renderPriority" : "NEUTRAL",
-          "renditionMap" : { },
-          "type" : "component"
-        } ],
-        "id" : "513f827d-99c4-495f-8a92-a744379fd668",
-        "regionLabel" : "WhatsApp",
-        "regionName" : "18411",
         "renditionMap" : { },
         "type" : "region"
       } ],
