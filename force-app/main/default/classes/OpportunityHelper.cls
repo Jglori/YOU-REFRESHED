@@ -29,7 +29,7 @@ public with sharing class OpportunityHelper {
     public static void validateTransitionToFichaCadastral(List<Opportunity> newOpportunities, Map<Id, Opportunity> oldOpportunitiesMap) {
         for (Opportunity newOpp : newOpportunities) {
             Opportunity oldOpp = oldOpportunitiesMap.get(newOpp.Id);
-
+            
             if (oldOpp != null && oldOpp.StageName == 'Negociação') {
                 if (validStagesAfterFichaCadastral.contains(newOpp.StageName)) {
                     newOpp.addError('Não é permitido avançar diretamente para a fase ' + newOpp.StageName + ' sem passar pela fase "Ficha Cadastral".');
@@ -41,7 +41,7 @@ public with sharing class OpportunityHelper {
                     boolean hasBuyers = hasBuyers(newOpp.Id);
 
                     for (String fieldName : mandatoryFields.keySet()) {
-                        if (newOpp.get(fieldName) == null || String.isBlank(String.valueOf(newOpp.get(fieldName)))) {
+						if (newOpp.get(fieldName) == null || String.isBlank(String.valueOf(newOpp.get(fieldName)))) {
                             newOpp.addError(mandatoryFields.get(fieldName) + ' é um campo obrigatório.');
                         }
                     }

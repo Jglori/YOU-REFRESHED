@@ -1,29 +1,34 @@
-/**
- * This class contains unit tests for validating the behavior of Apex classes
- * and triggers.
- *
- * Unit tests are class methods that verify whether a particular piece
- * of code is working properly. Unit test methods take no arguments,
- * commit no data to the database, and are flagged with the testMethod
- * keyword in the method definition.
- *
- * All test methods in an org are executed whenever Apex code is deployed
- * to a production org to confirm correctness, ensure code
- * coverage, and prevent regressions. All Apex classes are
- * required to have at least 75% code coverage in order to be deployed
- * to a production org. In addition, all triggers must have some code coverage.
- * 
- * The @isTest class annotation indicates this class only contains test
- * methods. Classes defined with the @isTest annotation do not count against
- * the org size limit for all Apex scripts.
- *
- * See the Apex Language Reference for more information about Testing and Code Coverage.
- */
 @isTest
 private class TemplateSelectorTest {
 
-    @isTest
-    static void myUnitTest() {
-        // TO DO: implement unit test
+    @TestSetup
+    static void makeData() {
+        Empreendimento__c emp = new Empreendimento__c();
+        emp.Name = 'Empreendimento de Teste';
+        emp.CNPJEmpreendimento__c = '11084433000199';
+        insert emp;
+
+        TemplateDocumento__c template = new TemplateDocumento__c(Name = 'Template Test', Empreendimento__c = emp.Id, TipoTemplate__c = 'Contrato', ConteudoTemplate__c = 'Teste de conteudo', Ativo__c = true);
+        insert template;
+
+        Opportunity opp = new Opportunity(Name = 'Oportunidade de Teste', Empreendimento__c = emp.Id, StageName = 'Negociação', CloseDate = Date.today());
+        insert opp;
+    }
+
+    @IsTest
+    static void testGetTemplates() {
+        Test.startTest();
+        List<TemplateDocumento__c> templates = TemplateSelector.getTemplates();
+        Test.stopTest();
+
+        System.assertEquals(1, templates.size());
+    }
+
+    @IsTest
+    static void testGetTemplateById() {
+        List<TemplateDocumento__c> templates = TemplateSelector.getTemplates();
+        TemplateDocumento__c template = TemplateSelector.getTemplateById(templates[0].Id);
+
+        System.assertEquals(templates[0].Id, template.Id);
     }
 }

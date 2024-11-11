@@ -60,7 +60,7 @@ public with sharing class AnaliseCreditoHelper {
             if (analise.Status__c == 'Aprovada' && analise.Opportunity__c != null) {
                 Integer quantidade = opportunityComAnalisesAprovada.get(analise.Opportunity__c);
 
-                if (quantidade != null && quantidade > 0) {
+                if (quantidade > 0) {
                     analise.addError('Não é permitido ter duas análises de crédito com status aprovada em uma oportunidade');
                 }
             }

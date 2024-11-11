@@ -1,29 +1,77 @@
-/**
- * This class contains unit tests for validating the behavior of Apex classes
- * and triggers.
- *
- * Unit tests are class methods that verify whether a particular piece
- * of code is working properly. Unit test methods take no arguments,
- * commit no data to the database, and are flagged with the testMethod
- * keyword in the method definition.
- *
- * All test methods in an org are executed whenever Apex code is deployed
- * to a production org to confirm correctness, ensure code
- * coverage, and prevent regressions. All Apex classes are
- * required to have at least 75% code coverage in order to be deployed
- * to a production org. In addition, all triggers must have some code coverage.
- * 
- * The @isTest class annotation indicates this class only contains test
- * methods. Classes defined with the @isTest annotation do not count against
- * the org size limit for all Apex scripts.
- *
- * See the Apex Language Reference for more information about Testing and Code Coverage.
- */
-@isTest
-private class AnaliseCreditoDATest {
+@IsTest
+public with sharing class AnaliseCreditoDATest {
+    
+    @TestSetup
+    static void setup() {
+        RecordType rt = [
+            SELECT Id 
+            FROM RecordType 
+            WHERE SobjectType = 'Contact' AND Name = 'Corretor'
+        ];
+        
+        Account accTest = TestDataFactory.gerarConta('HouseImobiliaria');
+        insert accTest;
+        
+        Contact cttTest = TestDataFactory.gerarContato(accTest, rt.Id);
+        insert cttTest;
+        
+        Opportunity opp1 = TestDataFactory.gerarOportunidade(accTest, cttTest);
+        opp1.StageName = 'Pré-análise';
+        insert opp1;
 
-    @isTest
-    static void myUnitTest() {
-        // TO DO: implement unit test
+        AnaliseCredito__c analise1 = TestDataFactory.gerarAnaliseCredito(opp1);
+        AnaliseCredito__c analise2 = TestDataFactory.gerarAnaliseCredito(opp1);
+        analise2.Status__c = 'Aprovada';
+        insert new List<AnaliseCredito__c> { analise1, analise2 };
+    }
+
+    @IsTest
+    static void testGetById_Valid() {
+        AnaliseCredito__c analise = [
+            SELECT Id
+            FROM AnaliseCredito__c
+            LIMIT 1
+        ];
+
+        Test.startTest();
+        List<AnaliseCredito__c> analiseRes = AnaliseCreditoDA.getById(new Set<Id> { analise.Id });
+        Test.stopTest();
+
+        System.assert(!analiseRes.isEmpty(), 'Deveria ao menos retornar uma análise.');
+    }
+
+    
+    @IsTest
+    static void testGetById_Invalid() {
+        Test.startTest();
+        List<AnaliseCredito__c> analiseRes = AnaliseCreditoDA.getById(new Set<Id>());
+        Test.stopTest();
+
+        System.assert(analiseRes.isEmpty(), 'Deveria retorar uma lista vazia.');
+    }
+
+    
+    @IsTest
+    static void testGetOpportunityById_Valid() {
+        AnaliseCredito__c analise = [
+            SELECT Id
+            FROM AnaliseCredito__c
+            LIMIT 1
+        ];
+
+        Test.startTest();
+        List<Opportunity> results = AnaliseCreditoDA.getOpportunityById(analise.Id);
+        Test.stopTest();
+
+        System.assert(!results.isEmpty(), 'Deveria ao menos retornar uma oportunidade.');
+    }
+
+    @IsTest
+    static void testGetOpportunityById_Invalid() {
+        Test.startTest();
+        List<Opportunity> results = AnaliseCreditoDA.getOpportunityById(null);
+        Test.stopTest();
+
+        System.assert(results.isEmpty(), 'Deveria retorar uma lista vazia.');
     }
 }

@@ -25,6 +25,25 @@ public class EmpreendimentoSelectorTest {
     }
 
     @isTest
+    static void testGetEmpreendimentoById() {
+     
+        Empreendimento__c empreendimento = new Empreendimento__c(Name = 'Empreendimento Teste',CNPJEmpreendimento__c = '11084433000199');
+        insert empreendimento;
+
+        Test.startTest();
+        
+      
+        Empreendimento__c result = EmpreendimentoSelector.getEmpreendimentoById(empreendimento.Id);
+        
+        Test.stopTest();
+
+        
+        System.assertNotEquals(null, result, 'O registro de empreendimento não deve ser nulo.');
+        System.assertEquals(empreendimento.Id, result.Id, 'O ID deve ser o mesmo do registro criado.');
+        System.assertEquals('Empreendimento Teste', result.Name, 'O nome do empreendimento deve ser "Empreendimento Teste".');
+    }
+
+    @isTest
     static void testObterNomeEmpreendimentoById() {
      
         Empreendimento__c empreendimento = new Empreendimento__c(Name = 'Empreendimento Teste',CNPJEmpreendimento__c = '11084433000199');

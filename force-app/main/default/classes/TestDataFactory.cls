@@ -108,6 +108,13 @@ public class TestDataFactory {
         return produto;
     }
 
+    public static Pricebook2 gerarPricebook() {
+        Pricebook2 pricebook = new Pricebook2();
+        pricebook.Name = 'test';
+        pricebook.isActive = true;
+        return pricebook;
+    }
+
     public static PricebookEntry gerarPricebookEntry(Product2 produto) {
         PricebookEntry pricebookEntry = gerarPricebookEntry(produto.Id);
         return pricebookEntry;
@@ -185,6 +192,16 @@ public class TestDataFactory {
         oppContact.ContactId = ctt.Id;
         oppContact.Role = 'Fiador';
         return oppContact;
+    }
+
+    public static OpportunityLineItem gerarOpportunityLineItem(Opportunity opportunity, Product2 product, Quote cotacao) {
+        OpportunityLineItem oli = new OpportunityLineItem();
+        oli.OpportunityId = opportunity.Id;
+        oli.Product2Id = product.Id;
+        // oli.PricebookEntryId;
+        oli.Quantity = 3;
+        oli.TotalPrice = 12;
+        return oli;
     }
 
     public static QuoteLineItem gerarQuoteLineItem(Quote quote, PricebookEntry pricebookEntry) {

@@ -85,23 +85,39 @@ public class ContratoService {
         }
     }
 
-    public static void evitarGeracaoMultipla(List<Contract> contracts){
+    public static void evitarGeracaoMultipla(List<Contract> contracts) {
         Set<Id> oppIds = new Set<Id>();
-
-        for(Contract ctt : contracts){
+    
+        for (Contract ctt : contracts) {
             oppIds.add(ctt.Oportunidade__c);
         }
-
-        List<Contract> contratos = ContractSelector.getContractsByOpp(oppIds);
-
-        if(!contratos.isEmpty()){
-            for(Contract ctt : contracts){
-                if(ctt.Status == 'Contrato Gerado'){
-                    ctt.addError('Já existe um contrato gerado para esta oportunidade.');
+    
+        Map<Id, Integer> oppContratoCount = new Map<Id, Integer>();
+        List<Contract> contratosExistentes = [
+            SELECT Id, Oportunidade__c
+            FROM Contract 
+            WHERE Oportunidade__c IN :oppIds AND Status = 'Contrato Gerado'
+        ];
+    
+        for (Contract cttExistente : contratosExistentes) {
+            if (oppContratoCount.containsKey(cttExistente.Oportunidade__c)) {
+                oppContratoCount.put(cttExistente.Oportunidade__c, oppContratoCount.get(cttExistente.Oportunidade__c) + 1);
+            } else {
+                oppContratoCount.put(cttExistente.Oportunidade__c, 1);
+            }
+        }
+    
+        for (Contract ctt : contracts) {
+            if (ctt.Status == 'Contrato Gerado') {
+                Integer count = oppContratoCount.get(ctt.Oportunidade__c);
+                if (count != null && count >= 1) {
+                    ctt.addError('Já existe um contrato gerado para oportunidade deste contrato');
                 }
             }
         }
+        
     }
+    
   
     public static void verificaPrazoAssinatura(List<Contract> contracts){
         List<Messaging.SingleEmailMessage> emails = new List<Messaging.SingleEmailMessage>();

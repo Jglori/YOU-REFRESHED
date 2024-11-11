@@ -15,8 +15,11 @@ public with sharing class AnaliseCreditoHelperTest {
         Contact cttTest = TestDataFactory.gerarContato(accTest, rt.Id);
         insert cttTest;
         
-        Opportunity oppTest = TestDataFactory.gerarOportunidade(accTest, cttTest);
-        insert oppTest;
+        Opportunity opp1 = TestDataFactory.gerarOportunidade(accTest, cttTest);
+        opp1.StageName = 'Pré-análise';
+        Opportunity opp2 = TestDataFactory.gerarOportunidade(accTest, cttTest);
+        opp2.StageName = 'Negociação';
+        insert new List<Opportunity> { opp1, opp2 };
     }
 
     @IsTest
@@ -24,10 +27,9 @@ public with sharing class AnaliseCreditoHelperTest {
         Opportunity oppTest = [
             SELECT Id, StageName
             FROM Opportunity
+            WHERE StageName = 'Pré-análise'
         ];
-        oppTest.StageName = 'Pré-análise';
-        update oppTest;
-        
+
         Test.startTest();
         AnaliseCredito__c analise = TestDataFactory.gerarAnaliseCredito(oppTest);
         insert analise;
@@ -49,9 +51,8 @@ public with sharing class AnaliseCreditoHelperTest {
         Opportunity oppTest = [
             SELECT Id, StageName
             FROM Opportunity
+            WHERE StageName = 'Negociação'
         ];
-        oppTest.StageName = 'Negociação';
-        update oppTest;
         
         Test.startTest();
         AnaliseCredito__c analise = TestDataFactory.gerarAnaliseCredito(oppTest);
@@ -76,9 +77,8 @@ public with sharing class AnaliseCreditoHelperTest {
         Opportunity oppTest = [
             SELECT Id, StageName
             FROM Opportunity
+            WHERE StageName = 'Pré-análise'
         ];
-        oppTest.StageName = 'Pré-análise';
-        update oppTest;
         
         AnaliseCredito__c analise1 = TestDataFactory.gerarAnaliseCredito(oppTest);
         AnaliseCredito__c analise2 = TestDataFactory.gerarAnaliseCredito(oppTest);
@@ -104,9 +104,8 @@ public with sharing class AnaliseCreditoHelperTest {
         Opportunity oppTest = [
             SELECT Id, StageName
             FROM Opportunity
+            WHERE StageName = 'Pré-análise'
         ];
-        oppTest.StageName = 'Pré-análise';
-        update oppTest;
         
         List<AnaliseCredito__c> analises = new List<AnaliseCredito__c>();
         for (Integer i = 0; i < 2; i++) {
@@ -138,9 +137,8 @@ public with sharing class AnaliseCreditoHelperTest {
         Opportunity oppTest = [
             SELECT Id, StageName
             FROM Opportunity
+            WHERE StageName = 'Pré-análise'
         ];
-        oppTest.StageName = 'Pré-análise';
-        update oppTest;        
         
         AnaliseCredito__c analise1 = TestDataFactory.gerarAnaliseCredito(oppTest);
         analise1.Status__c = 'Aprovada';
@@ -167,4 +165,24 @@ public with sharing class AnaliseCreditoHelperTest {
         System.assertEquals(1, analisesTestadas.size(), 'A lista de análise deveria ter 1 registro.');
     }
 
+    @IsTest
+    static void testGetOppById() {
+        Opportunity opp = [
+            SELECT Id, StageName, Name
+            FROM Opportunity
+            WHERE StageName = 'Pré-análise'
+        ];
+        
+        AnaliseCredito__c analise1 = TestDataFactory.gerarAnaliseCredito(opp);
+        analise1.Status__c = 'Aprovada';
+        insert analise1;
+
+        Test.startTest();
+        Opportunity oppRes = AnaliseCreditoHelper.getOppById(analise1.Id); 
+        Test.stopTest();
+    
+        System.assertNotEquals(null, oppRes, 'Deveria retorar um objeto de oportunidade.');
+        System.assertEquals(opp.Id, oppRes.Id, 'Deveria ser o mesmo id.');
+        System.assertEquals(opp.Name, oppRes.Name, 'Deveria ser o mesmo name.');
+    }
 }
