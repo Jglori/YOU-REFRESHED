@@ -11,11 +11,11 @@
   }, {
     "components" : [ {
       "componentAttributes" : {
-        "height" : "920",
-        "recordId" : "01Z89000000tpebEAA"
+        "height" : "485",
+        "recordId" : "01ZHu000001ebHwMAI"
       },
       "componentName" : "forceCommunity:dashboard",
-      "id" : "416a27c4-025c-4013-b992-70e72864dfb4",
+      "id" : "5cb50ec6-03b6-4772-963f-a6ece0026a57",
       "renderPriority" : "NEUTRAL",
       "renditionMap" : { },
       "type" : "component"
