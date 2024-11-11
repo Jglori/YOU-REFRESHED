@@ -60,16 +60,6 @@
         "renditionMap" : { },
         "type" : "region"
       }, {
-        "components" : [ {
-          "componentAttributes" : {
-            "recordId" : "{!recordId}"
-          },
-          "componentName" : "c:contactManager",
-          "id" : "de158445-e7ba-4255-ad48-7d438eb97c17",
-          "renderPriority" : "NEUTRAL",
-          "renditionMap" : { },
-          "type" : "component"
-        } ],
         "id" : "af9ec02a-15e8-4bcb-b570-63fc82cc2307",
         "regionLabel" : "Relacionados",
         "regionName" : "2",
