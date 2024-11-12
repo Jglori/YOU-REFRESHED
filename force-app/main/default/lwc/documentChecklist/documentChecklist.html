@@ -1,0 +1,129 @@
+<template>
+    <lightning-card>
+        <div class="section-container">
+
+            <div class="header-container">
+                <!-- Botão de recarregamento -->
+                 <lightning-helptext 
+                   content="Atenção:Após excluir ou adicionar uma imagem, pode ser necessário recarregar a página para ver as alterações refletidas. Isso ocorre devido ao tempo necessário para processar essas operações."
+                 ></lightning-helptext>
+                <lightning-button-icon icon-name="utility:refresh" alternative-text="Recarregar" title="Recarregar" onclick={handleReloadClick} class="refresh-button"></lightning-button-icon>
+            </div>
+    
+            <!-- Condicional para exibir mensagem e ícone quando contactRoles estiver vazio -->
+            <template if:true={isEmptyContactRoles}>
+                <div class="empty-container">
+                    <lightning-icon icon-name="utility:info" alternative-text="Info" size="large" class="empty-icon"></lightning-icon>
+                    <p class="empty-message">Papéis de contatos não disponíveis</p>
+                    <!-- Adicionando um spinner como exemplo -->
+                </div>
+            </template>
+
+            <!-- Accordion para Papéis de Contato -->
+            <template if:false={isEmptyContactRoles}>
+                <template for:each={contactRoles} for:item="role">
+                    <lightning-accordion key={role.id} allow-multiple-sections-open>
+                        <lightning-accordion-section name={role.id} label={role.contactName}>
+                            <!-- Documentos Obrigatórios -->
+                            <div class="section">
+                                <h2 class="section-header">Documentos Obrigatórios</h2>
+                                <template for:each={role.mandatoryDocuments} for:item="doc">
+                                    <div key={doc.id} class="document-container">
+                                        <div class="document-row">
+                                            <lightning-icon icon-name='doctype:gdoc' alternative-text='gdoc' size='large' title='gdoc'></lightning-icon>
+                                            <span>{doc.Nome_do_Documento__c}</span>
+                                            <div class="icon-and-buttons-container">
+                                                <template if:true={doc.completed}>
+                                                    <lightning-button-icon icon-name="utility:delete" alternative-text="Delete" title="Deletar" data-id={doc.id} data-contact-id={role.id} data-nome-id={doc.Nome_do_Documento__c} data-completed="true" onclick={deletarArquivo}></lightning-button-icon>
+                                                </template>
+                                                <template if:false={doc.completed}>
+                                                    <div class="upload-container">
+                                                        <lightning-helptext content="Somente Aceitos Arquivos PNG e JPG" class="help-text"></lightning-helptext>
+                                                        <lightning-button-icon icon-name="utility:upload" alternative-text="Upload" title="Upload" data-id={doc.id} data-contact-id={role.id} data-nome-id={doc.Nome_do_Documento__c} data-completed="true" onclick={handleUploadClick}></lightning-button-icon>
+                                                    </div>
+                                                </template>
+                                                <lightning-button-icon icon-name="utility:preview" alternative-text="View" title="Visualizar Documento" data-id={doc.id} data-contact-id={role.id} data-nome-id={doc.Nome_do_Documento__c} data-completed="true" onclick={handleViewClick}></lightning-button-icon>
+                                                <lightning-button-icon icon-name="utility:download" alternative-text="Download" title="Download" data-id={doc.id} data-contact-id={role.id} data-nome-id={doc.Nome_do_Documento__c} data-completed="true" onclick={handleDownloadClick}></lightning-button-icon>
+                                            </div>
+                                            <div class="approval-icon-container">
+                                                <template if:true={doc.completed}>
+                                                    <lightning-icon icon-name='standard:task2' alternative-text='task2' size='medium' title='task2'></lightning-icon>
+                                                </template>
+                                                <template if:false={doc.completed}>
+                                                    <lightning-icon icon-name="utility:warning" alternative-text="Warning" size='medium' class="warning-icon"></lightning-icon>
+                                                </template>
+                                            </div>
+                                        </div>
+                                        <span class="delivery-date"></span>
+                                    </div>
+                                </template>
+                            </div>
+
+                            <!-- Documentos Opcionais -->
+                            <div class="section">
+                                <h2 class="section-header">Documentos Opcionais</h2>
+                                <template for:each={role.optionalDocuments} for:item="doc">
+                                    <div key={doc.id} class="document-container">
+                                        <div class="document-row">
+                                            <lightning-icon icon-name='doctype:unknown' alternative-text='unknown' size='large' title='unknown'></lightning-icon>
+                                            <span>{doc.Nome_do_Documento__c}</span>
+                                            <div class="icon-and-buttons-container">
+                                                <template if:true={doc.completed}>
+                                                    <lightning-button-icon icon-name="utility:delete" alternative-text="Delete" title="Deletar" data-id={doc.id} data-contact-id={role.id} data-nome-id={doc.Nome_do_Documento__c} data-completed="false" onclick={deletarArquivo}></lightning-button-icon>
+                                                </template>
+                                                <template if:false={doc.completed}>
+                                                    <div class="upload-container">
+                                                        <lightning-helptext content="Somente Aceitos Arquivos PNG, JPG e GIF" class="help-text"></lightning-helptext>
+                                                        <lightning-button-icon icon-name="utility:upload" alternative-text="Upload" title="Upload" data-id={doc.id} data-contact-id={role.id} data-nome-id={doc.Nome_do_Documento__c} data-completed="false" onclick={handleUploadClick}></lightning-button-icon>
+                                                    </div>
+                                                </template>
+                                                <lightning-button-icon icon-name="utility:preview" alternative-text="View" title="Visualizar Documento" data-id={doc.id} data-contact-id={role.id} data-nome-id={doc.Nome_do_Documento__c} data-completed="false" onclick={handleViewClick}></lightning-button-icon>
+                                                <lightning-button-icon icon-name="utility:download" alternative-text="Download" title="Download" data-id={doc.id} data-contact-id={role.id} data-nome-id={doc.Nome_do_Documento__c} data-completed="false" onclick={handleDownloadClick}></lightning-button-icon>
+                                            </div>
+                                            <div class="approval-icon-container">
+                                                <template if:true={doc.completed}>
+                                                    <lightning-icon icon-name='standard:task2' alternative-text='task2' size='medium' title='task2'></lightning-icon>
+                                                </template>
+                                                <template if:false={doc.completed}>
+                                                    <lightning-icon icon-name="utility:warning" alternative-text="Warning" size='medium' class="warning-icon"></lightning-icon>
+                                                </template>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </lightning-accordion-section>
+                    </lightning-accordion>
+                </template>
+            </template>
+        </div>
+
+        <!-- Input de Arquivo Oculto -->
+        <input type="file" id="fileInput" style="opacity: 0; width: 0.1px; height: 0.1px; position: absolute; overflow: hidden; clip: rect(1px, 1px, 1px, 1px);" onchange={handleFileChange}/>
+
+        <!-- Modal de Confirmação -->
+        <div class="modal" style="display: none;">
+            <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse">
+                        <svg class="slds-button__icon slds-button__icon_large" aria-hidden="true">
+                            <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#close"></use>
+                        </svg>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <div class="slds-modal__header">
+                        <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate" tabindex="-1">Documento: {selectedDocumentText}</h1>
+                    </div>
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <!-- Conteúdo do Modal -->
+                    </div>
+                    <div class="slds-modal__footer">
+                        <button class="slds-button slds-button_neutral" aria-label="Cancel and close" onclick={handleCancelClick}>Cancelar</button>
+                        <button class="slds-button slds-button_brand" onclick={handleSaveOptional}>{tipoModal}</button>
+                    </div>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+        </div>
+    </lightning-card>
+</template>

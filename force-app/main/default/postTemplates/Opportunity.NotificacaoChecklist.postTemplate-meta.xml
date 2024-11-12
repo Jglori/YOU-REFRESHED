@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PostTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <default>false</default>
+    <description>Notificação de aprovação do checklist de documentos</description>
+    <fields>Name</fields>
+    <fields>Owner</fields>
+    <fields>StageName</fields>
+    <fields>Description</fields>
+    <label>Notificação Aprovação de Checklist</label>
+</PostTemplate>

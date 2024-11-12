@@ -1,0 +1,53 @@
+<template>
+    <div class="slds-form-element slds-box">
+        <lightning-card title={title} icon-name="standard:drafts">
+            <template if:true={documents}>
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered" aria-labelledby="document-table-label">
+                    <thead>
+                        <tr class="slds-line-height_reset">
+                            <th scope="col">
+                                <div class="slds-truncate" title="Nome do Documento">Nome do Documento</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate slds-text-align_center" title="Validado">Validado</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate slds-text-align_right" title="Ação">Ação</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={documentsAction} for:item="document">
+                            <tr key={document.Id} class="slds-hint-parent">
+                                <td data-label="Nome do Documento">
+                                    <a href={document.profileUrl} target="_blank" class="slds-truncate">
+                                        {document.Name}
+                                    </a>
+                                </td>
+                                <td data-label="Validado" class="slds-text-align_center">
+                                    <lightning-input 
+                                        type="checkbox"
+                                        checked={document.Validado__c}
+                                        disabled>
+                                    </lightning-input>
+                                </td>
+                                <td data-label="Ação" class="slds-text-align_right">
+                                    <button 
+                                        title={document.title}
+                                        data-id={document.Id}
+                                        onclick={handleValidate}
+                                        class={document.class}>
+                                        {document.label}
+                                    </button>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </template>
+            <template if:false={documents}>
+                <p>Nenhum documento encontrado.</p>
+            </template>
+        </lightning-card>
+    </div>
+</template>

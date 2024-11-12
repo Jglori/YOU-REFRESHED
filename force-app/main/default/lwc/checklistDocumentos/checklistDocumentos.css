@@ -1,0 +1,24 @@
+.card {
+    position: relative;
+    top: 70px;
+}
+
+.container {
+    position: relative;
+    top: -250px;
+    height: 80vh; /* Ajusta a altura da container para centralizar verticalmente */
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Centraliza o conteúdo verticalmente */
+}
+
+.custom-card {
+    width: 1000px; 
+    padding: 2rem;
+}
+
+.slds-card__body_inner {
+    border-top: 1px solid #ddd;
+    margin-top: 1rem;
+    padding-top: 1rem;
+}
