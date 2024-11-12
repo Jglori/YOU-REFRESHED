@@ -87,7 +87,6 @@
         <members>Documento__mdt</members>
         <members>Contract</members>
         <members>OpportunityContactRole</members>
-        <members>UnidadeTabelaVendas__c</members>
         <name>CustomObject</name>
     </types>
     <types>
