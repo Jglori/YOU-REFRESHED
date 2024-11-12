@@ -1,0 +1,13 @@
+{
+  "componentVariants" : [ {
+    "id" : "26c5374c-cc36-4ea5-9dd2-c613f8571c80",
+    "propertyOverrides" : {
+      "activeViewId" : "88c8cbf5-3ae3-4825-9626-9f04c00f49e8"
+    },
+    "targetId" : "f8faac40-c83d-4951-bdc1-6e2faf48576e",
+    "type" : "componentVariant"
+  } ],
+  "developerName" : "Roleta_de_leads_Lista_Lista_de_registros_Page",
+  "id" : "04ab3647-d538-4b07-86fb-3f120f309d9c",
+  "type" : "experienceVariation"
+}

@@ -1,0 +1,15 @@
+{
+  "componentVariants" : [ {
+    "id" : "f3a4f43e-28c8-43b2-a97b-cb99e008d30c",
+    "propertyOverrides" : {
+      "componentAttributes" : {
+        "NavigationMenuEditorRefresh" : "Menu_Recepcionista"
+      }
+    },
+    "targetId" : "42e47e89-4f27-4c9e-981b-188999afc042",
+    "type" : "componentVariant"
+  } ],
+  "developerName" : "Default_Menu_de_navegao_1_Component_Properties",
+  "id" : "5f30c8a9-bb9b-44d8-b432-1a710533f844",
+  "type" : "experienceVariation"
+}

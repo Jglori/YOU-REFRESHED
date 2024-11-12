@@ -1,0 +1,46 @@
+{
+  "appPageId" : "c887584e-f884-4234-884f-c032fcf46c96",
+  "componentName" : "siteforce:sldsOneColLayout",
+  "dataProviders" : [ ],
+  "id" : "29594aa5-a237-4f84-a6b3-01d5280b89b6",
+  "label" : "Tarefa Lista",
+  "regions" : [ {
+    "id" : "a030eecf-d840-48e2-8174-b8f1a81fab6a",
+    "regionName" : "header",
+    "type" : "region"
+  }, {
+    "components" : [ {
+      "componentAttributes" : {
+        "enableInlineEdit" : false,
+        "filterName" : "{!filterId}",
+        "layout" : "FULL",
+        "pageSize" : 25,
+        "scope" : "{!objectName}",
+        "showActionBar" : false,
+        "showChartsPanel" : true,
+        "showDisplay" : "showall",
+        "showFilterPanel" : true,
+        "showImageIcon" : true,
+        "showManualRefreshButton" : true,
+        "showObjectName" : true,
+        "showPinnedList" : true,
+        "showSearchBar" : true
+      },
+      "componentName" : "forceCommunity:objectHome",
+      "id" : "d825e65e-79ce-4745-848b-034618d1a029",
+      "renderPriority" : "NEUTRAL",
+      "renditionMap" : { },
+      "type" : "component"
+    } ],
+    "id" : "0a906954-bf1f-437f-bf3d-f5b5ae8dc80a",
+    "regionName" : "content",
+    "type" : "region"
+  }, {
+    "id" : "f851c66c-43e8-45fa-8475-abe70ea331ed",
+    "regionName" : "footer",
+    "type" : "region"
+  } ],
+  "themeLayoutType" : "Inner",
+  "type" : "view",
+  "viewType" : "list-00T"
+}

@@ -1,0 +1,11 @@
+{
+  "activeViewId" : "c1fb8365-18ba-4e07-9f79-97b60c12fc94",
+  "appPageId" : "c887584e-f884-4234-884f-c032fcf46c96",
+  "configurationTags" : [ ],
+  "devName" : "Fluxo_Lista_relacionada",
+  "id" : "16c4b24e-390d-4053-abe3-5e76e5bf2f7a",
+  "label" : "Fluxo Lista relacionada",
+  "routeType" : "relatedlist-0Fq",
+  "type" : "route",
+  "urlPrefix" : "streams"
+}

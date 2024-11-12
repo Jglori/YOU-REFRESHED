@@ -1,0 +1,13 @@
+{
+  "componentVariants" : [ {
+    "id" : "4e43dc88-eec3-427b-9044-f8342ba5d30f",
+    "propertyOverrides" : {
+      "activeViewId" : "7d3da19a-84d8-44df-a65d-42e12a6cb155"
+    },
+    "targetId" : "bcb4fb27-3940-48c9-b957-0d6a82be58c5",
+    "type" : "componentVariant"
+  } ],
+  "developerName" : "Concierge_Concierge_Page",
+  "id" : "c09963a7-b39b-4f35-a31e-ba9b62e3a247",
+  "type" : "experienceVariation"
+}

@@ -1,0 +1,13 @@
+{
+  "componentVariants" : [ {
+    "id" : "3830de17-db82-4603-a1ee-69e0689ba24e",
+    "propertyOverrides" : {
+      "isVisible" : true
+    },
+    "targetId" : "416a27c4-025c-4013-b992-70e72864dfb4",
+    "type" : "componentVariant"
+  } ],
+  "developerName" : "Incio_Painel_Component",
+  "id" : "ffc68458-80a6-4eb3-b611-09bea0bfbc1f",
+  "type" : "experienceVariation"
+}

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSetGroup xmlns="http://soap.sforce.com/2006/04/metadata">
+    <hasActivationRequired>false</hasActivationRequired>
+    <label>Recepcionista</label>
+    <permissionSets>ComponenteConcierge</permissionSets>
+    <permissionSets>EnviarEmail</permissionSets>
+    <permissionSets>EquipeRoletaEdicao</permissionSets>
+    <permissionSets>ExecutarSorteio</permissionSets>
+    <permissionSets>Lead_Alterar_propriet_rio</permissionSets>
+    <permissionSets>Lead_Somente_leitura</permissionSets>
+    <permissionSets>MembroDeEquipeEdicao</permissionSets>
+    <permissionSets>MensagemSomenteLeitura</permissionSets>
+    <permissionSets>Omnichannel_Leitura</permissionSets>
+    <permissionSets>Opp_Editar</permissionSets>
+    <permissionSets>Opp_Escrita</permissionSets>
+    <permissionSets>Pain_is_e_Relat_rios</permissionSets>
+    <permissionSets>ParticipanteRoletaEscrita</permissionSets>
+    <permissionSets>ParticipanteRoletaSomenteLeitura</permissionSets>
+    <permissionSets>Participantes_da_Roleta_Exibir_Minha_participa_o</permissionSets>
+    <permissionSets>RoletaLeadsVerProprios</permissionSets>
+    <permissionSets>SorteioExcluir</permissionSets>
+    <status>Updated</status>
+</PermissionSetGroup>

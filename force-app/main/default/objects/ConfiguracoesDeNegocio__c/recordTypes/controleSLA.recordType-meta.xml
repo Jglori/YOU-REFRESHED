@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>controleSLA</fullName>
+    <active>true</active>
+    <label>Controle SLA</label>
+    <picklistValues>
+        <picklist>FaseParaRedirecionamentoDoLead__c</picklist>
+        <values>
+            <fullName>Agendamento de Visita</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Contato Realizado</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Conversão</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Descartado</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lead Perdido%28não trabalho%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Novo</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Nutrindo</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Qualificação</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tentativa de contato</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Fase__c</picklist>
+        <values>
+            <fullName>Agendamento de Visita</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Contato Realizado</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Convertido</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Descartado</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Lead Perdido</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Novo</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Nutrindo</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Qualificação</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tentativa de contato</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>motivoDaPerda__c</picklist>
+        <values>
+            <fullName>Corretor</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Fornecedor</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Não conseguimos Contato</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Não possuímos produtos em linha com as características de Investimento do cliente</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pesquisa aponta risco de fraude ou especulação</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Solicitado exclusão do cadastro pelo cliente</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+</RecordType>

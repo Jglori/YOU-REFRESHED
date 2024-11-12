@@ -1,0 +1,12 @@
+.custom-datatable {
+    --slds-c-table-color-background: var(--lwc-colorBackgroundRowHover, rgb(243, 242, 242));
+    --slds-c-table-heading-color-background: var(--lwc-colorBackgroundRowHover, rgb(243, 242, 242));
+}
+
+.slds-theme_shade {
+    background-color: transparent !important;
+}
+
+.slds-text-color_default {
+    color: rgb(0, 112, 210) !important;
+}

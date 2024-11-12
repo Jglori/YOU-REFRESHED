@@ -1,0 +1,43 @@
+<template>
+    <div class="slds-form-element slds-box">
+        <lightning-card title={title} icon-name="standard:team_member">
+            <template if:true={salesTeamMembers}>
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered slds-table_row-bordered">
+                    <thead>
+                        <tr>
+                            <th scope="col">
+                                <div class="slds-truncate">Nome</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate">Cargo</div>
+                            </th>
+                            <th scope="col">
+                                <div class="slds-truncate">Valor da Comissão</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={salesTeamMembers} for:item="member">
+                            <tr key={member.userId}>
+                                <td>
+                                    <a href={member.profileUrl} target="_blank">
+                                        <div class="slds-truncate">{member.userName}</div>
+                                    </a>
+                                </td>
+                                <td>
+                                    <div class="slds-truncate">{member.userCargo}</div>
+                                </td>
+                                <td>
+                                    <div class="slds-truncate">R$ 0,00</div>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </template>
+            <template if:false={salesTeamMembers}>
+                <p>Nenhum membro da equipe encontrado.</p>
+            </template>
+        </lightning-card>
+    </div>
+</template>
