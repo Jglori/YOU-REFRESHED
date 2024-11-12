@@ -509,6 +509,7 @@ public without sharing class WhatsAppService {
      * Método responsável pela atualização das mensagens com URL gerada por
      * documento relacionado.
      */
+    @TestVisible 
     private static void atualizarMensagens(List<Mensagem__c> mensagens, Set<Id> idsMidias) {
         Map<Id, Mensagem__c> mensagensPorId = new Map<Id, Mensagem__c>(mensagens);
         Map<Id, ContentVersion> midiasPorIdMensagem = ContentVersionDomain.obterArquivosPorIdRelacionado(idsMidias);
@@ -537,6 +538,7 @@ public without sharing class WhatsAppService {
      * Método responsável pela geração de mídias por mensagens caso haja mídia
      * relacionada.
      */
+    @TestVisible 
     private static List<ContentVersion> obterMidias(List<Mensagem__c> mensagens) {
         List<ContentVersion> midias = new List<ContentVersion>();
         for(Mensagem__c mensagem : mensagens) {
@@ -565,6 +567,7 @@ public without sharing class WhatsAppService {
      * Método responsável pela obtenção de mídia enviada pela WhatsApp a partir 
      * da URL gerada para a mídia.
      */
+    @TestVisible
     private static Blob obterMidia(String urlMidia) {
         HttpResponse response = WhatsAppCallout.obterMidia(urlMidia);
         
@@ -585,6 +588,7 @@ public without sharing class WhatsAppService {
         return (Map<String, Object>) JSON.deserializeUntyped(response.getBody());
     }
 
+    @TestVisible 
     @Future
     private static void cadastrarLeads(Set<Id> idsMensagens){
         List<Mensagem__c> mensagens = MensagemSelector.obterMensagensPorIds(idsMensagens);
@@ -649,6 +653,7 @@ public without sharing class WhatsAppService {
         return mensagens;
     }
 
+    @TestVisible 
     private static List<Mensagem__c> obterMensagens(Map<String, Object> requestBody) {
         List<Mensagem__c> mensagens = new List<Mensagem__c>();
         for(Object entryObject : (List<Object>) requestBody.get('entry')) {
@@ -662,6 +667,7 @@ public without sharing class WhatsAppService {
         return mensagens;
     }
 
+    @TestVisible 
     private static List<Mensagem__c> obterMensagensPorEntry(Map<String, Object> entry) {
         List<Mensagem__c> mensagens = new List<Mensagem__c>();
         for(Object changeObject : (List<Object>) entry.get('changes')) {
@@ -679,6 +685,7 @@ public without sharing class WhatsAppService {
         return mensagens;
     }
 
+    @TestVisible 
     private static List<Mensagem__c> obterMensagensPorValue(Map<String, Object> value) {
         List<Mensagem__c> mensagens = new List<Mensagem__c>();
         for(Object messageObject : (List<Object>) value.get('messages')) {
