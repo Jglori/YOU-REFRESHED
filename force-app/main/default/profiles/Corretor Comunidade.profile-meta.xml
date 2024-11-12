@@ -29,9 +29,6 @@
         <layout>Opportunity-Opportunity Layout - Comunidade</layout>
     </layoutAssignments>
     <layoutAssignments>
-        <layout>OpportunityTeamMember-Layout de Membro da equipe da oportunidade</layout>
-    </layoutAssignments>
-    <layoutAssignments>
         <layout>ParticipanteRoleta__c-Layout de Participante da roleta</layout>
     </layoutAssignments>
     <layoutAssignments>
