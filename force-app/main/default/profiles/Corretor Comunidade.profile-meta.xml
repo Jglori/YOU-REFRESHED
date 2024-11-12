@@ -1,84 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Profile xmlns="http://soap.sforce.com/2006/04/metadata">
-    <classAccesses>
-        <apexClass>ReportingContactsController</apexClass>
-        <enabled>false</enabled>
-    </classAccesses>
-    <classAccesses>
-        <apexClass>ReportingContactsControllerTest</apexClass>
-        <enabled>false</enabled>
-    </classAccesses>
     <custom>true</custom>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>ConjuntoCriteriosAnalise__c.CaptacaoMensal__c</field>
-        <readable>false</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>ConjuntoCriteriosAnalise__c.CaptacaoPosHabitaSe__c</field>
-        <readable>false</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>ConjuntoCriteriosAnalise__c.CaptacaoVista__c</field>
-        <readable>false</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>ConjuntoCriteriosAnalise__c.PrazoFinanciamento__c</field>
-        <readable>false</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>ConjuntoCriteriosAnalise__c.ValorMetro__c</field>
-        <readable>false</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>ConjuntoCriteriosAnalise__c.ValorNominal__c</field>
-        <readable>false</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>ConjuntoCriteriosAnalise__c.ValorVPL__c</field>
-        <readable>false</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>ConjuntoCriteriosAnalise__c.VariacaoLimiteCaptacaoMensal__c</field>
-        <readable>false</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>ConjuntoCriteriosAnalise__c.VariacaoLimiteCaptacaoPos__c</field>
-        <readable>false</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>ConjuntoCriteriosAnalise__c.VariacaoLimiteCaptacaoVista__c</field>
-        <readable>false</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>ConjuntoCriteriosAnalise__c.VariacaoLimiteMetro__c</field>
-        <readable>false</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>ConjuntoCriteriosAnalise__c.VariacaoLimitePrazoFinanciamento__c</field>
-        <readable>false</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>ConjuntoCriteriosAnalise__c.VariacaoLimiteValorNominal__c</field>
-        <readable>false</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>ConjuntoCriteriosAnalise__c.VariacaoLimiteValorVPL__c</field>
-        <readable>false</readable>
-    </fieldPermissions>
+    <layoutAssignments>
+        <layout>Account-Conta - Comunidade</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Bloco__c-Layout de Bloco</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Campaign-Campaign Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>ConfiguracoesDeNegocio__c-Layout de Configurações de Negócio - Controle SLA</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Empreendimento__c-Layout de Empreendimento</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Equipe__c-Layout de Equipe</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Lead-Lead Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>MembroEquipe__c-Layout de Membro da equipe</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Opportunity-Opportunity Layout - Comunidade</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>OpportunityTeamMember-Layout de Membro da equipe da oportunidade</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>ParticipanteRoleta__c-Layout de Participante da roleta</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>PersonAccount-Layout da conta pessoal - Comunidade</layout>
+        <recordType>PersonAccount.PersonAccount</recordType>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Product2-Product Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>RoletaLeads__c-Layout de Roleta de Leads</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Sorteio__c-Layout de Sorteio</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>Task-Task Layout</layout>
+    </layoutAssignments>
+    <layoutAssignments>
+        <layout>User-User Layout</layout>
+    </layoutAssignments>
     <loginFlows>
         <flow>Login_flow</flow>
         <flowType>UI</flowType>
@@ -86,10 +60,6 @@
         <uiLoginFlowType>VisualWorkflow</uiLoginFlowType>
         <useLightningRuntime>false</useLightningRuntime>
     </loginFlows>
-    <tabVisibilities>
-        <tab>ConjuntoCriteriosAnalise__c</tab>
-        <visibility>Hidden</visibility>
-    </tabVisibilities>
     <userLicense>Partner Community</userLicense>
     <userPermissions>
         <enabled>true</enabled>
