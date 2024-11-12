@@ -10,5 +10,6 @@ public with sharing class OpportunityTriggerHandler extends TriggerHandler {
         OpportunityHelper.handleBeforeUpdate((List<Opportunity>) Trigger.new, (Map<Id, Opportunity>) Trigger.oldMap);
         OpportunityHelper.handlePreAnaliseForAnaliseCredito(Trigger.new);
         OpportunityHelper.verificarProibirConferencia((List<Opportunity>) Trigger.new);
+        OpportunityHelper.impedirAlteracaoProbability((List<Opportunity>) Trigger.new, (Map<Id, Opportunity>) Trigger.oldMap);
     }
 }

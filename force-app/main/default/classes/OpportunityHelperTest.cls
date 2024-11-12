@@ -43,8 +43,8 @@ private class OpportunityHelperTest {
         QuoteLineItem quoteLI = TestDataFactory.gerarQuoteLineItem(cotacao, pricebookEntry);
         insert quoteLI;
     
-        OpportunityContactRole ocr = TestDataFactory.gerarOpportunityContactRole(cotacao, ctt);
-        insert ocr;
+       // OpportunityContactRole ocr = TestDataFactory.gerarOpportunityContactRole(cotacao, ctt);
+       // insert ocr;
     }
 
     @isTest

@@ -178,6 +178,13 @@ public with sharing class OpportunityHelper {
             }
         }
     }
-    
 
+    public static void impedirAlteracaoProbability(List<Opportunity> newOpps, Map<Id, Opportunity> oldOpps){
+        for(Opportunity newOpp : newOpps){
+            Opportunity oldOpp = oldOpps.get(newOpp.Id);
+            if(oldOpp.StageName == newOpp.StageName && newOpp.Probability != oldOpp.Probability){
+                newOpp.addError('Não é permitido alterar a probabilidade da oportunidade.');
+            }
+        }
+    }  
 }

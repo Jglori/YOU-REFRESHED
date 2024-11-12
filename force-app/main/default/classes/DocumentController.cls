@@ -477,7 +477,7 @@ public static String baixarDocumento(String contactId, String nomeDocumento) {
 
         // Obter o ContentDocumentId
         String contentDocumentId = checklistDocs[0].Documenta_o__r.ContentDocumentId_c__c;
-
+        
         // Query para obter o ContentVersion mais recente
         List<ContentVersion> versions = [
             SELECT Id, VersionData, PathOnClient

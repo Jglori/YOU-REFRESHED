@@ -70,8 +70,8 @@ public class SalesTeamControllerTest {
             Name = 'Test Opportunity',
             StageName = 'Prospecting',
             CloseDate = Date.today(),
-            Corretor__c = corretorContact.UsuarioCorretor__c
-        );        
+            Corretor__c = corretorContact.Id
+        );
         insert opp;
 
         // Teste - Chama o método que estamos testando
@@ -81,7 +81,7 @@ public class SalesTeamControllerTest {
 
         // Verificações
         System.assertNotEquals(0, teamMembers.size(), 'A equipe de vendas não deve estar vazia.');
-        System.assertEquals(2, teamMembers.size(), 'Deve haver 2 membros na equipe de vendas (corretor e superior).');
+        System.assertEquals(3, teamMembers.size(), 'Deve haver 3 membros na equipe de vendas (corretor, gerente e superior).');
 
         // Verifica se o primeiro membro é user2
         System.assertEquals(user2.Id, teamMembers[0].userId, 'O primeiro membro da equipe deve ser o corretor.');

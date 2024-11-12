@@ -100,7 +100,7 @@
         <members>AnaliseCredito__c-Análise de Crédito Layout</members> 
         <members>Checklist_de_Documentos__c-Checklist de Documentos Layout</members>
         <members>Quote-Quote Layout</members>
-        </members>QuoteLineItem-Quote Line Item Layout</members>
+        <members>QuoteLineItem-Quote Line Item Layout</members>
         <members>Documentacao__c-Documentação Layout</members>
         <members>Documento__mdt-Documento %28Configuracao%29 Layout</members>
         <name>Layout</name>

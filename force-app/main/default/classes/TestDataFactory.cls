@@ -8,9 +8,14 @@ public class TestDataFactory {
         return analise;
     }
 
-    public static Checklist_de_Documentos__c gerarChecklistDocumentos(Opportunity opportunity, Documentacao__c documentacao) {
+    public static Checklist_de_Documentos__c gerarChecklistDocumentos(Opportunity opportunity) {
         Checklist_de_Documentos__c checklist = new Checklist_de_Documentos__c();
         checklist.Oportunidade__c = opportunity.Id;
+        return checklist;
+    }
+
+    public static Checklist_de_Documentos__c gerarChecklistDocumentos(Opportunity opportunity, Documentacao__c documentacao) {
+        Checklist_de_Documentos__c checklist = gerarChecklistDocumentos(opportunity);
         checklist.Documenta_o__c = documentacao.Id;
         return checklist;
     }
@@ -57,6 +62,14 @@ public class TestDataFactory {
         return contato;
     }
 
+    public static ContentVersion gerarContentVersion() {
+        ContentVersion contentVersion = new ContentVersion();
+        contentVersion.Title = 'Test Document';
+        contentVersion.PathOnClient = 'testdocument.pdf';
+        contentVersion.VersionData = Blob.valueOf('Test content');
+        return contentVersion;
+    }
+
     public static Quote gerarCotacao(Opportunity oportunidade) {
         Quote cotacao = new Quote();
         cotacao.Name = 'Teste';
@@ -71,6 +84,12 @@ public class TestDataFactory {
         documentacao.Name = 'Documento test';
         documentacao.Obrigatorio__c = true;
         documentacao.Entregue__c = false;
+        return documentacao;
+    }
+
+    public static Documentacao__c gerarDocumentacao(ContentVersion contentVersion) {
+        Documentacao__c documentacao = gerarDocumentacao();
+        documentacao.ContentDocumentId_c__c = contentVersion.ContentDocumentId;
         return documentacao;
     }
 
@@ -182,19 +201,18 @@ public class TestDataFactory {
     public static Opportunity gerarOportunidade(Account conta, Contact corretor) {
         Opportunity opp = gerarOportunidade();
         opp.AccountId = conta.Id;
-        opp.Contato__c = corretor.Id;
         return opp;
     }
 
-    public static OpportunityContactRole gerarOpportunityContactRole(Quote quote, Contact ctt) {
+    public static OpportunityContactRole gerarOpportunityContactRole(Opportunity opp, Contact ctt) {
         OpportunityContactRole oppContact = new OpportunityContactRole();
-        oppContact.OpportunityId = quote.OpportunityId;
+        oppContact.OpportunityId = opp.Id;
         oppContact.ContactId = ctt.Id;
         oppContact.Role = 'Fiador';
         return oppContact;
     }
 
-    public static OpportunityLineItem gerarOpportunityLineItem(Opportunity opportunity, Product2 product, Quote cotacao) {
+    public static OpportunityLineItem gerarOpportunityLineItem(Opportunity opportunity, Product2 product) {
         OpportunityLineItem oli = new OpportunityLineItem();
         oli.OpportunityId = opportunity.Id;
         oli.Product2Id = product.Id;
