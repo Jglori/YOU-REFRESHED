@@ -144,7 +144,6 @@
         <fields>Gerente_Salao__c</fields>
         <fields>Superintendente__c</fields>
         <fields>Diretor_geral__c</fields>
-        <quickActions>ParticipanteRoleta__c.Ativar_Recepcao_de_Leads</quickActions>
         <relatedList>ParticipanteRoleta__c.RoletaLeads__c</relatedList>
         <sortField>Posicao__c</sortField>
         <sortOrder>Asc</sortOrder>
