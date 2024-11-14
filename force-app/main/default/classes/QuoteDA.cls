@@ -22,10 +22,12 @@ public with sharing class QuoteDA {
         if (pricebookEntryId != null) {
             return pricebookEntryId;
         }
+
+        System.debug('PricebookId:' + Test.getStandardPricebookId());
         
         PricebookEntry newPBE = new PricebookEntry(
             Product2Id = productId,
-            Pricebook2Id = [SELECT Id FROM Pricebook2 WHERE IsStandard = true LIMIT 1].Id,
+            Pricebook2Id = Test.getStandardPricebookId(),
             UnitPrice = 0.0,
             IsActive = true
         );

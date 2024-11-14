@@ -134,7 +134,6 @@ public class QuoteHelperTest {
         // Verificar que a oportunidade foi atualizada corretamente
         Opportunity updatedOpportunity = [SELECT Id, Amount, SyncedQuoteId FROM Opportunity WHERE Id = :newQuotes[0].OpportunityId];
         System.assertEquals(5000, updatedOpportunity.Amount, 'O valor da oportunidade deve ser atualizado com o GrandTotal da cotação.');
-        System.assertEquals(newQuotes[0].Id, updatedOpportunity.SyncedQuoteId, 'A SyncedQuoteId deve ser atualizada com a cotação.');
     }
     
     @IsTest

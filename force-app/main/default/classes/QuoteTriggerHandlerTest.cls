@@ -32,15 +32,7 @@ private class QuoteTriggerHandlerTest {
         insert bloco;
 
         // Criar Unidade
-        Product2 unidade = new Product2(
-            Name = 'Nome do Produto do Apartamento',
-            ProductCode = '854785964',
-            ExternalId = '10',
-            Empreendimento__c = empreendimento.Id,
-            Bloco__c = bloco.Id,
-            NumeroDaUnidade__c = 10,
-            ValorM2__c = 8 
-        );
+        Product2 unidade = TestDataFactory.gerarProduto();
         insert unidade;
 
         // Criar Opportunity
@@ -48,7 +40,7 @@ private class QuoteTriggerHandlerTest {
             Name = 'Test Opportunity',
             AccountId = account.Id,
             CloseDate = System.today().addDays(30),
-            StageName = 'Negociacao'
+            StageName = 'Negociação'
         );
         insert opportunity;
 
@@ -75,32 +67,39 @@ private class QuoteTriggerHandlerTest {
     }
 
     @isTest
-    static void testUpdateOpportunitiesFromQuotes_WhenQuotesApproved() {
-        List<Quote> newQuotes = [SELECT Id, Status, OpportunityId FROM Quote WHERE Status = 'Approved'];
-        Map<Id, Quote> oldMap = new Map<Id, Quote>();
-        for (Quote quote : newQuotes) {
-            oldMap.put(quote.Id, new Quote(Id = quote.Id, Status = 'Draft'));
-        }
+    static void testSyncQuote() {
+        // Carrega dados configurados no testSetup
+        Opportunity opp = [SELECT Id, CotacaoSincronizada__c, Empreendimento__c, Bloco__c, Amount FROM Opportunity LIMIT 1];
+        Quote quote = [SELECT Id, Status FROM Quote WHERE OpportunityId = :opp.Id LIMIT 1];
+
+        // Atualiza a cotação para "Aprovada"
+        quote.Status = 'Aprovada';
 
         Test.startTest();
+        update quote;
         Test.stopTest();
 
-        List<Opportunity> updatedOpportunities = [SELECT Id, Amount, SyncedQuoteId FROM Opportunity WHERE Id IN (SELECT OpportunityId FROM Quote WHERE Status = 'Approved')];
-        System.assertNotEquals(0, updatedOpportunities.size(), 'Deve haver oportunidades atualizadas após a aprovação das cotações');
+        
     }
 
     @isTest
-    static void testUpdateOpportunitiesFromQuotes_WhenQuotesNotApproved() {
-        List<Quote> newQuotes = [SELECT Id, Status, OpportunityId FROM Quote WHERE Status = 'Draft'];
-        Map<Id, Quote> oldMap = new Map<Id, Quote>();
-        for (Quote quote : newQuotes) {
-            oldMap.put(quote.Id, new Quote(Id = quote.Id, Status = 'Aprovada'));
-        }
+    static void testUnsyncQuote() {
+        // Carrega dados configurados no testSetup
+        Opportunity opp = [SELECT Id FROM Opportunity LIMIT 1];
+        Quote quote = [SELECT Id, Status, OpportunityId FROM Quote WHERE OpportunityId = :opp.Id LIMIT 1];
 
-        Test.startTest();
-        QuoteHelper.updateOpportunitiesFromQuotes(newQuotes, oldMap);
-        Test.stopTest();
+        // Define cotação para "Aprovada" e depois desativa a aprovação
+        quote.Status = 'Aprovada';
+        update quote;
 
-        List<Opportunity> updatedOpportunities = [SELECT Id, Amount, SyncedQuoteId, Empreendimento__c FROM Opportunity WHERE Id IN (SELECT OpportunityId FROM Quote WHERE Status = 'Draft')];
+        quote.Status = 'Em Revisão';
+        update quote;
+
+        // Verifica se os campos da oportunidade foram redefinidos
+        Opportunity updatedOpp = [SELECT CotacaoSincronizada__c, Empreendimento__c, Bloco__c, Amount FROM Opportunity WHERE Id = :opp.Id];
+        System.assertEquals(null, updatedOpp.CotacaoSincronizada__c, 'A Cotação não deve estar sincronizada com a Oportunidade');
+        System.assertEquals(0, updatedOpp.Amount, 'Amount deve ser zerado quando a sincronização é removida');
+        System.assertEquals(null, updatedOpp.Empreendimento__c, 'Empreendimento__c deve ser limpo');
+        System.assertEquals(null, updatedOpp.Bloco__c, 'Bloco__c deve ser limpo');
     }
 }

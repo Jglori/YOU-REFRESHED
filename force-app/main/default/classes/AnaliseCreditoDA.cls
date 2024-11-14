@@ -12,19 +12,4 @@ public with sharing class AnaliseCreditoDA {
         ];        
     }
 
-    public static List<Opportunity> getOpportunityById(Id id) {
-        if (id == null) {
-            return new List<Opportunity>();
-        }
-
-        return [
-            SELECT Id, Name, AccountId, Corretor__c, StageName, Type
-            FROM Opportunity
-            WHERE Id IN (
-                SELECT Opportunity__c
-                FROM AnaliseCredito__c
-                WHERE Id = :id 
-            )
-        ];
-    }
 }

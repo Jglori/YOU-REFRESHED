@@ -1,11 +1,15 @@
 public with sharing class AnaliseCreditoHelper {
 
     public static void handleOpportunityFase(List<AnaliseCredito__c> analises) {
+        if (analises == null || analises.isEmpty()) {
+            throw new IllegalArgumentException('A lista de Análises de Crédito não deve ser nula ou vazia.');
+        }
+        
         Set<Id> opportunityIds = new Set<Id>();
         for (AnaliseCredito__c analise : analises) {
-            if (analise.Opportunity__c != null) {
-                opportunityIds.add(analise.Opportunity__c);
-            }
+            if (analise.Opportunity__c == null) throw new IllegalArgumentException('Oportunidade não deve ser null.');
+
+            opportunityIds.add(analise.Opportunity__c);
         }
 
         Map<Id, Opportunity> opportunityMap = new Map<Id, Opportunity>(
@@ -21,11 +25,19 @@ public with sharing class AnaliseCreditoHelper {
     }
 
     public static void handleStatusForOpportunity(List<AnaliseCredito__c> analises) {
+        if (analises == null || analises.isEmpty()) {
+            throw new IllegalArgumentException('A lista de Análises de Crédito não deve ser nula ou vazia.');
+        }
+        
         Set<Id> opportunityIds = new Set<Id>();
         Map<Id, Integer> analisesAprovadas = new Map<Id, Integer>();
 
         for (AnaliseCredito__c analise : analises) {
-            if (analise.Status__c == 'Aprovada' && analise.Opportunity__c != null) {
+            if (analise.Status__c == null) throw new IllegalArgumentException('Status não deve ser null.');
+            
+            if (analise.Opportunity__c == null) throw new IllegalArgumentException('Oportunidade não deve ser null.');
+
+            if (analise.Status__c == 'Aprovada') {
                 opportunityIds.add(analise.Opportunity__c);
             
                 if (!analisesAprovadas.containsKey(analise.Opportunity__c)) {
@@ -57,10 +69,10 @@ public with sharing class AnaliseCreditoHelper {
         }
 
         for (AnaliseCredito__c analise : analises) {
-            if (analise.Status__c == 'Aprovada' && analise.Opportunity__c != null) {
+            if (analise.Status__c == 'Aprovada') {
                 Integer quantidade = opportunityComAnalisesAprovada.get(analise.Opportunity__c);
 
-                if (quantidade > 0) {
+                if (quantidade != null && quantidade > 0) {
                     analise.addError('Não é permitido ter duas análises de crédito com status aprovada em uma oportunidade');
                 }
             }
@@ -68,19 +80,90 @@ public with sharing class AnaliseCreditoHelper {
     }
 
     public static void handleDataVencimento(List<AnaliseCredito__c> analises) {
+        if (analises == null || analises.isEmpty()) {
+            throw new IllegalArgumentException('A lista de Análises de Crédito não deve ser nula ou vazia.');
+        }
+
         Date hoje = Date.today();
         for(AnaliseCredito__c analise : analises) {
+            if (analise.DataVencimento__c == null) {
+                analise.addError('Data Vencimento não deve estar vazia');
+                analise.DataVencimento__c.addError('Data Vencimento não deve estar vazia');
+            }
+            
             if (hoje > analise.DataVencimento__c) {
                 analise.Status__c = 'Vencida';
             }
         }
     }
-    
-    public static Opportunity getOppById(Id id) {
-        List<Opportunity> opps = AnaliseCreditoDA.getOpportunityById(id);
-        if (opps.isEmpty()) {
-            throw new IllegalArgumentException('Nenhuma Oportunidade encontrada! Id inválido.');
+
+    public static void handleDocumentVerification(List<AnaliseCredito__c> analises) {
+        if (analises == null || analises.isEmpty()) {
+            throw new IllegalArgumentException('A lista de Análises de Crédito não deve ser nula ou vazia.');
         }
-        return opps[0];
+
+        Set<Id> analiseIds = new Set<Id>();
+        Map<Id, AnaliseCredito__c> analisePorOpp = new Map<Id, AnaliseCredito__c>();
+        for (AnaliseCredito__c analise : analises) {
+            if (analise.Status__c == null) throw new IllegalArgumentException('Status da Análise não deve ser null.');
+            if (analise.Opportunity__c == null) throw new IllegalArgumentException('Oportunidade da Análise não deve ser null.');
+            
+            analiseIds.add(analise.Id);
+            analisePorOpp.put(analise.Opportunity__c, analise);
+        }
+
+        List<Checklist_de_Documentos__c> cklistDocs = ChecklistHelper.getByAnalisesCredito(analiseIds);
+        for (Checklist_de_Documentos__c cklistDoc : cklistDocs) {
+            if (cklistDoc.Oportunidade__c == null) throw new IllegalArgumentException('Oportunidade de Checklist não deve ser null.');
+            if (cklistDoc.Documenta_o__c == null) throw new IllegalArgumentException('Documentacao de Checklist não deve ser null.');
+    
+            AnaliseCredito__c analise = analisePorOpp.get(cklistDoc.Oportunidade__c);
+            if (analise != null && analise.Status__c == 'Aprovada' && !cklistDoc.Documenta_o__r.Validado__c) {
+                analise.Status__c = 'Reprovada';
+            }
+        }
+    }   
+
+    public static void handleNotification(List<AnaliseCredito__c> analises) {
+        if (analises == null || analises.isEmpty()) {
+            throw new IllegalArgumentException('A lista de Análises de Crédito não deve ser nula ou vazia.');
+        }
+
+        Set<Id> oppIds = new Set<Id>();
+        Map<Id, AnaliseCredito__c> analisePorOpp = new Map<Id, AnaliseCredito__c>();
+        for (AnaliseCredito__c analise : analises) {
+            if (analise.Opportunity__c == null) throw new IllegalArgumentException('Oportunidade da Análise não deve ser null.');
+            if (analise.Status__c == null) throw new IllegalArgumentException('Status da Análise não deve ser null.');
+            
+            oppIds.add(analise.Opportunity__c);
+            analisePorOpp.put(analise.Opportunity__c, analise);
+        }
+
+        List<Opportunity> opps = OpportunityHelper.getAccountsIdByIds(oppIds);
+
+        // System.debug(analise.Opportunity__r.AccountId);
+        // System.debug(analise.Opportunity__r.OwnerId);
+        // System.debug(analise.Opportunity__r.Corretor__c);
+        // Corretor = Contact
+        // Owner = User
+        // AccountId = Account
+        
+        List<FeedItem> feeds = new List<FeedItem>();
+        for (Opportunity opp : opps) {
+            AnaliseCredito__c analise = analisePorOpp.get(opp.Id);
+            
+            FeedItem feed = new FeedItem();
+            feed.ParentId =  opp.Owner.AccountId;
+            
+            if (analise.Status__c == 'Aprovada') {
+                feed.Body = 'Message teste aprovada';
+                feeds.add(feed);
+            } else if (analise.Status__c == 'Reprovada') {
+                feed.Body = 'Message teste reprovada';
+                feeds.add(feed);
+            }
+        }
+        insert feeds;
     }
+
 }

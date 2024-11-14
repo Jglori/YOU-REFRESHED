@@ -1,4 +1,11 @@
-public class QuoteSyncTriggerHandler {
+public class QuoteSyncTriggerHandler extends TriggerHandler {
+    public override void beforeInsert() {
+        QuoteSyncTriggerHandler.handleBeforeInsertOrUpdate(Trigger.new);
+    }
+
+    public override void beforeUpdate() {
+        QuoteSyncTriggerHandler.handleBeforeInsertOrUpdate(Trigger.new);
+    }
     
     public static void handleBeforeInsertOrUpdate(List<Quote> newQuotes) {
         Set<Id> opportunityIds = new Set<Id>();
@@ -12,7 +19,7 @@ public class QuoteSyncTriggerHandler {
 
         // Busca cotações sincronizadas relacionadas às oportunidades em questão
         Map<Id, Quote> syncedQuotesMap = new Map<Id, Quote>(
-            [SELECT Id, Name, OpportunityId FROM Quote WHERE Sincronizado__c = true AND OpportunityId IN :opportunityIds]
+            [SELECT Id, Name, OpportunityId, Sincronizado__c FROM Quote WHERE OpportunityId IN :opportunityIds]
         );
 
         for (Quote newQuote : newQuotes) {
@@ -20,9 +27,10 @@ public class QuoteSyncTriggerHandler {
             if (newQuote.OpportunityId != null && syncedQuotesMap.containsKey(newQuote.OpportunityId)) {
                 Quote syncedQuote = syncedQuotesMap.get(newQuote.OpportunityId);
                 
-                // Se a cotação sincronizada for diferente da cotação atual e a nova cotação não estiver sincronizada
-                if (syncedQuote.Id != newQuote.Id && newQuote.Sincronizado__c) {
+                // Se a cotação sincronizada for diferente da cotação atual e a nova cotação estiver marcada para sincronizar
+                if (newQuote.Sincronizado__c && syncedQuote.Sincronizado__c) {
                     newQuote.addError('A cotação: ' + syncedQuote.Name + ' já está sincronizada com esta oportunidade. Não é possível sincronizar outra cotação.');
+                    return;
                 }
             }
 

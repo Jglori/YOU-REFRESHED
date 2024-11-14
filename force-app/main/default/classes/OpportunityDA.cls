@@ -84,4 +84,49 @@ public with sharing class OpportunityDA {
 
         return !processInstances.isEmpty();
     }
+
+    public static List<Opportunity> getAllByAnaliseCredito(Set<Id> idsAnalise) {
+        if (idsAnalise == null) {
+            return new List<Opportunity>();
+        }
+
+        return [
+            SELECT Id, Name, AccountId, Corretor__c, StageName, Type
+            FROM Opportunity
+            WHERE Id IN (
+                SELECT Opportunity__c
+                FROM AnaliseCredito__c
+                WHERE Id IN :idsAnalise 
+            )
+        ];
+    }
+
+    public static List<Opportunity> getByAnaliseCredito(Id idAnalise) {
+        if (idAnalise == null) {
+            return new List<Opportunity>();
+        }
+
+        return [
+            SELECT Id, Name, AccountId, Corretor__c, StageName, Type
+            FROM Opportunity
+            WHERE Id IN (
+                SELECT Opportunity__c
+                FROM AnaliseCredito__c
+                WHERE Id = :idAnalise
+            )
+        ];
+    }
+
+    public static List<Opportunity> getAllAccountIdById(Set<Id> ids) {
+        if (ids == null) {
+            return new List<Opportunity>();
+        }
+
+        return [
+            SELECT Id, Name, AccountId, Corretor__r.AccountId, Owner.AccountId
+            FROM Opportunity
+            WHERE Id IN :ids
+        ];
+    }
+
 }

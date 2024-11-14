@@ -6,10 +6,10 @@ public class ChecklistDA {
         }
 
         return [
-            SELECT Id, Documenta_o__c, 
-                Documenta_o__r.Obrigatorio__c,
-                Documenta_o__r.Validado__c, 
+            SELECT Id, Oportunidade__c, Documenta_o__c, 
+                Documenta_o__r.Obrigatorio__c, 
                 Documenta_o__r.Entregue__c,
+                Documenta_o__r.Validado__c,
                 Documenta_o__r.Name
             FROM Checklist_de_Documentos__c
             WHERE Oportunidade__c IN :opportunityIds

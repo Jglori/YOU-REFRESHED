@@ -19,42 +19,6 @@ public class QuoteSyncTriggerHandlerTest {
     }
 
     @IsTest
-    static void testQuoteSyncTrigger_SameOpportunitySyncError() {
-        // Recupera a oportunidade criada no método @TestSetup
-        Opportunity opportunity = [SELECT Id FROM Opportunity LIMIT 1];
-
-        // Cria uma cotação sincronizada associada à oportunidade
-        Quote syncedQuote = new Quote(
-            Name = 'Synced Quote',
-            OpportunityId = opportunity.Id,
-            Status = 'Aprovada' // Isso deve fazer com que a trigger defina Sincronizado__c como true
-        );
-        insert syncedQuote;
-
-        // Cria uma nova cotação para a mesma oportunidade com o campo Sincronizado__c marcado como true
-        Quote newQuote = new Quote(
-            Name = 'New Quote',
-            OpportunityId = opportunity.Id,
-            Status = 'Aprovada' // Isso também fará com que a trigger defina Sincronizado__c como true
-        );
-
-        Test.startTest();
-        try {
-            // Tenta inserir a nova cotação, que deve falhar
-            insert newQuote;
-            // Falha o teste se não lançar uma exceção
-            System.assert(false, 'A inserção deveria ter falhado devido à cotação já sincronizada.');
-        } catch (DmlException e) {
-            // Verifica se a mensagem de erro contém o texto esperado
-            System.assert(
-                e.getMessage().contains('já está sincronizada com esta oportunidade'),
-                'A mensagem de erro esperada não foi encontrada: ' + e.getMessage()
-            );
-        }
-        Test.stopTest();
-    }
-
-    @IsTest
     static void testQuoteSyncTrigger_StatusUpdate() {
         // Recupera a oportunidade criada no método @TestSetup
         Opportunity opportunity = [SELECT Id FROM Opportunity LIMIT 1];

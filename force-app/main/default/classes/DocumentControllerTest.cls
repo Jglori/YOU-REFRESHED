@@ -104,11 +104,16 @@ public class DocumentControllerTest {
             FROM OpportunityContactRole
         ];
 
-        List<Map<Object, Object>> expected = (List<Map<Object, Object>>) JSON.deserializeUntyped(result);
-        for (Integer i = 0; i < expected.size(); i++) {
-            System.assertEquals(ocr.ContactId, expected[i].get('ContactId'), 'O atributo "ContactId" deveria ser igual a: '+ ocr.ContactId);
-            System.assertEquals(ocr.Contact.Name, expected[i].get('ContactName'), 'O atributo "ContactName" deveria ser igual a: '+ ocr.Contact.Name);
-            System.assertEquals(ocr.Role, expected[i].get('Role'), 'O atributo "Role" deveria ser igual a: '+ ocr.Role);
+        System.assertNotEquals(null, result, 'Resultado não deveria retornar null');
+
+        List<Object> listExpected = (List<Object>) JSON.deserializeUntyped(result);
+        System.assert(!listExpected.isEmpty(), 'Deveria retonar ao menos um valor na lista');
+
+        for (Integer i = 0; i < listExpected.size(); i++) {
+            Map<String, Object> mapExpected = (Map<String, Object>) listExpected[i];
+            System.assertEquals(ocr.ContactId, mapExpected.get('ContactId'), 'O atributo "ContactId" deveria ser igual a: '+ ocr.ContactId);
+            System.assertEquals(ocr.Contact.Name, mapExpected.get('ContactName'), 'O atributo "ContactName" deveria ser igual a: '+ ocr.Contact.Name);
+            System.assertEquals(ocr.Role, mapExpected.get('Role'), 'O atributo "Role" deveria ser igual a: '+ ocr.Role);
         }
     }
 

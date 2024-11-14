@@ -81,11 +81,17 @@ public class ChecklistHelper {
         }
     }
 
-    public static List<Checklist_de_Documentos__c> getWithDocsByOpp(Set<Id> ids) {
-        List<Checklist_de_Documentos__c> checklists = ChecklistDA.getWithDocumentsByOpportunity(ids);
-        if (checklists.isEmpty()) {
-            throw new IllegalArgumentException('Nenhuma Checklist encontrada! Parâmetro inválido.');
+    public static List<Checklist_de_Documentos__c> getByAnalisesCredito(Set<Id> analisesCreditoId) {
+        List<Opportunity> opps = OpportunityHelper.getByAnalisesCredito(analisesCreditoId);
+        Set<Id> oppIds = new Set<Id>();
+        
+        for (Opportunity opp : opps) {
+            oppIds.add(opp.Id);
         }
+
+        List<Checklist_de_Documentos__c> checklists = ChecklistDA.getWithDocumentsByOpportunity( oppIds );
+        if (checklists.isEmpty()) throw new IllegalArgumentException('Nunhuma Checklist de Documentos encontrada.');
+
         return checklists;
-    } 
+    }
 }

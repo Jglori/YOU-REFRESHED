@@ -187,4 +187,29 @@ public with sharing class OpportunityHelper {
             }
         }
     }  
+
+    
+    public static Opportunity getByAnaliseCredito(Id analiseCreditoId) {
+        List<Opportunity> opps = OpportunityDA.getByAnaliseCredito(analiseCreditoId);
+        if (opps.isEmpty()) {
+            throw new IllegalArgumentException('Nenhuma Oportunidade encontrada! Id inválido.');
+        }
+        return opps[0];
+    }
+
+    public static List<Opportunity> getByAnalisesCredito(Set<Id> analisesCreditoId ) {
+        List<Opportunity> opps = OpportunityDA.getAllByAnaliseCredito(analisesCreditoId);
+        if (opps.isEmpty()) {
+            throw new IllegalArgumentException('Nenhuma Oportunidade encontrada! Ids inválidos.');
+        }
+        return opps;
+    }
+
+    public static List<Opportunity> getAccountsIdByIds(Set<Id> oppIds) {
+        List<Opportunity> opps = OpportunityDA.getAllAccountIdById(oppIds);
+        if (opps.isEmpty()) {
+            throw new IllegalArgumentException('Nenhuma Oportunidade encontrada! Ids inválidos.');
+        }
+        return opps;    
+    }
 }

@@ -17,8 +17,7 @@ public class DocumentacaoHelper {
     }
 
     public static List<Documentacao__c> getByAnaliseCredito(Id analiseCreditoId) {
-        Opportunity opp = AnaliseCreditoHelper.getOppById(analiseCreditoId);
-        List<Checklist_de_Documentos__c> cklistDocs = ChecklistHelper.getWithDocsByOpp(new Set<Id>{opp.Id});
+        List<Checklist_de_Documentos__c> cklistDocs = ChecklistHelper.getByAnalisesCredito(new Set<Id>{analiseCreditoId});
         
         List<Documentacao__c> docs = new List<Documentacao__c>();
         for (Checklist_de_Documentos__c cklistDoc : cklistDocs) {
@@ -34,14 +33,12 @@ public class DocumentacaoHelper {
         }
 
         return docs;
-    } 
+    }  
 
     public static List<Documentacao__c> validateDocuments(Set<Id> ids) {
         List<Documentacao__c> documents = DocumentacaoDA.getAllById(ids);
 
-        System.debug(documents);
         for (Documentacao__c document : documents) {
-            System.debug(document);
             document.Validado__c = true;
         }
 
@@ -49,8 +46,7 @@ public class DocumentacaoHelper {
             update documents;
         } catch (DMLException e) {
             System.debug('Erro ao atualizar documentos: ' + e.getMessage());
-
-            // throw new DMLException('Erro ao atualizar documentos: ', e.getMessage());
+            throw new DMLException('Erro ao atualizar documentos: ' + e.getMessage());
         }
 
         return documents;
@@ -62,7 +58,13 @@ public class DocumentacaoHelper {
         for (Documentacao__c document : documents) {
             document.Validado__c = false;
         }
-        update documents;
+ 
+        try {
+            update documents;
+        } catch (Exception e) {
+            System.debug('Erro ao atualizar documentos: ' + e.getMessage());
+            throw new DMLException('Erro ao atualizar documentos: '+ e.getMessage());
+        }
 
         return documents;
     }
