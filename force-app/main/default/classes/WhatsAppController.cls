@@ -47,42 +47,4 @@ public class WhatsAppController {
 
         return response;
     }
-
-    // @AuraEnabled
-    // public static void invocarEnvioMensagem(String numeroLead, String textoMensagem) {
-    //     (new WhatsAppService()).responderConversaTexto(numeroLead, textoMensagem);
-    // }
-
-    // @InvocableMethod
-    // public static void invocarEnvioMensagemAutomatica(List<Lead> leads) {
-    //     WhatsAppService whatsAppService = new WhatsAppService();
-    //     for(Lead leadRecord : leads) {
-    //         String mensagemTemplate = '';
-    //         Integer numeroMsg = (Integer) leadRecord.NumeracaoMensagem__c;
-    //         MensagemWebhook__c salesforceMessage = [SELECT Id, TextBody__c, Lead__c FROM MensagemWebhook__c WHERE Lead__c = :leadRecord.Id ORDER By CreatedDate DESC LIMIT 1];
-    //         switch on numeroMsg {
-    //             when 1 {
-    //                 mensagemTemplate = 'Olá, bom dia! Obrigado por entrar em contato conosco. \nPara melhorar seu atendimento, gotariamos de saber se podemos coletar alguns dados para te conhecer melhor. \nPor favor, informe seu apenas primeiro nome.';
-    //             }
-    //             when 2 {
-    //                 leadRecord.FirstName = salesforceMessage.TextBody__c;
-    //                 mensagemTemplate = 'Para darmos continuidade, informe apenas seu sobrenome.';
-    //             }
-    //             when 3 {
-    //                 leadRecord.LastName = salesforceMessage.TextBody__c;
-    //                 mensagemTemplate = 'Por fim, informe seu e-mail.';
-    //             }
-    //             when 4 {
-    //                 leadRecord.Email = salesforceMessage.TextBody__c;
-    //                 mensagemTemplate = 'Agradecemos as informações enviadas! Estamos te transferindo para um atendente.';
-    //             }
-    //             when else {
-    //                 return;
-    //             }
-    //         }
-    //         WhatsAppController.programarMensagem(leadRecord.MobilePhone, mensagemTemplate);
-    //         leadRecord.NumeracaoMensagem__c++;
-    //     }
-    //     Database.update(leads);
-    // }
 }

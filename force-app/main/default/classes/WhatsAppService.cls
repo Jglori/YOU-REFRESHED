@@ -272,23 +272,14 @@ public without sharing class WhatsAppService {
      * o registro de mensagem gerado pelo sistema.
      */
     public static String enviarMensagem(Id idLead, String mensagemTexto) {
-        System.debug('Id do Lead enviado: ' + idLead);
-        System.debug('Mensagem de texto enviada: ' + mensagemTexto);
         Lead lead = LeadDomain.obterLeadPorId(idLead);
 
         Map<String, Object> requestBody = obterRequestBodyParaMensagemTexto(lead, mensagemTexto);
         Map<String, Object> responseBody = enviarMensagem(JSON.serialize(requestBody));
-
-        System.debug('resquestBody: ' + requestBody);
-        System.debug('responseBody: ' + responseBody);
         
         atualizarRequestBody(requestBody, responseBody);
 
-        System.debug('resquestBody atualizado: ' + requestBody);
-
         Mensagem__c mensagem = cadastrarMensagem(lead, requestBody, responseBody);
-
-        System.debug('Mensagem cadastrada: ' + mensagem);
 
         return JSON.serialize(new MensagemDTO(mensagem));
     }
@@ -872,5 +863,143 @@ public without sharing class WhatsAppService {
         if(request.params.get('hub.verify_token') != CONFIGURACAO_WHATSAPP.TokenVerificacao__c) { return; }
 
         response.responseBody = Blob.valueOf(request.params.get('hub.challenge'));
+    }
+
+    /**
+     * Método responsável pelo envio de mensagem para o cliente via Flow.
+     * Este é o único método invocável que será chamado diretamente no Flow.
+     * Ele processa a lista de Leads e chama o método assíncrono para enviar
+     * a mensagem automaticamente para cada um.
+     *
+     * @param requests Lista de Leads que receberão a mensagem.
+     * @return responses Lista de respostas confirmando o envio de mensagens para cada Lead.
+     */
+    @InvocableMethod(label='Enviar Mensagem Triagem' description='Envia mensagem automatica para o cliente via WhatsApp.')
+    public static List<String> enviarMensagemTriagem(List<Lead> requests) {
+        List<String> responses = new List<String>();
+
+        for (Lead lead : requests) {
+            invocarEnvioMensagemAutomatica(new List<Lead>{ lead });
+            responses.add('Mensagem enviada para o Lead: ' + lead.Id);
+        }
+        
+        return responses;
+    }
+
+    /**
+     * Método auxiliar que processa o envio de mensagens automáticas e 
+     * incrementa o contador de mensagens no Lead.
+     *
+     * @param leads Lista de Leads para os quais a mensagem será enviada.
+     */
+    public static void invocarEnvioMensagemAutomatica(List<Lead> leads) {
+        for (Lead leadRecord : leads) {
+            Integer numeroMsg = leadRecord.ContadorMensagemPadrao__c != null ? leadRecord.ContadorMensagemPadrao__c.intValue() : 1;
+            String mensagemTemplate = definirMensagemTemplate(numeroMsg, leadRecord);
+
+            // enviarMensagemAsync(leadRecord.Id, mensagemTemplate);
+            // enviarMensagem(leadRecord.Id, mensagemTemplate);
+            System.enqueueJob(new EnviarMensagemQueueable(leadRecord.Id, mensagemTemplate));
+
+            // Cadastrando a mensagem de triagem no sistema
+            // cadastrarMensagemTriagem(leadRecord, mensagemTemplate);
+
+            // Atualizando o contador de mensagens
+            leadRecord.ContadorMensagemPadrao__c = numeroMsg + 1;
+            
+            // Atualizando o Lead com a resposta do cliente
+            atualizarLeadComResposta(leadRecord, numeroMsg);
+        }
+        Database.update(leads);
+    }
+
+    /**
+     * Método para cadastrar a mensagem de triagem no sistema.
+     * É uma mensagem sem o campo De__c preenchido, para não cair em recursividade com o Flow ClriaLeadsWhast.
+     * 
+     * @param lead Lead que receberá a mensagem.
+     * @param mensagemTemplate Texto da mensagem personalizada para o cliente.
+     */
+    public static void cadastrarMensagemTriagem(Lead lead, String mensagemTemplate){
+        Mensagem__c mensagem = new Mensagem__c();
+            // mensagem.De__c = '';
+            mensagem.ChaveExternaCliente__c = lead.ChaveExternaWhatsApp__c;
+            mensagem.Conteudo__c =  mensagemTemplate;
+            mensagem.CorpoRequisicao__c = '';
+            mensagem.DataHora__c = System.now();
+            mensagem.CodigoStatus__c = 201;
+            mensagem.Status__c = 'Created';
+            mensagem.Tipo__c = 'text';
+
+        Database.insert(mensagem/*, Mensagem__c.ChaveExterna__c*/);
+    }
+
+    /**
+     * Método para definir o template da mensagem com base no contador atual.
+     * A mensagem muda conforme o número do contador para cada Lead.
+     *
+     * @param numeroMsg Número do contador de mensagens para definir o conteúdo da mensagem.
+     * @param leadRecord Registro do Lead que receberá a mensagem.
+     * @return mensagemTemplate Texto da mensagem personalizada para o cliente.
+     */
+    public static String definirMensagemTemplate(Integer numeroMsg, Lead leadRecord) {
+        switch on numeroMsg {
+            when 1 {
+                return 'Olá, bom dia! Obrigado por entrar em contato conosco. Por favor, informe seu primeiro nome.';
+            }
+            when 2 {
+                return 'Para darmos continuidade, informe apenas seu sobrenome.';
+            }
+            when 3 {
+                return 'Por fim, informe seu e-mail.';
+            }
+            when 4 {
+                return 'Agradecemos as informações! Estamos te transferindo para um atendente.';
+            }
+            when else {
+                return '';
+            }
+        }
+    }
+
+    /**
+     * Método para atualizar os campos do Lead com base na resposta do cliente.
+     * Utiliza o contador para determinar qual campo deve ser atualizado.
+     *
+     * @param leadRecord Registro do Lead a ser atualizado.
+     * @param numeroMsg Número do contador de mensagens para definir o campo a ser atualizado.
+     */
+    public static void atualizarLeadComResposta(Lead leadRecord, Integer numeroMsg) {
+        try {
+            List<Mensagem__c> mensagens = [
+                SELECT 
+                    Id,
+                    Conteudo__c,
+                    ChaveExternaCliente__c 
+                FROM Mensagem__c 
+                WHERE De__c = :leadRecord.ChaveExternaWhatsApp__c 
+                ORDER BY CreatedDate DESC 
+                LIMIT 1
+            ];
+
+            if (!mensagens.isEmpty()) {
+                String respostaCliente = mensagens[0].Conteudo__c;
+                System.debug('Resposta cliente: ' + respostaCliente);
+                
+                switch on numeroMsg {
+                    when 2 {
+                        leadRecord.FirstName = respostaCliente;
+                    }
+                    when 3 {
+                        leadRecord.LastName = respostaCliente;
+                    }
+                    when 4 {
+                        leadRecord.Email = respostaCliente;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.debug('Erro ao atualizar o Lead com a resposta: ' + e.getMessage());
+        }
     }
 }
