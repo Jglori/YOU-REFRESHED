@@ -1,20 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <description>Envia mensagem automatica para o cliente via WhatsApp.</description>
+        <name>EnviarMensagemTriagem</name>
+        <label>Enviar Mensagem Triagem</label>
+        <locationX>578</locationX>
+        <locationY>1403</locationY>
+        <actionName>WhatsAppService</actionName>
+        <actionType>apex</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>requests</name>
+            <value>
+                <elementReference>ObterLeadCriado</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>WhatsAppService</nameSegment>
+        <offset>0</offset>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+        <versionSegment>1</versionSegment>
+    </actionCalls>
+    <actionCalls>
+        <description>Envia mensagem automatica para o cliente via WhatsApp.</description>
+        <name>EnviarMensagemTriagemExistente</name>
+        <label>Enviar Mensagem Triagem Existente</label>
+        <locationX>50</locationX>
+        <locationY>1295</locationY>
+        <actionName>WhatsAppService</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>ReiteracaoLead</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>requests</name>
+            <value>
+                <elementReference>ObterLead</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>WhatsAppService</nameSegment>
+        <offset>0</offset>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+        <versionSegment>1</versionSegment>
+    </actionCalls>
     <apiVersion>62.0</apiVersion>
     <assignments>
         <name>AtualizarUltimaReiteracao</name>
         <label>AtualizarUltimaReiteracao</label>
         <locationX>50</locationX>
-        <locationY>1187</locationY>
+        <locationY>1595</locationY>
         <assignmentItems>
-            <assignToReference>ObterLeadExistente.ltima_Reitera_o__c</assignToReference>
+            <assignToReference>ObterLead.ltima_Reitera_o__c</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>DataAgora</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>ObterLeadExistente.QuantidadeDeReiteracoes__c</assignToReference>
+            <assignToReference>ObterLead.QuantidadeDeReiteracoes__c</assignToReference>
             <operator>Add</operator>
             <value>
                 <numberValue>1.0</numberValue>
@@ -22,16 +65,38 @@
         </assignmentItems>
     </assignments>
     <decisions>
+        <name>NumeroMetadadoValido</name>
+        <label>NumeroMetadadoValido</label>
+        <locationX>611</locationX>
+        <locationY>431</locationY>
+        <defaultConnectorLabel>MetadadoInvalido</defaultConnectorLabel>
+        <rules>
+            <name>MetadadoValido</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.De__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <elementReference>ObterMetadadoWhatsApp.NumeroDoWhatsappBusiness__c</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>ObterTipodeRegistro</targetReference>
+            </connector>
+            <label>MetadadoValido</label>
+        </rules>
+    </decisions>
+    <decisions>
         <name>ReiteracaoLead</name>
         <label>ReiteracaoLead</label>
         <locationX>182</locationX>
-        <locationY>1079</locationY>
+        <locationY>1487</locationY>
         <defaultConnectorLabel>Interacao</defaultConnectorLabel>
         <rules>
             <name>Reiteracao</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>DiasPassadoUltimaReiteracoes</leftValueReference>
+                <leftValueReference>DiasDesdeInteracao</leftValueReference>
                 <operator>GreaterThanOrEqualTo</operator>
                 <rightValue>
                     <numberValue>1.0</numberValue>
@@ -44,10 +109,35 @@
         </rules>
     </decisions>
     <decisions>
-        <name>Verifica_se_existe_Lead_com_Chave_Cdastrado</name>
-        <label>Verifica se existe Lead com Chave Cdastrado</label>
+        <name>TriagemLead</name>
+        <label>TriagemLead</label>
+        <locationX>182</locationX>
+        <locationY>1187</locationY>
+        <defaultConnector>
+            <targetReference>ReiteracaoLead</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>TriagemCompleta</defaultConnectorLabel>
+        <rules>
+            <name>TriagemIncompleta</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>ObterLead.ContadorMensagemPadrao__c</leftValueReference>
+                <operator>LessThanOrEqualTo</operator>
+                <rightValue>
+                    <numberValue>4.0</numberValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>EnviarMensagemTriagemExistente</targetReference>
+            </connector>
+            <label>TriagemIncompleta</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>VerificaSeExisteLeadChaveCadastrado</name>
+        <label>Verifica se existe Lead com Chave Cadastrado</label>
         <locationX>380</locationX>
-        <locationY>863</locationY>
+        <locationY>1079</locationY>
         <defaultConnector>
             <targetReference>CriaLead</targetReference>
         </defaultConnector>
@@ -63,7 +153,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>ObterLeadExistente</targetReference>
+                <targetReference>TriagemLead</targetReference>
             </connector>
             <label>BuscaExistente</label>
         </rules>
@@ -75,15 +165,9 @@
         <expression>NOW()</expression>
     </formulas>
     <formulas>
-        <name>DiasPassadoPrimeiraInteracao</name>
+        <name>DiasDesdeInteracao</name>
         <dataType>Number</dataType>
-        <expression>TODAY()-{!ObterLeadExistente.PrimeiraInteracao__c}</expression>
-        <scale>2</scale>
-    </formulas>
-    <formulas>
-        <name>DiasPassadoUltimaReiteracoes</name>
-        <dataType>Number</dataType>
-        <expression>TODAY()-{!ObterLeadExistente.DataUltimaReiteracoes__c}</expression>
+        <expression>TODAY()-{!ObterLead.DataUltimaReiteracoes__c}</expression>
         <scale>2</scale>
     </formulas>
     <interviewLabel>ClriaLeadsWhast {!$Flow.CurrentDateTime}</interviewLabel>
@@ -111,7 +195,10 @@
         <name>CriaLead</name>
         <label>CriaLead</label>
         <locationX>578</locationX>
-        <locationY>971</locationY>
+        <locationY>1187</locationY>
+        <connector>
+            <targetReference>ObterLeadCriado</targetReference>
+        </connector>
         <inputAssignments>
             <field>CanalAtendimento__c</field>
             <value>
@@ -179,10 +266,10 @@
         <name>ObterCorretorWhatsApp</name>
         <label>ObterCorretorWhatsApp</label>
         <locationX>380</locationX>
-        <locationY>755</locationY>
+        <locationY>971</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>Verifica_se_existe_Lead_com_Chave_Cdastrado</targetReference>
+            <targetReference>VerificaSeExisteLeadChaveCadastrado</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -200,7 +287,7 @@
         <name>ObterFila</name>
         <label>ObterFila</label>
         <locationX>380</locationX>
-        <locationY>647</locationY>
+        <locationY>863</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>ObterCorretorWhatsApp</targetReference>
@@ -221,7 +308,7 @@
         <name>ObterLead</name>
         <label>ObterLead</label>
         <locationX>380</locationX>
-        <locationY>431</locationY>
+        <locationY>647</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>ObterRoleta</targetReference>
@@ -246,20 +333,20 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
-        <name>ObterLeadExistente</name>
-        <label>ObterLeadExistente</label>
-        <locationX>182</locationX>
-        <locationY>971</locationY>
+        <name>ObterLeadCriado</name>
+        <label>ObterLeadCriado</label>
+        <locationX>578</locationX>
+        <locationY>1295</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>ReiteracaoLead</targetReference>
+            <targetReference>EnviarMensagemTriagem</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
-            <field>ChaveExternaWhatsApp__c</field>
+            <field>Id</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>BuscaExistente</elementReference>
+                <elementReference>CriaLead</elementReference>
             </value>
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
@@ -267,10 +354,25 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
+        <name>ObterMetadadoWhatsApp</name>
+        <label>ObterMetadadoWhatsApp</label>
+        <locationX>611</locationX>
+        <locationY>323</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>NumeroMetadadoValido</targetReference>
+        </connector>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>IntegracaoWhatsapp__mdt</object>
+        <sortField>Id</sortField>
+        <sortOrder>Asc</sortOrder>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
         <name>ObterRoleta</name>
         <label>ObterRoleta</label>
         <locationX>380</locationX>
-        <locationY>539</locationY>
+        <locationY>755</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>ObterFila</targetReference>
@@ -291,7 +393,7 @@
         <name>ObterTipodeRegistro</name>
         <label>ObterTipodeRegistro</label>
         <locationX>380</locationX>
-        <locationY>323</locationY>
+        <locationY>539</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>ObterLead</targetReference>
@@ -316,14 +418,24 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <start>
-        <locationX>254</locationX>
+        <locationX>485</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>ObterTipodeRegistro</targetReference>
+            <targetReference>ObterMetadadoWhatsApp</targetReference>
         </connector>
         <object>Mensagem__c</object>
         <recordTriggerType>Create</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
     <status>Active</status>
+    <variables>
+        <name>MensagemTexto1</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+        <value>
+            <stringValue>Olá, bom dia! Obrigado por entrar em contato conosco. Por favor, informe seu primeiro nome.</stringValue>
+        </value>
+    </variables>
 </Flow>
