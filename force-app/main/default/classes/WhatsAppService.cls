@@ -897,12 +897,7 @@ public without sharing class WhatsAppService {
             Integer numeroMsg = leadRecord.ContadorMensagemPadrao__c != null ? leadRecord.ContadorMensagemPadrao__c.intValue() : 1;
             String mensagemTemplate = definirMensagemTemplate(numeroMsg, leadRecord);
 
-            // enviarMensagemAsync(leadRecord.Id, mensagemTemplate);
-            // enviarMensagem(leadRecord.Id, mensagemTemplate);
             System.enqueueJob(new EnviarMensagemQueueable(leadRecord.Id, mensagemTemplate));
-
-            // Cadastrando a mensagem de triagem no sistema
-            // cadastrarMensagemTriagem(leadRecord, mensagemTemplate);
 
             // Atualizando o contador de mensagens
             leadRecord.ContadorMensagemPadrao__c = numeroMsg + 1;
@@ -911,27 +906,6 @@ public without sharing class WhatsAppService {
             atualizarLeadComResposta(leadRecord, numeroMsg);
         }
         Database.update(leads);
-    }
-
-    /**
-     * Método para cadastrar a mensagem de triagem no sistema.
-     * É uma mensagem sem o campo De__c preenchido, para não cair em recursividade com o Flow ClriaLeadsWhast.
-     * 
-     * @param lead Lead que receberá a mensagem.
-     * @param mensagemTemplate Texto da mensagem personalizada para o cliente.
-     */
-    public static void cadastrarMensagemTriagem(Lead lead, String mensagemTemplate){
-        Mensagem__c mensagem = new Mensagem__c();
-            // mensagem.De__c = '';
-            mensagem.ChaveExternaCliente__c = lead.ChaveExternaWhatsApp__c;
-            mensagem.Conteudo__c =  mensagemTemplate;
-            mensagem.CorpoRequisicao__c = '';
-            mensagem.DataHora__c = System.now();
-            mensagem.CodigoStatus__c = 201;
-            mensagem.Status__c = 'Created';
-            mensagem.Tipo__c = 'text';
-
-        Database.insert(mensagem/*, Mensagem__c.ChaveExterna__c*/);
     }
 
     /**

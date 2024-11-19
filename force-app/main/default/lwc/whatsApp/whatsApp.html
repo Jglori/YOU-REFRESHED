@@ -1,10 +1,11 @@
 <template>
     <div>
         <section role="log" class="slds-chat">
-            <div class="slds-chat-bookend">
+            <div class="slds-chat-bookend" style="border: none;">
                 <div>
                     <span
-                        class="slds-text-title_bold slds-float_left slds-var-p-right_x-small">{lead.primeiroNome}</span>
+                        class="slds-text-title_bold slds-float_left slds-var-p-right_x-small">{lead.primeiroNome}
+                    </span>
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#25D366" class="bi bi-whatsapp"
                         viewBox="0 0 16 16">
                         <g id="whatsapp">
@@ -28,7 +29,8 @@
                     </template>
                 </lightning-button-menu>
             </div>
-            <div>
+
+            <div  style="padding: 2px; border: 1px solid #e5e5e5;">
                 <div class="slds-chat-event">
                     <div class="slds-chat-event__body">
                         <template lwc:if={dialogoEmAndamento}>
@@ -58,8 +60,9 @@
                 </ul>
             </div>
         </section>
+
         <section>
-            <div style="display: flex; align-items: flex-start; gap: .75rem;">
+            <div style="padding: 1%; display: flex; align-items: center; gap: .75rem; border: 1px solid #e5e5e5;" >
                 <template lwc:if={dialogoEmAndamento}>
                     <lightning-button-icon variant="neutral" label="Selecionar template padrão" title="Template padrão"
                         icon-name="utility:insert_template"
