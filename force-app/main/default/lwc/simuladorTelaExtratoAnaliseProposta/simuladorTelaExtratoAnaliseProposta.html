@@ -1,0 +1,41 @@
+<template>
+    <lightning-card class="slds-col slds-p-horizontal_large" icon-name="standard:social" title="Análise da Proposta" variant="narrow">                
+        <div class="slds-grid slds-wrap">
+            <div class="slds-text-title slds-col slds-size_1-of-1">
+                <span>Acompanhe o resultado da análise da simulação realizada! A primeira coluna indica a situação do critério dada a alçada de aprovação vinculada ao empreendimento.</span>
+            </div>
+
+            <div class="slds-box slds-grid slds-wrap slds-col slds-p-vertical_medium" style="padding: 1rem 2rem; overflow-x: auto;">
+                <div class="slds-col  slds-grid slds-size_1-of-1" style="gap: 1rem;">
+                    <lightning-combobox
+                        name="Conjunto de critérios"
+                        label="Conjunto de critérios"
+                        placeholder="Selecione uma conjunto de critérios"
+                        options={conjuntoCriterioOptions}
+                        value={tabelaVendaValue}
+                        class="slds-col" style="width: 1/4;"
+                        onchange={handleChangeconjunto}>
+                    </lightning-combobox>
+                
+                    <lightning-input disabled class="slds-col" value={inicioVigenciaTabela} style="width: 1/4;" type="text" name="inicioVigencia" label="Início de vigência" ></lightning-input>
+                    
+                    <lightning-input disabled class="slds-col" value={fimVigenciaTabela} style="width: 1/4;" type="text" name="fimVigencia" label="Fim de vigência" ></lightning-input>
+                </div>
+
+                <div class="slds-col slds-grid slds-size_1-of-1">
+                    <div class="slds-col slds-size_1-of-1 slds-p-vertical_medium">
+                        <lightning-datatable
+                                key-field="name"
+                                data={analisePropostasCliente}
+                                columns={analiseColunasOptions}
+                                hide-checkbox-column>
+
+                        </lightning-datatable>
+                    </div>
+               </div>
+            </div>
+
+        </div>
+    </lightning-card>
+
+</template>
