@@ -54,7 +54,7 @@ export default class WhatsApp extends LightningElement {
         await this.obterLead();
         await this.obterMensagensCarregando();
         this.handleSubscribe();
-        this.intervalId = setInterval(() => this.verificarNovasMensagens(), 30000);
+        this.intervalId = setInterval(() => this.verificarNovasMensagens(), 10000);
     }
 
     /**
