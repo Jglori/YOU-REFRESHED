@@ -72,7 +72,7 @@ export default class WhatsApp extends LightningElement {
         
         // Verifica se o chat é encontrado e é um elemento válido
         if (chat instanceof HTMLElement) {
-            console.log("Elemento de chat encontrado:", chat);
+            // console.log("Elemento de chat encontrado:", chat);
     
             // // Configura o MutationObserver para detectar mudanças no conteúdo do chat
             // const observer = new MutationObserver(() => {
@@ -186,7 +186,7 @@ export default class WhatsApp extends LightningElement {
      * Envia uma nova mensagem de texto para o lead e atualiza o histórico de mensagens.
      */
     async handleEnviarMensagem() {
-        if (!this.mensagemTexto) return;
+        if (!this.mensagemTexto || !this.lead.chaveExternaWhatsApp) {this.apresentarMensagem('Erro', 'Não é possivel enviar mensagem.', 'error'); return};
         try {
             const novaMensagem = await this.enviarMensagem(this.recordId, this.mensagemTexto);
             this.mensagens = [...this.mensagens, novaMensagem];
@@ -333,6 +333,6 @@ export default class WhatsApp extends LightningElement {
             description: 'Accessible description of modal\'s purpose',
             recordId: this.recordId
         });
-        console.log(result);
+        // console.log(result);
     }
 }
