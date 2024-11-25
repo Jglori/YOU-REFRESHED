@@ -10,4 +10,5 @@ export default class ErrorToastAlways extends LightningElement {
         });
         this.dispatchEvent(evt);
     } 
+    
 }

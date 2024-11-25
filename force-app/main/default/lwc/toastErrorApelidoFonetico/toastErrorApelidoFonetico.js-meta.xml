@@ -9,5 +9,6 @@
         <target>lightningCommunity__Page</target>
         <target>lightningCommunity__Page_Layout</target>
         <target>lightning__FlowScreen</target>
+        
     </targets> 
 </LightningComponentBundle>
