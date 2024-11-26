@@ -54,7 +54,7 @@ export default class WhatsApp extends LightningElement {
         await this.obterLead();
         await this.obterMensagensCarregando();
         this.handleSubscribe();
-        this.intervalId = setInterval(() => this.verificarNovasMensagens(), 30000);
+        this.intervalId = setInterval(() => this.verificarNovasMensagens(), 10000);
     }
 
     /**
@@ -69,11 +69,27 @@ export default class WhatsApp extends LightningElement {
      */ 
     apresentarUltimasMensagens() {
         const chat = this.template.querySelector('[data-id="chat"]');
-        if (chat) {
-            chat.scrollTo(0, chat.scrollHeight);
+        
+        // Verifica se o chat é encontrado e é um elemento válido
+        if (chat instanceof HTMLElement) {
+            // console.log("Elemento de chat encontrado:", chat);
+    
+            // // Configura o MutationObserver para detectar mudanças no conteúdo do chat
+            // const observer = new MutationObserver(() => {
+            //     chat.scrollTop = chat.scrollHeight; // Rolagem até a última mensagem
+            // });
+    
+            // // Observa mudanças no número de filhos do elemento chat
+            // observer.observe(chat, { childList: true });
+    
+            // // Realiza a rolagem inicial e desconecta o observador
+            // chat.scrollTop = chat.scrollHeight;
+            // observer.disconnect();
+        } else {
+            console.error("Elemento de chat não encontrado ou não é um HTMLElement:", chat);
         }
     }
-
+    
     /**
      * Ativa o estado de carregamento, chama o método para obter as mensagens,
      * e desativa o estado de carregamento ao final.
@@ -90,7 +106,7 @@ export default class WhatsApp extends LightningElement {
      */
     async obterMensagens() {
         try {
-            this.mensagens = await this.obterMensagensPorChaveExternaCliente(this.lead.chaveExternaWhatsApp);
+            if(this.lead.chaveExternaWhatsApp) this.mensagens = await this.obterMensagensPorChaveExternaCliente(this.lead.chaveExternaWhatsApp);
         } catch (erro) {
             this.apresentarMensagem('Erro', erro.body.message, 'error');
         }
@@ -100,7 +116,7 @@ export default class WhatsApp extends LightningElement {
      * Chama o método Apex para obter as mensagens usando a chave externa do cliente
      */ 
     obterMensagensPorChaveExternaCliente(chaveExternaCliente) {
-        return obterMensagensPorChaveExternaCliente({ chaveExternaCliente })
+        return obterMensagensPorChaveExternaCliente({ chaveExternaCliente, idLead: this.recordId })
             .then(resultado => JSON.parse(resultado))
             .catch(erro => {
                 console.error('Erro ao obter mensagens:', erro);
@@ -170,7 +186,7 @@ export default class WhatsApp extends LightningElement {
      * Envia uma nova mensagem de texto para o lead e atualiza o histórico de mensagens.
      */
     async handleEnviarMensagem() {
-        if (!this.mensagemTexto) return;
+        if (!this.mensagemTexto || !this.lead.chaveExternaWhatsApp || this.lead.ContadorMensagemPadrao__c <= 1) {return this.apresentarMensagem('Erro', 'Não é possível enviar mensagem', 'error');};
         try {
             const novaMensagem = await this.enviarMensagem(this.recordId, this.mensagemTexto);
             this.mensagens = [...this.mensagens, novaMensagem];
@@ -252,6 +268,7 @@ export default class WhatsApp extends LightningElement {
      * Chama o método Apex para enviar a mídia
      */
     enviarMidia(idLead, tipoArquivo, nomeArquivo, corpoArquivo) {
+        if (!this.mensagemTexto || !this.lead.chaveExternaWhatsApp || this.lead.ContadorMensagemPadrao__c <= 1) {return this.apresentarMensagem('Erro', 'Não é possível enviar mensagem', 'error');};
         return enviarMidia({ idLead, tipoArquivo, nomeArquivo, corpoArquivo })
             .then(resultado => JSON.parse(resultado))
             .catch(erro => {
@@ -317,6 +334,6 @@ export default class WhatsApp extends LightningElement {
             description: 'Accessible description of modal\'s purpose',
             recordId: this.recordId
         });
-        console.log(result);
+        // console.log(result);
     }
 }
