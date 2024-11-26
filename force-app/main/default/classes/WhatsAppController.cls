@@ -5,8 +5,8 @@ public class WhatsAppController {
     }
 
     @AuraEnabled
-    public static String obterMensagensPorChaveExternaCliente(String chaveExternaCliente) {
-        return WhatsAppService.obterMensagensPorChaveExternaCliente(chaveExternaCliente);
+    public static String obterMensagensPorChaveExternaCliente(String chaveExternaCliente, Id lead) {
+        return WhatsAppService.obterMensagensPorChaveExternaCliente(chaveExternaCliente, lead);
     }
 
     @AuraEnabled

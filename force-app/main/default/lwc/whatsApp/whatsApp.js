@@ -54,7 +54,7 @@ export default class WhatsApp extends LightningElement {
         await this.obterLead();
         await this.obterMensagensCarregando();
         this.handleSubscribe();
-        this.intervalId = setInterval(() => this.verificarNovasMensagens(), 10000);
+        this.intervalId = setInterval(() => this.verificarNovasMensagens(), 30000);
     }
 
     /**
@@ -69,27 +69,11 @@ export default class WhatsApp extends LightningElement {
      */ 
     apresentarUltimasMensagens() {
         const chat = this.template.querySelector('[data-id="chat"]');
-        
-        // Verifica se o chat é encontrado e é um elemento válido
-        if (chat instanceof HTMLElement) {
-            // console.log("Elemento de chat encontrado:", chat);
-    
-            // // Configura o MutationObserver para detectar mudanças no conteúdo do chat
-            // const observer = new MutationObserver(() => {
-            //     chat.scrollTop = chat.scrollHeight; // Rolagem até a última mensagem
-            // });
-    
-            // // Observa mudanças no número de filhos do elemento chat
-            // observer.observe(chat, { childList: true });
-    
-            // // Realiza a rolagem inicial e desconecta o observador
-            // chat.scrollTop = chat.scrollHeight;
-            // observer.disconnect();
-        } else {
-            console.error("Elemento de chat não encontrado ou não é um HTMLElement:", chat);
+        if (chat) {
+            chat.scrollTo(0, chat.scrollHeight);
         }
     }
-    
+
     /**
      * Ativa o estado de carregamento, chama o método para obter as mensagens,
      * e desativa o estado de carregamento ao final.
@@ -106,7 +90,7 @@ export default class WhatsApp extends LightningElement {
      */
     async obterMensagens() {
         try {
-            this.mensagens = await this.obterMensagensPorChaveExternaCliente(this.lead.chaveExternaWhatsApp);
+            this.mensagens = await this.obterMensagensPorChaveExternaCliente(this.lead.chaveExternaWhatsApp, this.recordId);
         } catch (erro) {
             this.apresentarMensagem('Erro', erro.body.message, 'error');
         }
@@ -186,7 +170,7 @@ export default class WhatsApp extends LightningElement {
      * Envia uma nova mensagem de texto para o lead e atualiza o histórico de mensagens.
      */
     async handleEnviarMensagem() {
-        if (!this.mensagemTexto || !this.lead.chaveExternaWhatsApp) {this.apresentarMensagem('Erro', 'Não é possivel enviar mensagem.', 'error'); return};
+        if (!this.mensagemTexto) return;
         try {
             const novaMensagem = await this.enviarMensagem(this.recordId, this.mensagemTexto);
             this.mensagens = [...this.mensagens, novaMensagem];
@@ -333,6 +317,6 @@ export default class WhatsApp extends LightningElement {
             description: 'Accessible description of modal\'s purpose',
             recordId: this.recordId
         });
-        // console.log(result);
+        console.log(result);
     }
 }

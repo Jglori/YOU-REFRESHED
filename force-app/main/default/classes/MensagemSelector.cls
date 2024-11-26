@@ -15,13 +15,20 @@ public without sharing class MensagemSelector {
                 Status__c,
                 Tipo__c,
                 TipoMidia__c,
+                LeadMensagem__c,
                 URLMidia__c
             FROM Mensagem__c
             WHERE Id IN :idsMensagens
         ];
     }
 
-    public static List<Mensagem__c> obterMensagensPorChavesExternasClientes(Set<String> chavesExternasClientes) {
+    public static List<Mensagem__c> obterMensagensPorChavesExternasClientes(Set<String> chavesExternasClientes, Id lead) {
+        System.debug('chavesExternasClientes: ' + chavesExternasClientes);
+        if (chavesExternasClientes == null || chavesExternasClientes.isEmpty()) {
+            System.debug('chavesExternasClientes is null or empty');
+            return new List<Mensagem__c>();
+        }
+        System.debug('chavesExternasClientes is not null or empty');
         return [
             SELECT 
                 Certificado__c,
@@ -37,9 +44,11 @@ public without sharing class MensagemSelector {
                 Status__c,
                 Tipo__c,
                 TipoMidia__c,
+                LeadMensagem__c,
                 URLMidia__c
             FROM Mensagem__c
-            WHERE ChaveExternaCliente__c = :chavesExternasClientes
+            WHERE ChaveExternaCliente__c IN :chavesExternasClientes AND
+                  LeadMensagem__c = :lead
             ORDER BY DataHora__c ASC
         ];
     }
