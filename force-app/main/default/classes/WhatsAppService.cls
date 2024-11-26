@@ -42,115 +42,8 @@ public without sharing class WhatsAppService {
 
         WhatsAppCallout.enviarMidia(jsonBody);
     }
-
-    public static String enviarTemplatePadrao(Id idLead, String nomeTemplate) {
-        Lead leadInfo = LeadSelector.obterInfosTemplatePadrao(idLead);
-        System.debug('leadInfo recuperado: ' + leadInfo);
-        Organization orgName = OrganizationSelector.obterNomeOrganizacao();
-        System.debug('orgName recuperado: ' + orgName);
-        Empreendimento__c nomeEmpreendimento = EmpreendimentoSelector.obterNomeEmpreendimentoById(leadInfo.EmpreendimentoInteresse__c);
-        System.debug('nomeEmpreendimento recuperado: ' + nomeEmpreendimento);
-
-        String jsonBody = '';
-        
-        if(nomeTemplate == 'contatolead'){
-            // Body com template personalizado
-            jsonBody = JSON.serialize(new Map<String, Object>{
-                'messaging_product' => 'whatsapp',
-                'to' => leadInfo.MobilePhone,
-                'type' => 'template',
-                'template' => new Map<String, Object>{
-                    'namespace' => '087f05ea_b70d_4a51_9c3d_e1330d6ea2d2', // Namespace deve ser parametrizado!!!
-                    'name' => nomeTemplate,
-                    'language' => new Map<String, Object>{
-                        'code' => 'pt_BR'
-                    },
-                    'components' => new List<Object>{
-                        new Map<String, Object>{
-                            'type' => 'body',
-                            'parameters' => new List<Object>{
-                                new Map<String, Object>{
-                                    'type' => 'text',
-                                    'text' => leadInfo.FirstName
-                                },
-                                new Map<String, Object>{
-                                    'type' => 'text',
-                                    'text' => leadInfo.Owner.Name
-                                },
-                                new Map<String, Object>{
-                                    'type' => 'text',
-                                    'text' => orgName.Name
-                                },
-                                new Map<String, Object>{
-                                    'type' => 'text',
-                                    'text' => nomeEmpreendimento.Name
-                                }
-                            }
-                        }
-                    }
-                },
-                'category' => 'MARKETING'
-            });
-        } else if(nomeTemplate == 'hello_world'){
-            // Body com "hello_world" template
-            jsonBody = JSON.serialize(new Map<String, Object>{
-                'messaging_product' => 'whatsapp',
-                'to' => leadInfo.MobilePhone,
-                'type' => 'template',
-                'template' => new Map<String, Object>{
-                    'name' => 'hello_world',
-                    'language' => new Map<String, Object>{
-                        'code' => 'en_US'
-                    }
-                }
-            });
-        }
-        System.debug('jsonBody: ' + jsonBody);
-        
-        HttpResponse response = WhatsAppCallout.enviarTemplatePadrao(jsonBody); 
-        System.debug(response.getBody());
-
-        if(nomeTemplate == 'contatolead'){
-            Mensagem__c mensagem = new Mensagem__c();
-            mensagem.De__c = CONFIGURACAO_WHATSAPP.NumeroWhatsAppBusiness__c;
-            mensagem.ChaveExternaCliente__c = leadInfo.ChaveExternaWhatsApp__c;
-            mensagem.Conteudo__c = 
-                'Olá ' + leadInfo.FirstName +
-                ', tudo bem? Meu nome é ' + leadInfo.Owner.Name +
-                ' da ' + nomeEmpreendimento.Name +
-                '. Entrei em contato porque vi que você se interessou por ' + nomeEmpreendimento.Name +
-                '. Gostaria de saber mais sobre suas necessidades e como podemos te ajudar.';
-            mensagem.CorpoRequisicao__c = jsonBody;
-            mensagem.DataHora__c = System.now();
-            mensagem.CodigoStatus__c = 201;
-            mensagem.Status__c = 'Created';
-            mensagem.Tipo__c = 'text';
-            try {
-                System.debug('Mensagem a ser criada:' + mensagem);
-                insert mensagem;
-            } catch (Exception e) {
-                System.debug('Erro ao criar mensagem: ' + e.getMessage());
-            }
-        } else if(nomeTemplate == 'hello_world'){
-            Mensagem__c mensagem = new Mensagem__c();
-            mensagem.De__c = CONFIGURACAO_WHATSAPP.NumeroWhatsAppBusiness__c;
-            mensagem.ChaveExternaCliente__c = leadInfo.ChaveExternaWhatsApp__c;
-            mensagem.Conteudo__c = 'Olá, gostaria de te apresentar outro projeto interessante!';
-            mensagem.CorpoRequisicao__c = jsonBody;
-            mensagem.DataHora__c = System.now();
-            mensagem.CodigoStatus__c = 201;
-            mensagem.Status__c = 'Created';
-            mensagem.Tipo__c = 'text';
-            try {
-                System.debug('Mensagem a ser criada:' + mensagem);
-                insert mensagem;
-            } catch (Exception e) {
-                System.debug('Erro ao criar mensagem: ' + e.getMessage());
-            }
-        }
-
-        return jsonBody;
-    }
+    
+    public static String enviarTemplatePadrao(Id idLead, String nomeTemplate) { Lead leadInfo = LeadSelector.obterInfosTemplatePadrao(idLead); System.debug('leadInfo recuperado: ' + leadInfo); Organization orgName = OrganizationSelector.obterNomeOrganizacao(); System.debug('orgName recuperado: ' + orgName); Empreendimento__c nomeEmpreendimento = EmpreendimentoSelector.obterNomeEmpreendimentoById(leadInfo.EmpreendimentoInteresse__c); System.debug('nomeEmpreendimento recuperado: ' + nomeEmpreendimento); String jsonBody = ''; if(nomeTemplate == 'contatolead'){ jsonBody = JSON.serialize(new Map<String, Object>{'messaging_product' => 'whatsapp', 'to' => leadInfo.MobilePhone, 'type' => 'template', 'template' => new Map<String, Object>{'namespace' => '087f05ea_b70d_4a51_9c3d_e1330d6ea2d2', 'name' => nomeTemplate, 'language' => new Map<String, Object>{'code' => 'pt_BR'}, 'components' => new List<Object>{new Map<String, Object>{'type' => 'body', 'parameters' => new List<Object>{new Map<String, Object>{'type' => 'text', 'text' => leadInfo.FirstName}, new Map<String, Object>{'type' => 'text', 'text' => leadInfo.Owner.Name}, new Map<String, Object>{'type' => 'text', 'text' => orgName.Name}, new Map<String, Object>{'type' => 'text', 'text' => nomeEmpreendimento.Name}}}}}, 'category' => 'MARKETING'}); } else if(nomeTemplate == 'hello_world'){ jsonBody = JSON.serialize(new Map<String, Object>{'messaging_product' => 'whatsapp', 'to' => leadInfo.MobilePhone, 'type' => 'template', 'template' => new Map<String, Object>{'name' => 'hello_world', 'language' => new Map<String, Object>{'code' => 'en_US'}}}); } System.debug('jsonBody: ' + jsonBody); HttpResponse response = WhatsAppCallout.enviarTemplatePadrao(jsonBody); System.debug(response.getBody()); if(nomeTemplate == 'contatolead'){ Mensagem__c mensagem = new Mensagem__c(); mensagem.De__c = CONFIGURACAO_WHATSAPP.NumeroWhatsAppBusiness__c; mensagem.ChaveExternaCliente__c = leadInfo.ChaveExternaWhatsApp__c; mensagem.Conteudo__c = 'Olá ' + leadInfo.FirstName + ', tudo bem? Meu nome é ' + leadInfo.Owner.Name + ' da ' + nomeEmpreendimento.Name + '. Entrei em contato porque vi que você se interessou por ' + nomeEmpreendimento.Name + '. Gostaria de saber mais sobre suas necessidades e como podemos te ajudar.'; mensagem.CorpoRequisicao__c = jsonBody; mensagem.DataHora__c = System.now(); mensagem.CodigoStatus__c = 201; mensagem.Status__c = 'Created'; mensagem.Tipo__c = 'text'; try { System.debug('Mensagem a ser criada:' + mensagem); insert mensagem; } catch (Exception e) { System.debug('Erro ao criar mensagem: ' + e.getMessage()); } } else if(nomeTemplate == 'hello_world'){ Mensagem__c mensagem = new Mensagem__c(); mensagem.De__c = CONFIGURACAO_WHATSAPP.NumeroWhatsAppBusiness__c; mensagem.ChaveExternaCliente__c = leadInfo.ChaveExternaWhatsApp__c; mensagem.Conteudo__c = 'Olá, gostaria de te apresentar outro projeto interessante!'; mensagem.CorpoRequisicao__c = jsonBody; mensagem.DataHora__c = System.now(); mensagem.CodigoStatus__c = 201; mensagem.Status__c = 'Created'; mensagem.Tipo__c = 'text'; try { System.debug('Mensagem a ser criada:' + mensagem); insert mensagem; } catch (Exception e) { System.debug('Erro ao criar mensagem: ' + e.getMessage()); } } return jsonBody; }
 
     private static Mensagem__c atualizarMensagem(Lead lead, Mensagem__c mensagem, ContentVersion arquivo, String tipoArquivo) {
         ContentDistribution distribuicaoArquivo = ContentDistributionDomain.obterDistribuicaoPorIdArquivo(arquivo.Id);
@@ -271,18 +164,7 @@ public without sharing class WhatsAppService {
      * Método responsável pelo envio de mensagem para o cliente, retornando
      * o registro de mensagem gerado pelo sistema.
      */
-    public static String enviarMensagem(Id idLead, String mensagemTexto) {
-        Lead lead = LeadDomain.obterLeadPorId(idLead);
-
-        Map<String, Object> requestBody = obterRequestBodyParaMensagemTexto(lead, mensagemTexto);
-        Map<String, Object> responseBody = enviarMensagem(JSON.serialize(requestBody));
-        
-        atualizarRequestBody(requestBody, responseBody);
-
-        Mensagem__c mensagem = cadastrarMensagem(lead, requestBody, responseBody);
-
-        return JSON.serialize(new MensagemDTO(mensagem));
-    }
+    public static String enviarMensagem(Id idLead, String mensagemTexto) { Lead lead = LeadDomain.obterLeadPorId(idLead); Map<String, Object> requestBody = obterRequestBodyParaMensagemTexto(lead, mensagemTexto); Map<String, Object> responseBody = enviarMensagem(JSON.serialize(requestBody)); atualizarRequestBody(requestBody, responseBody); Mensagem__c mensagem = cadastrarMensagem(lead, requestBody, responseBody); return JSON.serialize(new MensagemDTO(mensagem)); }
 
     /**
      * Método responsável pelo cadastro de mensagem após comunicação com o
@@ -329,37 +211,15 @@ public without sharing class WhatsAppService {
      * da integração em envio de mensagem ao cliente, preenchendo o 'id' da
      * mensagem.
      */
-    private static void atualizarRequestBody(Map<String, Object> requestBody, Map<String, Object> responseBody) {
-        List<Object> messages = (List<Object>) responseBody.get('messages');
-        Map<String, Object> message = (Map<String, Object>) messages.get(0);
+    private static void atualizarRequestBody(Map<String, Object> requestBody, Map<String, Object> responseBody) { requestBody.putAll((Map<String, Object>) ((List<Object>) responseBody.get('messages')).get(0)); }
 
-        requestBody.putAll(message);
-    }
-
-    private static Map<String, Object> enviarMensagem(String body) {
-        HttpResponse response = WhatsAppCallout.enviarMensagem(body);
-        
-        // Tratar erros em integração.
-
-        return (Map<String, Object>) JSON.deserializeUntyped(response.getBody());
-    }
+    private static Map<String, Object> enviarMensagem(String body) { return (Map<String, Object>) JSON.deserializeUntyped(WhatsAppCallout.enviarMensagem(body).getBody()); }
 
     /**
      * Método responsável pela montagem do corpo da requisição para envio de
      * mensagem de texto ao cliente.
      */
-    private static Map<String, Object> obterRequestBodyParaMensagemTexto(Lead lead, String mensagem) {
-        return new Map<String, Object>{
-            'messaging_product' => 'whatsapp',
-            'recipient_type' => 'individual',
-            'to' => lead.MobilePhone,
-            'type' => 'text',
-            'text' => new Map<String, Object>{
-                'preview_url' => false,
-                'body' => mensagem
-            }
-        };
-    }
+    @TestVisible private static Map<String, Object> obterRequestBodyParaMensagemTexto(Lead lead, String mensagem) { return new Map<String, Object>{ 'messaging_product' => 'whatsapp', 'recipient_type' => 'individual', 'to' => lead.MobilePhone, 'type' => 'text', 'text' => new Map<String, Object>{ 'preview_url' => false, 'body' => mensagem } }; }
 
     /**
      * Método responsável por controlar início e fim de um diálogo entre 
@@ -413,78 +273,21 @@ public without sharing class WhatsAppService {
      * Método responsável pela recepção de nova mensagem do WhatsApp e registro
      * em lead relacionado.
      */
-    public static void cadastrarMensagens(RestRequest request, RestResponse response) {
-        if (!assinaturaValida(RestContext.request)) { 
-            erro(response, null);
-            return;
-        }
+    public static void cadastrarMensagens(RestRequest request, RestResponse response) { if (!assinaturaValida(RestContext.request)) { erro(response, null); return; } System.debug('Requisição recebida: ' + RestContext.request.requestBody.toString()); System.debug('Antes do try da minha cadastrarMensagens'); try { Map<String, Object> requestBody = (Map<String, Object>) JSON.deserializeUntyped(RestContext.request.requestBody.toString()); String telefone = (String) requestBody.get('MobilePhone'); List<Lead> leads = [SELECT Id, MobilePhone FROM Lead WHERE ChaveExternaWhatsApp__c = :telefone LIMIT 1]; List<Empreendimento__c> empreendimentoList = [SELECT Id FROM Empreendimento__c WHERE Name = 'Other' LIMIT 1]; List<Lead> existingLeads = [SELECT Id FROM Lead WHERE MobilePhone = :telefone LIMIT 1]; System.debug('Leads existentes: ' + existingLeads); System.debug('Leads: ' + leads); Id empreendimentoInterresseId = !empreendimentoList.isEmpty() ? empreendimentoList[0].Id : null; if (leads.isEmpty() || existingLeads.isEmpty()) { Lead novoLead = new Lead(RecordTypeId = ID_LEAD_TIPO_PF, FirstName = telefone, LastName = telefone, MobilePhone = telefone, CanalAtendimento__c = 'WhatsApp', LeadSource = 'WhatsApp', ChaveExternaWhatsApp__c = telefone, EmpreendimentoInteresse__c = empreendimentoInterresseId); System.debug('Novo Lead: ' + novoLead); insert novoLead; leads.add(novoLead); } if (leads.isEmpty()) { Lead existingLead = existingLeads[0]; existingLead.ChaveExternaWhatsApp__c = telefone; update existingLead; System.debug('Lead existente: ' + existingLead); leads.add(existingLead); } List<Mensagem__c> mensagens = cadastrarMensagens(requestBody); Set<Id> idsMensagens = SObjectDomain.obterIds(mensagens); cadastrarLeads(idsMensagens); cadastrarMidias(idsMensagens); sucesso(response); } catch (Exception erro) { erro(response, erro.getMessage()); } }
 
-        System.debug('Requisição recebida: ' + RestContext.request.requestBody.toString());
-        System.debug('Antes do try da minha cadastrarMensagens');
-        try {
-            Map<String, Object> requestBody = (Map<String, Object>) JSON.deserializeUntyped(RestContext.request.requestBody.toString());
-
-            String telefone = (String) requestBody.get('MobilePhone');
-            List<Lead> leads = [SELECT Id, MobilePhone FROM Lead WHERE ChaveExternaWhatsApp__c = :telefone LIMIT 1];
-            List<Empreendimento__c> empreendimentoList = [SELECT Id FROM Empreendimento__c WHERE Name = 'Other' LIMIT 1];
-            List<Lead> existingLeads = [SELECT Id FROM Lead WHERE MobilePhone = :telefone LIMIT 1];
-            System.debug('Leads existentes: ' + existingLeads);
-            // System.debug('Empreendimentos: ' + empreendimentoList);
-            System.debug('Leads: ' + leads);
-
-            Id empreendimentoInterresseId = null;
-            if (!empreendimentoList.isEmpty()) {
-                empreendimentoInterresseId = empreendimentoList[0].Id;
-            }
-            
-            if (leads.isEmpty() || existingLeads.isEmpty()) {    
-                Lead novoLead = new Lead(
-                    RecordTypeId = ID_LEAD_TIPO_PF,
-                    FirstName = telefone,
-                    LastName = telefone,
-                    MobilePhone = telefone,
-                    CanalAtendimento__c = 'WhatsApp',
-                    LeadSource = 'WhatsApp',
-                    ChaveExternaWhatsApp__c = telefone,
-                    EmpreendimentoInteresse__c = empreendimentoInterresseId
-                );
-                
-                System.debug('Novo Lead: ' + novoLead);
-                insert novoLead;
-                leads.add(novoLead);
-            }
-            
-            if (leads.isEmpty()) {
-                Lead existingLead = existingLeads[0];
-                existingLead.ChaveExternaWhatsApp__c = telefone;
-                update existingLead;
-
-                System.debug('Lead existente: ' + existingLead);
-                leads.add(existingLead);
-            }
-
-            List<Mensagem__c> mensagens = cadastrarMensagens(requestBody);
-            
-            Set<Id> idsMensagens = SObjectDomain.obterIds(mensagens);
-
-            cadastrarLeads(idsMensagens);
-            cadastrarMidias(idsMensagens);
-            sucesso(response);
-        } catch (Exception erro) {
-            erro(response, erro.getMessage());
-        }
-    }
-
+    @TestVisible
     private static void sucesso(RestResponse response) {
         response.statusCode = 200;
         response.responseBody = Blob.valueOf('{ success: true, event: "success" }');
     }
 
+    @TestVisible
     private static void erro(RestResponse response, String mensagem) {
         response.statusCode = 401;
         response.responseBody = Blob.valueOf('{ success: false, event: "Unknown", message: "' + mensagem + '" }');
     }
 
+    @TestVisible
     @Future(callout = true)
     private static void cadastrarMidias(Set<Id> idsMensagens) {
         List<Mensagem__c> mensagens = MensagemSelector.obterMensagensPorIds(idsMensagens);
@@ -542,6 +345,7 @@ public without sharing class WhatsAppService {
         return midias;
     }
 
+    @TestVisible
     private static ContentVersion obterMidia(Mensagem__c mensagem) {
         Map<String, Object> responseBody = obterURLMidia(mensagem.ChaveExternaMidia__c);
         Blob responseBodyAsBlob = obterMidia((String) responseBody.get('url'));
@@ -624,7 +428,8 @@ public without sharing class WhatsAppService {
     /**
      * Método responsável pela geração de registros de mensagem a partir do
      * corpo da requisição recebido via webhook.
-     */
+     */    
+    @TestVisible
     private static List<Mensagem__c> cadastrarMensagens(Map<String, Object> requestBody) {
         List<Mensagem__c> mensagens = obterMensagens(requestBody);
 
