@@ -90,7 +90,7 @@ export default class WhatsApp extends LightningElement {
      */
     async obterMensagens() {
         try {
-            this.mensagens = await this.obterMensagensPorChaveExternaCliente(this.lead.chaveExternaWhatsApp, this.recordId);
+            this.mensagens = await this.obterMensagensPorChaveExternaCliente(this.lead.chaveExternaWhatsApp);
         } catch (erro) {
             this.apresentarMensagem('Erro', erro.body.message, 'error');
         }

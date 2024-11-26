@@ -22,7 +22,7 @@ public without sharing class MensagemSelector {
         ];
     }
 
-    public static List<Mensagem__c> obterMensagensPorChavesExternasClientes(Set<String> chavesExternasClientes, Id lead) {
+    public static List<Mensagem__c> obterMensagensPorChavesExternasClientes(Set<String> chavesExternasClientes) {
         System.debug('chavesExternasClientes: ' + chavesExternasClientes);
         if (chavesExternasClientes == null || chavesExternasClientes.isEmpty()) {
             System.debug('chavesExternasClientes is null or empty');
@@ -47,8 +47,7 @@ public without sharing class MensagemSelector {
                 LeadMensagem__c,
                 URLMidia__c
             FROM Mensagem__c
-            WHERE ChaveExternaCliente__c IN :chavesExternasClientes AND
-                  LeadMensagem__c = :lead
+            WHERE ChaveExternaCliente__c IN :chavesExternasClientes 
             ORDER BY DataHora__c ASC
         ];
     }

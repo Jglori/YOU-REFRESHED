@@ -393,10 +393,10 @@ public without sharing class WhatsAppService {
      * Método responsável pela obtenção das mensagens relacionadas à chave
      * externa do cliente.
      */
-    public static String obterMensagensPorChaveExternaCliente(String chaveExternaCliente, Id lead) {
+    public static String obterMensagensPorChaveExternaCliente(String chaveExternaCliente) {
         List<MensagemDTO> mensagensDTO = new List<MensagemDTO>();
         if (String.isBlank(chaveExternaCliente)) { return JSON.serialize(mensagensDTO); }
-        for(Mensagem__c mensagem : MensagemSelector.obterMensagensPorChavesExternasClientes(new Set<String>{ chaveExternaCliente }, lead)) {
+        for(Mensagem__c mensagem : MensagemSelector.obterMensagensPorChavesExternasClientes(new Set<String>{ chaveExternaCliente })) {
             mensagensDTO.add(new MensagemDTO(mensagem));
         }
 
