@@ -19,7 +19,7 @@ export default class WhatsAppMensagem extends LightningElement {
     }
     
     get mensagemRemetente() {
-        return this.mensagem.de === this.lead.celular;
+        return String(this.mensagem.de) === String(this.lead.chaveExternaWhatsApp);
     }
 
     get listItemClassName() {
