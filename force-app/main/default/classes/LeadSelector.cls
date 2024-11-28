@@ -65,14 +65,23 @@ public without sharing class LeadSelector {
                 AND OwnerId NOT IN :idsCorretores
         ];
     }
-    
-    public static List<Lead> obterLeadsPorIds(Set<Id> idsLeads) {
-        Lead lead = [
-            SELECT EmpreendimentoInteresse__r.Name 
-            FROM Lead 
-            WHERE Id = :idsLeads
+
+    public static List<Lead> bolsaoLeads(){
+        return [
+            SELECT Id ,Name,
+            Email,
+            CanalAtendimento__c,
+            OwnerId,
+            Owner.Name,
+            CreatedDate,
+            Corretor__r.CargaRestante__c
+             FROM LEAD WHERE RoletaLeads__c != '' and CorretorContato__r.name = ''
         ];
+    }
     
+
+
+    public static List<Lead> obterLeadsPorIds(Set<Id> idsLeads) {
         return [
             SELECT
                 Name,
@@ -91,9 +100,9 @@ public without sharing class LeadSelector {
                 InicioDialogo__c,
                 FimDialogo__c,
                 UltimaMensagem__c,
-                EmpreendimentoInteresse__c,
-                Corretor__r.QuantidadeLeadsFaleConosco__c,
+                EmpreendimentoInteresse__r.Name,
                 RemetenteWhatsApp__c,
+                Corretor__r.QuantidadeLeadsFaleConosco__c,
                 Corretor__r.QuantidadeLeadsChat__c,
                 Corretor__r.QuantidadeLeadsWhatsApp__c,
                 Corretor__r.QuantidadeLeadsTelefone__c,
@@ -103,6 +112,44 @@ public without sharing class LeadSelector {
             WHERE Id IN :idsLeads
         ];
     }
+    
+    // esse metodo esra esperando um set de ids mas esta passando uma lista o que esra errado 
+    // public static List<Lead> obterLeadsPorIds(Set<Id> idsLeads) {
+    //     Lead lead = [
+    //         SELECT EmpreendimentoInteresse__r.Name 
+    //         FROM Lead 
+    //         WHERE Id = :idsLeads
+    //     ];
+    
+    //     return [
+    //         SELECT
+    //             Name,
+    //             CanalAtendimento__c,
+    //             RoletaLeads__c,
+    //             Corretor__c,
+    //             ChaveExternaWhatsApp__c,
+    //             FirstName,
+    //             LastName,
+    //             MobilePhone,
+    //             Email,
+    //             Status,
+    //             OwnerId,
+    //             CreatedDate,
+    //             Owner.Name,
+    //             InicioDialogo__c,
+    //             FimDialogo__c,
+    //             UltimaMensagem__c,
+    //             EmpreendimentoInteresse__c,
+    //             Corretor__r.QuantidadeLeadsFaleConosco__c,
+    //             Corretor__r.QuantidadeLeadsChat__c,
+    //             Corretor__r.QuantidadeLeadsWhatsApp__c,
+    //             Corretor__r.QuantidadeLeadsTelefone__c,
+    //             Corretor__r.QuantidadeLeadsLoja__c,
+    //             Corretor__r.QuantidadeLeadsStand__c
+    //         FROM Lead
+    //         WHERE Id IN :idsLeads
+    //     ];
+    // }
 
     public static List<Lead> obterLeadsPorChavesExternasClientes(Set<String> chavesClientes) {
         return [
@@ -133,22 +180,58 @@ public without sharing class LeadSelector {
     }
 
     public static List<Lead> obterLeadsPorInformacoesConcierge(String celular, String email, Boolean isJuridica, String phone) {
+        List<String> conditions = new List<String>();
+    
+        // Construir as condições da consulta dinamicamente
+        if (isJuridica) {
+            if (String.isNotBlank(phone)) {
+                conditions.add('(Phone = :phone)');
+            }
+            if (String.isNotBlank(email)) {
+                conditions.add('(EmailAdicional__c = :email)');
+                conditions.add('(Email = :email)');
+            }
+        } else {
+            if (String.isNotBlank(celular)) {
+                conditions.add('(MobilePhone = :celular)');
+                conditions.add('(CelularAdicional__c = :celular)');
+                conditions.add('(CelularAdicional1__c = :celular)');
+                conditions.add('(CelularAdicional2__c = :celular)');
+                conditions.add('(CelularComercialAdicional__c = :celular)');
+            }
+            if (String.isNotBlank(email)) {
+                conditions.add('(Email = :email)');
+                conditions.add('(EmailAdicional__c = :email)');
+            }
+        }
+    
+        // Se nenhuma condição for adicionada, retorne uma lista vazia
+        if (conditions.isEmpty()) {
+            return new List<Lead>();
+        }
+    
+        // Construa a consulta com as condições dinâmicas
         String query = 'SELECT ' +
                        '    Id, ' +
                        '    Name, ' +
                        '    MobilePhone, ' +
                        '    Email, ' +
                        '    Status, ' +
+                       '    Owner.Name, ' +
+                       '    CorretorContato__r.Name, ' + 
                        '    InicioDialogo__c, ' +
                        '    FimDialogo__c, ' +
                        '    UltimaMensagem__c, ' +
                        '    Phone, ' +
                        '    CreatedDate ' +
-                       'FROM Lead';
+                       'FROM Lead ' +
+                       'WHERE ' + String.join(conditions, ' OR ') +
+                       ' LIMIT 500';
     
-        // Executa a query
+        // Realize a consulta usando a string de consulta dinâmica
         return Database.query(query);
     }
+    
     
     public static Lead obterMobilePhoneLead(String idLead) {
         return [

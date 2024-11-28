@@ -204,7 +204,7 @@ export default class WhatsApp extends LightningElement {
      * Envia uma nova mensagem de texto para o lead e atualiza o histórico de mensagens.
      */
     async handleEnviarMensagem() {
-        if (!this.mensagemTexto || !this.lead.chaveExternaWhatsApp || this.lead.ContadorMensagemPadrao__c <= 1) {return this.apresentarMensagem('Erro', 'Não é possível enviar mensagem', 'error');};
+        if (!this.mensagemTexto) return ;
         try {
             const novaMensagem = await this.enviarMensagem(this.recordId, this.mensagemTexto);
             this.mensagens = [...this.mensagens, novaMensagem];
@@ -219,7 +219,6 @@ export default class WhatsApp extends LightningElement {
      * Chama o método Apex para enviar a mensagem de texto
      */
     enviarMensagem(idLead, mensagemTexto) {
-        if (!this.mensagemTexto || !this.lead.chaveExternaWhatsApp || this.lead.ContadorMensagemPadrao__c <= 1) {return this.apresentarMensagem('Erro', 'Não é possível enviar mensagem', 'error');};
         return enviarMensagem({ idLead, mensagemTexto })
             .then(resultado => JSON.parse(resultado))
             .catch(erro => {
@@ -259,7 +258,6 @@ export default class WhatsApp extends LightningElement {
      * Trata o envio de arquivos de mídia
      */
     handleEnviarMidia(event) {
-        if (!this.mensagemTexto || !this.lead.chaveExternaWhatsApp || this.lead.ContadorMensagemPadrao__c <= 1) {return this.apresentarMensagem('Erro', 'Não é possível enviar mensagem', 'error');};
         Array.from(event.target.files).forEach(arquivo => {
             const leitor = new FileReader();
             leitor.onload = (e) => this.carregarArquivo(e, arquivo);
@@ -288,7 +286,6 @@ export default class WhatsApp extends LightningElement {
      * Chama o método Apex para enviar a mídia
      */
     enviarMidia(idLead, tipoArquivo, nomeArquivo, corpoArquivo) {
-        if (!this.mensagemTexto || !this.lead.chaveExternaWhatsApp || this.lead.ContadorMensagemPadrao__c <= 1) {return this.apresentarMensagem('Erro', 'Não é possível enviar mensagem', 'error');};
         return enviarMidia({ idLead, tipoArquivo, nomeArquivo, corpoArquivo })
             .then(resultado => JSON.parse(resultado))
             .catch(erro => {
