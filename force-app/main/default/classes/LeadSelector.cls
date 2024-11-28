@@ -93,6 +93,7 @@ public without sharing class LeadSelector {
                 UltimaMensagem__c,
                 EmpreendimentoInteresse__c,
                 Corretor__r.QuantidadeLeadsFaleConosco__c,
+                RemetenteWhatsApp__c,
                 Corretor__r.QuantidadeLeadsChat__c,
                 Corretor__r.QuantidadeLeadsWhatsApp__c,
                 Corretor__r.QuantidadeLeadsTelefone__c,

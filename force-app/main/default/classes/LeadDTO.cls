@@ -37,6 +37,7 @@ public class LeadDTO {
         this.CreatedDate = camposLeadPorNomeAPI.containsKey('CreatedDate') ? lead.CreatedDate : null;
         //this.nomeCorretor = (lead.CorretorContato__r != null) ? lead.CorretorContato__r.Name : null;
         this.telefone = camposLeadPorNomeAPI.containsKey('Phone') ? lead.Phone : null;
+        this.remetenteWhatsApp = camposLeadPorNomeAPI.containsKey('RemetenteWhatsApp__c') ? lead.RemetenteWhatsApp__c : null;
     }
 
     public LeadDTO(Lead lead, ConfiguracaoCanalAtendimento__mdt configuracaoCanalAtendimento) {

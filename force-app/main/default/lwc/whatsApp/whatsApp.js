@@ -39,12 +39,30 @@ export default class WhatsApp extends LightningElement {
     }
 
     /**
+     * Verifica se é possivel enviar mensagem para o Lead
+     * Sem ser pelos Templates Padrões 
+     */
+    get isRemetenteWhatsAppBlocked(){
+        console.log('isRemetenteWhatsAppBlocked', this.lead.remetenteWhatsApp);
+        return this.lead.remetenteWhatsApp
+    }
+
+    /**
      * Método executado quando o componente é conectado ao DOM. Inicializa
      * o componente e ativa a verificação periódica de novas mensagens.
      */
     connectedCallback() {
         this.initializeComponent();
     }
+
+    /**
+     * Estilo do botão de anexar arquivo, desabilitado se o remetente do WhatsApp estiver bloqueado
+     */
+    get buttonStyle() {
+        return `cursor: ${this.isRemetenteWhatsAppBlocked ? 'not-allowed' : 'pointer'}; pointer-events: ${this.isRemetenteWhatsAppBlocked ? 'none' : 'auto'};`;
+    }
+
+    
 
     /**
      * Inicializa o componente, carregando as informações do lead e as mensagens

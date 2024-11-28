@@ -62,29 +62,63 @@
         </section>
 
         <section>
-            <div style="padding: 1%; display: flex; align-items: center; gap: .75rem; border: 1px solid #e5e5e5;" >
+            <div style="padding: 1%; display: flex; align-items: center; gap: .75rem; border: 1px solid #e5e5e5;">
                 <template lwc:if={dialogoEmAndamento}>
-                    <lightning-button-icon variant="neutral" label="Selecionar template padrão" title="Template padrão"
-                        icon-name="utility:insert_template"
-                        onclick={handleSelecionarTemplate}></lightning-button-icon>
-                    <div>
-                        <label for="file-input">
-                            <div class="slds-button slds-button_icon slds-button_icon-border" style="cursor: pointer">
-                                <lightning-icon variant="neutral" size="x-small" label="Anexar" title="Anexar mídia"
-                                    icon-name="utility:attach">
-                                </lightning-icon>
-                            </div>
-                        </label>
-                        <input id="file-input" type="file" style="display: none;" onchange={handleEnviarMidia}
-                            multiple />
-                    </div>
-                    <lightning-textarea style="width: 100%;" type="text" placeholder="Digite uma mensagem"
-                        variant="label-hidden" value={mensagemTexto}
-                        onchange={handleAlteracaoMensagemTexto}></lightning-textarea>
-                    <lightning-button-icon variant="brand" label="Enviar" title="Enviar mensagem"
-                        icon-name="utility:send" onclick={handleEnviarMensagem}></lightning-button-icon>
+                    <!-- Botão de template padrão -->
+                    <lightning-button-icon 
+                        variant="neutral" 
+                        label="Selecionar template padrão" 
+                        title="Template padrão"
+                        icon-name="utility:insert_template" 
+                        onclick={handleSelecionarTemplate}>
+                    </lightning-button-icon>
+
+                <!-- Botão de anexar mídia -->
+                <div>
+                    <label for="file-input">
+                        <div 
+                            class="slds-button slds-button_icon slds-button_icon-border"
+                            style={buttonStyle}>
+                            <lightning-icon 
+                                variant="neutral" 
+                                size="x-small" 
+                                label="Anexar" 
+                                title="Anexar mídia"
+                                icon-name="utility:attach">
+                            </lightning-icon>
+                        </div>
+                    </label>
+                    <input 
+                        id="file-input" 
+                        type="file" 
+                        style="display: none;" 
+                        onchange={handleEnviarMidia} 
+                        multiple 
+                        disabled={isRemetenteWhatsAppBlocked} />
+                </div>
+
+                    <!-- Campo de texto -->
+                    <lightning-textarea 
+                        style="width: 100%;" 
+                        type="text" 
+                        placeholder="Digite uma mensagem"
+                        variant="label-hidden" 
+                        value={mensagemTexto} 
+                        disabled={isRemetenteWhatsAppBlocked}
+                        onchange={handleAlteracaoMensagemTexto}>
+                    </lightning-textarea>
+
+                    <!-- Botão de envio -->
+                    <lightning-button-icon 
+                        variant="brand" 
+                        label="Enviar" 
+                        title="Enviar mensagem"
+                        icon-name="utility:send" 
+                        onclick={handleEnviarMensagem} 
+                        disabled={isRemetenteWhatsAppBlocked}>
+                    </lightning-button-icon>
                 </template>
             </div>
-        </section>
+        </section>      
     </div>
 </template>
