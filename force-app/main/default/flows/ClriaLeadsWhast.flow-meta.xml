@@ -1,54 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
-    <actionCalls>
-        <description>Envia mensagem automatica para o cliente via WhatsApp.</description>
-        <name>EnviarMensagemTriagem</name>
-        <label>Enviar Mensagem Triagem</label>
-        <locationX>578</locationX>
-        <locationY>1403</locationY>
-        <actionName>WhatsAppService</actionName>
-        <actionType>apex</actionType>
-        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
-        <inputParameters>
-            <name>requests</name>
-            <value>
-                <elementReference>ObterLeadCriado</elementReference>
-            </value>
-        </inputParameters>
-        <nameSegment>WhatsAppService</nameSegment>
-        <offset>0</offset>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-        <versionSegment>1</versionSegment>
-    </actionCalls>
-    <actionCalls>
-        <description>Envia mensagem automatica para o cliente via WhatsApp.</description>
-        <name>EnviarMensagemTriagemExistente</name>
-        <label>Enviar Mensagem Triagem Existente</label>
-        <locationX>50</locationX>
-        <locationY>1295</locationY>
-        <actionName>WhatsAppService</actionName>
-        <actionType>apex</actionType>
-        <connector>
-            <targetReference>ReiteracaoLead</targetReference>
-        </connector>
-        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
-        <inputParameters>
-            <name>requests</name>
-            <value>
-                <elementReference>ObterLead</elementReference>
-            </value>
-        </inputParameters>
-        <nameSegment>WhatsAppService</nameSegment>
-        <offset>0</offset>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-        <versionSegment>1</versionSegment>
-    </actionCalls>
     <apiVersion>62.0</apiVersion>
     <assignments>
         <name>AtualizarUltimaReiteracao</name>
         <label>AtualizarUltimaReiteracao</label>
         <locationX>50</locationX>
-        <locationY>1595</locationY>
+        <locationY>1703</locationY>
         <assignmentItems>
             <assignToReference>ObterLead.ltima_Reitera_o__c</assignToReference>
             <operator>Assign</operator>
@@ -90,7 +47,7 @@
         <name>ReiteracaoLead</name>
         <label>ReiteracaoLead</label>
         <locationX>182</locationX>
-        <locationY>1487</locationY>
+        <locationY>1595</locationY>
         <defaultConnectorLabel>Interacao</defaultConnectorLabel>
         <rules>
             <name>Reiteracao</name>
@@ -112,7 +69,7 @@
         <name>TriagemLead</name>
         <label>TriagemLead</label>
         <locationX>182</locationX>
-        <locationY>1187</locationY>
+        <locationY>1295</locationY>
         <defaultConnector>
             <targetReference>ReiteracaoLead</targetReference>
         </defaultConnector>
@@ -128,7 +85,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>EnviarMensagemTriagemExistente</targetReference>
+                <targetReference>AtualizarContadorMensagem</targetReference>
             </connector>
             <label>TriagemIncompleta</label>
         </rules>
@@ -137,7 +94,7 @@
         <name>VerificaSeExisteLeadChaveCadastrado</name>
         <label>Verifica se existe Lead com Chave Cadastrado</label>
         <locationX>380</locationX>
-        <locationY>1079</locationY>
+        <locationY>1187</locationY>
         <defaultConnector>
             <targetReference>CriaLead</targetReference>
         </defaultConnector>
@@ -170,6 +127,12 @@
         <expression>TODAY()-{!ObterLead.DataUltimaReiteracoes__c}</expression>
         <scale>2</scale>
     </formulas>
+    <formulas>
+        <name>SomarContador</name>
+        <dataType>Number</dataType>
+        <expression>{!ObterLead.ContadorMensagemPadrao__c}+1</expression>
+        <scale>1</scale>
+    </formulas>
     <interviewLabel>ClriaLeadsWhast {!$Flow.CurrentDateTime}</interviewLabel>
     <label>ClriaLeadsWhast</label>
     <processMetadataValues>
@@ -195,10 +158,7 @@
         <name>CriaLead</name>
         <label>CriaLead</label>
         <locationX>578</locationX>
-        <locationY>1187</locationY>
-        <connector>
-            <targetReference>ObterLeadCriado</targetReference>
-        </connector>
+        <locationY>1295</locationY>
         <inputAssignments>
             <field>CanalAtendimento__c</field>
             <value>
@@ -254,6 +214,12 @@
             </value>
         </inputAssignments>
         <inputAssignments>
+            <field>RemetenteWhatsApp__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
             <field>RoletaLeads__c</field>
             <value>
                 <stringValue>{!ObterRoleta.Id}</stringValue>
@@ -269,7 +235,7 @@
         <locationY>971</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>VerificaSeExisteLeadChaveCadastrado</targetReference>
+            <targetReference>Atualizar_registros_1</targetReference>
         </connector>
         <filterLogic>and</filterLogic>
         <filters>
@@ -326,27 +292,6 @@
             <operator>EqualTo</operator>
             <value>
                 <elementReference>ObterTipodeRegistro.Id</elementReference>
-            </value>
-        </filters>
-        <getFirstRecordOnly>true</getFirstRecordOnly>
-        <object>Lead</object>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-    </recordLookups>
-    <recordLookups>
-        <name>ObterLeadCriado</name>
-        <label>ObterLeadCriado</label>
-        <locationX>578</locationX>
-        <locationY>1295</locationY>
-        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
-        <connector>
-            <targetReference>EnviarMensagemTriagem</targetReference>
-        </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Id</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>CriaLead</elementReference>
             </value>
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
@@ -417,6 +362,40 @@
         <object>RecordType</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
+    <recordUpdates>
+        <name>Atualizar_registros_1</name>
+        <label>Atualizar registros 1</label>
+        <locationX>380</locationX>
+        <locationY>1079</locationY>
+        <connector>
+            <targetReference>VerificaSeExisteLeadChaveCadastrado</targetReference>
+        </connector>
+        <inputReference>ObterLead</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <name>AtualizarContadorMensagem</name>
+        <label>AtualizarContadorMensagem</label>
+        <locationX>50</locationX>
+        <locationY>1403</locationY>
+        <connector>
+            <targetReference>ReiteracaoLead</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>ObterLead.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>ContadorMensagemPadrao__c</field>
+            <value>
+                <elementReference>SomarContador</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Lead</object>
+    </recordUpdates>
     <start>
         <locationX>485</locationX>
         <locationY>0</locationY>
@@ -427,7 +406,7 @@
         <recordTriggerType>Create</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
-    <status>Obsolete</status>
+    <status>Active</status>
     <variables>
         <name>MensagemTexto1</name>
         <dataType>String</dataType>
