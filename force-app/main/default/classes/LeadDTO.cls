@@ -14,6 +14,7 @@ public class LeadDTO {
     public Datetime CreatedDate;
     public String nomeCorretor;
     public String telefone;
+    public Boolean remetenteWhatsApp;
 
     public Decimal carga;
     public Decimal cargaRestante;
