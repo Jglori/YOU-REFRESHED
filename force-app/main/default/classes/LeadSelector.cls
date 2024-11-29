@@ -50,7 +50,40 @@ public without sharing class LeadSelector {
     }
     
     public static List<Lead> obterLeadsPorIdsUsuarios(Set<Id> idsCorretores) {
-        return [
+        // Obtemos os membros da equipe e os nomes das equipes associadas aos corretores
+        List<MembroEquipe__c> membros = [
+            SELECT Id, Equipe__r.Name 
+            FROM MembroEquipe__c 
+            WHERE Usuario__r.Id IN :idsCorretores
+        ];
+    
+        // Agora, obtemos os nomes das equipes dos membros
+        Set<String> nomesEquipes = new Set<String>();
+        for (MembroEquipe__c membro : membros) {
+            nomesEquipes.add(membro.Equipe__r.Name);
+        }
+    
+        // Consulta os leads com roleta e cuja equipe está no conjunto de nomes
+        List<Lead> leadsComRoleta = [
+            SELECT
+                Name,
+                Email,
+                CanalAtendimento__c,
+                OwnerId,
+                Owner.Name,
+                CreatedDate,
+                Corretor__r.CargaRestante__c,
+                RoletaLeads__r.Name,          
+                RoletaLeads__r.Equipe__r.Name
+            FROM Lead
+            WHERE
+                RoletaLeads__r.Id != null 
+                AND CorretorContato__c = null 
+                AND RoletaLeads__r.Equipe__r.Name IN :nomesEquipes
+        ];
+    
+        // Consulta os leads associados a corretores e que não estão associados ao mesmo corretor
+        List<Lead> leadsComEquipe = [
             SELECT
                 Name,
                 Email,
@@ -61,23 +94,54 @@ public without sharing class LeadSelector {
                 Corretor__r.CargaRestante__c
             FROM Lead
             WHERE
-                Corretor__r.MembroEquipe__r.Usuario__c IN :idsCorretores 
+                Corretor__r.MembroEquipe__r.Usuario__c IN :idsCorretores
+                AND OwnerId NOT IN :idsCorretores
+        ];
+    
+        // Para evitar duplicação, usamos um Set para controlar os IDs dos leads já recuperados
+        Set<Id> leadIds = new Set<Id>();
+        List<Lead> todosLeads = new List<Lead>();
+    
+        // Adiciona os leads de RoletaLeads sem duplicação
+        for (Lead lead : leadsComRoleta) {
+            if (!leadIds.contains(lead.Id)) {
+                todosLeads.add(lead);
+                leadIds.add(lead.Id);
+            }
+        }
+    
+        // Adiciona os leads da equipe sem duplicação
+        for (Lead lead : leadsComEquipe) {
+            if (!leadIds.contains(lead.Id)) {
+                todosLeads.add(lead);
+                leadIds.add(lead.Id);
+            }
+        }
+    
+        // Retorna a lista combinada sem duplicação
+        return todosLeads;
+    }
+    
+    
+    public static List<Lead> bolsaoLeads(Set<Id> idsCorretores) {
+        return [
+            SELECT
+                Id,
+                Name,
+                Email,
+                CanalAtendimento__c,
+                OwnerId,
+                Owner.Name,
+                CreatedDate,
+                Corretor__r.CargaRestante__c
+            FROM Lead
+            WHERE
+                RoletaLeads__c != ''
+                AND CorretorContato__r.Name = ''
                 AND OwnerId NOT IN :idsCorretores
         ];
     }
-
-    public static List<Lead> bolsaoLeads(){
-        return [
-            SELECT Id ,Name,
-            Email,
-            CanalAtendimento__c,
-            OwnerId,
-            Owner.Name,
-            CreatedDate,
-            Corretor__r.CargaRestante__c
-             FROM LEAD WHERE RoletaLeads__c != '' and CorretorContato__r.name = ''
-        ];
-    }
+    
     
 
 

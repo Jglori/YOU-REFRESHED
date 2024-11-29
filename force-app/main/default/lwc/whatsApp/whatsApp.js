@@ -43,8 +43,7 @@ export default class WhatsApp extends LightningElement {
      * Sem ser pelos Templates Padrões 
      */
     get isRemetenteWhatsAppBlocked(){
-        console.log('isRemetenteWhatsAppBlocked', this.lead.remetenteWhatsApp);
-        return this.lead.remetenteWhatsApp
+        return !this.lead.remetenteWhatsApp
     }
 
     /**
@@ -214,7 +213,18 @@ export default class WhatsApp extends LightningElement {
             this.apresentarMensagem('Erro', erro.body.message, 'error');
         }
     }
-
+    
+    /**
+     * Metodo para enviar mensagem ao pressionar a tecla Enter
+     * @param {*} event
+     */
+    handleKeyPress(event) {
+        // Verifica se a tecla pressionada foi "Enter" sem o Shift
+        if (event.key === "Enter" && !event.shiftKey) {
+            this.handleEnviarMensagem();
+        }
+    }
+    
     /**
      * Chama o método Apex para enviar a mensagem de texto
      */

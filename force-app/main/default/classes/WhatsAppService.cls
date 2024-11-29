@@ -63,6 +63,25 @@ public without sharing class WhatsAppService {
         return mensagemAtualizada;
     }
 
+    /**
+     * Método responsável pela atualização do campo 'RemetenteWhatsApp' do Lead.
+     * Caso o campo esteja como 'true', alterna para 'false' e vice-versa.
+     * @param idLead - Id do Lead a ser atualizado.
+     */
+    public static void atualizarRemetenteWhatsApp(Id idLead) {
+        // Busca o Lead
+        Lead leadToUpdate = [SELECT Id, RemetenteWhatsApp__c FROM Lead WHERE Id = :idLead LIMIT 1];
+    
+        // Verifica se o campo RemetenteWhatsApp__c é 'false' antes de atualizar
+        if (leadToUpdate.RemetenteWhatsApp__c == false) {
+            // Atualiza o campo para 'true' apenas se for 'false'
+            leadToUpdate.RemetenteWhatsApp__c = true;
+        
+            // Atualiza o registro
+            update leadToUpdate;
+        }
+    }
+
     private static Map<String, Object> obterRequestBodyParaMidia(Lead lead, ContentDistribution distribuicaoArquivo, String tipoArquivo) {
         Map<String, Object> requestBody = new Map<String, Object>{
             'messaging_product' => 'whatsapp',

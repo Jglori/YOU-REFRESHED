@@ -6,7 +6,6 @@ import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
 export default class TemplateModal extends LightningModal {
     @api recordId;
-
     nomeLead; 
     nomeOwner; 
     nomeOrganizacao; 
@@ -21,13 +20,11 @@ export default class TemplateModal extends LightningModal {
     connectedCallback() {
         this.fetchLeadDetails();
     }
+
     renderedCallback() {
         this.fetchLeadDetails();
     }
 
-    /**
-     * Busca os detalhes do Lead a partir do Apex Controller e popula as variáveis do componente com esses dados.
-     */
     fetchLeadDetails() {
         getLeadDetails({ leadId: this.recordId })
             .then((data) => {
@@ -40,19 +37,20 @@ export default class TemplateModal extends LightningModal {
             })
             .catch((error) => {
                 console.error('Erro ao buscar os detalhes do Lead:', error);
+                this.dispatchEvent(
+                    new ShowToastEvent({
+                        title: 'Erro',
+                        message: 'Erro ao buscar os detalhes do Lead',
+                        variant: 'error',
+                    })
+                );
             });
     }
 
-    /**
-     * Fecha o modal ao disparar o evento de fechamento com o valor 'okay'.
-     */
     handleClose() {
         this.close('okay');
     }
 
-    /**
-     * Realiza a validação e o envio do template selecionado. Caso faltem campos obrigatórios, exibe uma mensagem de erro.
-     */
     async handleSend() {
         if (!this.selectedTemplateId) {
             this.dispatchEvent(
@@ -76,7 +74,7 @@ export default class TemplateModal extends LightningModal {
             this.dispatchEvent(
                 new ShowToastEvent({
                     title: 'Lead não possui informações suficientes',
-                    message: mensagemErro,
+                    message: 'Erro: ' + mensagemErro,
                     variant: 'error',
                 })
             );
@@ -104,9 +102,6 @@ export default class TemplateModal extends LightningModal {
         }
     }
 
-    /**
-     * Define o template selecionado com base no card clicado pelo usuário e atualiza o estado do componente.
-     */
     handleCardClick(event) {
         const cardId = event.currentTarget.dataset.id;
 
