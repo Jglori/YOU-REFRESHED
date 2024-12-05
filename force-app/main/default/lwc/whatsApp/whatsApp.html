@@ -97,27 +97,52 @@
                         disabled={isRemetenteWhatsAppBlocked} />
                 </div>
 
-                    <!-- Campo de texto -->
-                    <lightning-textarea 
-                        style="width: 100%;" 
-                        type="text" 
-                        placeholder="Digite uma mensagem"
-                        variant="label-hidden" 
-                        value={mensagemTexto} 
-                        disabled={isRemetenteWhatsAppBlocked}
-                        onchange={handleAlteracaoMensagemTexto}
-                        onkeypress={handleKeyPress}>
-                    </lightning-textarea>
+                    <template lwc:if={chatEnable}>
+                        <!-- Campo de texto -->
+                        <lightning-textarea 
+                            style="width: 100%;" 
+                            type="text" 
+                            placeholder="Digite uma mensagem"
+                            variant="label-hidden" 
+                            value={mensagemTexto} 
+                            disabled={isRemetenteWhatsAppBlocked}
+                            onchange={handleAlteracaoMensagemTexto}
+                            onkeypress={handleKeyPress}>
+                        </lightning-textarea>
 
-                    <!-- Botão de envio -->
-                    <lightning-button-icon 
-                        variant="brand" 
-                        label="Enviar" 
-                        title="Enviar mensagem"
-                        icon-name="utility:send" 
-                        onclick={handleEnviarMensagem} 
-                        disabled={isRemetenteWhatsAppBlocked}>
-                    </lightning-button-icon>
+                        <!-- Botão de envio -->
+                        <lightning-button-icon 
+                            variant="brand" 
+                            label="Enviar" 
+                            title="Enviar mensagem"
+                            icon-name="utility:send" 
+                            onclick={handleEnviarMensagem} 
+                            disabled={isRemetenteWhatsAppBlocked}>
+                        </lightning-button-icon>
+                    </template>
+                    <template lwc:else>
+                        <!-- Campo de texto enquanto envio -->
+                        <lightning-textarea 
+                            style="width: 100%;" 
+                            type="text" 
+                            placeholder="Digite uma mensagem"
+                            variant="label-hidden" 
+                            value={mensagemTexto} 
+                            disabled
+                            onchange={handleAlteracaoMensagemTexto}
+                            onkeypress={handleKeyPress}>
+                        </lightning-textarea>
+
+                        <!-- Botão de envio enquanto envio -->
+                        <lightning-button-icon 
+                            variant="brand" 
+                            label="Enviar" 
+                            title="Enviar mensagem"
+                            icon-name="utility:send" 
+                            onclick={handleEnviarMensagem} 
+                            disabled>
+                        </lightning-button-icon>
+                    </template>
                 </template>
             </div>
         </section>      

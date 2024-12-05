@@ -14,6 +14,7 @@ export default class WhatsApp extends LightningElement {
     @api recordId;
     @track lead = {};
     @track mensagens = [];
+    @track chatEnable = true;
     channelName = '/event/EventoWhatsApp__e';
     carregando = false;
     mensagemTexto = null;
@@ -90,7 +91,7 @@ export default class WhatsApp extends LightningElement {
         
         // Verifica se o chat é encontrado e é um elemento válido
         if (chat instanceof HTMLElement) {
-            // console.log("Elemento de chat encontrado:", chat);
+            console.log("Elemento de chat encontrado:", chat);
     
             // Configura o MutationObserver para detectar mudanças no conteúdo do chat
             const observer = new MutationObserver(() => {
@@ -206,12 +207,15 @@ export default class WhatsApp extends LightningElement {
     async handleEnviarMensagem() {
         if (!this.mensagemTexto) return ;
         try {
+            this.chatEnable = false;
             const novaMensagem = await this.enviarMensagem(this.recordId, this.mensagemTexto);
             this.mensagens = [...this.mensagens, novaMensagem];
             this.mensagemTexto = null;
             this.apresentarUltimasMensagens();
         } catch (erro) {
             this.apresentarMensagem('Erro', erro.body.message, 'error');
+        } finally {
+            this.chatEnable = true;
         }
     }
     
@@ -224,6 +228,7 @@ export default class WhatsApp extends LightningElement {
         if (event.key === "Enter" && !event.shiftKey) {
             this.handleEnviarMensagem();
         }
+        
     }
     
     /**
