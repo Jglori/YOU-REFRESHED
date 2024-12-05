@@ -75,16 +75,22 @@ public static void additionalValidations(List<Lead> newLeads, Map<Id, Lead> oldL
         Lead oldLead = oldLeads.get(lead.Id);
 
         // Validação para fase Tentativa de Contato -> Contato Realizado
-        if (oldLead.Status.equalsIgnoreCase('Tentativa de contato') && lead.Status.equalsIgnoreCase('Contato Realizado')) { if (!isTaskCreatedAndOpenForAttemptToContact(lead.Id) && !Test.isRunningTest()) {  lead.addError(Label.TentativaContato_LEAD);  // Mensagem para Tentativa de contato
+        if (oldLead.Status.equalsIgnoreCase('Tentativa de contato') && lead.Status.equalsIgnoreCase('Contato Realizado')) {
+            if (!isTaskCreatedAndOpenForAttemptToContact(lead.Id) && !Test.isRunningTest()) {
+                lead.addError(Label.TentativaContato_LEAD);  // Mensagem para Tentativa de contato
             }
 
         //Validação para fase Agendamento de Visita -> Conversão
-        } else if (oldLead.Status.equalsIgnoreCase('Agendamento de Visita') && lead.Status.equalsIgnoreCase('Conversão')) {            if (!lead.LeadNaoVisitou__c && isEventCreatedForVisits(lead.Id)) { lead.addError(Label.Agendamento_LEAD);
+        } else if (oldLead.Status.equalsIgnoreCase('Agendamento de Visita') && lead.Status.equalsIgnoreCase('Conversão')) {
+            // Verifica se o campo 'LeadNaoVisitou__c' está preenchido ou se existe um evento do tipo "Visita Realizada com Sucesso"
+            if (!lead.LeadNaoVisitou__c && isEventCreatedForVisits(lead.Id)) {
+                lead.addError(Label.Agendamento_LEAD);
             }
 
         // Validação para Descartado/Lead Perdido/Novo -> Contato Realizado
         } else if ((oldLead.Status.equals('Descartado') || oldLead.Status.equals('Lead Perdido(não trabalho)') ||
-                    oldLead.Status.equals('Novo')) && lead.Status.equals('Contato Realizado')) { lead.addError(Label.Fases_LEAD);  // Mensagem para mudanças de status inválidas
+                    oldLead.Status.equals('Novo')) && lead.Status.equals('Contato Realizado')) {
+            lead.addError(Label.Fases_LEAD);  // Mensagem para mudanças de status inválidas
 
         // Validação para Descartado/Lead Perdido/Novo/Tentativa de contato -> Agendamento de Visita
         } else if ((oldLead.Status.equalsIgnoreCase('Descartado') || oldLead.Status.equalsIgnoreCase('Lead Perdido(não trabalho)') ||
@@ -95,7 +101,8 @@ public static void additionalValidations(List<Lead> newLeads, Map<Id, Lead> oldL
             }
         // Validação para Conversão (sem fases anteriores válidas)
         } else if ((new Set<String>{'Descartado', 'Lead Perdido(não trabalho)', 'Novo', 'Tentativa de contato', 
-                   'Contato Realizado'}).contains(oldLead.Status) && lead.Status.equals('Conversão')) {lead.addError(Label.Conversao_LEAD);  // Mensagem para conversão inválida
+                   'Contato Realizado'}).contains(oldLead.Status) && lead.Status.equals('Conversão')) {
+            lead.addError(Label.Conversao_LEAD);  // Mensagem para conversão inválida
         }
     }
 }
@@ -205,46 +212,6 @@ public static void additionalValidations(List<Lead> newLeads, Map<Id, Lead> oldL
             }
         }
     }
-
-    public static void setMarcarLeadsSemParticipantesOnline(List<Lead> newLeads, Map<Id, Lead> oldLeads) {
-        Set<Id> roletaIds = new Set<Id>();
-        for (Lead lead : newLeads) {
-            if (lead.RoletaLeads__c != null) {
-                roletaIds.add(lead.RoletaLeads__c);
-            }
-        }
-    
-        Map<Id, List<ParticipanteRoleta__c>> participantesPorRoleta = new Map<Id, List<ParticipanteRoleta__c>>();
-        if (!roletaIds.isEmpty()) {
-            List<ParticipanteRoleta__c> participantes = [
-                SELECT Id, RoletaLeads__c 
-                FROM ParticipanteRoleta__c 
-                WHERE RoletaLeads__c IN :roletaIds AND Situacao__c = 'Online'
-            ];
-            for (ParticipanteRoleta__c participante : participantes) {
-                if (!participantesPorRoleta.containsKey(participante.RoletaLeads__c)) {
-                    participantesPorRoleta.put(participante.RoletaLeads__c, new List<ParticipanteRoleta__c>());
-                }
-                participantesPorRoleta.get(participante.RoletaLeads__c).add(participante);
-            }
-        }
-    
-        List<Lead> leadsParaAtualizar = new List<Lead>();
-        for (Lead lead : newLeads) {
-            if (lead.RoletaLeads__c != null && 
-                (!participantesPorRoleta.containsKey(lead.RoletaLeads__c) || 
-                 participantesPorRoleta.get(lead.RoletaLeads__c).isEmpty())) {
-                lead.hasPendingLead__c = true;
-                leadsParaAtualizar.add(lead);
-                System.debug('Nenhum participante online. Lead marcado como pendente: ' + lead.Id);
-            }
-        }
-    
-        if (!leadsParaAtualizar.isEmpty()) {
-            update leadsParaAtualizar;
-        }
-    }
-    
     
     // public static void checkAndUpdateLeadsWithTasks(List<Lead> newLeads, Map<Id, Lead> oldLeadMap) {
     //     List<Id> leadsWithTasks = new List<Id>();
@@ -260,7 +227,7 @@ public static void additionalValidations(List<Lead> newLeads, Map<Id, Lead> oldL
     public static void verifyLeadControlSLA(List<Lead> leadList, Map<Id, Lead> oldLeads) {
         LeadSLAHelper.verifyLeadControlSLA(leadList, oldLeads);
     }
-    @TestVisible
+
     private static Map<Id, List<Task>> getMapTaskByWho(Set<Id> setID){
         Map<Id, List<Task>> result = new Map<Id, List<Task>>();
         List<Task> lstTasks = [SELECT Id, Subject, WhoId FROM Task WHERE WhoId IN :setID];
@@ -302,7 +269,8 @@ public static void additionalValidations(List<Lead> newLeads, Map<Id, Lead> oldL
     private static void updateLeadFields(Lead lead, Map<String, Object> params) {
         if (lead.QuantidadeDeReiteracoes__c == null) {
             lead.QuantidadeDeReiteracoes__c = 1;
-        } else { lead.QuantidadeDeReiteracoes__c += 1;
+        } else {
+            lead.QuantidadeDeReiteracoes__c += 1;
         }
 
         Boolean isModified = false;
@@ -625,13 +593,26 @@ public static void additionalValidations(List<Lead> newLeads, Map<Id, Lead> oldL
 
         List<Opportunity> oppsToUpdate = new List<Opportunity>();
 
-       for(Id ldId : mapLeadOpp.keySet()) { Id oppId = mapLeadOpp.get(ldId); Id userId = mapLeadUser.get(ldId); if(oppId <> null && userId <> null){ User us = mapUser.get(userId); if(us <> null && us.Reportase__c <> null){ Opportunity opp = new Opportunity(Id = oppId, OwnerId = us.Reportase__c); oppsToUpdate.add(opp); } } }
+        for(Id ldId : mapLeadOpp.keySet()) {
+            Id oppId = mapLeadOpp.get(ldId);
+            Id userId = mapLeadUser.get(ldId);
+
+            if(oppId <> null && userId <> null){
+                User us = mapUser.get(userId);
+                if(us <> null && us.Reportase__c <> null){
+                    Opportunity opp =  new Opportunity(Id = oppId, OwnerId = us.Reportase__c);
+                    oppsToUpdate.add(opp);
+                }
+            }
+           
+        }
 
         if(!oppsToUpdate.isEmpty()){
             Database.update(oppsToUpdate);
         }
     }
 
+    
     /**
      * Metodo responsável por sincronizar a chave externa do WhatsApp com o número de celular do lead
      * @param leads Lista de leads a serem sincronizados, disparado por uma Trigger.new

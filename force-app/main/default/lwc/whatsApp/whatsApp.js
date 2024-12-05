@@ -71,7 +71,8 @@ export default class WhatsApp extends LightningElement {
         await this.obterLead();
         await this.obterMensagensCarregando();
         this.handleSubscribe();
-        this.intervalId = setInterval(() => this.verificarNovasMensagens(), 10000);
+        this.verificarNovasMensagens();
+        // this.intervalId = setInterval(() => this.verificarNovasMensagens(), 10000);
     }
 
     /**
@@ -91,17 +92,17 @@ export default class WhatsApp extends LightningElement {
         if (chat instanceof HTMLElement) {
             // console.log("Elemento de chat encontrado:", chat);
     
-            // // Configura o MutationObserver para detectar mudanças no conteúdo do chat
-            // const observer = new MutationObserver(() => {
-            //     chat.scrollTop = chat.scrollHeight; // Rolagem até a última mensagem
-            // });
+            // Configura o MutationObserver para detectar mudanças no conteúdo do chat
+            const observer = new MutationObserver(() => {
+                chat.scrollTop = chat.scrollHeight; // Rolagem até a última mensagem
+            });
     
-            // // Observa mudanças no número de filhos do elemento chat
-            // observer.observe(chat, { childList: true });
+            // Observa mudanças no número de filhos do elemento chat
+            observer.observe(chat, { childList: true });
     
-            // // Realiza a rolagem inicial e desconecta o observador
-            // chat.scrollTop = chat.scrollHeight;
-            // observer.disconnect();
+            // Realiza a rolagem inicial e desconecta o observador
+            chat.scrollTop = chat.scrollHeight;
+            observer.disconnect();
         } else {
             console.error("Elemento de chat não encontrado ou não é um HTMLElement:", chat);
         }
@@ -317,9 +318,13 @@ export default class WhatsApp extends LightningElement {
     handleSubscribe() {
         const thisReference = this;
         subscribe(this.channelName, -1, function (mensagem) {
+            console.log("Inscrição concluida: " + JSON.stringify(mensagem));
             thisReference.verificarNovasMensagens();
         }).then(response => {
             this.subscription = response;
+        })
+        .catch(erro => {
+            console.log("Erro na inscrição: ", JSON.stringify(erro));
         });
     }
 

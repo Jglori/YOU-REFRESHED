@@ -433,7 +433,8 @@ public without sharing class WhatsAppService {
                 CanalAtendimento__c = 'WhatsApp',
                 LeadSource = 'WhatsApp',
                 MobilePhone = mensagem.ChaveExternaCliente__c,
-                ChaveExternaWhatsApp__c = mensagem.ChaveExternaCliente__c
+                ChaveExternaWhatsApp__c = mensagem.ChaveExternaCliente__c,
+                RemetenteWhatsApp__c = true
             ));
         }
 
