@@ -59,9 +59,18 @@
                     </template>
                 </ul>
             </div>
+            
+            <!-- Botão de rolagem para o final da lista -->
+            <div class="unread-button-container" lwc:if={temMensagensNaoLidas}>
+                <button class="unread-button" onclick={handleScrollToBottom}>
+                    <div class="unread-ball" lwc:if={redIcon}></div>
+                    <span><!-- Mensagens não lidas -->  ⭣</span>
+                </button>
+            </div>
         </section>
+        
 
-        <section>
+        <section>   
             <div style="padding: 1%; display: flex; align-items: center; gap: .75rem; border: 1px solid #e5e5e5;">
                 <template lwc:if={dialogoEmAndamento}>
                     <!-- Botão de template padrão -->
@@ -145,6 +154,6 @@
                     </template>
                 </template>
             </div>
-        </section>      
+        </section>              
     </div>
 </template>

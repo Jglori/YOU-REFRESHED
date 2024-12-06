@@ -15,6 +15,8 @@ export default class WhatsApp extends LightningElement {
     @track lead = {};
     @track mensagens = [];
     @track chatEnable = true;
+    @track temMensagensNaoLidas = true;
+    @track redIcon = false;
     channelName = '/event/EventoWhatsApp__e';
     carregando = false;
     mensagemTexto = null;
@@ -69,11 +71,16 @@ export default class WhatsApp extends LightningElement {
      * associadas, e realiza a assinatura no canal para eventos do WhatsApp.
      */
     async initializeComponent() {
+        this.handleSubscribe();
         await this.obterLead();
         await this.obterMensagensCarregando();
-        this.handleSubscribe();
-        this.verificarNovasMensagens();
-        // this.intervalId = setInterval(() => this.verificarNovasMensagens(), 10000);
+        // this.verificarNovasMensagens();
+        this.intervalId = setInterval(() => this.verificarNovasMensagens(), 10000);
+        
+        const chat = this.template.querySelector('[data-id="chat"]');
+        chat.addEventListener('scroll', this.handleScroll.bind(this)); 
+
+        this.handleScrollToBottom();
     }
 
     /**
@@ -91,19 +98,19 @@ export default class WhatsApp extends LightningElement {
         
         // Verifica se o chat é encontrado e é um elemento válido
         if (chat instanceof HTMLElement) {
-            console.log("Elemento de chat encontrado:", chat);
+            // console.log("Elemento de chat encontrado:", chat);
     
-            // Configura o MutationObserver para detectar mudanças no conteúdo do chat
-            const observer = new MutationObserver(() => {
-                chat.scrollTop = chat.scrollHeight; // Rolagem até a última mensagem
-            });
+            // // Configura o MutationObserver para detectar mudanças no conteúdo do chat
+            // const observer = new MutationObserver(() => {
+            //     chat.scrollTop = chat.scrollHeight; // Rolagem até a última mensagem
+            // });
     
-            // Observa mudanças no número de filhos do elemento chat
-            observer.observe(chat, { childList: true });
+            // // Observa mudanças no número de filhos do elemento chat
+            // observer.observe(chat, { childList: true });
     
-            // Realiza a rolagem inicial e desconecta o observador
-            chat.scrollTop = chat.scrollHeight;
-            observer.disconnect();
+            // // Realiza a rolagem inicial e desconecta o observador
+            // chat.scrollTop = chat.scrollHeight;
+            // observer.disconnect();
         } else {
             console.error("Elemento de chat não encontrado ou não é um HTMLElement:", chat);
         }
@@ -216,6 +223,8 @@ export default class WhatsApp extends LightningElement {
             this.apresentarMensagem('Erro', erro.body.message, 'error');
         } finally {
             this.chatEnable = true;
+            this.temMensagensNaoLidas = true;
+            this.handleScrollToBottom();
         }
     }
     
@@ -278,7 +287,9 @@ export default class WhatsApp extends LightningElement {
             const leitor = new FileReader();
             leitor.onload = (e) => this.carregarArquivo(e, arquivo);
             leitor.readAsDataURL(arquivo);
+            this.temMensagensNaoLidas = true;
         });
+        this.handleScrollToBottom();
     }
 
     /**
@@ -341,6 +352,8 @@ export default class WhatsApp extends LightningElement {
         await this.obterMensagens();
         if (mensagensAtuais.length !== this.mensagens.length) {
             this.apresentarUltimasMensagens();
+            this.temMensagensNaoLidas = true;
+            this.redIcon = true;
         }
     }
 
@@ -373,4 +386,53 @@ export default class WhatsApp extends LightningElement {
         });
         // console.log(result);
     }
+
+    handleScrollToBottom() {
+        const chat = this.template.querySelector('[data-id="chat"]');
+        chat.scrollTop = chat.scrollHeight;
+        console.log("Rolagem para o final: " + chat.scrollTop);
+        console.log("Altura do chat iguais?: " + (chat.scrollHeight === chat.scrollTop));
+        
+        // Verifica se o scroll está quase no final (com uma margem pequena)
+        const isAtBottom = chat.scrollTop + chat.clientHeight >= chat.scrollHeight - 1;
+        console.log("Altura do chat iguais?: " + (chat.scrollTop + chat.clientHeight >= chat.scrollHeight - 1));
+        
+        if (isAtBottom) {
+            this.temMensagensNaoLidas = false;
+            this.redIcon = false;
+        }
+    }
+
+    handleScroll() {
+        const chat = this.template.querySelector('[data-id="chat"]');
+        
+        const isAtBottom = chat.scrollTop + chat.clientHeight >= chat.scrollHeight - 50;
+        console.log("Rolagem para o final: " + chat.scrollTop);
+        console.log("Altura do chat iguais?: " + (chat.scrollHeight === chat.scrollTop));
+        console.log("Está quase no final?: " + isAtBottom);
+        
+        if (isAtBottom) {
+            this.temMensagensNaoLidas = false; 
+        } else {
+            this.temMensagensNaoLidas = true; 
+        }
+    }    
+
+    checkScroll() {
+        const scrollButton = document.getElementById('scrollButton'); 
+    if (window.scrollY > 0) {
+        // Se o scroll for maior que 0, mostramos o botão
+        scrollButton.style.display = 'block';
+    } else {
+        // Caso contrário, escondemos o botão
+        scrollButton.style.display = 'none';
+    }
+    
+        // Adicionando o ouvinte de evento para o scroll
+        window.addEventListener('scroll', checkScroll);
+    
+        // Inicialmente, fazemos a verificação do scroll para garantir que o botão seja exibido ou escondido ao carregar a página
+        checkScroll();
+    }
+
 }
