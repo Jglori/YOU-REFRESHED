@@ -1,0 +1,50 @@
+/* Contêiner do chat */
+.chat-container {
+  position: relative; /* Define o contêiner como referência para elementos posicionados dentro dele */
+  width: 100%; /* Largura do chat */
+  height: 400px; /* Altura do chat */
+  overflow: hidden; /* Garante que elementos fora do contêiner não fiquem visíveis */
+  border: 1px solid #e5e5e5; /* Apenas um exemplo de borda */
+}
+
+/* Botão */
+.unread-button-container {
+  position: absolute; /* Fixa o botão dentro do contêiner pai */
+  bottom: 2rem; /* Define a distância do fundo */
+  right: 2rem; /* Define a distância da lateral direita */
+  z-index: 1000; /* Garante que fique acima de outros elementos */
+  border-radius: 8px; /* Borda arredondada */
+  padding: 3.5rem; /* Espaçamento interno */
+  padding-right: 0rem; /* Espaçamento interno na lateral direita */
+}
+
+/* Estilo do botão */
+.unread-button {
+  display: flex; /* Deixa o conteúdo do botão alinhado */
+  align-items: center; /* Alinha o ícone e texto no centro verticalmente */
+  gap: 0.5rem; /* Espaçamento entre ícone e texto */
+  border: none; /* Remove a borda padrão do botão */
+  background-color:  #0070d2; /* Cor de fundo azul */
+  color: white; /* Cor do texto */
+  border-radius: 4px; /* Borda arredondada */
+  padding: 0.5rem 1rem; /* Espaçamento interno */
+  cursor: pointer; /* Muda o cursor ao passar sobre o botão */
+  transition: background-color 0.3s ease; /* Animação suave para mudança de cor */
+}
+
+/* Efeito hover */
+.unread-button:hover {
+  background-color: #005bb5; /* Cor mais escura ao passar o mouse */
+}
+
+/* Ícone do botão */
+.unread-ball {
+  width: .7rem; /* Largura da bolinha */
+  height: .7rem; /* Altura da bolinha */
+  position: absolute; /* Fixa a bolinha dentro do botão */
+  top: 3rem; /* Ajusta a posição para que fique na parte superior */
+  right: -0.3rem; /* Ajusta a posição para que fique na parte direita */
+  background-color: #ff0000; /* Cor vermelha */
+  transition: background-color 1s ease; /* Animação suave para mudança de cor */
+  border-radius: 1000%; /* Borda arredondada */
+}
