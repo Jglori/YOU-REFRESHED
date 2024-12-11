@@ -12,7 +12,6 @@
   position: absolute; /* Fixa o botão dentro do contêiner pai */
   bottom: 2rem; /* Define a distância do fundo */
   right: 2rem; /* Define a distância da lateral direita */
-  z-index: 1000; /* Garante que fique acima de outros elementos */
   border-radius: 8px; /* Borda arredondada */
   padding: 3.5rem; /* Espaçamento interno */
   padding-right: 0rem; /* Espaçamento interno na lateral direita */

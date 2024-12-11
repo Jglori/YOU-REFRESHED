@@ -43,7 +43,7 @@ export default class WhatsApp extends LightningElement {
 
     /**
      * Verifica se é possivel enviar mensagem para o Lead
-     * Sem ser pelos Templates Padrões 
+     * sem ser pelos Templates Padrões 
      */
     get isRemetenteWhatsAppBlocked(){
         return !this.lead.remetenteWhatsApp
@@ -71,7 +71,7 @@ export default class WhatsApp extends LightningElement {
      * associadas, e realiza a assinatura no canal para eventos do WhatsApp.
      */
     async initializeComponent() {
-        this.handleSubscribe();
+        // this.handleSubscribe();
         await this.obterLead();
         await this.obterMensagensCarregando();
         // this.verificarNovasMensagens();
@@ -395,7 +395,7 @@ export default class WhatsApp extends LightningElement {
         
         // Verifica se o scroll está quase no final (com uma margem pequena)
         const isAtBottom = chat.scrollTop + chat.clientHeight >= chat.scrollHeight - 1;
-        console.log("Altura do chat iguais?: " + (chat.scrollTop + chat.clientHeight >= chat.scrollHeight - 1));
+        console.log("Esta no final?: " + isAtBottom);
         
         if (isAtBottom) {
             this.temMensagensNaoLidas = false;
