@@ -4,11 +4,11 @@
     <protected>false</protected>
     <values>
         <field>NumeroWhatsAppBusiness__c</field>
-        <value xsi:type="xsd:string">5516982018151</value>
+        <value xsi:type="xsd:string">5511995871036</value>
     </values>
     <values>
         <field>SegredoAplicativo__c</field>
-        <value xsi:type="xsd:string">c179a4d1a25af9364183306263bf1220</value>
+        <value xsi:type="xsd:string">fe96d8f5467c71c4b53ee907f7184b01</value>
     </values>
     <values>
         <field>TokenVerificacao__c</field>
