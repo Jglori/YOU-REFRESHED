@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>UTF-8</encodingKey>
+    <name>Template de notificação para o cliente</name>
+    <pageDevName>Template_de_notifica_o_para_o_cliente</pageDevName>
+    <relatedEntityType>Contact</relatedEntityType>
+    <style>none</style>
+    <textOnly>{{{Recipient.IsPersonAccount}}}Insert Text Here</textOnly>
+    <type>custom</type>
+    <uiType>SFX</uiType>
+</EmailTemplate>
