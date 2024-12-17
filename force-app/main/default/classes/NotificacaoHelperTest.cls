@@ -209,6 +209,4 @@ public class NotificacaoHelperTest {
         System.assert(!unidades.get(0).hasErrors());
     }
 
-
-
 }
