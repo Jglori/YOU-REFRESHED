@@ -1,19 +1,28 @@
-name: Validate Pull Request - QA
+name: Deploy das alterações para QA
+# only trigger on pull request closed events
 on:
   pull_request:
+    types: [closed]
     branches:
       - qa
     paths:
       - 'force-app/**'
-      - 'manifest/package.xml'  # Agora também inclui mudanças no package.xml
+      - 'manifest/package.xml' 
 jobs:
-  validate:
+  merge_job:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: Authenticate to Salesforce
         run: echo ${{ secrets.AUTH_URL_QA }} > sfdx-auth-url.txt
-      - name: Validate on QA
+      - name: Deploy - QA
         run: |
           sf org login sfdx-url -f sfdx-auth-url.txt --alias qa
-          sf project deploy start --dry-run --test-level NoTestRun -x manifest/package.xml
+          sf project deploy start --test-level NoTestRun -x manifest/package.xml
+  close_job:
+    if: github.event.pull_request.merged == false
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo PR #${{ github.event.number }} foi fechada sem realizar o merge
