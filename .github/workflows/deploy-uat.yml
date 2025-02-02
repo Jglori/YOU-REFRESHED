@@ -3,7 +3,7 @@ on:
   pull_request:
     types: [closed]
     branches:
-      - qa
+      - uat
     paths:
       - 'force-app/**'
       - 'manifest/package.xml' 
