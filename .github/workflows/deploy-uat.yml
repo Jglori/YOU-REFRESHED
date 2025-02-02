@@ -1,31 +1,32 @@
-name: Deploy das alterações para UAt
-
-# only trigger on pull request closed events
+name: Deploy das alterações para UAT
 on:
   pull_request:
     types: [closed]
     branches:
-      - uat
+      - qa
     paths:
       - 'force-app/**'
+      - 'manifest/package.xml' 
+
 jobs:
-  merge_job:
-    # this job will only run if the PR has been merged
+  deploy_job:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Deploy - UAT
-        uses: jawills/sf-deploy@v1.0
-        with:
-          SFDX_AUTH_URL: ${{ secrets.AUTH_URL_UAT }}
-          DRY_RUN: false
-          TEST_LEVEL:  NoTestRun
+
+      - name: Autenticar no Salesforce
+        run: echo ${{ secrets.AUTH_URL_UAT }} > sfdx-auth-url.txt
+
+      - name: Conectar ao Salesforce
+        run: sf org login sfdx-url -f sfdx-auth-url.txt --alias uat
+
+      - name: Executar Deploy na HML
+        run: sf project deploy start --test-level NoTestRun -x manifest/package.xml -o uat
 
   close_job:
-    # this job will only run if the PR has been closed without being merged
     if: github.event.pull_request.merged == false
     runs-on: ubuntu-latest
     steps:
       - run: |
-          echo PR #${{ github.event.number }} foi fechada sem realizar o merge
+          echo "PR #${{ github.event.number }} foi fechado sem realizar o merge."
