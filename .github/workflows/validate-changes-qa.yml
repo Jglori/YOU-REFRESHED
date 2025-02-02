@@ -2,7 +2,7 @@ name: Validate Pull Request - QA
 on:
   pull_request:
     branches:
-      - hml
+      - qa
     paths:
       - 'force-app/**'
       - 'manifest/**'
