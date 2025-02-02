@@ -1,19 +1,29 @@
 name: Validate Pull Request - QA
-
 on:
   pull_request:
     branches:
       - qa
     paths:
       - 'force-app/**'
+      - 'manifest/**'
+
 jobs:
-  validate:
+  validate_job:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Validate on QA
-        uses: jawills/sf-deploy@v1.0
-        with:
-          SFDX_AUTH_URL: ${{ secrets.AUTH_URL_QA }}
-          DRY_RUN: true
-          TEST_LEVEL: NoTestRun
+
+      - name: Instalar dependências
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget curl jq
+          npm install @salesforce/cli --global
+      
+      - name: Autenticar no Salesforce
+        run: echo ${{ secrets.AUTH_URL_HML }} > sfdx-auth-url.txt
+      
+      - name: Conectar ao Salesforce
+        run: sf org login sfdx-url -f sfdx-auth-url.txt --alias qa
+      
+      - name: Validar Deploy (Dry Run)
+        run: sf project deploy start --dry-run --test-level NoTestRun -x manifest/package.xml -o qa
