@@ -21,7 +21,7 @@ jobs:
       - name: Conectar ao Salesforce
         run: sf org login sfdx-url -f sfdx-auth-url.txt --alias uat
 
-      - name: Executar Deploy na HML
+      - name: Executar Deploy na UAT
         run: sf project deploy start --test-level NoTestRun -x manifest/package.xml -o uat
 
   close_job:
