@@ -5,25 +5,56 @@ on:
       - qa
     paths:
       - 'force-app/**'
-      - 'manifest/**'
-
+      - 'manifest/package.xml'
 jobs:
-  validate_job:
+  validate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-
-      - name: Instalar dependências
+      - name: Checkout do repositório
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  
+      - name: Instalar dependências do sistema e do Salesforce CLI
         run: |
           sudo apt-get update
           sudo apt-get install -y wget curl jq
           npm install @salesforce/cli --global
+      - name: Autenticar com a org QA
+        run: |
+          echo "${{ secrets.AUTH_URL_QA }}" > sfdx-auth-url.txt
+          sf org login sfdx-url -f sfdx-auth-url.txt --alias qa
+      - name: Instalar plugin sfdx-git-delta
+        run: echo "y" | sf plugins install sfdx-git-delta
+      - name: Criar diretório de saída para o pacote delta
+        run: mkdir -p deploy
+      - name: Gerar pacote delta no diretório deploy
+        run: |
+          sf sgd source delta --from origin/qa --to HEAD --output-dir deploy
+      - name: Listar conteúdo do diretório deploy
+        run: ls -R deploy
+      - name: Exibir conteúdo do package.xml
+        run: cat deploy/package/package.xml
+      - name: Implantar usando o pacote delta gerado
+        run: |
+          sf project deploy start --manifest deploy/package/package.xml --dry-run --test-level NoTestRun --target-org qa > deploy/deploy_output.log || true
       
-      - name: Autenticar no Salesforce
-        run: echo ${{ secrets.AUTH_URL_QA }} > sfdx-auth-url.txt
+      - name: Definir nome do artefato com org, data e hora
+        id: set-artifact-name
+        run: |
+          ORG_NAME="QA"
+          export TZ="America/Sao_Paulo"  # Define o fuso horário para o Brasil (UTC-3)
+          TIMESTAMP=$(date +'%d-%m-%Y--%H-%M-%S')  # Gera o timestamp no fuso horário do Brasil
+          echo "PACKAGE_XML_ARTIFACT=${ORG_NAME}_Package_xml_${TIMESTAMP}" >> $GITHUB_OUTPUT
+          echo "DEPLOY_LOG_ARTIFACT=${ORG_NAME}_Validade_log_${TIMESTAMP}" >> $GITHUB_OUTPUT
       
-      - name: Conectar ao Salesforce
-        run: sf org login sfdx-url -f sfdx-auth-url.txt --alias qa
+      - name: Salvar package.xml
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.set-artifact-name.outputs.PACKAGE_XML_ARTIFACT }}
+          path: deploy/package/package.xml
       
-      - name: Validar Deploy (Dry Run)
-        run: sf project deploy start --dry-run --test-level NoTestRun -x manifest/package.xml -o qa
+      - name: Salvar o Log de Deploy
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.set-artifact-name.outputs.DEPLOY_LOG_ARTIFACT }}
+          path: deploy/deploy_output.log
