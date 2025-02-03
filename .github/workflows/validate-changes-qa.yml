@@ -5,7 +5,7 @@ on:
       - qa
     paths:
       - 'force-app/**'
-      - 'manifest/package.xml'
+     
 jobs:
   validate:
     runs-on: ubuntu-latest
