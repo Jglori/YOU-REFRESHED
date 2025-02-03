@@ -1,4 +1,4 @@
-name: Deploy validate on qa
+name:Deploy das alterações para UAT
 on:
   pull_request:
     branches:
