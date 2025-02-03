@@ -20,7 +20,7 @@ jobs:
           npm install @salesforce/cli --global
       
       - name: Autenticar no Salesforce
-        run: echo ${{ secrets.AUTH_URL_HML }} > sfdx-auth-url.txt
+        run: echo ${{ secrets.AUTH_URL_QA }} > sfdx-auth-url.txt
       
       - name: Conectar ao Salesforce
         run: sf org login sfdx-url -f sfdx-auth-url.txt --alias qa
