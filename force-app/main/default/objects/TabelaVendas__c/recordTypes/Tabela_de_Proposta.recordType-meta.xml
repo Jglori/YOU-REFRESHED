@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Tabela_de_Proposta</fullName>
+    <active>true</active>
+    <compactLayoutAssignment>CompactoPadrao</compactLayoutAssignment>
+    <label>Tabela de Proposta</label>
+    <picklistValues>
+        <picklist>Status__c</picklist>
+        <values>
+            <fullName>Desativada</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Draft</fullName>
+            <default>true</default>
+        </values>
+        <values>
+            <fullName>Publicada</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+</RecordType>
