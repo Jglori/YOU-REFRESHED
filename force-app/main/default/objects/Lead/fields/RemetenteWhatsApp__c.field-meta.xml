@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>RemetenteWhatsApp__c</fullName>
+    <defaultValue>true</defaultValue>
+    <description>Campo responsável por definir quem foi o remetente inicial da conversa.</description>
+    <inlineHelpText>Se o campo estiver selecionado (True) significa que o Remetente foi o Lead, Se o campo não estiver selecionado (False) significa que o Remetente foi corretor.</inlineHelpText>
+    <label>Remetente WhatsApp</label>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Checkbox</type>
+</CustomField>
