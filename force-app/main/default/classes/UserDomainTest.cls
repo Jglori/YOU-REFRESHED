@@ -3,22 +3,23 @@ public class UserDomainTest {
 
     @testSetup
     static void setup() {
-        // Criação de um usuário de teste
-        Profile p = [SELECT Id FROM Profile WHERE Name = 'Usuário Padrão' LIMIT 1];
-        User usuario = new User(
-            Alias = 'testusr',
-            Email = 'testuser@example.com',
-            EmailEncodingKey = 'UTF-8',
-            LastName = 'Test',
-            LanguageLocaleKey = 'en_US',
-            LocaleSidKey = 'en_US',
-            ProfileId = p.Id,
-            TimeZoneSidKey = 'America/Los_Angeles',
-            UserName = 'testuser11321321@example.com',
-            // Preenchendo o campo obrigatório `UserRoleId` com um valor válido, se necessário
-            UserRoleId = null // Use um ID válido ou `null` se não for necessário
-        );
-        insert usuario;
+        User user1 = new User(Alias = 'user1', Email = 'user1@test.com', 
+            EmailEncodingKey = 'UTF-8', LastName = 'Test', LanguageLocaleKey = 'en_US', 
+            LocaleSidKey = 'en_US', ProfileId = UserInfo.getProfileId(), 
+            TimeZoneSidKey = 'America/Los_Angeles', 
+            CompanyName = 'You',
+            Username = 'user1_' + System.currentTimeMillis() + '@test.com',
+            Situacao__c = 'Online');
+                
+        User user2 = new User(Alias = 'user2', Email = 'user2@test.com', 
+            EmailEncodingKey = 'UTF-8', LastName = 'Test', LanguageLocaleKey = 'en_US', 
+            LocaleSidKey = 'en_US', ProfileId = UserInfo.getProfileId(), 
+            TimeZoneSidKey = 'America/Los_Angeles', 
+            Username = 'user2_' + System.currentTimeMillis() + '@test.com',
+            CompanyName = 'You',
+            Situacao__c = 'Offline');
+        
+        insert new List<User>{user1, user2};
     }
 
     @isTest

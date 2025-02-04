@@ -40,7 +40,7 @@
             <assignToReference>id</assignToReference>
             <operator>Add</operator>
             <value>
-                <elementReference>Busca.Coordenador__r.Id</elementReference>
+                <elementReference>Busca.null__NotFound.Id</elementReference>
             </value>
         </assignmentItems>
         <connector>
@@ -94,7 +94,7 @@
         <getFirstRecordOnly>true</getFirstRecordOnly>
         <object>RoletaLeads__c</object>
         <queriedFields>Id</queriedFields>
-        <queriedFields>Coordenador__c</queriedFields>
+        <queriedFields>null__NotFound</queriedFields>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <start>
@@ -115,7 +115,7 @@
         <recordTriggerType>Update</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
     </start>
-    <status>Obsolete</status>
+    <status>InvalidDraft</status>
     <variables>
         <name>id</name>
         <dataType>String</dataType>

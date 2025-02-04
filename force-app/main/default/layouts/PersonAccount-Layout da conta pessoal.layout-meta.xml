@@ -29,10 +29,6 @@
                 <behavior>Edit</behavior>
                 <field>Reporta_se_A__pc</field>
             </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Apelido__pc</field>
-            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -687,9 +683,18 @@
         <relatedList>Lead.UsuarioCorretor__c</relatedList>
     </relatedLists>
     <relatedLists>
+        <fields>OPPORTUNITY.NAME</fields>
+        <fields>ACCOUNT.NAME</fields>
+        <fields>OPPORTUNITY.CLOSE_DATE</fields>
+        <relatedList>Opportunity.Contato__c</relatedList>
+    </relatedLists>
+    <relatedLists>
         <fields>FULL_NAME</fields>
+        <fields>Apelido__c</fields>
         <fields>ACCOUNT.NAME</fields>
         <fields>CONTACT.PHONE1</fields>
+        <fields>CONTACT.EMAIL</fields>
+        <fields>CPF__c</fields>
         <relatedList>Contact.Reporta_se_A__c</relatedList>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>

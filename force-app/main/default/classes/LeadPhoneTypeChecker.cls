@@ -10,9 +10,7 @@ public class LeadPhoneTypeChecker {
 
         // Verificar o tipo de objeto do campo Phone
         if (phoneFieldDescribe.getType() == Schema.DisplayType.PHONE) {
-            phoneType = 'Phone';
-        } else if (phoneFieldDescribe.getType() == Schema.DisplayType.URL) {
-            phoneType = 'URL';
+            phoneType = 'Phone'; } else if (phoneFieldDescribe.getType() == Schema.DisplayType.URL) {phoneType = 'URL';
         } else {
             phoneType = 'Outro';
         }

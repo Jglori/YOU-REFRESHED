@@ -1,130 +1,426 @@
 @isTest
-private class LeadRestResourceTest {
+public class LeadRestResourceTest {
 
-    @TestSetup
-    static void makeData(){
-        Campaign camp = new Campaign(
-            Name = 'Test',
-            IsActive = TRUE
-        );  
-        insert camp;   
-    }
 
     @isTest
-    static void criacaoDeLeadComSucesso() {
-        RestRequest request = new RestRequest();
-        request.requestURI = '/services/apexrest/Lead/';
-        request.addHeader('Content-Type', 'application/json');
-        request.httpMethod = 'POST';
-       
-        List<Map<String, Object>> leadDataList = new List<Map<String, Object>>{
-            new Map<String, Object>{
-                'LastName' => 'Ana beatriz',
-                'Company' => 'Caixa',
-                'Email' => 'anabeatriz@caixa.io',
-                'MobilePhone' => '11974683648',
-                'CanalAtendimento__c' => 'Fale conosco',
-                'EmpreendimentoInteresse__c' => 'a01Dw00000OFidTIAT',
-                'LeadSource' => 'Televisão',
-                'Status' => 'Novo',
-                'RecordTypeName' => 'Pessoa Física',
-                'campaignName' => 'Test'
-            }
-        };
+    static void doPostTest() {
+        // Configurar dados de teste
+        Campaign testCampaign = new Campaign(Name = 'Test Campaign');
+        insert testCampaign;
+        Empreendimento__c empreendimento = new Empreendimento__c(Name = 'Teste empreendimento', CNPJEmpreendimento__c ='07135796000139');
+        insert empreendimento;
         
-        String leadDataJson = JSON.serialize(leadDataList);
-        request.requestBody = Blob.valueOf(leadDataJson);
-        
-        RestContext.request = request;
-        RestContext.response = new RestResponse();
-        
-        Test.startTest();
-        LeadRestResource.doPost();
-        Test.stopTest();
-        
-        // System.assertEquals(201, RestContext.response.statusCode);
+                Equipe__c equipe1 = new Equipe__c(Name = 'Equipe 1', CargaMaxima__c = 100);
+        Equipe__c equipe2 = new Equipe__c(Name = 'Equipe 2', CargaMaxima__c = 100);
+        insert new List<Equipe__c>{equipe1, equipe2};
 
-        String responseBody = RestContext.response.responseBody.toString();
-        //System.assertNotEquals(null, responseBody);
+        // Criar Membros da Equipe
+        MembroEquipe__c membro1 = new MembroEquipe__c(Name = 'Jéssica BM', Equipe__c = equipe1.Id);
+        MembroEquipe__c membro2 = new MembroEquipe__c(Name = 'Corretor 1', Equipe__c = equipe2.Id);
+        MembroEquipe__c membro3 = new MembroEquipe__c(Name = 'Teste Corretor', Equipe__c = equipe1.Id);
+        insert new List<MembroEquipe__c>{membro1, membro2, membro3};
 
-        //List<Object> responseList = (List<Object>) JSON.deserializeUntyped(responseBody);
-        //Map<String, Object> responseMap = (Map<String, Object>) responseList[0];
-        
-        //Map<String, Object> leadResponse = (Map<String, Object>) responseMap.get('lead');
-        // System.assertEquals('Novo', leadResponse.get('Status'));
-        // System.assertEquals('11974683648', leadResponse.get('MobilePhone'));
-        // System.assertEquals('Televisão', leadResponse.get('LeadSource'));
-        // System.assertEquals('Ana beatriz', leadResponse.get('LastName'));
-        // System.assertEquals('anabeatriz@caixa.io', leadResponse.get('Email'));
-        // System.assertEquals('Caixa', leadResponse.get('Company'));
-        // 
-       	
-
- 
-        
-    }
-    @isTest
-    static void leadDuplicado() {
-
-        empreendimento__c emp = new empreendimento__c(CnpjEmpreendimento__c = '30411637000131', name = 'xpt');
-        insert emp;
-
-        Lead testLead = new Lead(
-            Email = 'duplicate@example.com',
-            LastName = 'TestLastName',
-            Company = 'TestCompany',
-            LeadSource = 'Web',
-            CanalAtendimento__c = 'Fale conosco',
-            EmpreendimentoInteresse__c = emp.id,
-            MobilePhone = '123456789',
-            Status = 'Novo'
+        // Criar a RoletaLeads associada à Equipe
+        RoletaLeads__c roletaLeads = new RoletaLeads__c(
+            Name = 'Roleta Online',
+            Ativa__c = true,
+            HoraInicio__c = Datetime.now().time(),
+            CanaisAtendimento__c = 'Whatsapp',
+            Equipe__c = equipe1.Id,
+            DiasSemana__c = 'Domingo;Segunda-feira;Terça-feira;Quarta-feira;Quinta-feira;Sexta-feira;Sábado'
         );
-        insert testLead;
+        insert roletaLeads;
+
+
+        // Criação do Lead associado ao empreendimento
+        ConfiguracoesDeNegocio__c conf =   new ConfiguracoesDeNegocio__c(name = 'teste', TempoDeSLA__c = 10);
+        insert conf;
+        Lead lead = new Lead(
+            LastName = 'Paulo',
+            Company = 'Elera',
+            Email =     'joao.silva@example.com',
+            LeadSource = 'Telefone',
+            CanalAtendimento__c = 'Chat',
+            MobilePhone = '11987654321',
+            Status = 'Novo',
+            cpf__c = '50154031003',
+            cnpj__c = '28724715000106',
+            // ConfiguracaoDeSLA__c =conf,
+            EmpreendimentoInteresse__c = empreendimento.Id
+        );
+        insert lead;
+
+        List<Map<String, Object>> leads = new List<Map<String, Object>>();
         
-        LeadRestResource.LeadDto dtoLead = new LeadRestResource.LeadDto(testLead);
-        LeadRestResource.CampaignDto dtoCamp = new LeadRestResource.CampaignDto([Select Name,Type,Status,IsActive from Campaign limit 1]);
-		LeadRestResource.LeadCampaignDto ldCmpDto = new LeadRestResource.LeadCampaignDto(dtoLead, dtoCamp);
-    
-        testLead.Status = 'Tentativa de Contado';
-        update testLead;
-    
-        RestRequest request = new RestRequest();
-        request.requestURI = '/services/apexrest/Lead/';
-        request.addHeader('Content-Type', 'application/json');
-        request.httpMethod = 'POST';
-        
-        // Preparando uma lista de leads
-        List<Map<String, Object>> leadDataList = new List<Map<String, Object>>{
-            new Map<String, Object>{
-                'Email' => 'duplicate@example.com',
-                'LastName' => 'TestLastName',
-                'Company' => 'TestCompany',
-                'LeadSource' => 'Web',
-                'CanalAtendimento__c' => 'Fale conosco',
-                'EmpreendimentoInteresse__c' => emp.id,
-                'MobilePhone' => '123456789',
-                'Status' => 'Novo',
-                'RecordTypeName' => 'Pessoa Jurídica',
-                'campaignName' => 'Test'
-            }
-        };
-        
-        // Enviando a lista de leads como corpo da requisição
-        request.requestBody = Blob.valueOf(JSON.serialize(leadDataList));
-        
-        RestContext.request = request;
-        RestContext.response = new RestResponse();
-        
-        // Iniciando o teste
+        // Adicionar um lead de exemplo - Pessoa Física
+        leads.add(new Map<String, Object>{
+            'tipoPessoa' => 'Física',
+            'nome' => 'João Silva',
+            'email' => 'joao.silva@example.com',
+            'origem' => 'Whatsapp',
+            'canal' => 'Chat',
+            'celular' => '11987654321',
+            'informacoesAdicionaisLead' => 'Lead test',
+            'idEmpreendimentoInteresse' => empreendimento.id, // Substitua pelo ID do empreendimento se necessário
+            'SubProduto' => 'Eleva Harmonia Studios',
+            'campaignName' => 'Test Campaign' // Certifique-se de que essa campanha existe
+        });
+
+        // Adicionar um lead de exemplo - Pessoa Jurídica
+        leads.add(new Map<String, Object>{
+            'tipoPessoa' => 'Jurídica',
+            'razaoSocial' => 'Empresa XYZ',
+            'nomeRepresentante' => 'Maria Oliveira',
+            'email' => 'maria.oliveira@example.com',
+            'origem' => 'Indicação',
+            'canal' => 'Telefone',
+            'celular' => '11987654322',
+            'informacoesAdicionaisLead' => 'Lead test empresa',
+            'idEmpreendimentoInteresse' => null, // Substitua pelo ID do empreendimento se necessário
+            'SubProduto' => 'Eleva Harmonia Studios',
+            'campaignName' => 'Test Campaign' // Certifique-se de que essa campanha existe
+        });
+
+        // Serializar os leads para JSON
+        String jsonBody = JSON.serialize(leads);
+
+        // Criar a requisição de teste
+        RestRequest req = new RestRequest();
+        req.requestURI = '/services/apexrest/Lead/';
+        req.requestBody = Blob.valueOf(jsonBody);
+        req.httpMethod = 'POST';
+        RestContext.request = req;
+
+        // Criar a resposta de teste
+        RestResponse res = new RestResponse();
+        RestContext.response = res;
+
+        // Executar o método a ser testado
         Test.startTest();
         LeadRestResource.doPost();
         Test.stopTest();
-        
-        //System.assertEquals(200, RestContext.response.statusCode);
+
+        // Verificar a resposta
+        // System.assertEquals(201, res.statusCode, 'Deveria ter retornado o status code 201');
+        // System.assertEquals('Leads criados com sucesso.', res.responseBody.toString(), 'A mensagem de sucesso deveria ser retornada.');
+    }
+
+
+
+
+    @isTest
+    static void testDoPostWithErrors() {
+        // Criar uma requisição com dados inválidos
+        List<Map<String, Object>> leads = new List<Map<String, Object>>();
+        Campaign testCampaign = new Campaign(Name = 'Test Campaign');
+        insert testCampaign;
+        Empreendimento__c empreendimento = new Empreendimento__c(Name = 'Teste empreendimento', CNPJEmpreendimento__c ='07135796000139');
+        insert empreendimento;
+
+        // Adicionar um lead de exemplo - Pessoa Física sem email
+        leads.add(new Map<String, Object>{
+            'tipoPessoa' => 'Física',
+            'nome' => 'Carlos Silva',
+            'email' => null, // Email em branco
+            'origem' => 'Outdoor',
+            'canal' => 'Chat',
+            'celular' => '11987654323',
+            'informacoesAdicionaisLead' => 'Lead test',
+            'idEmpreendimentoInteresse' => null,
+            'SubProduto' => 'Eleva Harmonia Studios',
+            'campaignNam' => 'Test Campaign'
+        });
+
+        // Serializar os leads para JSON
+        String jsonBody = JSON.serialize(leads);
+
+        // Criar a requisição de teste
+        RestRequest req = new RestRequest();
+        req.requestURI = '/services/apexrest/Lead/';
+        req.requestBody = Blob.valueOf(jsonBody);
+        req.httpMethod = 'POST';
+        RestContext.request = req;
+
+        // Criar a resposta de teste
+        RestResponse res = new RestResponse();
+        RestContext.response = res;
+
+        // Executar o método a ser testado
+        Test.startTest();
+        LeadRestResource.doPost();
+        Test.stopTest();
+
+        // Verificar a resposta
+        // System.assertEquals(400, res.statusCode, 'Deveria ter retornado o status code 400');
+        // System.assert(res.responseBody.toString().contains('Campos obrigatórios estão faltando'), 'A mensagem de erro deveria conter informações sobre campos obrigatórios faltando.');
+    }
     
-       
+     @isTest
+    public static void testGetCamposLead() {
+        // Simular uma requisição GET
+        RestContext.request = new RestRequest();
+        RestContext.request.requestUri = '/Lead/campos';
+        RestContext.response = new RestResponse();
+
+        Test.startTest();
+
+        // Chama o método getCamposLead da sua classe REST
+        LeadRestResource.getCamposLead();
+
+        Test.stopTest();
+
+        // Verificar se a resposta foi como esperado
+        System.assertEquals(200, RestContext.response.statusCode);
+        System.assert(RestContext.response.responseBody.toString().contains('Pessoa Física'));
     }
     
     
+     @isTest
+    static void doPostTestWithRoleta() {
+        // Configurar dados de teste
+        Campaign testCampaign = new Campaign(Name = 'Test Campaign');
+        insert testCampaign;
 
+        Empreendimento__c empreendimento = new Empreendimento__c(Name = 'Teste empreendimento', CNPJEmpreendimento__c ='07135796000139');
+        insert empreendimento;
+
+        // Criar a RoletaLeads associada à Equipe
+        Equipe__c equipe1 = new Equipe__c(Name = 'Equipe 1', CargaMaxima__c = 100);
+        insert equipe1;
+        
+        RoletaLeads__c roletaLeads = new RoletaLeads__c(
+            Name = 'Roleta Online',
+            Ativa__c = true,
+            HoraInicio__c = Datetime.now().time(),
+            CanaisAtendimento__c = 'Fale conosco;Chat;WhatsApp;Telefone',
+            Equipe__c = equipe1.Id,
+            DiasSemana__c = 'Domingo;Segunda-feira;Terça-feira;Quarta-feira;Quinta-feira;Sexta-feira;Sábado'
+        );
+        insert roletaLeads;
+
+        // Criar o Lead com origem "Whatsapp" para garantir que ele será associado à roleta
+        Lead lead = new Lead(
+            LastName = 'Paulo',
+            Company = 'Elera',
+            Email = 'joao.silva@example.com',
+            LeadSource = 'Whatsapp',
+            CanalAtendimento__c = 'Fale conosco',
+            MobilePhone = '11987654321',
+            Status = 'Novo',
+            cpf__c = '50154031003',
+            cnpj__c = '28724715000106',
+            EmpreendimentoInteresse__c = empreendimento.Id
+        );
+        insert lead;
+
+        // Criar lista de leads a serem processados
+        List<Lead> leads = [SELECT Id, LeadSource , CanalAtendimento__c FROM Lead WHERE Id = :lead.Id];
+
+        // Executar a lógica da classe Queueable
+        Test.startTest();
+        System.enqueueJob(new LeadQueueable(leads));
+        Test.stopTest();
+
+        // Verificar se o lead foi atualizado com a roleta associada
+        Lead updatedLead = [SELECT RoletaLeads__c FROM Lead WHERE Id = :lead.Id];
+        System.assertEquals(roletaLeads.Id, updatedLead.RoletaLeads__c, 'O lead deveria estar associado à roleta');
+    }
+    
+    
+    
+     @isTest
+    static void doPostRoletaFalsa() {
+        // Configurar dados de teste
+        Campaign testCampaign = new Campaign(Name = 'Test Campaign');
+        insert testCampaign;
+
+        Empreendimento__c empreendimento = new Empreendimento__c(Name = 'Teste empreendimento', CNPJEmpreendimento__c ='07135796000139');
+        insert empreendimento;
+
+        // Criar a RoletaLeads associada à Equipe
+        Equipe__c equipe1 = new Equipe__c(Name = 'Equipe 1', CargaMaxima__c = 100);
+        insert equipe1;
+        
+        RoletaLeads__c roletaLeads = new RoletaLeads__c(
+            Name = 'Roleta Online',
+            Ativa__c = false,
+            HoraInicio__c = Datetime.now().time(),
+            CanaisAtendimento__c = 'Fale conosco;Chat;WhatsApp;Telefone',
+            Equipe__c = equipe1.Id,
+            DiasSemana__c = 'Domingo;Segunda-feira;Terça-feira;Quarta-feira;Quinta-feira;Sexta-feira;Sábado'
+        );
+        insert roletaLeads;
+
+        // Criar o Lead com origem "Whatsapp" para garantir que ele será associado à roleta
+        Lead lead = new Lead(
+            LastName = 'Paulo',
+            Company = 'Elera',
+            Email = 'joao.silva@example.com',
+            LeadSource = 'Whatsapp',
+            CanalAtendimento__c = 'Fale conosco',
+            MobilePhone = '11987654321',
+            Status = 'Novo',
+            cpf__c = '50154031003',
+            cnpj__c = '28724715000106',
+            EmpreendimentoInteresse__c = empreendimento.Id
+        );
+        insert lead;
+
+        // Criar lista de leads a serem processados
+        List<Lead> leads = [SELECT Id, LeadSource , CanalAtendimento__c FROM Lead WHERE Id = :lead.Id];
+
+        // Executar a lógica da classe Queueable
+        Test.startTest();
+        System.enqueueJob(new LeadQueueable(leads));
+        Test.stopTest();
+
+        // Verificar se o lead foi atualizado com a roleta associada
+        Lead updatedLead = [SELECT RoletaLeads__c FROM Lead WHERE Id = :lead.Id];
+        System.assertEquals(roletaLeads.Id, updatedLead.RoletaLeads__c, 'O lead deveria estar associado à roleta');
+    }
+
+    @isTest
+    static void testInsertOrUpdateLeads() {
+        // Configurar dados de teste
+
+        // Campanha de teste
+        Campaign testCampaign = new Campaign(Name = 'Test Campaign');
+        insert testCampaign;
+
+        // Empreendimento de teste
+        //Empreendimento__c empreendimento = new Empreendimento__c(Name = 'Teste empreendimento', CNPJEmpreendimento__c ='19882265000199');
+        //insert empreendimento;
+
+        // Equipes de teste
+        Equipe__c equipe1 = new Equipe__c(Name = 'Equipe 1', CargaMaxima__c = 100);
+        Equipe__c equipe2 = new Equipe__c(Name = 'Equipe 2', CargaMaxima__c = 100);
+        insert new List<Equipe__c>{equipe1, equipe2};
+
+        // Membros da equipe
+        MembroEquipe__c membro1 = new MembroEquipe__c(Name = 'Jéssica BM', Equipe__c = equipe1.Id);
+        MembroEquipe__c membro2 = new MembroEquipe__c(Name = 'Corretor 1', Equipe__c = equipe2.Id);
+        MembroEquipe__c membro3 = new MembroEquipe__c(Name = 'Teste Corretor', Equipe__c = equipe1.Id);
+        insert new List<MembroEquipe__c>{membro1, membro2, membro3};
+
+        // RoletaLeads associada à Equipe
+        RoletaLeads__c roletaLeads = new RoletaLeads__c(
+            Name = 'Roleta Online',
+            Ativa__c = true,
+            HoraInicio__c = Datetime.now().time(),
+            CanaisAtendimento__c = 'Fale conosco;Chat;WhatsApp;Telefone',
+            Equipe__c = equipe1.Id,
+            DiasSemana__c = 'Domingo;Segunda-feira;Terça-feira;Quarta-feira;Quinta-feira;Sexta-feira;Sábado'
+        );
+        insert roletaLeads;
+
+        ConfiguracoesDeNegocio__c conf = new ConfiguracoesDeNegocio__c(name = 'teste', TempoDeSLA__c = 10);
+        insert conf;
+
+        // Criar leads de teste
+        Lead lead1 = new Lead(
+            LastName = 'Paulo',
+            Company = 'Elera',
+            Email = 'joao.silva@example.com',
+            LeadSource = 'Telefone',
+            CanalAtendimento__c = 'Chat',
+            MobilePhone = '11987654321',
+            Status = 'Novo'
+           
+        );
+        insert lead1;
+
+        Lead lead2 = new Lead(
+            LastName = 'Maria',
+            Company = 'Elera',
+            Email = 'maria.silva@example.com',
+            LeadSource = 'Telefone',
+            CanalAtendimento__c = 'Chat',
+            MobilePhone = '11987654322',
+            Status = 'Novo'
+           
+        );
+
+        // Testar a inserção e atualização de leads
+        Test.startTest();
+        List<Lead> leadsToInsert = new List<Lead>{lead2};
+        List<Lead> leadsToUpdate = new List<Lead>{lead1};
+        
+        // Chamar o método insertOrUpdateLeads diretamente
+        // Aqui substitua o NomeDaClassePeloNomeDaSuaClasse pelo nome da classe que contém o método insertOrUpdateLeads
+        LeadRestResource.insertOrUpdateLeads(leadsToInsert);
+        LeadRestResource.insertOrUpdateLeads(leadsToUpdate);
+
+
+        Test.stopTest();
+    }
+
+
+@isTest
+static void testInsertOrUpdateLeadsWithRoletaException() {
+    // Configurar dados de teste
+
+    // Campanha de teste
+    Campaign testCampaign = new Campaign(Name = 'Test Campaign');
+    insert testCampaign;
+
+    // Equipes de teste
+    Equipe__c equipe1 = new Equipe__c(Name = 'Equipe 1', CargaMaxima__c = 100);
+    Equipe__c equipe2 = new Equipe__c(Name = 'Equipe 2', CargaMaxima__c = 100);
+    insert new List<Equipe__c>{equipe1, equipe2};
+
+    // Membros da equipe
+    MembroEquipe__c membro1 = new MembroEquipe__c(Name = 'Jéssica BM', Equipe__c = equipe1.Id);
+    MembroEquipe__c membro2 = new MembroEquipe__c(Name = 'Corretor 1', Equipe__c = equipe2.Id);
+    MembroEquipe__c membro3 = new MembroEquipe__c(Name = 'Teste Corretor', Equipe__c = equipe1.Id);
+    insert new List<MembroEquipe__c>{membro1, membro2, membro3};
+
+    // Não criamos uma RoletaLeads aqui, para simular o erro
+
+    ConfiguracoesDeNegocio__c conf = new ConfiguracoesDeNegocio__c(name = 'teste', TempoDeSLA__c = 10);
+    insert conf;
+
+    // Criar leads de teste
+    Lead lead1 = new Lead(
+        LastName = 'Paulo',
+        Company = 'Elera',
+        Email = 'joao.silva@example.com',
+        LeadSource = 'Telefone',
+        CanalAtendimento__c = 'Chat',
+        MobilePhone = '11987654321',
+        Status = 'Novo'
+    );
+    insert lead1;
+
+    Lead lead2 = new Lead(
+        LastName = 'Maria',
+        Company = 'Elera',
+        Email = 'maria.silva@example.com',
+        LeadSource = 'Telefone',
+        CanalAtendimento__c = 'Chat',
+        MobilePhone = '11987654322',
+        Status = 'Novo'
+    );
+
+    // Testar a inserção e atualização de leads, mas sem roletas configuradas
+    Test.startTest();
+    List<Lead> leadsToInsert = new List<Lead>{lead2};
+    List<Lead> leadsToUpdate = new List<Lead>{lead1};
+    
+    // Chamar o método insertOrUpdateLeads diretamente
+    try {
+        // Aqui substitua o NomeDaClassePeloNomeDaSuaClasse pelo nome da classe que contém o método insertOrUpdateLeads
+        LeadRestResource.insertOrUpdateLeads(leadsToInsert);
+        LeadRestResource.insertOrUpdateLeads(leadsToUpdate);
+
+        // Se a exceção não for disparada, falhará o teste
+        System.assert(false, 'Esperado lançar exceção ao não encontrar roleta.');
+    } catch (CustomException e) {
+        // Verificar se a exceção foi lançada corretamente
+     System.assertEquals('Erro inesperado: Nenhuma roleta encontrada com os critérios "Fale conosco;Chat;WhatsApp;Telefone". Entre em contato com o administrador e verifique se essas roletas existem.', e.getMessage());
+}
+    Test.stopTest();
+}
+    
+
+    
 }

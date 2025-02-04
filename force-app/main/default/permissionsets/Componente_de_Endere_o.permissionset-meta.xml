@@ -173,10 +173,6 @@
         <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
-        <apexClass>EmpreendimentoHelper</apexClass>
-        <enabled>true</enabled>
-    </classAccesses>
-    <classAccesses>
         <apexClass>EmpreendimentoSelector</apexClass>
         <enabled>true</enabled>
     </classAccesses>

@@ -9,10 +9,10 @@ private class BuscaFoneticaFlowCorretoresTest {
         // Criando registros de contatos com apelidos
         List<Contact> corretores = new List<Contact>();
         
-        corretores.add(new Contact(FirstName='João', LastName='Silva', RecordTypeId=corretorRecordTypeId, Apelido__c='Jao'));
-        corretores.add(new Contact(FirstName='Ricardo', LastName='Lima', RecordTypeId=corretorRecordTypeId, Apelido__c='Rick'));
-        corretores.add(new Contact(FirstName='Felipe', LastName='Mendes', RecordTypeId=corretorRecordTypeId, Apelido__c='Philipe'));
-        corretores.add(new Contact(FirstName='Lucas', LastName='Sousa', RecordTypeId=corretorRecordTypeId, Apelido__c='Lu'));
+        corretores.add(new Contact(FirstName='João', LastName='Silva', RecordTypeId=corretorRecordTypeId, Apelido__c='Jao' , Cpf__c = '27338436053'));
+        corretores.add(new Contact(FirstName='Ricardo', LastName='Lima', RecordTypeId=corretorRecordTypeId, Apelido__c='Rick' ,  Cpf__c = '54150436088'));
+        corretores.add(new Contact(FirstName='Felipe', LastName='Mendes', RecordTypeId=corretorRecordTypeId, Apelido__c='Philipe' ,  Cpf__c = '60754215059'));
+        corretores.add(new Contact(FirstName='Lucas', LastName='Sousa', RecordTypeId=corretorRecordTypeId, Apelido__c='Lu' ,  Cpf__c = '86229186020'));
 
         insert corretores;
     }
