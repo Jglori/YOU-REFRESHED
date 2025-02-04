@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>AntecipacaoAposHabiteSe__c</fullName>
-    <externalId>false</externalId>
     <formula>EXP(LN((1+ TaxaTP__c ))*( PeriodicidadeParcelaPos__c /12))-1</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <inlineHelpText>Taxa de antecipação após o habite-se por mês</inlineHelpText>
