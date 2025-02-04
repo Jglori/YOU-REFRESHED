@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Layout xmlns="http://soap.sforce.com/2006/04/metadata">
+    <excludeButtons>AssignRecordLabel</excludeButtons>
+    <excludeButtons>OpenSlackRecordChannel</excludeButtons>
+    <excludeButtons>RecordShareHierarchy</excludeButtons>
+    <excludeButtons>Share</excludeButtons>
     <excludeButtons>Submit</excludeButtons>
     <layoutSections>
         <customLabel>true</customLabel>
@@ -22,6 +26,14 @@
             <layoutItems>
                 <behavior>Required</behavior>
                 <field>TipoEmpreendimento__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>CodigoSistemaExterno__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>NomeCodigoSistemaExterno__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
@@ -196,9 +208,12 @@
         <style>CustomLinks</style>
     </layoutSections>
     <relatedLists>
+        <excludeButtons>MassChangeOwner</excludeButtons>
+        <excludeButtons>New</excludeButtons>
         <fields>FULL_NAME</fields>
-        <fields>LEAD.COMPANY</fields>
-        <fields>LEAD.PHONE</fields>
+        <fields>LEAD.MOBILE_PHONE</fields>
+        <fields>LEAD.EMAIL</fields>
+        <fields>FarolLead__c</fields>
         <relatedList>Lead.EmpreendimentoInteresse__c</relatedList>
     </relatedLists>
     <relatedLists>
@@ -211,13 +226,17 @@
         <fields>PRODUCT2.DESCRIPTION</fields>
         <relatedList>Product2.Empreendimento__c</relatedList>
     </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
+        <relatedList>Lead_MTN__c.Empreendimento__c</relatedList>
+    </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>
     <showInteractionLogPanel>false</showInteractionLogPanel>
     <showRunAssignmentRulesCheckbox>false</showRunAssignmentRulesCheckbox>
     <showSubmitAndAttachButton>false</showSubmitAndAttachButton>
     <summaryLayout>
-        <masterLabel>00hDw000000arWI</masterLabel>
+        <masterLabel>00hDy000000iDlb</masterLabel>
         <sizeX>4</sizeX>
         <sizeY>0</sizeY>
         <summaryLayoutStyle>Default</summaryLayoutStyle>

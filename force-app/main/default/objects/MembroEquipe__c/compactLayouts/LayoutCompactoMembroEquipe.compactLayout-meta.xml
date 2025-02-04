@@ -3,5 +3,8 @@
     <fullName>LayoutCompactoMembroEquipe</fullName>
     <fields>Usuario__c</fields>
     <fields>Equipe__c</fields>
+    <fields>Gerente_Salao__c</fields>
+    <fields>Superintendente__c</fields>
+    <fields>Diretor_Geral__c</fields>
     <label>Layout compacto do membro da equipe</label>
 </CompactLayout>

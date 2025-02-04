@@ -1,4 +1,4 @@
-@IsTest
+@isTest
 public class ParticipanteRoletaTriggerHandlerTest {
 
     @TestSetup

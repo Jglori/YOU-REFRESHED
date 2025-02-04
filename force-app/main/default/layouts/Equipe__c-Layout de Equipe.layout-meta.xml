@@ -76,6 +76,9 @@
     <relatedLists>
         <fields>NAME</fields>
         <fields>Usuario__c</fields>
+        <fields>Gerente_Salao__c</fields>
+        <fields>Superintendente__c</fields>
+        <fields>Diretor_Geral__c</fields>
         <relatedList>MembroEquipe__c.Equipe__c</relatedList>
     </relatedLists>
     <relatedLists>
@@ -90,7 +93,7 @@
     <showRunAssignmentRulesCheckbox>false</showRunAssignmentRulesCheckbox>
     <showSubmitAndAttachButton>false</showSubmitAndAttachButton>
     <summaryLayout>
-        <masterLabel>00h7g000006zTkK</masterLabel>
+        <masterLabel>00hDy000000iFH1</masterLabel>
         <sizeX>4</sizeX>
         <sizeY>0</sizeY>
         <summaryLayoutStyle>Default</summaryLayoutStyle>

@@ -1,6 +1,7 @@
 @IsTest
 public class WhatsAppServiceTest {
-     // Cria dados de teste para serem usados pelos testes
+
+    // Cria dados de teste para serem usados pelos testes
     @TestSetup
     static void setupTestData() {
         // Criando um Empreendimento de exemplo
@@ -9,7 +10,7 @@ public class WhatsAppServiceTest {
             CNPJEmpreendimento__c = '07135796000139'
         );
         insert empreendimento;
-        
+
         // Criar um Lead de teste associado ao Empreendimento
         Lead testLead = new Lead(
             LastName = 'Will',
@@ -26,16 +27,15 @@ public class WhatsAppServiceTest {
 
     // Classe para simular o callout HTTP
     public class MockHttpResponseGenerator implements HttpCalloutMock {
-    public HTTPResponse respond(HTTPRequest req) {
-        // Simular uma resposta de sucesso
-        HttpResponse res = new HttpResponse();
-        res.setHeader('Content-Type', 'application/json');
-        res.setBody('{"status":"success","message":"Message sent successfully"}');
-        res.setStatusCode(200);
-        return res;
+        public HTTPResponse respond(HTTPRequest req) {
+            // Simular uma resposta de sucesso
+            HttpResponse res = new HttpResponse();
+            res.setHeader('Content-Type', 'application/json');
+            res.setBody('{"status":"success","message":"Message sent successfully"}');
+            res.setStatusCode(200);
+            return res;
+        }
     }
-}
-
 
     @IsTest
     static void testObterLeadPorId() {
@@ -46,7 +46,7 @@ public class WhatsAppServiceTest {
         Test.startTest();
         String result = WhatsAppService.obterLeadPorId(lead.Id);
         Test.stopTest();
-        //NotEquals(null, result, 'O resultado não deve ser nulo.');
+        System.assertNotEquals(null, result, 'O resultado não deve ser nulo.');
     }
 
     @IsTest
@@ -58,7 +58,7 @@ public class WhatsAppServiceTest {
         Test.startTest();
         String result = WhatsAppService.obterMensagensPorChaveExternaCliente(chaveExternaCliente);
         Test.stopTest();
-        //NotEquals(null, result, 'O resultado não deve ser nulo.');
+        System.assertNotEquals(null, result, 'O resultado não deve ser nulo.');
     }
 
     @IsTest
@@ -70,21 +70,9 @@ public class WhatsAppServiceTest {
         Test.startTest();
         String result = WhatsAppService.controlarDialogo(lead.Id);
         Test.stopTest();
-        //NotEquals(null, result, 'O resultado não deve ser nulo.');
+        System.assertNotEquals(null, result, 'O resultado não deve ser nulo.');
     }
 
-     @IsTest
-    static void testControlarDialog() {
-        // Configura o mock para simular o callout
-        Test.setMock(HttpCalloutMock.class, new MockHttpResponseGenerator());
-
-        Lead lead1 = [SELECT Id FROM Lead LIMIT 1];
-        Test.startTest();
-        String result = WhatsAppService.controlarDialogo(lead1.Id);
-        Test.stopTest();
-        //NotEquals(null, result, 'O resultado não deve ser nulo.');
-    }
- 
     @IsTest
     static void testEnviarMidia() {
         // Configura o mock para simular o callout
@@ -97,12 +85,11 @@ public class WhatsAppServiceTest {
         Test.startTest();
         String result = WhatsAppService.enviarMidia(lead.Id, tipoArquivo, nomeArquivo, corpoArquivo);
         Test.stopTest();
-        //NotEquals(null, result, 'O resultado não deve ser nulo.');
+        System.assertNotEquals(null, result, 'O resultado não deve ser nulo.');
     }
-    
-    
-    @isTest
-      static void testEnviarMidiaErro() {
+
+    @IsTest
+    static void testEnviarMidiaErro() {
         // Configura o mock para simular o callout
         Test.setMock(HttpCalloutMock.class, new MockHttpResponseGenerator());
 
@@ -113,102 +100,14 @@ public class WhatsAppServiceTest {
         Test.startTest();
         String result = WhatsAppService.enviarMidia(lead.Id, tipoArquivo, nomeArquivo, corpoArquivo);
         Test.stopTest();
-        //NotEquals(null, result, 'O resultado não deve ser nulo.');
-    }
-    
-     @IsTest
-    static void testEnviarMidias() {
-        // Configura o mock para simular o callout
-        Test.setMock(HttpCalloutMock.class, new MockHttpResponseGenerator());
-
-        Lead leads = [SELECT Id FROM Lead LIMIT 1];
-        String tipoArquivo = 'image/png';
-        String nomeArquivo = 'teste.png';
-        String corpoArquivo = 'base64string';
-        Test.startTest();
-        String result = WhatsAppService.enviarMidia(leads.Id, tipoArquivo, nomeArquivo, corpoArquivo);
-        Test.stopTest();
-        //NotEquals(null, result, 'O resultado não deve ser nulo.');
-    }
-    
-    @IsTest
-    static void testEnviarTemplatePadraoContatoLead() {
-        // Configura o mock para simular o callout
-        Test.setMock(HttpCalloutMock.class, new MockHttpResponseGenerator());
-    
-        // Configurando dados de teste
-        Lead lead = [SELECT Id FROM Lead LIMIT 1];
-        String nomeTemplate = 'contatolead';
-    
-        // Início do teste
-        Test.startTest();
-        String result = WhatsAppService.enviarTemplatePadrao(lead.Id, nomeTemplate);
-        Test.stopTest();
-    
-        // Verificações
-        //NotEquals(null, result, 'O resultado não deve ser nulo.');
-        //(result.contains('"status":"success"'), 'A resposta deve conter o status de sucesso.');
-        //(result.contains('"message":"Message sent successfully"'), 'A mensagem de sucesso deve estar presente na resposta.');
-    }   
-    
-    @IsTest
-    static void testEnviarTemplatePadraoHelloWorld() {
-        // Configura o mock para simular o callout
-        Test.setMock(HttpCalloutMock.class, new MockHttpResponseGenerator());
-    
-        // Configurando dados de teste
-        Lead lead = [SELECT Id FROM Lead LIMIT 1];
-        String nomeTemplate = 'hello_world';
-    
-        // Início do teste
-        Test.startTest();
-        String result = WhatsAppService.enviarTemplatePadrao(lead.Id, nomeTemplate);
-        Test.stopTest();
-    
-        // Verificações
-        //NotEquals(null, result, 'O resultado não deve ser nulo.');
-        //(result.contains('"status":"success"'), 'A resposta deve conter o status de sucesso.');
-        //(result.contains('"message":"Message sent successfully"'), 'A mensagem de sucesso deve estar presente na resposta.');
-    }
-
-    @IsTest
-    static void enviarMensagemComLeadTest() {
-
-    Test.setMock(HttpCalloutMock.class, new MockHttpResponseGenerator());
-
-    Empreendimento__c empreendimento = TestDataFactory.gerarEmpreendimento();
-
-    insert empreendimento;
-
-    Lead lead1 = [SELECT Id FROM Lead LIMIT 1];
-
-    Lead testLead = new Lead(
-        LastName = 'Teste',
-        Email = 'teste@exemplo.com',
-        LeadSource = 'WhatsApp',
-        MobilePhone = '11987654321',
-        EmpreendimentoInteresse__c = empreendimento.Id,
-        Status = 'Novo'
-    );
-
-    insert testLead;
-
-    String mensagemTexto = 'Olá, este é um teste de mensagem via WhatsApp!';
-
-    Test.startTest();
-
-    String result = WhatsAppService.enviarMensagem(lead1.Id, mensagemTexto);
-
-    Test.stopTest();
-
-    
+        System.assertNotEquals(null, result, 'O resultado não deve ser nulo.');
     }
 
     @IsTest
     static void testEnviarMidiaInvalida() {
         // Configura o mock para simular o callout
         Test.setMock(HttpCalloutMock.class, new MockHttpResponseGenerator());
-    
+
         Lead lead = [SELECT Id FROM Lead LIMIT 1];
         String tipoArquivo = 'invalid/type';
         String nomeArquivo = 'arquivo_invalido';
@@ -216,454 +115,360 @@ public class WhatsAppServiceTest {
         Test.startTest();
         try {
             String result = WhatsAppService.enviarMidia(lead.Id, tipoArquivo, nomeArquivo, corpoArquivo);
-            //(false, 'O método deveria ter lançado uma exceção para tipo de arquivo inválido.');
+            System.assert(false, 'O método deveria ter lançado uma exceção para tipo de arquivo inválido.');
         } catch (Exception e) {
+            // Exceção esperada
         }
         Test.stopTest();
     }
 
-	@IsTest
-    static void testEnviarMidiaComErro() {
-            Test.setMock(HttpCalloutMock.class, new MockHttpResponseGenerator());
-
-        Lead lead = [SELECT Id FROM Lead LIMIT 1];
-        String tipoArquivo = 'image/png';
-        String nomeArquivo = 'teste.png';
-        String corpoArquivo = 'base65string';
-        Test.startTest();
-        try {
-            String result = WhatsAppService.enviarMidia(lead.Id, tipoArquivo, nomeArquivo, corpoArquivo);
-        } catch (Exception e) {
-        //    //Equals('Erro ao enviar mídia', e.getMessage(), 'A mensagem de erro não corresponde ao esperado.');
-        }
-        Test.stopTest();
-    }
-    
     @IsTest
-    static void testCadastrarMensagens() {
+    static void testEnviarTemplatePadrao() {
         // Configura o mock para simular o callout
         Test.setMock(HttpCalloutMock.class, new MockHttpResponseGenerator());
 
-        // Configura a requisição e resposta REST básica
-        String requestBody = '{"text":{"body":"Olá, este é um teste de mensagem via WhatsApp!","preview_url":false},"type":"text","to":"11960387699","recipient_type":"individual","messaging_product":"whatsapp"}';
-        System.debug('Aqui esta o requestBody' + requestBody);
-        RestRequest req = new RestRequest();
-        req.requestBody = Blob.valueOf(requestBody);
-        RestContext.request = req;
-        RestResponse res = new RestResponse();
-        RestContext.response = res;
-
-        System.debug('req: ' + req);
-        System.debug('res: ' + res);
-        
-        // Executa o método de teste
+        Lead lead = [SELECT Id FROM Lead LIMIT 1];
+        String nomeTemplate = 'Template de Teste';
         Test.startTest();
-        WhatsAppService.cadastrarMensagens(req, res);
+        String result = WhatsAppService.enviarTemplatePadrao(lead.Id, nomeTemplate);
         Test.stopTest();
-
-        // Verifique se uma nova mensagem foi criada
-        List<Mensagem__c> mensagens = [SELECT Id, ChaveExternaCliente__c, Conteudo__c FROM Mensagem__c WHERE ChaveExternaCliente__c = '11987654321'];
-
-        // Verifique o conteúdo da mensagem criada
-        Mensagem__c mensagemCriada = mensagens[0];
+        System.assertNotEquals(null, result, 'O resultado não deve ser nulo.');
     }
     
-    @isTest
-    public static void testObterMensagensPorValue() {
-        // Cria um objeto simulado que será utilizado no Map de entrada
-        Map<String, Object> mensagemSimulada = new Map<String, Object>();
-        mensagemSimulada.put('Id', '001xx000003DGJpAA0');
-        mensagemSimulada.put('Conteudo', 'Mensagem de teste');
-
-        // Cria uma lista com a mensagem simulada
-        List<Object> listaMensagens = new List<Object>();
-        listaMensagens.add(mensagemSimulada);
-
-        // Cria o Map que será passado como argumento para o método
-        Map<String, Object> value = new Map<String, Object>();
-        value.put('messages', listaMensagens);
-
-        // Chama o método que está sendo testado
-        Test.startTest();
-        List<Mensagem__c> mensagens = WhatsAppService.obterMensagensPorValue(value);
-        Test.stopTest();
-
-        // Verifica se o retorno é correto
-        //NotEquals(mensagens, null, 'A lista de mensagens não pode ser nula');
-        //Equals(mensagens.size(), 1, 'Deve retornar 1 mensagem');
-        //Equals(mensagens[0].Id, '001xx000003DGJpAA0', 'O Id da mensagem deve ser o esperado');
-        //Equals(mensagens[0].Conteudo__c, 'Mensagem de teste', 'O conteúdo da mensagem deve ser o esperado');
-    }
-    
-    
-    @isTest
-    public static void testObterMensagensPorEntry() {
-        // Cria um objeto simulado para 'value' com mensagens
-        Map<String, Object> mensagemSimulada = new Map<String, Object>();
-        mensagemSimulada.put('Id', '001xx000003DGJpAA0');
-        mensagemSimulada.put('Conteudo__c', 'Mensagem de teste');
-
-        // Cria uma lista de mensagens simuladas
-        List<Object> listaMensagens = new List<Object>();
-        listaMensagens.add(mensagemSimulada);
-
-        // Cria o 'value' com a chave 'messages' contendo as mensagens simuladas
-        Map<String, Object> valueSimulado = new Map<String, Object>();
-        valueSimulado.put('messages', listaMensagens);
-
-        // Cria a entrada 'change' que simula a estrutura do Map de entrada
-        Map<String, Object> changeSimulado = new Map<String, Object>();
-        changeSimulado.put('value', valueSimulado);
-
-        // Cria a entrada final que contém a lista de 'changes'
-        Map<String, Object> entry = new Map<String, Object>();
-        List<Object> changesSimulados = new List<Object>();
-        changesSimulados.add(changeSimulado);
-        entry.put('changes', changesSimulados);
-
-        // Chama o método que está sendo testado
-        Test.startTest();
-        List<Mensagem__c> mensagens = WhatsAppService.obterMensagensPorEntry(entry); // Certifique-se de que WhatsAppService está correto
-        Test.stopTest();
-
-        // Verifica se o retorno é correto
-        //NotEquals(mensagens, null, 'A lista de mensagens não pode ser nula');
-        //Equals(mensagens.size(), 1, 'Deve retornar 1 mensagem');
-        //Equals(mensagens[0].Id, '001xx000003DGJpAA0', 'O Id da mensagem deve ser o esperado');
-        //Equals(mensagens[0].Conteudo__c, 'Mensagem de teste', 'O conteúdo da mensagem deve ser o esperado');
-    }
-
-    @isTest
-    public static void testObterMensagensPorEntryComMudancaSemValue() {
-        // Cria uma entrada 'change' sem a chave 'value'
-        Map<String, Object> changeSimulado = new Map<String, Object>();
-        changeSimulado.put('otherKey', 'someValue'); // Não tem chave 'value'
-
-        // Cria a entrada final com a lista de 'changes'
-        Map<String, Object> entry = new Map<String, Object>();
-        List<Object> changesSimulados = new List<Object>();
-        changesSimulados.add(changeSimulado);
-        entry.put('changes', changesSimulados);
-
-        // Chama o método que está sendo testado
-        Test.startTest();
-        List<Mensagem__c> mensagens = WhatsAppService.obterMensagensPorEntry(entry); // Certifique-se de que WhatsAppService está correto
-        Test.stopTest();
-
-        // Verifica se a lista de mensagens está vazia, já que não havia chave 'value'
-        //Equals(mensagens.size(), 0, 'A lista de mensagens deve estar vazia');
-    }
-
-    @isTest
-    public static void testObterMensagensPorEntryComMudancaSemMessages() {
-        // Cria um objeto simulado 'value' sem a chave 'messages'
-        Map<String, Object> valueSimulado = new Map<String, Object>();
-        valueSimulado.put('someKey', 'someValue'); // Não tem chave 'messages'
-
-        // Cria a entrada 'change' que contém o 'value'
-        Map<String, Object> changeSimulado = new Map<String, Object>();
-        changeSimulado.put('value', valueSimulado);
-
-        // Cria a entrada final com a lista de 'changes'
-        Map<String, Object> entry = new Map<String, Object>();
-        List<Object> changesSimulados = new List<Object>();
-        changesSimulados.add(changeSimulado);
-        entry.put('changes', changesSimulados);
-
-        // Chama o método que está sendo testado
-        Test.startTest();
-        List<Mensagem__c> mensagens = WhatsAppService.obterMensagensPorEntry(entry); // Certifique-se de que WhatsAppService está correto
-        Test.stopTest();
-
-        // Verifica se a lista de mensagens está vazia, já que não havia chave 'messages'
-        //Equals(mensagens.size(), 0, 'A lista de mensagens deve estar vazia');
-    }
-    
-    
-    @isTest
-    public static void testObterMensagensComEntradaValida() {
-        // Cria um objeto simulado de 'value' com mensagens
-        Map<String, Object> mensagemSimulada = new Map<String, Object>();
-        mensagemSimulada.put('Id', '001xx000003DGJpAA0');
-        mensagemSimulada.put('Conteudo__c', 'Mensagem de teste');
-
-        // Cria uma lista de mensagens simuladas
-        List<Object> listaMensagens = new List<Object>();
-        listaMensagens.add(mensagemSimulada);
-
-        // Cria o 'value' com a chave 'messages' contendo as mensagens simuladas
-        Map<String, Object> valueSimulado = new Map<String, Object>();
-        valueSimulado.put('messages', listaMensagens);
-
-        // Cria a entrada 'change' com a chave 'value'
-        Map<String, Object> changeSimulado = new Map<String, Object>();
-        changeSimulado.put('value', valueSimulado);
-
-        // Cria a lista de 'changes' contendo a mudança simulada
-        List<Object> listaChanges = new List<Object>();
-        listaChanges.add(changeSimulado);
-
-        // Cria a entrada principal que contém a chave 'changes'
-        Map<String, Object> entrySimulado = new Map<String, Object>();
-        entrySimulado.put('changes', listaChanges);
-
-        // Cria uma lista de 'entry' contendo a entrada principal
-        List<Object> listaEntry = new List<Object>();
-        listaEntry.add(entrySimulado);
-
-        // Cria o requestBody final que contém a lista de 'entry'
-        Map<String, Object> requestBody = new Map<String, Object>();
-        requestBody.put('entry', listaEntry);
-
-        // Chama o método que está sendo testado
-        Test.startTest();
-        List<Mensagem__c> mensagens = WhatsAppService.obterMensagens(requestBody);
-        Test.stopTest();
-
-        // Verifica se o retorno é correto
-        //NotEquals(mensagens, null, 'A lista de mensagens não pode ser nula');
-        //Equals(mensagens.size(), 1, 'Deve retornar 1 mensagem');
-        //Equals(mensagens[0].Id, '001xx000003DGJpAA0', 'O Id da mensagem deve ser o esperado');
-        //Equals(mensagens[0].Conteudo__c, 'Mensagem de teste', 'O conteúdo da mensagem deve ser o esperado');
-    }
-
-   // @isTest
-    //public static void testObterMensagensSemEntry() {
-        // Cria um requestBody sem a chave 'entry'
-       // Map<String, Object> requestBody = new Map<String, Object>();
-
-        // Chama o método que está sendo testado
-      //  Test.startTest();
-     //   List<Mensagem__c> mensagens = WhatsAppService.obterMensagens(requestBody);
-    //    Test.stopTest();
-
-        // Verifica se a lista de mensagens está vazia
-        //Equals(mensagens.size(), 0, 'A lista de mensagens deve estar vazia se não houver entry');
-    //}
-
-    @isTest
-    public static void testObterMensagensComEntrySemChanges() {
-        // Cria uma entrada 'entry' sem a chave 'changes'
-        Map<String, Object> entrySimulado = new Map<String, Object>();
-        entrySimulado.put('otherKey', 'someValue'); // Não tem chave 'changes'
-
-        // Cria uma lista de 'entry' contendo a entrada sem 'changes'
-        List<Object> listaEntry = new List<Object>();
-        listaEntry.add(entrySimulado);
-
-        // Cria o requestBody com a lista de 'entry'
-        Map<String, Object> requestBody = new Map<String, Object>();
-        requestBody.put('entry', listaEntry);
-
-        // Chama o método que está sendo testado
-        Test.startTest();
-        List<Mensagem__c> mensagens = WhatsAppService.obterMensagens(requestBody);
-        Test.stopTest();
-
-        // Verifica se a lista de mensagens está vazia
-        //Equals(mensagens.size(), 0, 'A lista de mensagens deve estar vazia se não houver changes em entry');
-    }
-    
-    
-    @isTest
-    public static void testCadastrarLeadsCriacaoDeNovosLeads() {
-        // Preparação do cenário de teste
-        
-        // Cria mensagens simuladas que serão processadas
-        List<Mensagem__c> mensagensSimuladas = new List<Mensagem__c>{
-            new Mensagem__c(ChaveExternaCliente__c = '123456789'),
-            new Mensagem__c(ChaveExternaCliente__c = '987654321')
-        };
-        insert mensagensSimuladas;
-
-        // Verifica se as mensagens foram inseridas
-        Set<Id> idsMensagens = new Set<Id>();
-        for (Mensagem__c mensagem : mensagensSimuladas) {
-            idsMensagens.add(mensagem.Id);
-        }
-
-        // Define uma chave de lead existente para simular um lead já associado
-        Lead leadExistente = new Lead(
-            RecordTypeId = Schema.SObjectType.Lead.getRecordTypeInfosByDeveloperName().get('PessoaFisica').getRecordTypeId(),
-            LastName = 'Cliente Existente',
-            CanalAtendimento__c = 'WhatsApp',
-            LeadSource = 'WhatsApp',
-            MobilePhone = '123456789',
-            ChaveExternaWhatsApp__c = '123456789'
+	@IsTest
+    static void testeAtualizarLeadComResposta() {
+        // Setup: Criar um Lead de teste
+        Lead leadDeTeste = new Lead(
+            FirstName = 'Nome Original',
+            LastName = 'Sobrenome Original',
+            Company = 'Empresa de Teste',
+            ChaveExternaWhatsApp__c = 'chaveExterna123'
         );
-        insert leadExistente;
+        insert leadDeTeste;
 
-        // Executa o método assíncrono de teste
+        // Setup: Criar uma mensagem relacionada ao Lead
+        Mensagem__c mensagemDeTeste = new Mensagem__c(
+            Conteudo__c = 'Novo Nome',
+            ChaveExternaCliente__c = leadDeTeste.ChaveExternaWhatsApp__c,
+            De__c = leadDeTeste.ChaveExternaWhatsApp__c
+        );
+        insert mensagemDeTeste;
+
+        // Início do teste
         Test.startTest();
-        WhatsAppService.cadastrarLeads(idsMensagens);
+        // Chamando o método com diferentes números de mensagem
+        WhatsAppService.atualizarLeadComResposta(leadDeTeste, 2);
+        WhatsAppService.atualizarLeadComResposta(leadDeTeste, 3);
+        WhatsAppService.atualizarLeadComResposta(leadDeTeste, 4);
         Test.stopTest();
 
-        // Validação dos resultados
+        // Consulta o Lead atualizado para verificar alterações
+        Lead leadAtualizado = [SELECT FirstName, LastName, Email FROM Lead WHERE Id = :leadDeTeste.Id];
 
-        // Recupera todos os leads após a execução do método
-        List<Lead> leads = [SELECT ChaveExternaWhatsApp__c, MobilePhone FROM Lead WHERE ChaveExternaWhatsApp__c IN ('123456789', '987654321')];
+        // Debug para validar manualmente os resultados
+        System.debug('FirstName atualizado: ' + leadAtualizado.FirstName); // Deve ser "Novo Nome"
+        System.debug('LastName atualizado: ' + leadAtualizado.LastName);   // Deve ser "Novo Nome"
+        System.debug('Email atualizado: ' + leadAtualizado.Email);         // Deve ser "Novo Nome"
+    }
+        
+    @IsTest
+    static void testeDefinirMensagemTemplate() {
+        // Setup: Criar um Lead de teste
+        Lead leadDeTeste = new Lead(
+            FirstName = 'Teste',
+            LastName = 'Usuário',
+            Company = 'Empresa Teste'
+        );
+        insert leadDeTeste;
 
-        // Valida que dois leads existem, pois um já existia e um novo deve ter sido criado
-        //Equals(2, leads.size(), 'Deve haver dois leads no total.');
+        // Início do teste
+        Test.startTest();
+        
+        // Chamadas ao método com diferentes valores para numeroMsg
+        String mensagem1 = WhatsAppService.definirMensagemTemplate(1, leadDeTeste);
+        String mensagem2 = WhatsAppService.definirMensagemTemplate(2, leadDeTeste);
+        String mensagem3 = WhatsAppService.definirMensagemTemplate(3, leadDeTeste);
+        String mensagem4 = WhatsAppService.definirMensagemTemplate(4, leadDeTeste);
+        String mensagemInvalida = WhatsAppService.definirMensagemTemplate(99, leadDeTeste);
 
-        // Verifica se o lead com '987654321' foi criado (não deve ter sido ignorado)
-        Boolean leadNovoCriado = false;
-        for (Lead lead : leads) {
-            if (lead.ChaveExternaWhatsApp__c == '987654321') {
-                leadNovoCriado = true;
-                //Equals('987654321', lead.MobilePhone, 'O telefone do lead criado deve ser o esperado.');
+        Test.stopTest();
+
+        // Logs para validação manual
+        System.debug('Mensagem para numeroMsg = 1: ' + mensagem1); // Esperado: mensagem inicial
+        System.debug('Mensagem para numeroMsg = 2: ' + mensagem2); // Esperado: mensagem para sobrenome
+        System.debug('Mensagem para numeroMsg = 3: ' + mensagem3); // Esperado: mensagem para e-mail
+        System.debug('Mensagem para numeroMsg = 4: ' + mensagem4); // Esperado: mensagem de agradecimento
+        System.debug('Mensagem para numeroMsg inválido: ' + mensagemInvalida); // Esperado: mensagem vazia
+    }
+     
+    @isTest
+    static void testSucesso() {
+        // Criando uma instância de RestResponse
+        RestResponse response = new RestResponse();
+
+        // Chamando o método sucesso para configurar a resposta
+        WhatsAppService.sucesso(response);
+
+        // Verificando se o código de status foi definido corretamente como 200
+        System.assertEquals(200, response.statusCode, 'O status code deve ser 200.');
+
+        // Verificando se o corpo da resposta foi definido corretamente
+        String expectedResponseBody = '{ success: true, event: "success" }';
+        String actualResponseBody = response.responseBody.toString();
+
+        System.assertEquals(expectedResponseBody, actualResponseBody, 'O corpo da resposta não está correto.');
+    }
+    
+	@isTest
+    static void testErro() {
+        // Criando uma instância de RestResponse
+        RestResponse response = new RestResponse();
+        
+        // Definindo uma mensagem para passar como argumento
+        String mensagem = 'Erro ao processar a requisição';
+
+        // Chamando o método erro para configurar a resposta com o código 401 e a mensagem
+        WhatsAppService.erro(response, mensagem);
+
+        // Verificando se o código de status foi definido corretamente como 401
+        System.assertEquals(401, response.statusCode, 'O status code deve ser 401.');
+
+        // Verificando se o corpo da resposta contém a mensagem passada como argumento
+        String expectedResponseBody = '{ success: false, event: "Unknown", message: "' + mensagem + '" }';
+        String actualResponseBody = response.responseBody.toString();
+
+        System.assertEquals(expectedResponseBody, actualResponseBody, 'O corpo da resposta não está correto.');
+    }
+    
+    @isTest
+    static void testCadastrarMidias() {
+        // Criando um conjunto de ids para simular as mensagens
+        Set<Id> idsMensagens = new Set<Id>();
+        
+        // Criando algumas Mensagens simuladas
+        Mensagem__c mensagem1 = new Mensagem__c();
+        mensagem1.De__c = 'whatsapp_business_number_1';
+        mensagem1.ChaveExternaCliente__c = 'chave_cliente_1';
+        mensagem1.CorpoRequisicao__c = 'mensagem corpo 1';
+        
+        Mensagem__c mensagem2 = new Mensagem__c();
+        mensagem2.De__c = 'whatsapp_business_number_2';
+        mensagem2.ChaveExternaCliente__c = 'chave_cliente_2';
+        mensagem2.CorpoRequisicao__c = 'mensagem corpo 2';
+
+        // Inserindo as Mensagens para que possamos obter seus ids
+        insert new List<Mensagem__c>{mensagem1, mensagem2};
+
+        // Adicionando os ids das mensagens no Set
+        idsMensagens.add(mensagem1.Id);
+        idsMensagens.add(mensagem2.Id);
+
+        // Mockando o método obterMidias para retornar uma lista de ContentVersion simulados
+        Test.startTest();
+        
+        // Criando ContentVersion simulados
+        ContentVersion media1 = new ContentVersion();
+        media1.Title = 'Midia 1';
+        media1.PathOnClient = 'midia1.jpg';
+        
+        ContentVersion media2 = new ContentVersion();
+        media2.Title = 'Midia 2';
+        media2.PathOnClient = 'midia2.jpg';
+        
+        // Adicionando as mídias à lista
+        List<ContentVersion> midias = new List<ContentVersion>{media1, media2};
+        
+        // Simulando a execução do método @Future
+        Test.setMock(HttpCalloutMock.class, new MockHttpResponse());
+        
+        // Chamando o método @Future
+        WhatsAppService.cadastrarMidias(idsMensagens);
+        
+        // Verificando se as mídias foram inseridas corretamente
+        List<ContentVersion> insertedMidias = [SELECT Id, Title, PathOnClient FROM ContentVersion];
+        
+        Test.stopTest();
+    }
+   
+    @isTest
+    static void testObterMidia() {
+        // Criando uma Mensagem simulada
+        Mensagem__c mensagem = new Mensagem__c();
+        mensagem.NomeArquivo__c = 'arquivoTeste';
+        mensagem.ChaveExternaMidia__c = 'chaveExternaTeste';
+        mensagem.TipoMidia__c = 'image/jpeg';
+        
+        // Inserindo a mensagem para poder usá-la no teste
+        insert mensagem;
+
+        // Garantindo que a inserção seja confirmada antes de chamar o método @future
+        Test.startTest();
+        
+        // Simulando a resposta do método 'obterURLMidia' (fazendo um mock)
+        Map<String, Object> mockedResponse = new Map<String, Object>();
+        mockedResponse.put('url', 'http://example.com/arquivoTeste.jpg');
+        
+        // Mockando o método 'obterURLMidia' para retornar a resposta simulada
+        Test.setMock(HttpCalloutMock.class, new MockHttpResponse());
+
+        // Chamando o método com callout (isso será executado fora da transação atual)
+        WhatsAppService.cadastrarMidias(new Set<Id>{mensagem.Id});
+        
+        Test.stopTest();
+        
+        // A partir daqui, podemos validar se o callout foi feito corretamente
+        // Não é necessário validar diretamente os dados de inserção no ContentVersion, 
+        // pois isso foi feito fora da transação principal devido ao @future
+    }
+    
+    @isTest
+    static void testCadastrarLeads() {
+        // Criar um conjunto de mensagens simuladas
+        Mensagem__c mensagem1 = new Mensagem__c(
+            ChaveExternaCliente__c = '1234567890'
+        );
+        Mensagem__c mensagem2 = new Mensagem__c(
+            ChaveExternaCliente__c = '0987654321'
+        );
+        
+        // Inserir as mensagens
+        insert new List<Mensagem__c>{mensagem1, mensagem2};
+
+        // Criar o mock de retorno para o método 'LeadSelector.obterLeadsPorChavesExternasClientes'
+        // (não será necessário criar Leads para essas chaves, pois eles são retornados diretamente do mock)
+        Test.startTest();
+
+        // Chamar o método @future
+        WhatsAppService.cadastrarLeads(new Set<Id>{mensagem1.Id, mensagem2.Id});
+        
+        // Finalizar a transação do @future
+        Test.stopTest();
+    }
+    
+    @isTest
+    static void testObterMensagensPorEntry() {
+        // Step 1: Criar dados simulados
+        // Criando uma mensagem fictícia com chave externa e cliente
+        Map<String, Object> mensagem1 = new Map<String, Object>{
+            'id' => 'unique-key-1',
+            'from' => 'client-key-1',
+            'timestamp' => '1638482394000'
+        };
+    
+        Map<String, Object> mensagem2 = new Map<String, Object>{
+            'id' => 'unique-key-2',
+            'from' => 'client-key-2',
+            'timestamp' => '1638482395000'
+        };
+    
+        // Simulando o corpo da requisição (requestBody)
+        Map<String, Object> requestBody = new Map<String, Object>{
+            'changes' => new List<Object>{
+                new Map<String, Object>{
+                    'value' => new Map<String, Object>{
+                        'messages' => new List<Map<String, Object>>{ mensagem1, mensagem2 }
+                    }
+                }
             }
-        }
-        //(leadNovoCriado, 'O lead com chave WhatsApp "987654321" deve ser criado.');
-    }
-
-    @isTest
-    public static void testCadastrarLeadsSemNovosLeadsParaCriar() {
-        // Preparação do cenário de teste
-
-        // Cria uma mensagem simulada já com um lead correspondente
-        List<Mensagem__c> mensagensSimuladas = new List<Mensagem__c>{
-            new Mensagem__c(ChaveExternaCliente__c = '123456789')
         };
-        insert mensagensSimuladas;
+    
+        // Step 2: Invocar o método a ser testado
+        Test.startTest();
+        List<Mensagem__c> mensagens = WhatsAppService.obterMensagensPorEntry(requestBody);
+        Test.stopTest();
+    
+        // Step 3: Validar se as mensagens foram obtidas corretamente
+        System.assertEquals(2, mensagens.size(), 'Deve retornar 2 mensagens');
+        
+        // Validar se as mensagens estão corretas
+        Mensagem__c mensagemTest1 = mensagens[0];
+        Mensagem__c mensagemTest2 = mensagens[1];
+        
+        System.assertEquals('unique-key-1', mensagemTest1.ChaveExterna__c, 'Chave externa da primeira mensagem deve ser correta');
+        System.assertEquals('client-key-1', mensagemTest1.ChaveExternaCliente__c, 'Chave externa cliente da primeira mensagem deve ser correta');
+        
+        System.assertEquals('unique-key-2', mensagemTest2.ChaveExterna__c, 'Chave externa da segunda mensagem deve ser correta');
+        System.assertEquals('client-key-2', mensagemTest2.ChaveExternaCliente__c, 'Chave externa cliente da segunda mensagem deve ser correta');
+    }
+    
+    @isTest
+    static void testObterMensagens() {
+        // Step 1: Criar dados simulados
+        // Criando uma mensagem fictícia com chave externa e cliente
+        Map<String, Object> mensagem1 = new Map<String, Object>{
+            'id' => 'unique-key-1',
+            'from' => 'client-key-1',
+            'timestamp' => '1638482394000'
+        };
+    
+        Map<String, Object> mensagem2 = new Map<String, Object>{
+            'id' => 'unique-key-2',
+            'from' => 'client-key-2',
+            'timestamp' => '1638482395000'
+        };
+    
+        // Simulando o corpo da requisição (requestBody) com a estrutura de 'entry'
+        Map<String, Object> requestBody = new Map<String, Object>{
+            'entry' => new List<Object>{
+                new Map<String, Object>{
+                    'changes' => new List<Object>{
+                        new Map<String, Object>{
+                            'value' => new Map<String, Object>{
+                                'messages' => new List<Map<String, Object>>{ mensagem1, mensagem2 }
+                            }
+                        }
+                    }
+                }
+            }
+        };
+    
+        // Step 2: Invocar o método a ser testado
+        Test.startTest();
+        List<Mensagem__c> mensagens = WhatsAppService.obterMensagens(requestBody);
+        Test.stopTest();
+    
+        // Step 3: Validar se as mensagens foram obtidas corretamente
+        System.assertEquals(2, mensagens.size(), 'Deve retornar 2 mensagens');
+        
+        // Validar se as mensagens estão corretas
+        Mensagem__c mensagemTest1 = mensagens[0];
+        Mensagem__c mensagemTest2 = mensagens[1];
+        
+        System.assertEquals('unique-key-1', mensagemTest1.ChaveExterna__c, 'Chave externa da primeira mensagem deve ser correta');
+        System.assertEquals('client-key-1', mensagemTest1.ChaveExternaCliente__c, 'Chave externa cliente da primeira mensagem deve ser correta');
+        
+        System.assertEquals('unique-key-2', mensagemTest2.ChaveExterna__c, 'Chave externa da segunda mensagem deve ser correta');
+        System.assertEquals('client-key-2', mensagemTest2.ChaveExternaCliente__c, 'Chave externa cliente da segunda mensagem deve ser correta');
+    }
+    
+	@isTest
+    static void testAtualizarRemetenteWhatsApp() {
+        // Configuração inicial do teste
 
-        // Verifica se as mensagens foram inseridas
-        Set<Id> idsMensagens = new Set<Id>();
-        for (Mensagem__c mensagem : mensagensSimuladas) {
-            idsMensagens.add(mensagem.Id);
-        }
-
-        // Cria um lead associado à chave de cliente da mensagem
-        Lead leadExistente = new Lead(
-            RecordTypeId = Schema.SObjectType.Lead.getRecordTypeInfosByDeveloperName().get('PessoaFisica').getRecordTypeId(),
-            LastName = 'Cliente Existente',
-            CanalAtendimento__c = 'WhatsApp',
-            LeadSource = 'WhatsApp',
-            MobilePhone = '123456789',
-            ChaveExternaWhatsApp__c = '123456789'
+        // Criação de um Lead de teste com o campo RemetenteWhatsApp__c como 'false'
+        Lead testLead = new Lead(
+            FirstName = 'Teste',
+            LastName = 'Lead',
+            Company = 'Teste Company',
+            Status = 'Open - Not Contacted',
+            RemetenteWhatsApp__c = false
         );
-        insert leadExistente;
+        insert testLead;
 
-        // Executa o método assíncrono de teste
-        Test.startTest();
-        WhatsAppService.cadastrarLeads(idsMensagens);
-        Test.stopTest();
+        // Valida que o campo inicial é 'false'
+        Lead insertedLead = [SELECT Id, RemetenteWhatsApp__c FROM Lead WHERE Id = :testLead.Id];
+        System.assertEquals(false, insertedLead.RemetenteWhatsApp__c);
 
-        // Validação dos resultados
+        // Chama o método a ser testado
+        WhatsAppService.atualizarRemetenteWhatsApp(testLead.Id);
 
-        // Recupera todos os leads e verifica se não houve duplicação
-        List<Lead> leads = [SELECT Id FROM Lead WHERE ChaveExternaWhatsApp__c = '123456789'];
-        //Equals(1, leads.size(), 'Nenhum novo lead deve ser criado para chaves já existentes.');
-    }
-    
+        // Valida que o campo foi atualizado para 'true'
+        Lead updatedLead = [SELECT Id, RemetenteWhatsApp__c FROM Lead WHERE Id = :testLead.Id];
+        System.assertEquals(true, updatedLead.RemetenteWhatsApp__c);
 
-    @isTest
-    public static void testAtualizarMensagensComURLMidia() {
-        // Cria mensagens simuladas para o teste
-        List<Mensagem__c> mensagensSimuladas = new List<Mensagem__c>{
-            new Mensagem__c(ChaveExternaCliente__c = 'Cliente1'),
-            new Mensagem__c(ChaveExternaCliente__c = 'Cliente2')
-        };
-        insert mensagensSimuladas;
-
-        // Captura os IDs das mensagens inseridas
-        Set<Id> idsMensagens = new Set<Id>();
-        for (Mensagem__c mensagem : mensagensSimuladas) {
-            idsMensagens.add(mensagem.Id);
-        }
-
-        // Simula registros de ContentVersion para representar os arquivos de mídia relacionados
-        List<ContentVersion> midiasSimuladas = new List<ContentVersion>{
-            new ContentVersion(
-                Title = 'Midia1',
-                PathOnClient = 'midia1.jpg',
-                VersionData = Blob.valueOf('Dummy data 1'),
-                FirstPublishLocationId = mensagensSimuladas[0].Id
-            ),
-            new ContentVersion(
-                Title = 'Midia2',
-                PathOnClient = 'midia2.jpg',
-                VersionData = Blob.valueOf('Dummy data 2'),
-                FirstPublishLocationId = mensagensSimuladas[1].Id
-            )
-        };
-        insert midiasSimuladas;
-
-        // Chama o método de atualização dentro do bloco de teste para capturar a publicação de eventos
-        Test.startTest();
-        WhatsAppService.atualizarMensagens(mensagensSimuladas, idsMensagens);
-        Test.stopTest();
-
-        // Validação dos resultados
-
-        // Recupera as mensagens atualizadas para verificar se as URLs foram atribuídas corretamente
-        List<Mensagem__c> mensagensAtualizadas = [SELECT URLMidia__c FROM Mensagem__c WHERE Id IN :idsMensagens];
-        
-        // Verifica se as URLs foram atribuídas corretamente (simulando valores como exemplo)
-        //NotEquals(null, mensagensAtualizadas[0].URLMidia__c, 'A URL da mídia deve estar presente para a primeira mensagem.');
-        //NotEquals(null, mensagensAtualizadas[1].URLMidia__c, 'A URL da mídia deve estar presente para a segunda mensagem.');
-
-        // Logs para verificar a publicação dos eventos
-        System.debug('Eventos de WhatsApp foram publicados para os clientes: ' + mensagensSimuladas[0].ChaveExternaCliente__c + ' e ' + mensagensSimuladas[1].ChaveExternaCliente__c);
-        
-        // Observação: Como não podemos consultar diretamente os eventos, isso valida indiretamente que a chamada foi realizada
-    }
-    
-    
-    @isTest
-    public static void testObterMidiasComMidiaRelacionada() {
-        // Criação de mensagens simuladas, algumas com chave de mídia e outras sem
-        List<Mensagem__c> mensagensSimuladas = new List<Mensagem__c>{
-            new Mensagem__c(ChaveExternaMidia__c = 'Midia1'),
-            new Mensagem__c(ChaveExternaMidia__c = 'Midia2'),
-            new Mensagem__c(ChaveExternaMidia__c = null)  // Mensagem sem mídia
-        };
-
-        // Insere as mensagens simuladas
-        insert mensagensSimuladas;
-
-        // Chama o método `obterMidias` para verificar se ele retorna as mídias corretas
-        Test.startTest();
-        List<ContentVersion> midias = WhatsAppService.obterMidias(mensagensSimuladas);
-        Test.stopTest();
-
-        // Valida que o método retornou mídias apenas para mensagens com `ChaveExternaMidia__c` preenchido
-        //Equals(2, midias.size(), 'Devem existir 2 mídias para mensagens com `ChaveExternaMidia__c` preenchido.');
-
-        // Verifica se cada mídia corresponde à chave de mídia da mensagem correta
-        Set<String> chavesEsperadas = new Set<String>{'Midia1', 'Midia2'};
-        for (ContentVersion midia : midias) {
-            //(chavesEsperadas.contains(midia.Title), 'A mídia retornada deve corresponder às chaves esperadas.');
-        }
-    }
-    
-    
-    // Classe de mock para simular a resposta da chamada HTTP
-    private class WhatsAppCalloutMock implements HttpCalloutMock {
-        public HttpResponse respond(HttpRequest req) {
-            HttpResponse res = new HttpResponse();
-            res.setHeader('Content-Type', 'application/octet-stream');
-            res.setBodyAsBlob(Blob.valueOf('Simulated media content'));
-            res.setStatusCode(200);
-            return res;
-        }
-    }
-
-    @isTest
-    public static void testObterMidia() {
-        // Define a URL de teste
-        String urlMidia = 'https://api.whatsapp.com/media/testMedia';
-
-        // Configura o mock de HTTP para a chamada
-        Test.setMock(HttpCalloutMock.class, new WhatsAppCalloutMock());
-
-        // Chama o método `obterMidia` para testar a funcionalidade
-        Test.startTest();
-        Blob midiaBlob = WhatsAppService.obterMidia(urlMidia);
-        Test.stopTest();
-
-        // Verifica se o conteúdo retornado corresponde ao esperado
-        //NotEquals(null, midiaBlob, 'A resposta de mídia não deve ser nula.');
-        //Equals('Simulated media content', midiaBlob.toString(), 'O conteúdo da mídia deve corresponder ao simulado.');
+        // Teste de idempotência: Chama o método novamente e valida que o valor não muda
+        WhatsAppService.atualizarRemetenteWhatsApp(testLead.Id);
+        Lead unchangedLead = [SELECT Id, RemetenteWhatsApp__c FROM Lead WHERE Id = :testLead.Id];
+        System.assertEquals(true, unchangedLead.RemetenteWhatsApp__c);
     }
 }

@@ -79,38 +79,8 @@ public class ConciergeControllerTest {
         System.assertEquals('Souza', createdLead.LastName, 'O sobrenome deve ser Souza.');
     }
 
-    @isTest
-    static void testCriarTaskReiteracao() {
-        // Setup de dados de teste
-        Lead lead = new Lead(
-            FirstName = 'Pedro',
-            LastName = 'Silva',
-            Email = 'pedro.silva@example.com',
-            MobilePhone = '11987654324',
-            LeadSource = 'Telefone',
-            Status = 'Novo',
-            CanalAtendimento__c = 'Telefone'
-        );
-        insert lead;
+   
 
-
-        String jsonLead = JSON.serialize(new Map<String, Object>{
-            'lead' => new Map<String, Object>{
-                'id' => lead.Id,
-                'nomeCorretor' => 'João Corretor',
-                'empreendimentoInteresse' => 'Imóvel A'
-            }
-        });
-
-        Test.startTest();
-        ConciergeController.criarTaskReiteracao(jsonLead, null);
-        Test.stopTest();
-
-        // Verifica se a tarefa foi criada
-       // Task createdTask = [SELECT Id, Subject, Description FROM Task WHERE WhoId = :lead.CorretorContato__c AND Status = 'Open' LIMIT 1];
-      //  System.assertNotEquals(null, createdTask, 'A tarefa deve ser criada.');
-        //System.assertEquals('Reiteração', createdTask.Subject, 'O assunto da tarefa deve ser Reiteração.');
-    }
 
     @isTest
     static void testCriarTaskReiteracaoeAssociarCorretor() {

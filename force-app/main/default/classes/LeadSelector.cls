@@ -32,7 +32,8 @@ public without sharing class LeadSelector {
                 Email, 
                 CreatedDate, 
                 OwnerId, 
-                Owner.Name
+                Owner.Name,
+                CorretorContato__r.Name
             FROM Lead 
             WHERE status NOT IN ('Lead Perdido(não trabalho)', 'Conversão', 'Descartado')
             AND OwnerId IN :idsProprietarios
@@ -58,7 +59,8 @@ public without sharing class LeadSelector {
                 OwnerId,
                 Owner.Name,
                 CreatedDate,
-                Corretor__r.CargaRestante__c
+                Corretor__r.CargaRestante__c,
+                CorretorContato__r.Name
             FROM Lead
             WHERE
                 Corretor__r.MembroEquipe__r.Usuario__c IN :idsCorretores 
@@ -82,12 +84,14 @@ public without sharing class LeadSelector {
                 Email,
                 Status,
                 OwnerId,
+                CorretorContato__r.Name,
                 CreatedDate,
                 Owner.Name,
                 InicioDialogo__c,
                 FimDialogo__c,
                 UltimaMensagem__c,
                 EmpreendimentoInteresse__r.Name,
+            	RemetenteWhatsApp__c,
                 Corretor__r.QuantidadeLeadsFaleConosco__c,
                 Corretor__r.QuantidadeLeadsChat__c,
                 Corretor__r.QuantidadeLeadsWhatsApp__c,
@@ -166,6 +170,31 @@ public without sharing class LeadSelector {
     }
 
     public static List<Lead> obterLeadsPorInformacoesConcierge(String celular, String email, Boolean isJuridica, String phone) {
+        List<String> conditions = new List<String>();
+    
+        // Construir as condições da consulta dinamicamente
+        if (isJuridica) {if (String.isNotBlank(phone)) {conditions.add('(Phone = :phone)');}if (String.isNotBlank(email)) {conditions.add('(EmailAdicional__c = :email)');conditions.add('(Email = :email)');
+            }
+        } else {
+            if (String.isNotBlank(celular)) {
+                conditions.add('(MobilePhone = :celular)');
+                conditions.add('(CelularAdicional__c = :celular)');
+                conditions.add('(CelularAdicional1__c = :celular)');
+                conditions.add('(CelularAdicional2__c = :celular)');
+                conditions.add('(CelularComercialAdicional__c = :celular)');
+            }
+            if (String.isNotBlank(email)) {
+                conditions.add('(Email = :email)');
+                conditions.add('(EmailAdicional__c = :email)');
+            }
+        }
+    
+        // Se nenhuma condição for adicionada, retorne uma lista vazia
+        if (conditions.isEmpty()) {
+            return new List<Lead>();
+        }
+    
+        // Construa a consulta com as condições dinâmicas
         String query = 'SELECT ' +
                        '    Id, ' +
                        '    Name, ' +
@@ -180,26 +209,13 @@ public without sharing class LeadSelector {
                        '    Phone, ' +
                        '    CreatedDate ' +
                        'FROM Lead ' +
-                       'WHERE ';
+                       'WHERE ' + String.join(conditions, ' OR ') +
+                       ' LIMIT 500';
     
-        if (isJuridica) {
-            query += '((Phone = :phone) OR ' +
-                     '(EmailAdicional__c = :email) OR' + 
-                     '(Email = :email)) ';
-        } else {
-            query += '((MobilePhone = :celular) OR ' +
-                     '(CelularAdicional__c = :celular) OR ' +
-                     '(CelularAdicional1__c = :celular) OR ' +
-                     '(CelularAdicional2__c = :celular) OR ' +
-                     '(CelularComercialAdicional__c = :celular) OR ' +
-                     '(Email = :email) OR ' +  
-                     '(EmailAdicional__c = :email))';
-        }
-    
-        query += ' LIMIT 500'; 
-    
+        // Realize a consulta usando a string de consulta dinâmica
         return Database.query(query);
     }
+    
     
     public static Lead obterMobilePhoneLead(String idLead) {
         return [
@@ -220,5 +236,32 @@ public without sharing class LeadSelector {
             FROM Lead 
             WHERE Id = :idLead
         ];
+    }
+    
+    
+    /**
+     * Método que verifica se o email informado já existe na base de leads.
+     * @param requests Lista de leads a serem verificados.
+     * @return Lista de Ids dos leads que possuem email igual.
+     */
+    @InvocableMethod(label='Verificar E-mail valido' description='Verifica se o email esta disponível dentro da base.')
+    public static List<Id> obterLeadsEmailValido(List<Lead> requests) {
+        List<Id> responses = new List<Id>();
+        if(requests == null || requests.isEmpty()) { responses = new List<Id>(); }
+        
+        for (Lead request : requests) {
+            List<Lead> leadsEmailIgual = [
+                SELECT Email
+                FROM Lead
+                WHERE Email = :request.Email
+            ];
+            
+            if (!leadsEmailIgual.isEmpty()) {
+                responses.add(request.Id);
+            } else {
+                responses.add(request.Id);
+            }
+        }
+        return responses;
     }
 }

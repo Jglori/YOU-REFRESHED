@@ -32,7 +32,7 @@ public with sharing class SalesTeamController {
         return teamMembers;
     }
 
-    private static void buildSalesTeamAbove(User user, List<SalesTeamMember> teamMembers) {
+    public static void buildSalesTeamAbove(User user, List<SalesTeamMember> teamMembers) {
         if (user.Reportase__c != null) {
             User nextUser = [SELECT Id, Name, Cargo__c, Reportase__c, Coordenador__c FROM User WHERE Id = :user.Reportase__c LIMIT 1];
             if (nextUser != null && !containsUser(teamMembers, nextUser.Id)) {
@@ -42,7 +42,7 @@ public with sharing class SalesTeamController {
         }
     }
 
-    private static void buildSalesTeamBelow(User user, List<SalesTeamMember> teamMembers) {
+    public static void buildSalesTeamBelow(User user, List<SalesTeamMember> teamMembers) {
         List<User> subordinates = [SELECT Id, Name, Cargo__c, Reportase__c, Coordenador__c FROM User WHERE Reportase__c = :user.Id];
         for (User subordinate : subordinates) {
             if (!containsUser(teamMembers, subordinate.Id)) {
@@ -52,7 +52,7 @@ public with sharing class SalesTeamController {
         }
     }
 
-    private static Boolean containsUser(List<SalesTeamMember> teamMembers, Id userId) {
+    public static Boolean containsUser(List<SalesTeamMember> teamMembers, Id userId) {
         for (SalesTeamMember member : teamMembers) {
             if (member.userId == userId) {
                 return true;

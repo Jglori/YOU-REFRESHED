@@ -5,6 +5,10 @@
     <columns>RoletaLeads__c</columns>
     <columns>MembroEquipe__c</columns>
     <columns>Posicao__c</columns>
+    <columns>Gerente_Salao__c</columns>
+    <columns>Superintendente__c</columns>
+    <columns>Diretor_geral__c</columns>
+    <columns>PresencaValidada__c</columns>
     <filterScope>Everything</filterScope>
     <label>Todos</label>
 </ListView>

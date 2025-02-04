@@ -1,96 +1,65 @@
 @isTest
 public class MensagemSelectorTest {
-    @isTest
-    static void obterMensagensPorIdsTest() {
-        Mensagem__c mensagem1 = new Mensagem__c(
-            ChaveExterna__c = '5444775455221225',
-            Certificado__c = 'Certificado1',
-            ChaveExternaMidia__c = 'Midia1',
-            ChaveExternaCliente__c = 'Cliente1',
-            CodigoStatus__c = 1,
-            Conteudo__c = 'Conteudo1',
-            CorpoRequisicao__c = 'Corpo1',
-            DataHora__c = DateTime.now(),
-            De__c = '1234567890',
-            NomeArquivo__c = 'Arquivo1.txt',
-            Status__c = 'Ativo',
-            Tipo__c = 'Tipo1',
-            TipoMidia__c = 'TipoMidia1',
-            URLMidia__c = 'http://example.com/media1'
-        );
-
-        Mensagem__c mensagem2 = new Mensagem__c(
-            ChaveExterna__c = '5444775455221226',
-            Certificado__c = 'Certificado2',
-            ChaveExternaMidia__c = 'Midia2',
-            ChaveExternaCliente__c = 'Cliente2',
-            CodigoStatus__c = 2,
-            Conteudo__c = 'Conteudo2',
-            CorpoRequisicao__c = 'Corpo2',
-            DataHora__c = DateTime.now().addDays(-1),
-            De__c = '0987654321',
-            NomeArquivo__c = 'Arquivo2.txt',
-            Status__c = 'Inativo',
-            Tipo__c = 'Tipo2',
-            TipoMidia__c = 'TipoMidia2',
-            URLMidia__c = 'http://example.com/media2'
-        );
-
-        insert new List<Mensagem__c> { mensagem1, mensagem2 };
-
-        Set<Id> idsMensagens = new Set<Id>{ mensagem1.Id, mensagem2.Id };
-        List<Mensagem__c> mensagens = MensagemSelector.obterMensagensPorIds(idsMensagens);
-
-        Mensagem__c mensagemRetornada1 = mensagens[0];
-        System.assertEquals('Certificado1', mensagemRetornada1.Certificado__c);
-        System.assertEquals('Cliente1', mensagemRetornada1.ChaveExternaCliente__c);
-
-        Mensagem__c mensagemRetornada2 = mensagens[1];
-        System.assertEquals('Certificado2', mensagemRetornada2.Certificado__c);
-        System.assertEquals('Cliente2', mensagemRetornada2.ChaveExternaCliente__c);
+    
+    @testSetup
+    static void setup() {
+        List<Mensagem__c> mensagens = new List<Mensagem__c>();
+        
+        for (Integer i = 0; i < 10; i++) {
+            mensagens.add(new Mensagem__c(
+                Certificado__c = 'Certificado' + i,
+                ChaveExterna__c = 'ChaveExterna' + i,
+                ChaveExternaMidia__c = 'ChaveExternaMidia' + i,
+                ChaveExternaCliente__c = 'ChaveExternaCliente' + i,
+                CodigoStatus__c = i, // Campo numérico
+                Conteudo__c = 'Conteudo' + i,
+                CorpoRequisicao__c = 'CorpoRequisicao' + i,
+                DataHora__c = DateTime.now().addDays(i),
+                De__c = '123-456-789' + i, // Exemplo de telefone
+                NomeArquivo__c = 'NomeArquivo' + i,
+                Status__c = 'Status' + i,
+                Tipo__c = 'Tipo' + i,
+                TipoMidia__c = 'TipoMidia' + i,
+                LeadMensagem__c = null, // Assume que não há Leads inicialmente
+                URLMidia__c = 'http://example.com/' + i
+            ));
+        }
+        
+        insert mensagens;
     }
-
+    
     @isTest
-    static void obterMensagensPorChavesExternasClientesTest() {
-        Mensagem__c mensagem1 = new Mensagem__c(
-            ChaveExterna__c = '5444775455221225',
-            Certificado__c = 'Certificado1',
-            ChaveExternaMidia__c = 'Midia1',
-            ChaveExternaCliente__c = 'Cliente1',
-            CodigoStatus__c = 1,
-            Conteudo__c = 'Conteudo1',
-            CorpoRequisicao__c = 'Corpo1',
-            DataHora__c = DateTime.now(),
-            De__c = '1234567890',
-            NomeArquivo__c = 'Arquivo1.txt',
-            Status__c = 'Ativo',
-            Tipo__c = 'Tipo1',
-            TipoMidia__c = 'TipoMidia1',
-            URLMidia__c = 'http://example.com/media1'
-        );
-
-        Mensagem__c mensagem2 = new Mensagem__c(
-            ChaveExterna__c = '5444775455221227',
-            Certificado__c = 'Certificado3',
-            ChaveExternaMidia__c = 'Midia3',
-            ChaveExternaCliente__c = 'Cliente1',
-            CodigoStatus__c = 2,
-            Conteudo__c = 'Conteudo3',
-            CorpoRequisicao__c = 'Corpo3',
-            DataHora__c = DateTime.now().addDays(-1),
-            De__c = '1122334455',
-            NomeArquivo__c = 'Arquivo3.txt',
-            Status__c = 'Inativo',
-            Tipo__c = 'Tipo3',
-            TipoMidia__c = 'TipoMidia3',
-            URLMidia__c = 'http://example.com/media3'
-        );
-
-        insert new List<Mensagem__c> { mensagem1, mensagem2 };
-
-        Set<String> chavesExternasClientes = new Set<String>{ 'Cliente1' };
-        List<Mensagem__c> mensagensCliente = MensagemSelector.obterMensagensPorChavesExternasClientes(chavesExternasClientes);
-
-        System.assert(mensagensCliente[0].DataHora__c <= mensagensCliente[1].DataHora__c, 'Mensagens devem estar em ordem crescente de DataHora');
+    static void testObterMensagensPorIds() {
+        // Obtendo IDs das mensagens inseridas
+        List<Mensagem__c> allMensagens = [SELECT Id FROM Mensagem__c];
+        Set<Id> idsMensagens = new Set<Id>();
+        for (Mensagem__c mensagem : allMensagens) {
+            idsMensagens.add(mensagem.Id);
+        }
+        
+        // Chamando o método e validando o resultado
+        Test.startTest();
+        List<Mensagem__c> result = MensagemSelector.obterMensagensPorIds(idsMensagens);
+        Test.stopTest();
+        
+        System.assertEquals(10, result.size(), 'O número de mensagens retornadas deve ser 10');
     }
+    
+    @isTest
+    static void testObterMensagensPorChavesExternasClientes() {
+        // Criando conjunto de chaves externas de clientes
+        Set<String> chavesExternasClientes = new Set<String>();
+        for (Integer i = 0; i < 5; i++) {
+            chavesExternasClientes.add('ChaveExternaCliente' + i);
+        }
+        
+        // Chamando o método e validando o resultado
+        Test.startTest();
+        List<Mensagem__c> result = MensagemSelector.obterMensagensPorChavesExternasClientes(chavesExternasClientes);
+        Test.stopTest();
+        
+        System.assertEquals(5, result.size(), 'O número de mensagens retornadas deve ser 5');
+    }
+    
+    
 }

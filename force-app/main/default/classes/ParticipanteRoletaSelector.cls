@@ -14,26 +14,14 @@ public without sharing class ParticipanteRoletaSelector {
                 MembroEquipe__c IN :idsMembros
         ];
     }
+
     public static List<ParticipanteRoleta__c> obterParticipantesPorIdsRoleta(Set<Id> idsRoletas) {
-        if (idsRoletas == null || idsRoletas.isEmpty()) {
-            return new List<ParticipanteRoleta__c>(); 
-        }
-    
-        List<ParticipanteRoleta__c> participantes = [
-            SELECT RoletaLeads__c, Posicao__c, MembroEquipe__c, Saida__c, RegistroIndisponibilidade__c 
-            FROM ParticipanteRoleta__c 
-            WHERE RoletaLeads__c IN :idsRoletas
-        ];
-    
-        return participantes;
+        System.debug('ID DA ROLETA QUE CHEGOU NA PARTICIPANTE ROLETA SELECTOR ' + idsRoletas);
+        return [SELECT  RoletaLeads__c, Posicao__c, MembroEquipe__c , Saida__c , RegistroIndisponibilidade__c  FROM ParticipanteRoleta__c WHERE RoletaLeads__c IN :idsRoletas];
     }
-    
+
     public static List<ParticipanteRoleta__c> obterParticipantesPorIds(Set<Id> idsParticipantes) {
-        if (idsParticipantes == null || idsParticipantes.isEmpty()) {
-            return new List<ParticipanteRoleta__c>(); // Retorna uma lista vazia se não houver IDs
-        }
-    
-        List<ParticipanteRoleta__c> participantes = [
+        return [
             SELECT 
                 MembroEquipe__c, 
                 MembroEquipe__r.ExigeValidacaoCoordenador__c, 
@@ -48,10 +36,7 @@ public without sharing class ParticipanteRoletaSelector {
             FROM ParticipanteRoleta__c 
             WHERE Id IN :idsParticipantes
         ];
-    
-        return participantes;
     }
-    
 
     public static List<ParticipanteRoleta__c> obterParticipantesPorUserID(Id userId) {
         return [SELECT  RoletaLeads__c, Posicao__c, MembroEquipe__c,MembroEquipe__r.Usuario__c FROM ParticipanteRoleta__c WHERE MembroEquipe__r.Usuario__c =: userId];

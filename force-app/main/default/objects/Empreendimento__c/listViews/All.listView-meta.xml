@@ -2,6 +2,8 @@
 <ListView xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>All</fullName>
     <columns>NAME</columns>
+    <columns>CodigoSistemaExterno__c</columns>
+    <columns>DisponivelEspelho__c</columns>
     <columns>Logradouro__c</columns>
     <columns>Numero__c</columns>
     <columns>Complemento__c</columns>
@@ -10,6 +12,7 @@
     <columns>UF__c</columns>
     <columns>CEP__c</columns>
     <columns>CNPJEmpreendimento__c</columns>
+    <columns>LAST_UPDATE</columns>
     <filterScope>Everything</filterScope>
     <label>Tudo</label>
 </ListView>

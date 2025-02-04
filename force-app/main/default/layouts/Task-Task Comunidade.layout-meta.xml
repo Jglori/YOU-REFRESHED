@@ -50,6 +50,10 @@
                 <behavior>Edit</behavior>
                 <field>Canal_de_Atendimento__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Data_Iteracao_MTN__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>

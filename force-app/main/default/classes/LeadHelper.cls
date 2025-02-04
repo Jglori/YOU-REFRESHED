@@ -75,16 +75,22 @@ public static void additionalValidations(List<Lead> newLeads, Map<Id, Lead> oldL
         Lead oldLead = oldLeads.get(lead.Id);
 
         // Validação para fase Tentativa de Contato -> Contato Realizado
-        if (oldLead.Status.equalsIgnoreCase('Tentativa de contato') && lead.Status.equalsIgnoreCase('Contato Realizado')) { if (!isTaskCreatedAndOpenForAttemptToContact(lead.Id) && !Test.isRunningTest()) {  lead.addError(Label.TentativaContato_LEAD);  // Mensagem para Tentativa de contato
+        if (oldLead.Status.equalsIgnoreCase('Tentativa de contato') && lead.Status.equalsIgnoreCase('Contato Realizado')) {
+            if (!isTaskCreatedAndOpenForAttemptToContact(lead.Id) && !Test.isRunningTest()) {
+                lead.addError(Label.TentativaContato_LEAD);  // Mensagem para Tentativa de contato
             }
 
         //Validação para fase Agendamento de Visita -> Conversão
-        } else if (oldLead.Status.equalsIgnoreCase('Agendamento de Visita') && lead.Status.equalsIgnoreCase('Conversão')) {            if (!lead.LeadNaoVisitou__c && isEventCreatedForVisits(lead.Id)) { lead.addError(Label.Agendamento_LEAD);
+        } else if (oldLead.Status.equalsIgnoreCase('Agendamento de Visita') && lead.Status.equalsIgnoreCase('Conversão')) {
+            // Verifica se o campo 'LeadNaoVisitou__c' está preenchido ou se existe um evento do tipo "Visita Realizada com Sucesso"
+            if (!lead.LeadNaoVisitou__c && isEventCreatedForVisits(lead.Id)) {
+                lead.addError(Label.Agendamento_LEAD);
             }
 
         // Validação para Descartado/Lead Perdido/Novo -> Contato Realizado
         } else if ((oldLead.Status.equals('Descartado') || oldLead.Status.equals('Lead Perdido(não trabalho)') ||
-                    oldLead.Status.equals('Novo')) && lead.Status.equals('Contato Realizado')) { lead.addError(Label.Fases_LEAD);  // Mensagem para mudanças de status inválidas
+                    oldLead.Status.equals('Novo')) && lead.Status.equals('Contato Realizado')) {
+            lead.addError(Label.Fases_LEAD);  // Mensagem para mudanças de status inválidas
 
         // Validação para Descartado/Lead Perdido/Novo/Tentativa de contato -> Agendamento de Visita
         } else if ((oldLead.Status.equalsIgnoreCase('Descartado') || oldLead.Status.equalsIgnoreCase('Lead Perdido(não trabalho)') ||
@@ -95,7 +101,8 @@ public static void additionalValidations(List<Lead> newLeads, Map<Id, Lead> oldL
             }
         // Validação para Conversão (sem fases anteriores válidas)
         } else if ((new Set<String>{'Descartado', 'Lead Perdido(não trabalho)', 'Novo', 'Tentativa de contato', 
-                   'Contato Realizado'}).contains(oldLead.Status) && lead.Status.equals('Conversão')) {lead.addError(Label.Conversao_LEAD);  // Mensagem para conversão inválida
+                   'Contato Realizado'}).contains(oldLead.Status) && lead.Status.equals('Conversão')) {
+            lead.addError(Label.Conversao_LEAD);  // Mensagem para conversão inválida
         }
     }
 }
@@ -118,7 +125,7 @@ public static void additionalValidations(List<Lead> newLeads, Map<Id, Lead> oldL
                         if(task.Subject == 'Reiteração' || task.Subject.contains('Email')){
                             continue;
                         }
-                        if(!Test.isRunningTest()) task.addError('Só é permitido criar uma tarefa  quando o lead está nas fases Tentativa de Contato ou Contato Realizado.');
+                   //     if(!Test.isRunningTest()) task.addError('Só é permitido criar uma tarefa  quando o lead está nas fases Tentativa de Contato ou Contato Realizado.');
                     }
                 }
             }
@@ -262,7 +269,8 @@ public static void additionalValidations(List<Lead> newLeads, Map<Id, Lead> oldL
     private static void updateLeadFields(Lead lead, Map<String, Object> params) {
         if (lead.QuantidadeDeReiteracoes__c == null) {
             lead.QuantidadeDeReiteracoes__c = 1;
-        } else { lead.QuantidadeDeReiteracoes__c += 1;
+        } else {
+            lead.QuantidadeDeReiteracoes__c += 1;
         }
 
         Boolean isModified = false;
@@ -592,7 +600,7 @@ public static void additionalValidations(List<Lead> newLeads, Map<Id, Lead> oldL
             if(oppId <> null && userId <> null){
                 User us = mapUser.get(userId);
                 if(us <> null && us.Reportase__c <> null){
-                    Opportunity opp =  new Opportunity(Id = oppId, OwnerId = us.Reportase__c); 	
+                    Opportunity opp =  new Opportunity(Id = oppId, OwnerId = us.Reportase__c);
                     oppsToUpdate.add(opp);
                 }
             }
@@ -604,52 +612,29 @@ public static void additionalValidations(List<Lead> newLeads, Map<Id, Lead> oldL
         }
     }
 
-
- public static void verificarDuplicado(List<Lead> newLeads) {
-
-    System.debug('Leads que chegaram ' + newLeads);
-    Set<String> emails = new Set<String>();
-    Set<String> celulares = new Set<String>();
-    Set<String> telefones = new Set<String>();
-
-    for (Lead lead : newLeads) {
-        if (String.isNotBlank(lead.Email)) {
-            emails.add(lead.Email);
-        }
-        if (String.isNotBlank(lead.MobilePhone)) {
-            celulares.add(lead.MobilePhone);
-        }
-        if (String.isNotBlank(lead.Phone)) {
-            telefones.add(lead.Phone);
+    
+    /**
+     * Metodo responsável por sincronizar a chave externa do WhatsApp com o número de celular do lead
+     * @param leads Lista de leads a serem sincronizados, disparado por uma Trigger.new
+     */
+    public static void syncChaveExternaWhatsApp(List<Lead> leads){
+        for(Lead lead : leads){
+            lead.ChaveExternaWhatsApp__c = formatMobilePhone(lead.MobilePhone);
         }
     }
 
-    if (emails.isEmpty() && celulares.isEmpty() && telefones.isEmpty()) {
-        return; // Se não houver emails ou telefones, não há necessidade de verificar duplicidade
+    /**
+     * Método responsável por formatar o número de celular do lead
+     * @param mobilePhone Número de celular a ser formatado
+     * @return Número de celular formatado
+     */
+    public static String formatMobilePhone(String mobilePhone) {
+        if (String.isEmpty(mobilePhone)) {
+            return null;
+        }
+        
+        String formattedPhone = mobilePhone.replaceAll('[^\\d]', '');
+        
+        return formattedPhone;
     }
-
-    // Construindo a consulta de leads duplicados
-    List<Lead> potentialDuplicateLeads = [
-        SELECT Id, LastName, Name, Email, MobilePhone, Phone, EmailAdicional__c, 
-               CelularAdicional__c, CelularAdicional1__c, CelularAdicional2__c, 
-               CelularComercialAdicional__c, OwnerId, CanalAtendimento__c, 
-               QuantidadeDeReiteracoes__c, EmpreendimentoInteresse__c, LeadSource, 
-               Status, ltima_Reitera_o__c
-        FROM Lead
-        WHERE (Email IN :emails OR EmailAdicional__c IN :emails)
-        AND (
-            (MobilePhone IN :celulares OR Phone IN :telefones)
-            OR (CelularAdicional__c IN :celulares)
-            OR (CelularAdicional1__c IN :celulares)
-            OR (CelularAdicional2__c IN :celulares)
-            OR (CelularComercialAdicional__c IN :celulares)
-        )
-    ];
-
-    if (!potentialDuplicateLeads.isEmpty()) {
-        // Lançar exceção se houver duplicados
-        Trigger.new[0].addError('Lead duplicado encontrado. Não é possível criar um novo lead com o mesmo email ou telefone.');
-    }
-}
-
 }

@@ -21,19 +21,7 @@ public class ConciergeController {
 
     @AuraEnabled
     public static void criarLead(Map<String, String> formulario) {
-            ConciergeService.criarLead(formulario);
-    }
-    
-    @AuraEnabled
-    public static void atualizarLead(List<Map<String, Object>> formulario) {
-            ConciergeService.atualizarLead(formulario);
-        
-    }
-
-    @AuraEnabled
-    public static void criarTaskReiteracao(String jsonData, Id roletaId) {
-        ConciergeService.criarTaskReiteracao(jsonData, roletaId);
-    }
+            ConciergeService.criarLead(formulario);} @AuraEnabled public static void atualizarLead(List<Map<String, Object>> formulario) { ConciergeService.atualizarLead(formulario); } @AuraEnabled public static void criarTaskReiteracao(String jsonData, String informacoesAdicionais) { ConciergeService.criarTaskReiteracao(jsonData, informacoesAdicionais); }
 
     @AuraEnabled
     public static void criarTaskReiteracaoeAssociarCorretor(String jsonData, Id corretorId) {
@@ -46,6 +34,6 @@ public class ConciergeController {
 
     @AuraEnabled
     public static List<Contact> buscarCorretoresLetra(String corretor) {
-        return ConciergeService.buscarCorretoresLetra(corretor);
+        return ConciergeService.buscarCorretoresLetra(corretor);} @AuraEnabled(cacheable=true)public static String buscarPerfil(Id userId) {return ConciergeService.buscarPerfil(userId);}@AuraEnabled(cacheable=true) public static String buscarNomeCorretor(){  return ConciergeService.buscarNomeCorretor();
     }
 }

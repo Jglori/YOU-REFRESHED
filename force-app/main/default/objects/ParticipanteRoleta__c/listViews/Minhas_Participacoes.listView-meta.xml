@@ -3,8 +3,8 @@
     <fullName>Minhas_Participacoes</fullName>
     <columns>NAME</columns>
     <columns>RoletaLeads__c</columns>
-    <columns>MembroEquipe__c</columns>
     <columns>Posicao__c</columns>
+    <columns>PresencaValidada__c</columns>
     <filterScope>Everything</filterScope>
     <filters>
         <field>Participante_Vigente__c</field>

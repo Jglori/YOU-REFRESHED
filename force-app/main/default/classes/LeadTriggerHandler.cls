@@ -18,7 +18,7 @@ public with sharing class LeadTriggerHandler extends TriggerHandler {
         LeadHelper.getContactFromCorretor(Trigger.new);
         LeadHelper.getContactFromOwner(Trigger.new);
        // LeadHelper.verificarDuplicado(Trigger.new);
-
+       LeadHelper.syncChaveExternaWhatsApp(Trigger.new);
     }
     
     public override void beforeInsert(){
@@ -32,6 +32,7 @@ public with sharing class LeadTriggerHandler extends TriggerHandler {
         LeadHelper.SetQuantidadeDeReiteracoes(Trigger.new);
         LeadHelper.getContactFromCorretor(Trigger.new);
         LeadHelper.getContactFromOwner(Trigger.new);
+        LeadHelper.syncChaveExternaWhatsApp(Trigger.new);
     }
     public override void afterUpdate(){
         LeadHelper.scheduleLeadChange(Trigger.new, (Map<Id, Lead>) Trigger.oldMap);
@@ -44,6 +45,7 @@ public with sharing class LeadTriggerHandler extends TriggerHandler {
         LeadHelper.scheduleLeadChange(Trigger.new,(Map<Id,Lead>)Trigger.oldMap);
         DistribuirLeadsService.distribuirLeads((List<Lead>)Trigger.new);
         LeadHelper.sendNotificationToUser((List<Lead>)Trigger.new, (Map<Id, Lead>) Trigger.oldMap);
+      
         // LeadHelper.checkReiterationLead((List<Lead>) Trigger.new);
 
 

@@ -138,6 +138,10 @@
         <field>User.Situacao__c</field>
         <readable>true</readable>
     </fieldPermissions>
+    <flowAccesses>
+        <enabled>true</enabled>
+        <flow>Login_flow</flow>
+    </flowAccesses>
     <hasActivationRequired>false</hasActivationRequired>
     <label>Omnichannel - Leitura</label>
 </PermissionSet>

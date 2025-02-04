@@ -20,38 +20,17 @@ global with sharing class LeadEmpreendimentosRestResource {
     global static void buscarEmpreendimentos() {
         try {
             EmpreendimentosDto empreendimentosDto = new EmpreendimentosDto();
-            Set<Id> empreendimentoIds = new Set<Id>();
-            
-            Integer queryLimit = 2000;
-            Id lastLeadId = null; 
-            Boolean done = false;
 
-            while (!done) {
-                String query = 'SELECT EmpreendimentoInteresse__c, EmpreendimentoInteresse__r.Name ' +
-                               'FROM Lead ' +
-                               'WHERE EmpreendimentoInteresse__c != null ' +
-                               (lastLeadId != null ? 'AND Id > :lastLeadId ' : '') +
-                               'ORDER BY Id ' + 
-                               'LIMIT ' + queryLimit;
-                               
-                List<Lead> leads = Database.query(query);
+            List<Empreendimento__c> empreendimentos = [
+                SELECT Id, Name
+                FROM Empreendimento__c
+            ];
 
-                if (leads.isEmpty()) {
-                    done = true; 
-                } else {
-                    for (Lead lead : leads) {
-                        if (lead.EmpreendimentoInteresse__r.Name != null) {
-                            if (!empreendimentoIds.contains(lead.EmpreendimentoInteresse__c)) {
-                                Empreendimentos emp = new Empreendimentos();
-                                emp.id = lead.EmpreendimentoInteresse__c;
-                                emp.nome = lead.EmpreendimentoInteresse__r.Name;
-                                empreendimentosDto.empreendimentos.add(emp);
-                                empreendimentoIds.add(emp.id);
-                            }
-                        }
-                    }
-                    lastLeadId = leads[leads.size() - 1].Id; 
-                }
+            for (Empreendimento__c emp : empreendimentos) {
+                Empreendimentos empreendimentoDto = new Empreendimentos();
+                empreendimentoDto.id = emp.Id;
+                empreendimentoDto.nome = emp.Name;
+                empreendimentosDto.empreendimentos.add(empreendimentoDto);
             }
 
             RestContext.response.statusCode = 200;

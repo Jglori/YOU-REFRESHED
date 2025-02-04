@@ -23,6 +23,26 @@ private class LeadCanaisRestResourceTest {
         insert testLead;
     }
 
+    private static void CriarLeadComCanalDiferente(String canal){
+        Empreendimento__c empreendimento = new Empreendimento__c();  
+        empreendimento.Name = 'Teste empreendimentooo';  
+        empreendimento.CNPJEmpreendimento__c = '26197286000130'; // Substitua por um CNPJ válido  
+        insert empreendimento; 
+
+        // Criando o Lead com o Canal de Atendimento
+        Lead testLead = new Lead(
+            LastName = 'Ewerton',
+            Company = 'Empresa Lima',
+            Email = 'ewertonzorolima@xyz.com',
+            LeadSource = 'Website',
+            CanalAtendimento__c = canal,
+            MobilePhone = '5511987654325',
+            Status = 'Novo',
+            EmpreendimentoInteresse__c = empreendimento.Id
+        );
+        insert testLead;
+    }
+
     // Método para criar um Lead sem Canal de Atendimento
     private static void criarLeadSemCanal() {
         // Criando o Empreendimento
@@ -33,12 +53,12 @@ private class LeadCanaisRestResourceTest {
 
         // Criando o Lead sem Canal de Atendimento
         Lead testLead = new Lead(
-            LastName = 'Silva',
-            Company = 'Empresa XYZ',
-            Email = 'silva@xyz.com',
+            LastName = 'Silvana silva',
+            Company = 'Empresa silvass',
+            Email = 'silvandjjjkjdjhsjk@xyz.com',
             LeadSource = 'Website',
             CanalAtendimento__c = null,
-            MobilePhone = '5511987654321',
+            MobilePhone = '5511987654339',
             Status = 'Novo',
             EmpreendimentoInteresse__c = empreendimento.Id
         );
@@ -50,7 +70,7 @@ private class LeadCanaisRestResourceTest {
     static void testGetCanaisAtendimento_Success() {
         // Criando leads com canais de atendimento
         criarLeadComCanal('WhatsApp');
-        criarLeadComCanal('Fale conosco');
+        CriarLeadComCanalDiferente('Fale conosco');
         
         // Criando um lead sem canal de atendimento
         criarLeadSemCanal();

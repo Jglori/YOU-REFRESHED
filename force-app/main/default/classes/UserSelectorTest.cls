@@ -80,4 +80,17 @@ public class UserSelectorTest {
        
         Test.stopTest();
     }
+    
+    
+      @isTest
+    static void testObterUsuarios() {
+        // Iniciar o teste
+        Test.startTest();
+        
+        // Chamar o método que será testado
+        List<User> resultado = UserSelector.obterUsuarios();
+        
+        // Finalizar o teste
+        Test.stopTest();
+    }
 }

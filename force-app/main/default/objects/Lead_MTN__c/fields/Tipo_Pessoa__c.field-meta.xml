@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Tipo_Pessoa__c</fullName>
+    <label>Tipo Pessoa</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Física</fullName>
+                <default>false</default>
+                <label>Física</label>
+            </value>
+            <value>
+                <fullName>Pessoa Física</fullName>
+                <default>false</default>
+                <label>Pessoa Física</label>
+            </value>
+            <value>
+                <fullName>Pessoa Jurídica</fullName>
+                <default>false</default>
+                <label>Pessoa Jurídica</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

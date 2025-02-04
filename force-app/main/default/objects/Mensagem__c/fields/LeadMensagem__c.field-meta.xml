@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>LeadMensagem__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <description>Campo responsável por fazer o relacionamento da mensagem com o Lead.</description>
+    <inlineHelpText>Campo responsável por fazer o relacionamento da mensagem com o Lead.</inlineHelpText>
+    <label>Lead da Mensagem</label>
+    <referenceTo>Lead</referenceTo>
+    <relationshipLabel>Mensagens</relationshipLabel>
+    <relationshipName>Mensagens</relationshipName>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

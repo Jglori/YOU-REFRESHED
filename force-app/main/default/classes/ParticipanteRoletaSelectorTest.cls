@@ -4,7 +4,14 @@ public class ParticipanteRoletaSelectorTest {
     @testSetup
     static void setup() {
         // Criação de uma Roleta Leads de teste
-        RoletaLeads__c roleta = new RoletaLeads__c(Name = 'Roleta Teste', Ativa__c = true);
+      
+          RoletaLeads__c roleta = new RoletaLeads__c(
+            Name = 'Roleta Teste',
+            HoraInicio__c = Time.newInstance(0, 0, 0, 0),
+            HoraFim__c = Time.newInstance(23, 59, 0, 0),
+            Ativa__c = false,
+            DiasSemana__c = 'Domingo;Segunda-feira;Segunda-feira;Quarta-feira;Quinta-feira;Sexta-feira;Sábado'
+        );
         insert roleta;
 
         //Criar uma equipe

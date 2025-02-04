@@ -19,6 +19,14 @@
                 <behavior>Required</behavior>
                 <field>TotalUnidades__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>CodigoSistemaExterno__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>NomeCodigoSistemaExterno__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>

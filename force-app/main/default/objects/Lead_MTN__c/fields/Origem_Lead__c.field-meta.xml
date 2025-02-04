@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Origem_Lead__c</fullName>
+    <label>Origem Lead</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Instagram</fullName>
+                <default>false</default>
+                <label>Instagram</label>
+            </value>
+            <value>
+                <fullName>Outdoor</fullName>
+                <default>false</default>
+                <label>Outdoor</label>
+            </value>
+            <value>
+                <fullName>Radio</fullName>
+                <default>false</default>
+                <label>Radio</label>
+            </value>
+            <value>
+                <fullName>Televisão</fullName>
+                <default>false</default>
+                <label>Televisão</label>
+            </value>
+            <value>
+                <fullName>Publicações</fullName>
+                <default>false</default>
+                <label>Publicações</label>
+            </value>
+            <value>
+                <fullName>Twitter</fullName>
+                <default>false</default>
+                <label>Twitter</label>
+            </value>
+            <value>
+                <fullName>Facebook Ads</fullName>
+                <default>false</default>
+                <label>Facebook Ads</label>
+            </value>
+            <value>
+                <fullName>Wi-Fi</fullName>
+                <default>false</default>
+                <label>Wi-Fi</label>
+            </value>
+            <value>
+                <fullName>Site You</fullName>
+                <default>false</default>
+                <label>Site You</label>
+            </value>
+            <value>
+                <fullName>Landing Page</fullName>
+                <default>false</default>
+                <label>Landing Page</label>
+            </value>
+            <value>
+                <fullName>TikTok</fullName>
+                <default>false</default>
+                <label>TikTok</label>
+            </value>
+            <value>
+                <fullName>Youtube</fullName>
+                <default>false</default>
+                <label>Youtube</label>
+            </value>
+            <value>
+                <fullName>Tapume</fullName>
+                <default>false</default>
+                <label>Tapume</label>
+            </value>
+            <value>
+                <fullName>Anúncio de Loja</fullName>
+                <default>false</default>
+                <label>Anúncio de Loja</label>
+            </value>
+            <value>
+                <fullName>123i</fullName>
+                <default>false</default>
+                <label>123i</label>
+            </value>
+            <value>
+                <fullName>Agente Imóvel</fullName>
+                <default>false</default>
+                <label>Agente Imóvel</label>
+            </value>
+            <value>
+                <fullName>Apto</fullName>
+                <default>false</default>
+                <label>Apto</label>
+            </value>
+            <value>
+                <fullName>Bing</fullName>
+                <default>false</default>
+                <label>Bing</label>
+            </value>
+            <value>
+                <fullName>Bing-cpc</fullName>
+                <default>false</default>
+                <label>Bing-cpc</label>
+            </value>
+            <value>
+                <fullName>Bing-organico</fullName>
+                <default>false</default>
+                <label>Bing-organico</label>
+            </value>
+            <value>
+                <fullName>Cadastro Corretor</fullName>
+                <default>false</default>
+                <label>Cadastro Corretor</label>
+            </value>
+            <value>
+                <fullName>Casafy</fullName>
+                <default>false</default>
+                <label>Casafy</label>
+            </value>
+            <value>
+                <fullName>CNN</fullName>
+                <default>false</default>
+                <label>CNN</label>
+            </value>
+            <value>
+                <fullName>Convite Evento</fullName>
+                <default>false</default>
+                <label>Convite Evento</label>
+            </value>
+            <value>
+                <fullName>Direto</fullName>
+                <default>false</default>
+                <label>Direto</label>
+            </value>
+            <value>
+                <fullName>Duckduckgo</fullName>
+                <default>false</default>
+                <label>Duckduckgo</label>
+            </value>
+            <value>
+                <fullName>ESPN</fullName>
+                <default>false</default>
+                <label>ESPN</label>
+            </value>
+            <value>
+                <fullName>Exame</fullName>
+                <default>false</default>
+                <label>Exame</label>
+            </value>
+            <value>
+                <fullName>Facebook</fullName>
+                <default>false</default>
+                <label>Facebook</label>
+            </value>
+            <value>
+                <fullName>Fb_ig_form</fullName>
+                <default>false</default>
+                <label>Fb_ig_form</label>
+            </value>
+            <value>
+                <fullName>Folheto</fullName>
+                <default>false</default>
+                <label>Folheto</label>
+            </value>
+            <value>
+                <fullName>FSP</fullName>
+                <default>false</default>
+                <label>FSP</label>
+            </value>
+            <value>
+                <fullName>Globonews</fullName>
+                <default>false</default>
+                <label>Globonews</label>
+            </value>
+            <value>
+                <fullName>Google</fullName>
+                <default>false</default>
+                <label>Google</label>
+            </value>
+            <value>
+                <fullName>Google Ads</fullName>
+                <default>false</default>
+                <label>Google Ads</label>
+            </value>
+            <value>
+                <fullName>Google-cpc</fullName>
+                <default>false</default>
+                <label>Google-cpc</label>
+            </value>
+            <value>
+                <fullName>Google-organico</fullName>
+                <default>false</default>
+                <label>Google-organico</label>
+            </value>
+            <value>
+                <fullName>Imovelk</fullName>
+                <default>false</default>
+                <label>Imovelk</label>
+            </value>
+            <value>
+                <fullName>Imovelweb</fullName>
+                <default>false</default>
+                <label>Imovelweb</label>
+            </value>
+            <value>
+                <fullName>Instagram Ads</fullName>
+                <default>false</default>
+                <label>Instagram Ads</label>
+            </value>
+            <value>
+                <fullName>Jovem Pan</fullName>
+                <default>false</default>
+                <label>Jovem Pan</label>
+            </value>
+            <value>
+                <fullName>Ligação</fullName>
+                <default>false</default>
+                <label>Ligação</label>
+            </value>
+            <value>
+                <fullName>Linkedin</fullName>
+                <default>false</default>
+                <label>Linkedin</label>
+            </value>
+            <value>
+                <fullName>Linkedin Ads</fullName>
+                <default>false</default>
+                <label>Linkedin Ads</label>
+            </value>
+            <value>
+                <fullName>Linktree</fullName>
+                <default>false</default>
+                <label>Linktree</label>
+            </value>
+            <value>
+                <fullName>Meu Imóvel</fullName>
+                <default>false</default>
+                <label>Meu Imóvel</label>
+            </value>
+            <value>
+                <fullName>Mídias Impressas</fullName>
+                <default>false</default>
+                <label>Mídias Impressas</label>
+            </value>
+            <value>
+                <fullName>Mini Stand</fullName>
+                <default>false</default>
+                <label>Mini Stand</label>
+            </value>
+            <value>
+                <fullName>OESP</fullName>
+                <default>false</default>
+                <label>OESP</label>
+            </value>
+            <value>
+                <fullName>Oferta Corretor</fullName>
+                <default>false</default>
+                <label>Oferta Corretor</label>
+            </value>
+            <value>
+                <fullName>OLX</fullName>
+                <default>false</default>
+                <label>OLX</label>
+            </value>
+            <value>
+                <fullName>Painel de Led</fullName>
+                <default>false</default>
+                <label>Painel de Led</label>
+            </value>
+            <value>
+                <fullName>Pão de Açúcar</fullName>
+                <default>false</default>
+                <label>Pão de Açúcar</label>
+            </value>
+            <value>
+                <fullName>Pinterest</fullName>
+                <default>false</default>
+                <label>Pinterest</label>
+            </value>
+            <value>
+                <fullName>Pinterest-cpc</fullName>
+                <default>false</default>
+                <label>Pinterest-cpc</label>
+            </value>
+            <value>
+                <fullName>Placa</fullName>
+                <default>false</default>
+                <label>Placa</label>
+            </value>
+            <value>
+                <fullName>Properati</fullName>
+                <default>false</default>
+                <label>Properati</label>
+            </value>
+            <value>
+                <fullName>Rd Station</fullName>
+                <default>false</default>
+                <label>Rd Station</label>
+            </value>
+            <value>
+                <fullName>SMS</fullName>
+                <default>false</default>
+                <label>SMS</label>
+            </value>
+            <value>
+                <fullName>Stand</fullName>
+                <default>false</default>
+                <label>Stand</label>
+            </value>
+            <value>
+                <fullName>Tiktok Ads</fullName>
+                <default>false</default>
+                <label>Tiktok Ads</label>
+            </value>
+            <value>
+                <fullName>Valor Ecônomico</fullName>
+                <default>false</default>
+                <label>Valor Ecônomico</label>
+            </value>
+            <value>
+                <fullName>Van</fullName>
+                <default>false</default>
+                <label>Van</label>
+            </value>
+            <value>
+                <fullName>Veja</fullName>
+                <default>false</default>
+                <label>Veja</label>
+            </value>
+            <value>
+                <fullName>Viva Real</fullName>
+                <default>false</default>
+                <label>Viva Real</label>
+            </value>
+            <value>
+                <fullName>Waze</fullName>
+                <default>false</default>
+                <label>Waze</label>
+            </value>
+            <value>
+                <fullName>WhatsApp</fullName>
+                <default>false</default>
+                <label>WhatsApp</label>
+            </value>
+            <value>
+                <fullName>Yahoo</fullName>
+                <default>false</default>
+                <label>Yahoo</label>
+            </value>
+            <value>
+                <fullName>Youtube Ads</fullName>
+                <default>false</default>
+                <label>Youtube Ads</label>
+            </value>
+            <value>
+                <fullName>ZAP Imóveis</fullName>
+                <default>false</default>
+                <label>ZAP Imóveis</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

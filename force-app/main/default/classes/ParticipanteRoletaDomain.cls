@@ -26,8 +26,18 @@ public class ParticipanteRoletaDomain {
     }
 
     public static List<ParticipanteRoleta__c> obterParticipantesPorSorteios(List<Sorteio__c> sorteios) {
+        System.debug('Sorteios: ' + sorteios);
         Set<Id> idsRoletas = SorteioDomain.obterIdsRoletas(sorteios);
+        System.debug('Ids roletas: ' + idsRoletas);
 
         return ParticipanteRoletaSelector.obterParticipantesPorIdsRoleta(idsRoletas);
     }
+
+    // obterParticipantePorIdMembro
+
+    //public static  List<ParticipanteRoleta__c> obterParticipantePorIdMembro(ParticipanteRoleta__c participantes) {
+    //    List<ParticipanteRoleta__c> participantesPorIdMembro = ParticipanteRoletaSelector.obterParticipantesPorIdsMembros(new Set<Id>{participantes.MembroEquipe__c});
+
+    //    return participantesPorIdMembro;
+    //}
 }

@@ -23,6 +23,26 @@ private class LeadOrigemRestResourceTest {
         insert testLead;
     }
 
+    private static void CriarLeadComCanalDiferente(String canal){
+        Empreendimento__c empreendimento = new Empreendimento__c();  
+        empreendimento.Name = 'Teste empreendimentooo';  
+        empreendimento.CNPJEmpreendimento__c = '26197286000130'; // Substitua por um CNPJ válido  
+        insert empreendimento; 
+
+        // Criando o Lead com o Canal de Atendimento
+        Lead testLead = new Lead(
+            LastName = 'Ewerton',
+            Company = 'Empresa Lima',
+            Email = 'ewertonzorolima@xyz.com',
+            LeadSource = 'Website',
+            CanalAtendimento__c = canal,
+            MobilePhone = '5511987654325',
+            Status = 'Novo',
+            EmpreendimentoInteresse__c = empreendimento.Id
+        );
+        insert testLead;
+    }
+
     // Método para criar um Lead sem origem
     private static void criarLeadSemOrigem() {
         // Criando o Empreendimento
@@ -33,12 +53,12 @@ private class LeadOrigemRestResourceTest {
 
         // Criando o Lead sem origem
         Lead testLead = new Lead(
-            LastName = 'Silva',
-            Company = 'Empresa XYZ',
-            Email = 'silva@xyz.com',
+            LastName = 'Silvadkjsjkdjk',
+            Company = 'Empresa djsjd',
+            Email = 'silvahjdsj@xyz.com',
             LeadSource = null,
             CanalAtendimento__c = 'Telefone',
-            MobilePhone = '5511987654321',
+            MobilePhone = '5511987654330',
             Status = 'Novo',
             EmpreendimentoInteresse__c = empreendimento.Id
         );
@@ -50,7 +70,7 @@ private class LeadOrigemRestResourceTest {
     static void testGetLeadSources_Success() {
         // Criando leads com origens
         criarLeadComOrigem('Website');
-        criarLeadComOrigem('Referral');
+        CriarLeadComCanalDiferente('Fale conosco');
         
         // Criando um lead sem origem
         criarLeadSemOrigem();

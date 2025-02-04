@@ -6,6 +6,8 @@ public without sharing class ParticipacaoRoletaService {
     public static void sincronizarParticipantes(List<User> usuarios, Map<Id, User> usuariosAntigosPorId) {
         List<User> usuariosFiltrados = obterUsuariosComSituacaoAlterada(usuarios, usuariosAntigosPorId);
 
+        System.debug('Usuários filtrados: ' + usuariosFiltrados);
+
         if(usuariosFiltrados.isEmpty()) { return; }
 
         if(System.isFuture()) { sincronizarParticipantes(usuariosFiltrados); }
@@ -116,7 +118,7 @@ public without sharing class ParticipacaoRoletaService {
 
         if(roletasPorIdMembroParaCriar.isEmpty()) { return; }
 
-        criarParticipantes(membros, roletasPorIdMembroParaCriar);
+       criarParticipantes(membros, roletasPorIdMembroParaCriar);
     }
 
     /**
@@ -304,10 +306,13 @@ public without sharing class ParticipacaoRoletaService {
         }
 
         OrdenarParticipantesOffline(participante);
+       // AtualizarLeadsBolsaoJob(participante);
         System.debug('participante na linha 306' + participante);
 
         return participante;
     }
+
+  
 
 
     public static void OrdenarParticipantesOffline(ParticipanteRoleta__c participante) {
@@ -319,11 +324,25 @@ public without sharing class ParticipacaoRoletaService {
             WHERE RoletaLeads__c = :participante.RoletaLeads__c
                   AND Situacao__c = 'Online'
                   AND Id != :participante.Id
+                  AND Situacao__c != 'Indisponível'
             ORDER BY Posicao__c ASC
         ];
+
+        List<ParticipanteRoleta__c> todosParticipantes = [
+            SELECT Id, Name, Posicao__c, MembroEquipe__c, Participante_Vigente__c, 
+                   CargaRestante__c, Situacao__c, PausarDistribuicao__c, PresencaValidada__c
+            FROM ParticipanteRoleta__c
+            WHERE RoletaLeads__c = :participante.RoletaLeads__c 
+           
+            ORDER BY Posicao__c ASC
+            
+        ];
+        
+        System.debug('Todos os participantes da roleta: ' + todosParticipantes);
     
 
-        ordenarPosicoesParticipantesRoletas(participante.RoletaLeads__c , participantes);
+        System.debug('Participantes da roleta linha 376: ' + participantes);
+       ordenarPosicoesParticipantesRoletas(participante.RoletaLeads__c , participantes);
         System.debug('Participantes na roleta (online): ' + participantes);
     }
     

@@ -6,10 +6,5 @@
     <columns>Ativa__c</columns>
     <columns>DentroHorarioFuncionamento__c</columns>
     <filterScope>Everything</filterScope>
-    <filters>
-        <field>Ativa__c</field>
-        <operation>equals</operation>
-        <value>1</value>
-    </filters>
     <label>Tudo</label>
 </ListView>

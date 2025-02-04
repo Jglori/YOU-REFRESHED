@@ -18,6 +18,7 @@ public class LeadDTO {
     public Decimal carga;
     public Decimal cargaRestante;
     public Boolean naoPodeAceitar;
+    public Boolean remetenteWhatsApp;
 
     public LeadDTO(Lead lead) {
         Map<String, Object> camposLeadPorNomeAPI = lead.getPopulatedFieldsAsMap();
@@ -30,12 +31,14 @@ public class LeadDTO {
         this.celular = camposLeadPorNomeAPI.containsKey('MobilePhone') ? lead.MobilePhone : null;
         this.email = camposLeadPorNomeAPI.containsKey('Email') ? lead.Email : null;
         this.status = camposLeadPorNomeAPI.containsKey('Status') ? lead.Status : null;
-        this.proprietario = (lead.Owner != null) ? lead.Owner.Name : null;
+        this.proprietario = camposLeadPorNomeAPI.containsKey('Owner.Name') ? lead.Owner.Name : null;
         this.inicioDialogo = camposLeadPorNomeAPI.containsKey('InicioDialogo__c') ? lead.InicioDialogo__c : null;
         this.fimDialogo = camposLeadPorNomeAPI.containsKey('FimDialogo__c') ? lead.FimDialogo__c : null;
         this.ultimaMensagem = camposLeadPorNomeAPI.containsKey('UltimaMensagem__c') ? lead.UltimaMensagem__c : null;
         this.CreatedDate = camposLeadPorNomeAPI.containsKey('CreatedDate') ? lead.CreatedDate : null;
-        //this.nomeCorretor = (lead.CorretorContato__r != null) ? lead.CorretorContato__r.Name : null;
+        this.nomeCorretor = (lead.CorretorContato__r != null) ? lead.CorretorContato__r.Name : null;
+        this.remetenteWhatsApp = camposLeadPorNomeAPI.containsKey('RemetenteWhatsApp__c') ? lead.RemetenteWhatsApp__c : null;
+
         this.telefone = camposLeadPorNomeAPI.containsKey('Phone') ? lead.Phone : null;
     }
 

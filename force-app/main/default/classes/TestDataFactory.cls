@@ -40,12 +40,12 @@ public class TestDataFactory {
         return contato;
     }
 
-    public static Quote gerarCotacao(Opportunity oportunidade) {
+   /* public static Quote gerarCotacao(Opportunity oportunidade) {
         Quote cotacao = new Quote();
         cotacao.Name = 'Teste';
         cotacao.OpportunityId = oportunidade.Id; 
         return cotacao;
-    }
+    }*/
 
     public static Lead gerarLead() {
         Lead lead = new Lead();
@@ -85,7 +85,7 @@ public class TestDataFactory {
         task.WhoId = lead.Id;
         return task;
     }
-
+/*
     public static PricebookEntry  gerarPricebookEntry(Id idProduto){
         PricebookEntry pricebookEntry = new PricebookEntry();
         pricebookEntry.Pricebook2Id = Test.getStandardPricebookId();
@@ -94,7 +94,7 @@ public class TestDataFactory {
         pricebookEntry.UnitPrice = 100;
         pricebookEntry.IsActive = true;
         return pricebookEntry;
-    }
+    }*/
 
     //Registros simulador de vendas
     public static Empreendimento__c gerarEmpreendimento(){

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>LogTimestamp__c</fullName>
+    <description>Data e hora do evento de log.</description>
+    <inlineHelpText>Exemplo: &quot;2025-01-08 12:00:00&quot;.</inlineHelpText>
+    <label>Log Timestamp</label>
+    <required>true</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>DateTime</type>
+</CustomField>

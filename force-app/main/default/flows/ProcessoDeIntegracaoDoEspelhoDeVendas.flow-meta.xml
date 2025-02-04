@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <description>Este fluxo realiza a integração manual do Espelho de Vendas com o sistema Mega, permitindo a sincronização de dados atualizados sobre empreendimentos, torres e unidades diretamente para o Salesforce. O processo é ideal para garantir que os dados estejam sempre atualizados, sendo iniciado manualmente pelo usuário autorizado.</description>
+    <environments>Default</environments>
+    <interviewLabel>Processo de Integração do Espelho de Vendas {!$Flow.CurrentDateTime}</interviewLabel>
+    <isAdditionalPermissionRequiredToRun>true</isAdditionalPermissionRequiredToRun>
+    <label>Processo de Integração do Espelho de Vendas</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Flow</processType>
+    <screens>
+        <name>TelaMensagemConclusao</name>
+        <label>Integração do Espelho de Vendas</label>
+        <locationX>176</locationX>
+        <locationY>350</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <fields>
+            <name>TextoExibicaoProcessoFinalizado</name>
+            <fieldText>&lt;p&gt;Processo finalizado com sucesso!&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <nextOrFinishButtonLabel>Finalizar</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <screens>
+        <name>TelaSolicitacaoIntegracaoDoEspelhoDeVendas</name>
+        <label>Integração do Espelho de Vendas</label>
+        <locationX>176</locationX>
+        <locationY>134</locationY>
+        <allowBack>false</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>false</allowPause>
+        <connector>
+            <targetReference>ExecutarIntegracao</targetReference>
+        </connector>
+        <fields>
+            <name>TextoExibicaoInstrucoes</name>
+            <fieldText>&lt;p&gt;&lt;span style=&quot;font-size: 14px;&quot;&gt;Este processo realiza a integração dos dados do Espelho de Vendas do sistema Mega, trazendo informações atualizadas sobre empreendimentos, torres e unidades para o Salesforce.﻿&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;p&gt;⚠️ &lt;strong&gt;Atenção&lt;/strong&gt;:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Certifique-se de que os dados no sistema Mega estão corretos antes de prosseguir.&lt;/li&gt;&lt;li&gt;Após iniciar o processo, pode levar alguns minutos para concluir a integração.&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Clique em &apos;Iniciar&apos; para continuar.&quot;&lt;/p&gt;</fieldText>
+            <fieldType>DisplayText</fieldType>
+        </fields>
+        <nextOrFinishButtonLabel>Iniciar</nextOrFinishButtonLabel>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>TelaSolicitacaoIntegracaoDoEspelhoDeVendas</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <subflows>
+        <name>ExecutarIntegracao</name>
+        <label>Executar Integração</label>
+        <locationX>176</locationX>
+        <locationY>242</locationY>
+        <connector>
+            <targetReference>TelaMensagemConclusao</targetReference>
+        </connector>
+        <flowName>ExecutarIntegracaoDoEspelhoDeVendas</flowName>
+    </subflows>
+</Flow>

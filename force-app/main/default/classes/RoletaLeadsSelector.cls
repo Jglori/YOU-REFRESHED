@@ -8,8 +8,7 @@ public without sharing class RoletaLeadsSelector {
                 (
                     SELECT 
                         MembroEquipe__c, 
-                        MembroEquipe__r.Usuario__r.Situacao__c,
-                        Saida__c
+                        MembroEquipe__r.Usuario__r.Situacao__c
                     FROM ParticipantesRoleta__r
                 )
             FROM RoletaLeads__c 

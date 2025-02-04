@@ -9,18 +9,7 @@ public without sharing class DistribuirLeadsService {
         List<ParticipanteRoleta__c> participantesAtualizados = ParticipanteRoletaSelector.obterParticipantesPorIds(SObjectDomain.obterIds(participantes));
         List<ParticipanteRoleta__c> participantesOnline = obterParticipantesOnline(participantesAtualizados);
 
-        if(participantesOnline.isEmpty()) { return; }
-
-        List<Lead> leadsParaDistribuir = LeadSelector.obterLeadsParaDistribuir();
-
-        if(System.isFuture()) { 
-            TriggerHandler.bypass('ParticipanteRoletaTriggerHandler');
-
-            distribuirLeadsSync(leadsParaDistribuir); 
-
-            TriggerHandler.clearBypass('ParticipanteRoletaTriggerHandler');
-        } else { 
-            distribuirLeadsAsync(SObjectDomain.obterIds(leadsParaDistribuir)); 
+        if(participantesOnline.isEmpty()) { return; } List<Lead> leadsParaDistribuir = LeadSelector.obterLeadsParaDistribuir();if(System.isFuture()) {  TriggerHandler.bypass('ParticipanteRoletaTriggerHandler');distribuirLeadsSync(leadsParaDistribuir);  TriggerHandler.clearBypass('ParticipanteRoletaTriggerHandler');} else { distribuirLeadsAsync(SObjectDomain.obterIds(leadsParaDistribuir)); 
         }
     }
 
@@ -38,9 +27,7 @@ public without sharing class DistribuirLeadsService {
         List<ParticipanteRoleta__c> participantesOnline = new List<ParticipanteRoleta__c>();
         for(ParticipanteRoleta__c participante : participantes) {
             if(participante.Situacao__c != 'Online') { continue; }
-            if(!participante.PresencaValidada__c) { continue; } if(participante.CargaRestante__c <= 0) { continue; }if(participante.PausarDistribuicao__c) { continue; }if(participante.MembroEquipe__r.ExigeValidacaoCoordenador__c && !participante.PresencaValidada__c) { continue; } if(String.isBlank(participante.MembroEquipe__r.Usuario__r.CanaisAtendimento__c)) { continue; }
-
-            participantesOnline.add(participante);
+            if(!participante.PresencaValidada__c) { continue; } if(participante.CargaRestante__c <= 0) { continue; }if(participante.PausarDistribuicao__c) { continue; }if(participante.MembroEquipe__r.ExigeValidacaoCoordenador__c && !participante.PresencaValidada__c) { continue; }if(String.isBlank(participante.MembroEquipe__r.Usuario__r.CanaisAtendimento__c)) { continue; } participantesOnline.add(participante);
         }
 
         return participantesOnline;
@@ -57,9 +44,8 @@ public without sharing class DistribuirLeadsService {
 
         if(leadsParaDistribuir.isEmpty()) { return; }
 
-        if(System.isFuture()) {  TriggerHandler.bypass('LeadTriggerHandler');distribuirLeadsSync(leadsParaDistribuir);    TriggerHandler.clearBypass('LeadTriggerHandler');
-        } else { 
-            distribuirLeadsAsync(SObjectDomain.obterIds(leadsParaDistribuir)); 
+        if(System.isFuture()) { 
+            TriggerHandler.bypass('LeadTriggerHandler');distribuirLeadsSync(leadsParaDistribuir); TriggerHandler.clearBypass('LeadTriggerHandler');} else { distribuirLeadsAsync(SObjectDomain.obterIds(leadsParaDistribuir)); 
         }
     }
 
@@ -70,39 +56,22 @@ public without sharing class DistribuirLeadsService {
     @TestVisible
     @Future
     private static void distribuirLeadsAsync(Set<Id> idsLeads) {
+
+        System.debug('Distribuindo leads de forma assíncrona.');
+        System.debug('Leads: ' + idsLeads);
         List<Lead> leads = LeadSelector.obterLeadsPorIds(idsLeads);
+        
+
 
         if(leads.isEmpty()) { return; }
 
         distribuirLeadsSync(leads);
     }
+   public static void distribuirLeadsSync(List<Lead> leads) { if (leads == null || leads.isEmpty()) { System.debug('A lista de leads está nula ou vazia!'); return; } List<Lead> leadsComCorretor = [SELECT Id, CorretorContato__c, Status , CanalAtendimento__c , Corretor__c , RoletaLeads__c FROM Lead WHERE Id IN :leads]; List<Lead> leadsFiltrados = new List<Lead>(); for (Lead lead : leadsComCorretor) { if (lead.CorretorContato__c == null && lead.Status == 'Novo') { leadsFiltrados.add(lead); } } if (leadsFiltrados.isEmpty()) { System.debug('Nenhum lead a ser processado após o filtro!'); return; } Map<String, List<Lead>> leadsPorCanalAtendimento = LeadDomain.obterLeadsPorCanalAtendimento(leadsFiltrados); if (leadsPorCanalAtendimento == null || leadsPorCanalAtendimento.isEmpty()) { System.debug('O mapa de leadsPorCanalAtendimento está nulo ou vazio!'); return; } Map<String, ConfiguracaoCanalAtendimento__mdt> configuracoesPorCanal = CustomMetadataTypeDomain.obterConfiguracoesPorCanalAntendimento(); if (configuracoesPorCanal == null || configuracoesPorCanal.isEmpty()) { System.debug('O mapa de configuracoesPorCanal está nulo ou vazio!'); return; } CONFIGURACOES_POR_CANAL.putAll(configuracoesPorCanal); if (CONFIGURACOES_POR_CANAL == null || CONFIGURACOES_POR_CANAL.isEmpty()) { System.debug('CONFIGURACOES_POR_CANAL está nulo ou vazio após putAll!'); return; } List<RoletaLeads__c> roletasLeads = RoletaLeadsSelector.obterRoletasLeadsPorCanaisAtendimento(String.join(leadsPorCanalAtendimento.keySet(), '\', \'')); if (roletasLeads == null || roletasLeads.isEmpty()) { System.debug('A lista de roletasLeads está nula ou vazia!'); return; } List<Lead> leadsParaAtualizar = new List<Lead>(); leadsParaAtualizar.addAll(distribuirLeads(leadsFiltrados, roletasLeads)); leadsParaAtualizar.addAll(distribuirLeadsComRoleta(leadsFiltrados, roletasLeads)); if (leadsParaAtualizar == null || leadsParaAtualizar.isEmpty()) { System.debug('A lista de leads para atualizar está nula ou vazia!'); return; } try { Database.update(leadsParaAtualizar); } catch (Exception e) { System.debug('Erro ao atualizar os leads: ' + e.getMessage()); return; } List<OmnichannelRefresh__e> omniRefresh = new List<OmnichannelRefresh__e>(); OmnichannelRefresh__e evt = new OmnichannelRefresh__e(); omniRefresh.add(evt); EventBus.publish(omniRefresh); System.debug('Leads processados e atualizados com sucesso!'); }
 
-    private static void distribuirLeadsSync(List<Lead> leads) {
-        Map<String, List<Lead>> leadsPorCanalAtendimento = LeadDomain.obterLeadsPorCanalAtendimento(leads);
-
-        CONFIGURACOES_POR_CANAL.putAll(CustomMetadataTypeDomain.obterConfiguracoesPorCanalAntendimento());
-
-        if(leadsPorCanalAtendimento.isEmpty()) { return; }
-
-        List<RoletaLeads__c> roletasLeads = RoletaLeadsSelector.obterRoletasLeadsPorCanaisAtendimento(String.join(leadsPorCanalAtendimento.keySet(), '\', \''));
-
-        if(roletasLeads.isEmpty()) { return; } List<Lead> leadsParaAtualizar = new List<Lead>();leadsParaAtualizar.addAll(distribuirLeads(leads, roletasLeads));leadsParaAtualizar.addAll(distribuirLeadsComRoleta(leads, roletasLeads)); if(leadsParaAtualizar.isEmpty()) { return; } Database.update(leadsParaAtualizar);List<OmnichannelRefresh__e> omniRefresh = new List<OmnichannelRefresh__e>(); OmnichannelRefresh__e evt = new OmnichannelRefresh__e();
-        EventBus.publish(omniRefresh);
-
-        // Set<Id> membrosId = new Set<Id>();
-        // for(Lead ld : leadsParaAtualizar){
-        //     membrosId.add(ld.Corretor__c);
-        // }
-        
-        // Set<String> setUsersToNotify = new Set<String>();
-        // for(MembroEquipe__c member : MembroEquipeSelector.obterMembrosPorId(membrosId)){
-        //     setUsersToNotify.add(member.Usuario__c);
-        // }
-        
-        // if(!setUsersToNotify.isEmpty()){
-        //     notifyUsers(setUsersToNotify, '');
-        // }
-    }
+    
+    
+    
 
     /**
      * Método responsável pela distribuição de leads por roleta de acordo com
@@ -117,11 +86,16 @@ public without sharing class DistribuirLeadsService {
         List<Lead> leadsParaAtualizar = new List<Lead>();
 
         for(Lead lead : leads) {
-            if(lead.Corretor__c != null) { continue; }
-            if(!roletasLeadsPorId.containsKey(lead.RoletaLeads__c)) { continue; } RoletaLeads__c roletaLeads = roletasLeadsPorId.get(lead.RoletaLeads__c);Map<Id, List<ParticipanteRoleta__c>> participantesPorIdRoletaEmDistribuicao = distribuirLeadEntreParticipantes(lead, roletaLeads);if(participantesPorIdRoletaEmDistribuicao.isEmpty()) { continue; } participantesPorIdRoleta.putAll(participantesPorIdRoletaEmDistribuicao);leadsParaAtualizar.add(lead);
+            if(lead.Corretor__c != null) { continue; } if(!roletasLeadsPorId.containsKey(lead.RoletaLeads__c)) { continue; } RoletaLeads__c roletaLeads = roletasLeadsPorId.get(lead.RoletaLeads__c); Map<Id, List<ParticipanteRoleta__c>> participantesPorIdRoletaEmDistribuicao = distribuirLeadEntreParticipantes(lead, roletaLeads);if(participantesPorIdRoletaEmDistribuicao.isEmpty()) { continue; } participantesPorIdRoleta.putAll(participantesPorIdRoletaEmDistribuicao);leadsParaAtualizar.add(lead);
         }
 
-        if(participantesPorIdRoleta.isEmpty()) { return leadsParaAtualizar; } List<ParticipanteRoleta__c> participantes = reordenarParticipantesRoletasLeads(participantesPorIdRoleta); update participantes;return leadsParaAtualizar;
+        if(participantesPorIdRoleta.isEmpty()) { return leadsParaAtualizar; }
+
+        List<ParticipanteRoleta__c> participantes = reordenarParticipantesRoletasLeads(participantesPorIdRoleta);
+
+        update participantes;
+
+        return leadsParaAtualizar;
     }
 
     /**
@@ -168,7 +142,8 @@ public without sharing class DistribuirLeadsService {
      * Método responsável pela reordenação da lista de participantes das roletas 
      * de leads recebidas.
      */
-    public static List<ParticipanteRoleta__c> reordenarParticipantesRoletasLeads(Map<Id, List<ParticipanteRoleta__c>> participantesPorIdRoleta) {
+    @TestVisible
+    private static List<ParticipanteRoleta__c> reordenarParticipantesRoletasLeads(Map<Id, List<ParticipanteRoleta__c>> participantesPorIdRoleta) {
         List<ParticipanteRoleta__c> participantes = new List<ParticipanteRoleta__c>();
         for(Id idRoletaLeads : participantesPorIdRoleta.keySet()) {
             participantes.addAll(reordenarParticipantesRoletasLeads(participantesPorIdRoleta.get(idRoletaLeads)));
@@ -190,51 +165,79 @@ public without sharing class DistribuirLeadsService {
      * de leads, verificando capacidade de atendimento caso canal não seja bypass.
      */
     @TestVisible
-    private static Map<Id, List<ParticipanteRoleta__c>> distribuirLeadEntreParticipantes(Lead lead, RoletaLeads__c roletaLeads) {
-        Map<Id, List<ParticipanteRoleta__c>> participantesPorIdRoleta = new Map<Id, List<ParticipanteRoleta__c>>();
-        for(Integer i = 0; i < roletaLeads.ParticipantesRoleta__r.size(); i++) {
-            if(!canalConfigurado(lead, roletaLeads.ParticipantesRoleta__r.get(i))) { continue; }
-            if(!canalBypass(lead) && !possuiCapacidadeAtendimento(lead, roletaLeads.ParticipantesRoleta__r.get(i))) { continue; }
+private static Map<Id, List<ParticipanteRoleta__c>> distribuirLeadEntreParticipantes(Lead lead, RoletaLeads__c roletaLeads) {
+    System.debug('Iniciando a distribuição de lead ' + lead.Id + ' entre os participantes da roleta ' + roletaLeads.Id);
+    
+    Map<Id, List<ParticipanteRoleta__c>> participantesPorIdRoleta = new Map<Id, List<ParticipanteRoleta__c>>();
 
-            participantesPorIdRoleta.putAll(distribuirLeadParaParticipante(lead, i, new List<ParticipanteRoleta__c>(roletaLeads.ParticipantesRoleta__r)));
+    // Iterar sobre os participantes da roleta
+    for (Integer i = 0; i < roletaLeads.ParticipantesRoleta__r.size(); i++) {
+        ParticipanteRoleta__c participante = roletaLeads.ParticipantesRoleta__r.get(i);
 
-            break;
+        // Verifica se o canal está configurado corretamente
+        if (!canalConfigurado(lead, participante)) {
+            System.debug('Canal não configurado para o participante ' + participante.Id);
+            continue;
         }
 
-        return participantesPorIdRoleta;
+        // Verifica se o participante possui capacidade de atendimento
+        if (!canalBypass(lead) && !possuiCapacidadeAtendimento(lead, participante)) {
+            System.debug('Capacidade de atendimento insuficiente para o participante ' + participante.Id);
+            continue;
+        }
+
+        // Distribui o lead para o participante
+        participantesPorIdRoleta.putAll(distribuirLeadParaParticipante(lead, i, new List<ParticipanteRoleta__c>(roletaLeads.ParticipantesRoleta__r)));
+        break; // Interrompe após distribuir o lead para um participante
     }
 
-        public static Map<Id, List<ParticipanteRoleta__c>> distribuirLeadParaParticipante(Lead lead, Integer posicaoParticipante, List<ParticipanteRoleta__c> participantes) {
-        Map<Id, List<ParticipanteRoleta__c>> participantesPorIdRoleta = new Map<Id, List<ParticipanteRoleta__c>>();
+    System.debug('Leads distribuídos: ' + participantesPorIdRoleta.size());
+    return participantesPorIdRoleta;
+}
 
-        ParticipanteRoleta__c participante = participantes.remove(posicaoParticipante);
+public static Map<Id, List<ParticipanteRoleta__c>> distribuirLeadParaParticipante(Lead lead, Integer posicaoParticipante, List<ParticipanteRoleta__c> participantes) {
+    System.debug('Distribuindo lead ' + lead.Id + ' para o participante na posição ' + posicaoParticipante);
+    
+    Map<Id, List<ParticipanteRoleta__c>> participantesPorIdRoleta = new Map<Id, List<ParticipanteRoleta__c>>();
 
-        distribuirLead(lead, participante.RoletaLeads__c, participante.Id);
+    ParticipanteRoleta__c participante = participantes.remove(posicaoParticipante);
 
-        participantes.add(participante);
-        participantesPorIdRoleta.put(participante.RoletaLeads__c, participantes);
+    // Realiza a distribuição do lead
+    distribuirLead(lead, participante.RoletaLeads__c, participante.Id);
 
-        return participantesPorIdRoleta;
-    }
+    participantes.add(participante); // Re-insere o participante na lista
+    participantesPorIdRoleta.put(participante.RoletaLeads__c, participantes);
 
-    public static void distribuirLead(Lead lead, Id idRoleta, Id idCorretor) {
-        lead.RoletaLeads__c = idRoleta;
-        lead.Corretor__c = idCorretor;
-    }
+    System.debug('Lead ' + lead.Id + ' distribuído para o participante ' + participante.Id);
+    return participantesPorIdRoleta;
+}
 
-        public static Boolean possuiCapacidadeAtendimento(Lead lead, ParticipanteRoleta__c participante) {
-        return (participante.CargaRestante__c ?? 0) - (CONFIGURACOES_POR_CANAL.get(lead.CanalAtendimento__c)?.Carga__c ?? 0) >= 0;
-    }
+public static void distribuirLead(Lead lead, Id idRoleta, Id idCorretor) {
+    System.debug('Atribuindo lead ' + lead.Id + ' à roleta ' + idRoleta + ' e corretor ' + idCorretor);
 
-    public static Boolean canalBypass(Lead lead) {
-        return CONFIGURACOES_POR_CANAL.get(lead.CanalAtendimento__c)?.Bypass__c ?? false;
-    }
+    lead.RoletaLeads__c = idRoleta;
+    lead.Corretor__c = idCorretor;
+}
 
-    public static Boolean canalConfigurado(Lead lead, ParticipanteRoleta__c participante) {
-        return String.isNotBlank(participante.MembroEquipe__r?.Usuario__r?.CanaisAtendimento__c) 
-            ? participante.MembroEquipe__r.Usuario__r.CanaisAtendimento__c.contains(lead.CanalAtendimento__c)
-            : false;
-    }
+public static Boolean possuiCapacidadeAtendimento(Lead lead, ParticipanteRoleta__c participante) {
+   return true;
+}
+
+public static Boolean canalBypass(Lead lead) {
+    Boolean bypass = CONFIGURACOES_POR_CANAL.get(lead.CanalAtendimento__c)?.Bypass__c ?? false;
+    System.debug('Verificando bypass para o canal ' + lead.CanalAtendimento__c + ': ' + bypass);
+    return true;
+}
+
+public static Boolean canalConfigurado(Lead lead, ParticipanteRoleta__c participante) {
+    String canaisAtendimento = participante.MembroEquipe__r?.Usuario__r?.CanaisAtendimento__c;
+
+    Boolean configurado = String.isNotBlank(canaisAtendimento) && canaisAtendimento.contains(lead.CanalAtendimento__c);
+    System.debug('Verificando se o canal ' + lead.CanalAtendimento__c + ' está configurado para o participante ' + participante.Id + ': ' + configurado);
+    
+    return configurado;
+}
+
 
     /**
      * Método responsável pela obtenção de leads pendentes de distribuição, ou seja,

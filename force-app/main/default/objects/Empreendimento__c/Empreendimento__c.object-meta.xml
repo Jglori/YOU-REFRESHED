@@ -167,9 +167,11 @@
     <profileSearchLayouts>
         <fields>NAME</fields>
         <fields>OBJECT_ID</fields>
-        <profileName>Usuário do Marketing</profileName>
+        <profileName>Marketing User</profileName>
     </profileSearchLayouts>
-    <searchLayouts></searchLayouts>
+    <searchLayouts>
+        <listViewButtons>ProcessoDeIntegracaoEspelhoDeVendas</listViewButtons>
+    </searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>

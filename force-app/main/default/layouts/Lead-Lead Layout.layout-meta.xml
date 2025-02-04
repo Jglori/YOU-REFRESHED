@@ -42,6 +42,10 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
+                <field>Duplicado__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
                 <field>Informacoes_Adicionais__c</field>
             </layoutItems>
             <layoutItems>
@@ -426,6 +430,10 @@
     <relatedLists>
         <fields>NAME</fields>
         <relatedList>CampaignHistory__c.LeadId__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
+        <relatedList>Mensagem__c.LeadMensagem__c</relatedList>
     </relatedLists>
     <runAssignmentRulesDefault>false</runAssignmentRulesDefault>
     <showEmailCheckbox>false</showEmailCheckbox>

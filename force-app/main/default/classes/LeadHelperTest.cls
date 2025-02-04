@@ -1,6 +1,6 @@
 @isTest
 public class LeadHelperTest {
-        @TestSetup
+	@TestSetup
     static void makeData() {
         doCreateData();
     }
@@ -275,46 +275,57 @@ public class LeadHelperTest {
     }
 
    
-    @isTest
-    static void testVerificarCampanhas() {
-        Empreendimento__c empreendimento = new Empreendimento__c();  
-    empreendimento.Name = 'Teste empreendimento';  
-    empreendimento.CNPJEmpreendimento__c = '12345678000195'; // Insira um CNPJ válido
-    insert empreendimento; 
-        Lead testLead = new Lead(
-            LastName = 'Elera Lima',
-            Company = 'Empresa XYZ',
-            Email = 'eleraLima@gmail.com',
-            LeadSource = 'Chat',
-            CanalAtendimento__c = 'Telefone',
-            MobilePhone = '11987647487',
-            Status = 'Novo',
-            EmpreendimentoInteresse__c = empreendimento.Id
-        );
-        insert testLead;
-
-        testLead.Status = 'Tentativa de Contato';
-
-        update testLead;
-
-        Task task = new Task(
-            Subject = 'Chamada',
-            Status = 'Completed',
-            WhoId = testLead.Id
-        );
-
-        insert task;
-
-        CampaignMember testCampaignMember = new CampaignMember(
-            CampaignId = '701Dy000000mC80IAE',
-            LeadId = testLead.Id
-        );
-        insert testCampaignMember;
-
-        Test.startTest();
-        LeadHelper.verificarCampanhas(testLead.Id);
-        Test.stopTest();
-    }
+ 
+        @IsTest
+        static void testVerificarCampanhas() {
+            // Criação do registro de Empreendimento
+            Empreendimento__c empreendimento = new Empreendimento__c(
+                Name = 'Teste Empreendimento',
+                CNPJEmpreendimento__c = '12345678000195' // Insira um CNPJ válido
+            );
+            insert empreendimento;
+    
+            Lead testLead = new Lead(
+                LastName = 'Elera Lima',
+                Company = 'Empresa XYZ',
+                Email = 'eleraLima@gmail.com',
+                LeadSource = 'Chat',
+                CanalAtendimento__c = 'Telefone',
+                MobilePhone = '11987647487',
+                Status = 'Novo',
+                EmpreendimentoInteresse__c = empreendimento.Id
+            );
+            insert testLead;
+    
+            testLead.Status = 'Tentativa de Contato';
+            update testLead;
+    
+            Task task = new Task(
+                Subject = 'Chamada',
+                Status = 'Completed',
+                WhoId = testLead.Id
+            );
+            insert task;
+    
+            Campaign testCampaign = new Campaign(
+                Name = 'Campanha Teste',
+                IsActive = true
+            );
+            insert testCampaign;
+    
+            CampaignMember testCampaignMember = new CampaignMember(
+                CampaignId = testCampaign.Id,
+                LeadId = testLead.Id
+            );
+            insert testCampaignMember;
+    
+            Test.startTest();
+            LeadHelper.verificarCampanhas(testLead.Id);
+            Test.stopTest();
+    
+        }
+    
+    
   
     @IsTest
     static void testIsTaskCreatedAndOpenForAttemptToContact() {
@@ -492,10 +503,10 @@ static void testeContato() {
     Lead completedLead = new Lead(
         LastName = 'Elera Lima',
         Company = 'Empresa XYZ',
-        Email = 'eleraLima@gmail.com',
+        Email = 'eleraLima2@gmail.com',
         LeadSource = 'Chat',
         CanalAtendimento__c = 'Telefone',
-        MobilePhone = '11987647487',
+        MobilePhone = '11987647488',
         Status = 'Novo',
         EmpreendimentoInteresse__c = empreendimento.Id
     );
