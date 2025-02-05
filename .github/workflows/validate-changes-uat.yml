@@ -10,13 +10,20 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
+      # Verifica se o Pull Request foi cancelado (fechado sem merge)
+      - name: Verificar se o evento foi cancelado
+        if: github.event.action == 'closed' && github.event.pull_request.merged == false
+        run: |
+          echo "O Pull Request foi cancelado. Saindo com erro."
+          exit 1
+
       # Realiza o checkout do repositório
       - name: Checkout do repositório
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      # Instalar dependências do sistema e do Salesforce CLI
+      # Instalar dependências do sistema e Salesforce CLI
       - name: Instalar dependências do sistema e do Salesforce CLI
         run: |
           sudo apt-get update
