@@ -1,0 +1,29 @@
+@isTest
+public class ComparativoServiceTest {
+    
+    @TestSetup
+    static void makeData(){
+
+        Empreendimento__c empreendimento = TestDataFactory.gerarEmpreendimento();
+        empreendimento.MetragemPrivativaTotal__c = 100;
+        insert empreendimento;
+
+        TabelaVendas__c tabela = TestDataFactory.gerarTabelaVendas();
+        tabela.Empreendimento__c = empreendimento.id;
+        insert tabela;
+
+        SeriePagamentos__c serie = TestDataFactory.gerarSeriePagamento(tabela.Id);
+        insert serie;
+    }
+
+    @isTest
+    public static void testCalcularComparacao() {
+        TabelaVendas__c tabela = [SELECT Id, Name FROM TabelaVendas__c LIMIT 1];
+        List<SeriePagamentos__c> series = [SELECT Id, Name,InicioPagamento__c, QuantidadeParcelas__c, ValorTotal__c, TabelaVenda__c, TipoCondicao__c, AposHabiteSe__c FROM SeriePagamentos__c];
+    
+        Test.startTest();
+     
+        Test.stopTest();
+
+    }
+}
