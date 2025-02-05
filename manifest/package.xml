@@ -200,6 +200,17 @@
 <members>PaginaDocumentacao</members>
 <name>FlexiPage</name>
 </types>
+ <types>
+        <members>AnaliseCredito__c</members>
+        <members>TemplateDocumento__c</members>
+        <name>CustomTab</name>
+    </types>
+
+    <!-- Adicionando os CustomFields -->
+    <types>
+        <members>Quote.Sincronizado__c</members>
+        <name>CustomField</name>
+    </types>
 <types>
 <members>Checklist_de_Documentos__c-Checklist de Documentos Layout</members>
 <members>Checklist_de_Documentos__c-Layout de Checklist de Documentos</members>
@@ -235,10 +246,6 @@
 <members>TemplateDocumentosExcluir</members>
 <members>TemplateDocumentosVerTodos</members>
 <name>PermissionSet</name>
-</types>
-<types>
-<members>SuperAdmin</members>
-<name>PermissionSetGroup</name>
 </types>
 <types>
 <members>Opportunity.NotificacaoChecklist</members>
