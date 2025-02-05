@@ -23,4 +23,15 @@
             <default>false</default>
         </values>
     </picklistValues>
+    <picklistValues>
+        <picklist>UtilizaAto__c</picklist>
+        <values>
+            <fullName>Não</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SIm</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
 </RecordType>

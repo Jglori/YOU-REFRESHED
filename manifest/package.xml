@@ -1,265 +1,232 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>Onda2You</fullName>
- <types>
-<members>AccountController</members>
-<members>AccountControllerTest</members>
-<members>AccountDA</members>
-<members>AccountDATest</members>
-<members>AccountHelper</members>
-<members>AccountHelperTest</members>
-<members>AccountTriggerHandler</members>
-<members>AnaliseCreditoDA</members>
-<members>AnaliseCreditoDATest</members>
-<members>AnaliseCreditoHelper</members>
-<members>AnaliseCreditoHelperTest</members>
-<members>AnaliseCreditoTriggerHandler</members>
-<members>AnaliseCreditoTriggerHandlerTest</members>
-<members>ChecklistDA</members>
-<members>ChecklistDATest</members>
-<members>ChecklistHelper</members>
-<members>ChecklistHelperTest</members>
-<members>ChecklistTriggerHandler</members>
-<members>ContractController</members>
-<members>ContractControllerTest</members>
-<members>ContractHelper</members>
-<members>ContractHelperTest</members>
-<members>ContractSelector</members>
-<members>ContractSelectorTest</members>
-<members>ContractTriggerHandler</members>
-<members>ContractTriggerHandlerTest</members>
-<members>ContratoService</members>
-<members>ContratoServiceTest</members>
-<members>DocumentController</members>
-<members>DocumentControllerTest</members>
-<members>DocumentacaoDA</members>
-<members>DocumentacaoDATest</members>
-<members>DocumentacaoHelper</members>
-<members>DocumentacaoHelperTest</members>
-<members>EmailManager</members>
-<members>EmpreendimentoSelector</members>
-<members>GerarContratoController</members>
-<members>OpportunityDA</members>
-<members>OpportunityDATest</members>
-<members>OpportunityHelper</members>
-<members>OpportunityHelperTest</members>
-<members>OpportunityTriggerHandler</members>
-<members>OpportunityTriggerHandlerTest</members>
-<members>ProdutoSelector</members>
-<members>ProdutoSelectorTest</members>
-<members>QueryHelper</members>
-<members>QueryHelperTest</members>
-<members>QuoteDA</members>
-<members>QuoteDATest</members>
-<members>QuoteHelper</members>
-<members>QuoteHelperTest</members>
-<members>QuoteLineItemHelper</members>
-<members>QuoteLineItemHelperTest</members>
-<members>QuoteLineItemTriggerHandler</members>
-<members>QuoteLineItemTriggerHandlerTest</members>
-<members>QuoteSyncHelper</members>
-<members>QuoteSyncHelperTest</members>
-<members>QuoteSyncTriggerHandler</members>
-<members>QuoteSyncTriggerHandlerTest</members>
-<members>QuoteTriggerHandler</members>
-<members>QuoteTriggerHandlerTest</members>
-<members>SalesTeamController</members>
-<members>SalesTeamControllerTest</members>
-<members>TemplateDocumentoController</members>
-<members>TemplateDocumentoControllerTest</members>
-<members>TemplateDocumentoDA</members>
-<members>TemplateDocumentoDATest</members>
-<members>TemplateDocumentoHelper</members>
-<members>TemplateDocumentoTriggerHandler</members>
-<members>TriggerHandler</members>
-<members>UtilTest</members>
-<members>Utils</members>
-<name>ApexClass</name>
-</types>
-<types>
-<members>ContratoPDF</members>
-<name>ApexPage</name>
-</types>
-<types>
-<members>ChecklistTrigger</members>
-<members>DocumentacaoTrigger</members>
-<members>LeadConversionOpportunity</members>
-<members>QuoteLineItemTrigger</members>
-<members>QuoteSyncTrigger</members>
-<members>QuoteTrigger</members>
-<name>ApexTrigger</name>
-</types>
-<types>
-<members>Opportunity.ProcessoAprovacaoChecklist</members>
-<name>ApprovalProcess</name>
-</types>
-<types>
-<members>AnaliseCredito__c.AnaliseCreditoCompactLayout</members>
-<name>CompactLayout</name>
-</types>
-<types>
-<members>AccountContactRelation.Relacionamento__c</members>
-<members>AnaliseCredito__c.DataVencimento__c</members>
-<members>AnaliseCredito__c.NomeComprador__c</members>
-<members>AnaliseCredito__c.Opportunity__c</members>
-<members>AnaliseCredito__c.Status__c</members>
-<members>Checklist_de_Documentos__c.Contato__c</members>
-<members>Checklist_de_Documentos__c.ContentDocumentId_c__c</members>
-<members>Checklist_de_Documentos__c.Documenta_o__c</members>
-<members>Checklist_de_Documentos__c.IsDelivered__c</members>
-<members>Checklist_de_Documentos__c.Nome_do_Documento__c</members>
-<members>Checklist_de_Documentos__c.Oportunidade__c</members>
-<members>Contract.DataAssinaturaClienteDocuSign__c</members>
-<members>Contract.DataEnvioAssinatura__c</members>
-<members>Contract.DataInicioContrato__c</members>
-<members>Contract.DiasAposAssinatura__c</members>
-<members>Contract.Oportunidade__c</members>
-<members>Contract.PrazoAssinatura__c</members>
-<members>Contract.Template__c</members>
-<members>Documentacao__c.AnaliseCredito__c</members>
-<members>Documentacao__c.Contato__c</members>
-<members>Documentacao__c.ContentDocumentId_c__c</members>
-<members>Documentacao__c.DataEntrega__c</members>
-<members>Documentacao__c.Entregue__c</members>
-<members>Documentacao__c.Obrigatorio__c</members>
-<members>Documentacao__c.Validado__c</members>
-<members>Documento__mdt.Nome_do_Documento__c</members>
-<members>Documento__mdt.Obrigatorio__c</members>
-<members>Documento__mdt.Papel__c</members>
-<members>Empreendimento__c.DiasDeVencimentoDaParcela__c</members>
-<members>Opportunity.AssesoriaCredito__c</members>
-<members>Opportunity.Bloco__c</members>
-<members>Opportunity.CanalAtendimento__c</members>
-<members>Opportunity.Contato__c</members>
-<members>Opportunity.Corretor__c</members>
-<members>Opportunity.CotacaoSincronizada__c</members>
-<members>Opportunity.DataDeVencimento__c</members>
-<members>Opportunity.Desconto__c</members>
-<members>Opportunity.Empreendimento__c</members>
-<members>Opportunity.MotivoDaDesistencia__c</members>
-<members>Opportunity.ObjetivoCompra__c</members>
-<members>Opportunity.ProcessoAprovacao__c</members>
-<members>Opportunity.Sincronizado__c</members>
-<members>Opportunity.StatusAprovacao__c</members>
-<members>Opportunity.StatusDo1Pagamento__c</members>
-<members>Opportunity.TipoVenda__c</members>
-<members>Opportunity.Unidade__c</members>
-<members>OpportunityContactRole.PorcentagemParticipacao__c</members>
-<members>Product2.Andar__c</members>
-<members>Product2.Coeficiente__c</members>
-<members>Product2.DataDeReserva__c</members>
-<members>Product2.Empreendimento__c</members>
-<members>Product2.Enquadramento__c</members>
-<members>Product2.MetragemTotal__c</members>
-<members>Product2.NumeroDaUnidade__c</members>
-<members>Product2.NumeroQuartos__c</members>
-<members>Product2.PrecoLista__c</members>
-<members>Quote.ValorNominalProposta__c</members>
-<members>TemplateDocumento__c.Ativo__c</members>
-<members>TemplateDocumento__c.ConteudoTemplate__c</members>
-<members>TemplateDocumento__c.Empreendimento__c</members>
-<members>TemplateDocumento__c.TipoTemplate__c</members>
-<name>CustomField</name>
-</types>
-<types>
-<members>Documento.BalancoFinanceiroSocio</members>
-<members>Documento.CartaoCnpjSocio</members>
-<members>Documento.CertidaoEstadoCivilComp</members>
-<members>Documento.CertidaoEstadoCivilConjug</members>
-<members>Documento.ComprRendaComprador</members>
-<members>Documento.ComprRendaConjugue</members>
-<members>Documento.ComprResidenciaComp</members>
-<members>Documento.ComprResidenciaConjug</members>
-<members>Documento.ContratoSocialSocio</members>
-<members>Documento.CpfComprador</members>
-<members>Documento.CpfConjugue</members>
-<members>Documento.CpfRepresentanteSocio</members>
-<members>Documento.RgComprador</members>
-<members>Documento.RgConjugeCompanheiro</members>
-<members>Documento.RgRepresentanteSocio</members>
-<name>CustomMetadata</name>
-</types>
-<types>
-<members>AnaliseCredito__c</members>
-<members>Checklist_de_Documentos__c</members>
-<members>Documentacao__c</members>
-<members>Documento__mdt</members>
-<members>TemplateDocumento__c</members>
-<name>CustomObject</name>
-</types>
-<types>
-<members>EmailsAprovacao</members>
-<members>EmailsAprovacao/AprovacaoChecklistDocumentos</members>
-<members>EmailsAprovacao/ChecklistLembrete</members>
-<name>EmailTemplate</name>
-</types>
-<types>
-<members>AnaliseCredito</members>
-<members>Oportunidade_P_gina_de_registro1</members>
-<members>Opportunity_Record_Page_Three_Column</members>
-<members>PaginaDocumentacao</members>
-<name>FlexiPage</name>
-</types>
- <types>
-        <members>AnaliseCredito__c</members>
-        <members>TemplateDocumento__c</members>
-        <name>CustomTab</name>
-    </types>
-
-    <!-- Adicionando os CustomFields -->
-    <types>
-        <members>Quote.Sincronizado__c</members>
-        <name>CustomField</name>
-    </types>
-<types>
-<members>Checklist_de_Documentos__c-Checklist de Documentos Layout</members>
-<members>Checklist_de_Documentos__c-Layout de Checklist de Documentos</members>
-<members>Documentacao__c-Documentação Layout</members>
-<members>Documentacao__c-Layout de Documentação</members>
-<members>Documento__mdt-Documento %28Configuracao%29 Layout</members>
-<members>Documento__mdt-Layout de Documento %28Configuracao%29</members>
-<members>Opportunity-Opportunity Layout</members>
-<members>Quote-Quote Layout</members>
-<name>Layout</name>
-</types>
-<types>
-<members>analiseCreditoDocumentosList</members>
-<members>documentChecklist</members>
-<members>equipeVendasOpp</members>
-<members>gerarContrato</members>
-<members>modal</members>
-<members>utils</members>
-<name>LightningComponentBundle</name>
-</types>
-<types>
-<members>Documentacao__c.All</members>
-<name>ListView</name>
-</types>
-<types>
-<members>AnaliseCreditoCriar</members>
-<members>AnaliseCreditoEditar</members>
-<members>AnaliseCreditoExcluir</members>
-<members>AnaliseCreditoVerTodos</members>
-<members>TabelaVendas</members>
-<members>TemplateDocumentosCriar</members>
-<members>TemplateDocumentosEditar</members>
-<members>TemplateDocumentosExcluir</members>
-<members>TemplateDocumentosVerTodos</members>
-<name>PermissionSet</name>
-</types>
-<types>
-<members>Opportunity.NotificacaoChecklist</members>
-<name>PostTemplate</name>
-</types>
-<types>
-<members>AnaliseCredito__c.AnaliseCredito</members>
-<members>Contract.Contrato</members>
-<name>RecordType</name>
-</types>
-<types>
-<members>Opportunity.AtualizarAprovacaoChecklist</members>
-<members>Opportunity.EnvioAprovacaoChecklist</members>
-<name>WorkflowFieldUpdate</name>
-</types>
-    <version>62.0</version>
+	<types>
+		<members>AccountController</members>
+		<members>AccountControllerTest</members>
+		<members>AccountDA</members>
+		<members>AccountDATest</members>
+		<members>AccountHelper</members>
+		<members>AccountHelperTest</members>
+		<members>AccountTriggerHandler</members>
+		<members>AnaliseCreditoDA</members>
+		<members>AnaliseCreditoDATest</members>
+		<members>AnaliseCreditoHelper</members>
+		<members>AnaliseCreditoHelperTest</members>
+		<members>AnaliseCreditoTriggerHandler</members>
+		<members>AnaliseCreditoTriggerHandlerTest</members>
+		<members>ChecklistDA</members>
+		<members>ChecklistDATest</members>
+		<members>ChecklistHelper</members>
+		<members>ChecklistHelperTest</members>
+		<members>ChecklistTriggerHandler</members>
+		<members>ContractController</members>
+		<members>ContractControllerTest</members>
+		<members>ContractHelper</members>
+		<members>ContractHelperTest</members>
+		<members>ContractSelector</members>
+		<members>ContractSelectorTest</members>
+		<members>ContractTriggerHandler</members>
+		<members>ContractTriggerHandlerTest</members>
+		<members>ContratoService</members>
+		<members>ContratoServiceTest</members>
+		<members>DocumentController</members>
+		<members>DocumentControllerTest</members>
+		<members>DocumentacaoDA</members>
+		<members>DocumentacaoDATest</members>
+		<members>DocumentacaoHelper</members>
+		<members>DocumentacaoHelperTest</members>
+		<members>EmailManager</members>
+		<members>EmpreendimentoSelector</members>
+		<members>GerarContratoController</members>
+		<members>OpportunityDA</members>
+		<members>OpportunityDATest</members>
+		<members>OpportunityHelper</members>
+		<members>OpportunityHelperTest</members>
+		<members>OpportunityTriggerHandler</members>
+		<members>OpportunityTriggerHandlerTest</members>
+		<members>ProdutoSelector</members>
+		<members>ProdutoSelectorTest</members>
+		<members>QueryHelper</members>
+		<members>QueryHelperTest</members>
+		<members>QuoteDA</members>
+		<members>QuoteDATest</members>
+		<members>QuoteHelper</members>
+		<members>QuoteHelperTest</members>
+		<members>QuoteLineItemHelper</members>
+		<members>QuoteLineItemHelperTest</members>
+		<members>QuoteLineItemTriggerHandler</members>
+		<members>QuoteLineItemTriggerHandlerTest</members>
+		<members>QuoteSyncHelper</members>
+		<members>QuoteSyncHelperTest</members>
+		<members>QuoteSyncTriggerHandler</members>
+		<members>QuoteSyncTriggerHandlerTest</members>
+		<members>QuoteTriggerHandler</members>
+		<members>QuoteTriggerHandlerTest</members>
+		<members>SalesTeamController</members>
+		<members>SalesTeamControllerTest</members>
+		<members>TemplateDocumentoController</members>
+		<members>TemplateDocumentoControllerTest</members>
+		<members>TemplateDocumentoDA</members>
+		<members>TemplateDocumentoDATest</members>
+		<members>TemplateDocumentoHelper</members>
+		<members>TemplateDocumentoTriggerHandler</members>
+		<members>TriggerHandler</members>
+		<members>UtilTest</members>
+		<members>Utils</members>
+		<name>ApexClass</name>
+	</types>
+	<types>
+		<members>ContratoPDF</members>
+		<name>ApexPage</name>
+	</types>
+	<types>
+		<members>ChecklistTrigger</members>
+		<members>DocumentacaoTrigger</members>
+		<members>LeadConversionOpportunity</members>
+		<members>QuoteLineItemTrigger</members>
+		<members>QuoteSyncTrigger</members>
+		<members>QuoteTrigger</members>
+		<name>ApexTrigger</name>
+	</types>
+	<types>
+		<members>Opportunity.ProcessoAprovacaoChecklist</members>
+		<name>ApprovalProcess</name>
+	</types>
+	<types>
+		<members>AnaliseCredito__c.AnaliseCreditoCompactLayout</members>
+		<name>CompactLayout</name>
+	</types>
+	<types>
+		<members>AnaliseCredito__c.Bloco__c</members>
+		<members>AnaliseCredito__c.ComprometimentoRenda__c</members>
+		<members>AnaliseCredito__c.DataAnalise__c</members>
+		<members>AnaliseCredito__c.DataNascimento__c</members>
+		<members>AnaliseCredito__c.DataVencimento__c</members>
+		<members>AnaliseCredito__c.DetalhesParecerCredito__c</members>
+		<members>AnaliseCredito__c.Empreendimento__c</members>
+		<members>AnaliseCredito__c.NomeComprador__c</members>
+		<members>AnaliseCredito__c.Opportunity__c</members>
+		<members>AnaliseCredito__c.Outros__c</members>
+		<members>AnaliseCredito__c.RemuneracaoMensalLiquido__c</members>
+		<members>AnaliseCredito__c.RendaNecessariaFGTS__c</members>
+		<members>AnaliseCredito__c.RendaNecessariaFinanciamento__c</members>
+		<members>AnaliseCredito__c.SaldoFGTS__c</members>
+		<members>AnaliseCredito__c.ScoreSerasa__c</members>
+		<members>AnaliseCredito__c.Status__c</members>
+		<members>AnaliseCredito__c.TotalFGTS__c</members>
+		<members>AnaliseCredito__c.TotalRendaCompradores__c</members>
+		<members>AnaliseCredito__c.TotalRendaValorAplicado__c</members>
+		<members>AnaliseCredito__c.UnidadeTabelaVendas__c</members>
+		<members>AnaliseCredito__c.UtilizaAto__c</members>
+		<members>AnaliseCredito__c.ValorAplicado__c</members>
+		<members>AnaliseCredito__c.ValorFinanciamentoFGTS__c</members>
+		<members>AnaliseCredito__c.ValorFinanciamentoProposta__c</members>
+		<members>Contract.Template__c</members>
+		<members>Documentacao__c.AnaliseCredito__c</members>
+		<members>Quote.DiferencaNominalPorcentagem__c</members>
+		<members>Quote.DiferencaNominalReal__c</members>
+		<members>Quote.DiferencaVPLPorcentagem__c</members>
+		<members>Quote.DiferencaVPLReal__c</members>
+		<members>Quote.PorcentagemCaptacaoHabiteseProposta__c</members>
+		<members>Quote.PorcentagemCaptacaoHabiteseTabela__c</members>
+		<members>Quote.PorcentagemCaptacaoProposta__c</members>
+		<members>Quote.PorcentagemCaptacaoTabela__c</members>
+		<members>Quote.PrazoFinanciamentoProposta__c</members>
+		<members>Quote.PrazoFinanciamentoTabela__c</members>
+		<members>Quote.Sincronizado__c</members>
+		<members>Quote.ValorNominalProposta__c</members>
+		<members>Quote.ValorNominalTabela__c</members>
+		<members>Quote.ValorTotalComissao__c</members>
+		<members>Quote.ValorTotalProposta__c</members>
+		<members>Quote.ValorVPLProposta__c</members>
+		<members>Quote.ValorVPLTabela__c</members>
+		<members>TemplateDocumento__c.Ativo__c</members>
+		<members>TemplateDocumento__c.ConteudoTemplate__c</members>
+		<members>TemplateDocumento__c.Empreendimento__c</members>
+		<members>TemplateDocumento__c.TipoTemplate__c</members>
+		<name>CustomField</name>
+	</types>
+	<types>
+		<members>Documento.BalancoFinanceiroSocio</members>
+		<members>Documento.CartaoCnpjSocio</members>
+		<members>Documento.CertidaoEstadoCivilComp</members>
+		<members>Documento.CertidaoEstadoCivilConjug</members>
+		<members>Documento.ComprRendaComprador</members>
+		<members>Documento.ComprRendaConjugue</members>
+		<members>Documento.ComprResidenciaComp</members>
+		<members>Documento.ComprResidenciaConjug</members>
+		<members>Documento.ContratoSocialSocio</members>
+		<members>Documento.CpfComprador</members>
+		<members>Documento.CpfConjugue</members>
+		<members>Documento.CpfRepresentanteSocio</members>
+		<members>Documento.RgComprador</members>
+		<members>Documento.RgConjugeCompanheiro</members>
+		<members>Documento.RgRepresentanteSocio</members>
+		<name>CustomMetadata</name>
+	</types>
+	<types>
+		<members>AnaliseCredito__c</members>
+		<members>Checklist_de_Documentos__c</members>
+		<members>Documentacao__c</members>
+		<members>Documento__mdt</members>
+		<members>TemplateDocumento__c</members>
+		<name>CustomObject</name>
+	</types>
+	<types>
+		<members>AnaliseCredito__c</members>
+		<members>TemplateDocumento__c</members>
+		<name>CustomTab</name>
+	</types>
+	<types>
+		<members>EmailsAprovacao</members>
+		<members>EmailsAprovacao/AprovacaoChecklistDocumentos</members>
+		<members>EmailsAprovacao/ChecklistLembrete</members>
+		<name>EmailTemplate</name>
+	</types>
+	<types>
+		<members>AnaliseCredito</members>
+		<members>Oportunidade_P_gina_de_registro1</members>
+		<members>Opportunity_Record_Page_Three_Column</members>
+		<members>PaginaDocumentacao</members>
+		<name>FlexiPage</name>
+	</types>
+	<types>
+		<members>Checklist_de_Documentos__c-Checklist de Documentos Layout</members>
+		<members>Checklist_de_Documentos__c-Layout de Checklist de Documentos</members>
+		<members>Documentacao__c-Documentação Layout</members>
+		<members>Documentacao__c-Layout de Documentação</members>
+		<members>Documento__mdt-Documento %28Configuracao%29 Layout</members>
+		<members>Documento__mdt-Layout de Documento %28Configuracao%29</members>
+		<members>Opportunity-Opportunity Layout</members>
+		<members>Quote-Quote Layout</members>
+		<name>Layout</name>
+	</types>
+	<types>
+		<members>analiseCreditoDocumentosList</members>
+		<members>documentChecklist</members>
+		<members>equipeVendasOpp</members>
+		<members>gerarContrato</members>
+		<members>modal</members>
+		<members>utils</members>
+		<name>LightningComponentBundle</name>
+	</types>
+	<types>
+		<members>Documentacao__c.All</members>
+		<name>ListView</name>
+	</types>
+	<types>
+		<members>Opportunity.NotificacaoChecklist</members>
+		<name>PostTemplate</name>
+	</types>
+	<types>
+		<members>AnaliseCredito__c.AnaliseCredito</members>
+		<members>Contract.Contrato</members>
+		<name>RecordType</name>
+	</types>
+	<types>
+		<members>Opportunity.AtualizarAprovacaoChecklist</members>
+		<members>Opportunity.EnvioAprovacaoChecklist</members>
+		<name>WorkflowFieldUpdate</name>
+	</types>
+	<version>62.0</version>
 </Package>
