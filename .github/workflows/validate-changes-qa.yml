@@ -1,19 +1,102 @@
 name: Validate Pull Request - QA
-
 on:
   pull_request:
     branches:
       - qa
     paths:
       - 'force-app/**'
+
 jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Validate on QA
-        uses: jawills/sf-deploy@v1.0
+      # Verifica se o Pull Request foi cancelado (fechado sem merge)
+      - name: Verificar se o evento foi cancelado
+        if: github.event.action == 'closed' && github.event.pull_request.merged == false
+        run: |
+          echo "O Pull Request foi cancelado. Saindo com erro."
+          exit 1
+
+      # Realiza o checkout do repositório
+      - name: Checkout do repositório
+        uses: actions/checkout@v4
         with:
-          SFDX_AUTH_URL: ${{ secrets.AUTH_URL_QA }}
-          DRY_RUN: true
-          TEST_LEVEL: NoTestRun
+          fetch-depth: 0
+
+      # Instalar dependências do sistema e Salesforce CLI
+      - name: Instalar dependências do sistema e do Salesforce CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget curl jq
+          npm install @salesforce/cli --global
+
+      # Autenticar com a org QA
+      - name: Autenticar com a org QA
+        run: |
+          echo "${{ secrets.AUTH_URL_QA }}" > sfdx-auth-url.txt
+          sf org login sfdx-url -f sfdx-auth-url.txt --alias qa
+
+      # Instalar o plugin sfdx-git-delta
+      - name: Instalar plugin sfdx-git-delta
+        run: echo "y" | sf plugins install sfdx-git-delta
+
+      # Criar diretório para o pacote delta
+      - name: Criar diretório de saída para o pacote delta
+        run: mkdir -p deploy
+
+      # Gerar pacote delta no diretório deploy
+      - name: Gerar pacote delta no diretório deploy
+        run: |
+          sf sgd source delta --from origin/qa --to HEAD --output-dir deploy
+
+      # Listar conteúdo do diretório deploy
+      - name: Listar conteúdo do diretório deploy
+        run: ls -R deploy
+
+      # Exibir conteúdo do package.xml
+      - name: Exibir conteúdo do package.xml
+        run: cat deploy/package/package.xml
+
+      # Implantar usando o pacote delta gerado
+      - name: Implantar usando o pacote delta gerado
+        run: |
+          sf project deploy start --manifest deploy/package/package.xml --dry-run --test-level NoTestRun --target-org qa > deploy/deploy_output.log || true
+
+      # Verificar falhas de componentes no log de deploy
+      - name: Verificar falhas de componentes no log de deploy
+        run: |
+          if grep -i "Component Failures" deploy/deploy_output.log; then
+            echo "Falhas de componente detectadas! O deploy falhou."
+            cat deploy/deploy_output.log
+            exit 1
+          fi
+
+      # Exibir o Log de Deploy diretamente no console
+      - name: Exibir o Log de Deploy diretamente no console
+        run: |
+          echo "Log de Deploy - Erros e Detalhes"
+          cat deploy/deploy_output.log
+
+      # Definir nome do artefato com org, data e hora
+      - name: Definir nome do artefato com org, data e hora
+        id: set-artifact-name
+        run: |
+          ORG_NAME="QA"
+          export TZ="America/Sao_Paulo"  # Define o fuso horário para o Brasil (UTC-3)
+          TIMESTAMP=$(date +'%d-%m-%Y--%H-%M-%S')  # Gera o timestamp no fuso horário do Brasil
+          echo "PACKAGE_XML_ARTIFACT=${ORG_NAME}_Package_xml_${TIMESTAMP}" >> $GITHUB_OUTPUT
+          echo "DEPLOY_LOG_ARTIFACT=${ORG_NAME}_Validade_log_${TIMESTAMP}" >> $GITHUB_OUTPUT
+
+      # Salvar o package.xml como artefato
+      - name: Salvar package.xml
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.set-artifact-name.outputs.PACKAGE_XML_ARTIFACT }}
+          path: deploy/package/package.xml
+
+      # Salvar o Log de Deploy como artefato
+      - name: Salvar o Log de Deploy
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.set-artifact-name.outputs.DEPLOY_LOG_ARTIFACT }}
+          path: deploy/deploy_output.log
