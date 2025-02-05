@@ -7,15 +7,15 @@
     <permissionSets>AnaliseCreditoEditar</permissionSets>
     <permissionSets>AnaliseCreditoExcluir</permissionSets>
     <permissionSets>AnaliseCreditoVerTodos</permissionSets>
-    <permissionSets>BlocoCriar</permissionSets>
+    <!-- <permissionSets>BlocoCriar</permissionSets>
     <permissionSets>BlocoEditar</permissionSets>
-    <permissionSets>BlocoVerTodos</permissionSets>
+    <permissionSets>BlocoVerTodos</permissionSets> -->
     <permissionSets>ComponenteConcierge</permissionSets>
     <permissionSets>Controle_de_SLA</permissionSets>
     <permissionSets>DestribuicaoLeads</permissionSets>
-    <permissionSets>EmpreendimentoCriar</permissionSets>
+    <!-- <permissionSets>EmpreendimentoCriar</permissionSets>
     <permissionSets>EmpreendimentoEditar</permissionSets>
-    <permissionSets>EmpreendimentoVerTodos</permissionSets>
+    <permissionSets>EmpreendimentoVerTodos</permissionSets> -->
     <permissionSets>EquipeEscrita</permissionSets>
     <permissionSets>EquipeSomenteLeitura</permissionSets>
     <permissionSets>ExecutarSorteio</permissionSets>

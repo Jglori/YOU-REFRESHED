@@ -31,12 +31,12 @@
         <object>TemplateDocumento__c</object>
         <viewAllRecords>false</viewAllRecords>
     </objectPermissions>
-    <recordTypeVisibilities>
+    <!-- <recordTypeVisibilities>
         <recordType>TemplateDocumento__c.DocumentosEmpreendimento</recordType>
         <visible>true</visible>
-    </recordTypeVisibilities>
-    <tabSettings>
+    </recordTypeVisibilities> -->
+    <!-- <tabSettings>
         <tab>TemplateDocumento__c</tab>
         <visibility>Visible</visibility>
-    </tabSettings>
+    </tabSettings> -->
 </PermissionSet>
