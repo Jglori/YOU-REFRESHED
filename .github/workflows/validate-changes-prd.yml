@@ -5,7 +5,7 @@ on:
       - master
     paths:
       - 'force-app/**'
-     
+
 jobs:
   validate:
     runs-on: ubuntu-latest
@@ -34,7 +34,7 @@ jobs:
 
       - name: Gerar pacote delta no diretório deploy
         run: |
-          sf sgd source delta --from origin/master --to HEAD --output-dir deploy
+          sf sgd source delta --from origin/${{ github.head_ref }} --to HEAD --output-dir deploy
 
       - name: Listar conteúdo do diretório deploy
         run: ls -R deploy
