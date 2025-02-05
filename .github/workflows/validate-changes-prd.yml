@@ -47,7 +47,7 @@ jobs:
       # Gerar pacote delta no diretório deploy
       - name: Gerar pacote delta no diretório deploy
         run: |
-          sf sgd source delta --from origin/master --to HEAD --output-dir deploy
+          sf sgd source delta --from origin/${{ github.head_ref }} --to HEAD --output-dir deploy
 
       # Listar conteúdo do diretório deploy
       - name: Listar conteúdo do diretório deploy
