@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSetGroup xmlns="http://soap.sforce.com/2006/04/metadata">
+    <hasActivationRequired>false</hasActivationRequired>
+    <label>Super Admin</label>
+    <permissionSets>Admin</permissionSets>
+    <permissionSets>AnaliseCreditoCriar</permissionSets>
+    <permissionSets>AnaliseCreditoEditar</permissionSets>
+    <permissionSets>AnaliseCreditoExcluir</permissionSets>
+    <permissionSets>AnaliseCreditoVerTodos</permissionSets>
+    <permissionSets>BlocoCriar</permissionSets>
+    <permissionSets>BlocoEditar</permissionSets>
+    <permissionSets>BlocoVerTodos</permissionSets>
+    <permissionSets>ComponenteConcierge</permissionSets>
+    <permissionSets>Controle_de_SLA</permissionSets>
+    <permissionSets>DestribuicaoLeads</permissionSets>
+    <permissionSets>EmpreendimentoCriar</permissionSets>
+    <permissionSets>EmpreendimentoEditar</permissionSets>
+    <permissionSets>EmpreendimentoVerTodos</permissionSets>
+    <permissionSets>EquipeEscrita</permissionSets>
+    <permissionSets>EquipeSomenteLeitura</permissionSets>
+    <permissionSets>ExecutarSorteio</permissionSets>
+    <permissionSets>MembroEquipeEscrita</permissionSets>
+    <permissionSets>MembroEquipeLeitura</permissionSets>
+    <permissionSets>MensagemEscrita</permissionSets>
+    <permissionSets>MensagemSomenteLeitura</permissionSets>
+    <permissionSets>OppAcessoTotal</permissionSets>
+    <permissionSets>Opp_Acesso_na_Convers_o</permissionSets>
+    <permissionSets>Opp_Editar</permissionSets>
+    <permissionSets>Opp_Escrita</permissionSets>
+    <permissionSets>Opp_Somente_leitura</permissionSets>
+    <permissionSets>ParticipanteRoletaEscrita</permissionSets>
+    <permissionSets>ParticipanteRoletaSomenteLeitura</permissionSets>
+    <permissionSets>RoletaLeadsEscrita</permissionSets>
+    <permissionSets>RoletaLeadsSomenteLeitura</permissionSets>
+    <permissionSets>SorteioEscrita</permissionSets>
+    <permissionSets>TabelaVendas</permissionSets>
+    <permissionSets>TemplateDocumentosCriar</permissionSets>
+    <permissionSets>TemplateDocumentosEditar</permissionSets>
+    <permissionSets>TemplateDocumentosExcluir</permissionSets>
+    <permissionSets>TemplateDocumentosVerTodos</permissionSets>
+    <status>Updated</status>
+</PermissionSetGroup>
