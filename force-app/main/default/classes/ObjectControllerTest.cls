@@ -5,45 +5,43 @@ public class ObjectControllerTest {
     @isTest
     static void testGetObjects() {
         Test.startTest();
-        try {
-            // Chamando o método da controller de forma que a exceção será lançada
-            List<ObjectHelper.ObjectMetadata> objects = ObjectController.getObjects();
+           // Chamando o método da controller de forma que a exceção será lançada
+           List<ObjectHelper.ObjectMetadata> objects = ObjectController.getObjects();
             
-            // Suponhamos que isso não gere a exceção, forçamos a falha
-            System.assertNotEquals(0, objects.size(), 'A lista de objetos não pode ser vazia');
-            
-            // Simulando erro para que a AuraHandledException seja lançada
-            throw new AuraHandledException('Erro forçado para o teste');
-        } catch (AuraHandledException e) {
-            // Aqui a exceção do tipo AuraHandledException será tratada
-            System.debug('Erro durante o teste do método getObjects: ' + e.getMessage());
-            System.assert(true, 'Exceção tratada corretamente: ' + e.getMessage()); // Esperado cair aqui
-        } catch (Exception e) {
-            System.debug('Erro inesperado durante o teste do método getObjects: ' + e.getMessage());
-            System.assert(false, 'Erro inesperado durante o teste do método getObjects: ' + e.getMessage());
-        }
+           // Suponhamos que isso não gere a exceção, forçamos a falha
+           System.assertNotEquals(0, objects.size(), 'A lista de objetos não pode ser vazia');
+        Test.stopTest();
     }
 
     // Testando o método getFields - Forçando a exceção
     @isTest
     static void testGetFields() {
         Test.startTest();
+          // Chamando o método da controller com o nome do objeto 'Account'
+          List<ObjectHelper.FieldMetadata> fields = ObjectController.getFields('Account');
+            
+          // Verificando se a lista de campos não está vazia
+          System.assertNotEquals(0, fields.size(), 'A lista de campos não pode ser vazia');
+
+        Test.stopTest();
+    }
+    
+    @isTest
+    static void testGetFieldsExcepetion() {
+        Test.startTest();
+        
+        Exception capturedException;
+        
         try {
-            // Chamando o método da controller com o nome do objeto 'Account'
-            List<ObjectHelper.FieldMetadata> fields = ObjectController.getFields('Account');
-            
-            // Verificando se a lista de campos não está vazia
-            System.assertNotEquals(0, fields.size(), 'A lista de campos não pode ser vazia');
-            
-            // Simulando erro para que a AuraHandledException seja lançada
-            throw new AuraHandledException('Erro forçado para o teste');
-        } catch (AuraHandledException e) {
-            System.debug('Erro durante o teste do método getFields: ' + e.getMessage());
-            System.assert(true, 'Exceção tratada corretamente: ' + e.getMessage()); // Esperado cair aqui
+            List<ObjectHelper.FieldMetadata> fields = ObjectController.getFields('');
         } catch (Exception e) {
-            System.debug('Erro inesperado durante o teste do método getFields: ' + e.getMessage());
-            System.assert(false, 'Erro inesperado durante o teste do método getFields: ' + e.getMessage());
+            capturedException = e; 
         }
+        
+        Test.stopTest();
+        
+        System.assertNotEquals(null, capturedException, 'A exceção deveria ter sido lançada.');
+        System.assertEquals('Script-thrown exception', capturedException.getMessage());
     }
 
     // Testando o método getReferenceFields - Forçando a exceção
