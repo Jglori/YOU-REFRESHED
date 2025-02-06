@@ -1,16 +1,31 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
 	<types>
-		<members>OpportunityTrigger</members>
-		<name>ApexTrigger</name>
+		<members>OpportunityHelper</members>
+		<members>OpportunityHelperTest</members>
+		<members>OpportunityTriggerHandler</members>
+		<members>OpportunityTriggerHandlerTest</members>
+		<name>ApexClass</name>
 	</types>
 	<types>
-		<members>Opportunity.Processo Vendas</members>
-		<name>BusinessProcess</name>
+		<members>Opportunity.Data_Assinatura_Contrato__c</members>
+		<members>Opportunity.Dias_Apos_Assinatura__c</members>
+		<members>Opportunity.MotivoCancelamento__c</members>
+		<members>Opportunity.Observacao__c</members>
+		<name>CustomField</name>
 	</types>
 	<types>
-		<members>Default_Opportunity</members>
-		<name>PathAssistant</name>
+		<members>unfiled$public/Template_Cancelamento_da_Oportunidade_1738878785386</members>
+		<members>unfiled$public/Template_Vitoria_da_Oportunidade_1738878823478</members>
+		<name>EmailTemplate</name>
+	</types>
+	<types>
+        <members>EditionRequiredGanho</members>
+        <name>ValidationRule</name>
+    </types>
+	<types>
+		<members>Opportunity-Opportunity Layout</members>
+		<name>Layout</name>
 	</types>
 	<version>62.0</version>
 </Package>

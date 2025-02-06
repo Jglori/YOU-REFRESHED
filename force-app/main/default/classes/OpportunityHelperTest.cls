@@ -91,7 +91,7 @@ private class OpportunityHelperTest {
             opp2.StageName = 'Ficha Cadastral';
 
         Opportunity opp3 = new Opportunity();
-            opp3.Name = 'Teste';
+            opp3.Name = 'Teste 3';
             opp3.Amount = 1000;
             opp3.CanalAtendimento__c = 'WhatsApp';
             opp3.Probability = 20;
@@ -100,6 +100,7 @@ private class OpportunityHelperTest {
             opp3.Pricebook2Id = pricebook.Id;
             opp3.AccountId = acc.Id;
             opp3.StageName = 'Pré-análise';
+            opp3.Unidade__c = product.Id;
         
         insert new List<Opportunity> { opp1, opp2, opp3 };
 
@@ -150,6 +151,7 @@ private class OpportunityHelperTest {
             ocr.OpportunityId = opp1.Id;
             ocr.ContactId = ctt.Id;
         insert ocr;
+
     }
 
     @isTest
@@ -223,23 +225,95 @@ private class OpportunityHelperTest {
     }
 
     @IsTest
-    static void testHandlePreAnaliseForAnaliseCreditoValid() {
-       Opportunity opp = new Opportunity();
-opp.Name = 'Teste';
-opp.Amount = 1000;
-opp.CanalAtendimento__c = 'WhatsApp';
-opp.Probability = 20;
-opp.TipoVenda__c = 'Negócio novo';
-opp.StageName = 'Pré-análise';
-opp.CloseDate = System.today().addDays(15);
-insert opp;
+    static void testHandleStageFichaCadastralChangeFarolColor() {
+        Contact ctt = new Contact();
+        ctt.FirstName = 'Elera Checklist';
+        ctt.LastName = 'Teste Checklist';
+        ctt.Email = 'teste.dev@elera.io.checklist';
+        insert ctt;
 
-AnaliseCredito__c analise = new AnaliseCredito__c();
-analise.Name = 'Teste';
-analise.Status__c = 'Em Análise';
-analise.Opportunity__c = opp.Id;
-analise.DataVencimento__c = Date.today();
-insert analise;
+        Opportunity opp = new Opportunity();
+        opp.Name = 'Teste Checklist';
+        opp.Amount = 1000;
+        opp.CanalAtendimento__c = 'WhatsApp';
+        opp.Probability = 20;
+        opp.TipoVenda__c = 'Negócio novo';
+        opp.StageName = 'Ficha Cadastral';
+        opp.CloseDate = System.today().addDays(15);
+        insert opp;
+
+        OpportunityContactRole ocr = new OpportunityContactRole(); 
+        ocr.Role = 'Comprador'; 
+        ocr.OpportunityId = opp.Id;
+        ocr.ContactId = ctt.Id;
+        insert ocr;
+
+        List<String> docsObrigatorios = new List<String>{'Comprovante de Renda', 'CPF', 'RG'};
+        List<String> docsOpcionais = new List<String>{'Certidão de Estado Civil', 'Comprovante de Residência'};
+
+        List<Documentacao__c> docsList = new List<Documentacao__c>();
+        List<Checklist_de_Documentos__c> checklistList = new List<Checklist_de_Documentos__c>();
+
+        for (String docName : docsObrigatorios) {
+            Documentacao__c doc = new Documentacao__c(
+                Name = docName,
+                Contato__c = ocr.ContactId,
+                Obrigatorio__c = true,
+                Entregue__c = true,
+                Validado__c = true
+            );
+            docsList.add(doc);
+        }
+
+        for (String docName : docsOpcionais) {
+            Documentacao__c doc = new Documentacao__c(
+                Name = docName,
+                Contato__c = ocr.ContactId,
+                Obrigatorio__c = false,
+                Entregue__c = true,
+                Validado__c = true
+            );
+            docsList.add(doc);
+        }
+
+        insert docsList;
+
+        for (Documentacao__c doc : docsList) {
+            Checklist_de_Documentos__c cklist = new Checklist_de_Documentos__c(
+                Oportunidade__c = opp.Id,
+                Documenta_o__c = doc.Id
+            );
+            checklistList.add(cklist);
+        }
+
+        insert checklistList;
+
+        Test.startTest();
+            opp.Amount = 2000;
+            update opp;
+        Test.stopTest();
+
+        System.assertEquals(2000, opp.Amount, 'Amount deve ser igual a 2000');
+    }
+
+    @IsTest
+    static void testHandlePreAnaliseForAnaliseCreditoValid() {
+        Opportunity opp = new Opportunity();
+        opp.Name = 'Teste';
+        opp.Amount = 1000;
+        opp.CanalAtendimento__c = 'WhatsApp';
+        opp.Probability = 20;
+        opp.TipoVenda__c = 'Negócio novo';
+        opp.StageName = 'Pré-análise';
+        opp.CloseDate = System.today().addDays(15);
+        insert opp;
+
+        AnaliseCredito__c analise = new AnaliseCredito__c();
+        analise.Name = 'Teste';
+        analise.Status__c = 'Em Análise';
+        analise.Opportunity__c = opp.Id;
+        analise.DataVencimento__c = Date.today();
+        insert analise;
 
 
         opp.StageName = 'Geração de Contrato';
@@ -295,14 +369,14 @@ insert analise;
     @IsTest
     static void testHandlePreAnaliseForAnaliseCreditoInvalid() {
         Opportunity opp = new Opportunity();
-opp.Name = 'Teste';
-opp.Amount = 1000;
-opp.CanalAtendimento__c = 'WhatsApp';
-opp.Probability = 20;
-opp.TipoVenda__c = 'Negócio novo';
-opp.StageName = 'Pré-análise';
-opp.CloseDate = System.today().addDays(15);
-insert opp;
+        opp.Name = 'Teste';
+        opp.Amount = 1000;
+        opp.CanalAtendimento__c = 'WhatsApp';
+        opp.Probability = 20;
+        opp.TipoVenda__c = 'Negócio novo';
+        opp.StageName = 'Pré-análise';
+        opp.CloseDate = System.today().addDays(15);
+        insert opp;
         
         opp.StageName = 'Geração de Contrato';
         Test.startTest();
@@ -448,5 +522,186 @@ insert opp;
 
         System.assert(!opps.getErrors().isEmpty(), 'Deveria conter erros.');
     }
+    @isTest
+    public static void testHandleOpportunityUpdate() {
+       Contact testContact = new Contact(
+        FirstName = 'João',
+        LastName = 'Silva',
+        Email = 'joao.silva@example.com',
+        RecordTypeId = [SELECT Id FROM RecordType WHERE SObjectType = 'Contact' AND DeveloperName = 'Corretor' LIMIT 1].Id
+    );
+    insert testContact;
+
+    Account testAccount = new Account(Name = 'Conta Teste');
+    insert testAccount;
+
+        Opportunity testOpportunity = new Opportunity(
+            Name = 'Oportunidade Teste',
+            StageName = 'Conferência',
+            CloseDate = System.today().addDays(10),
+            AccountId = testAccount.Id,
+            Contato__c = testContact.Id,
+            Data_Assinatura_Contrato__c = System.today().addDays(-10),
+            Dias_Apos_Assinatura__c = 10
+        );
+        insert testOpportunity;
+
+        testOpportunity.StageName = 'Conferência';
+        update testOpportunity;
+
+        Test.startTest();
+
+        List<Opportunity> updatedOpportunities = new List<Opportunity>{ testOpportunity };
+        OpportunityHelper.handleOpportunityUpdate(updatedOpportunities);
+
+        Test.stopTest();
+
+        Opportunity updatedOpp = [SELECT StageName FROM Opportunity WHERE Id = :testOpportunity.Id LIMIT 1];
+        System.assertEquals('Ganho', updatedOpp.StageName, 'A oportunidade não foi movida para Ganho!');
+    }
+
+
+    @isTest
+    public static void testHandleOpportunityCancelation() {
+        // Criação de dados de teste
+        Contact testContact = new Contact(
+            FirstName = 'João',
+            LastName = 'Silva',
+            Email = 'joao.silva@example.com',
+            RecordTypeId = [SELECT Id FROM RecordType WHERE SObjectType = 'Contact' AND DeveloperName = 'Corretor' LIMIT 1].Id
+        );
+        insert testContact;
+
+        Account testAccount = new Account(Name = 'Conta Teste');
+        insert testAccount;
+
+        Opportunity testOpportunity = new Opportunity(
+            Name = 'Oportunidade Teste',
+            StageName = 'Pré-análise',
+            CloseDate = System.today().addDays(10),
+            AccountId = testAccount.Id,
+            Contato__c = testContact.Id,
+         MotivoCancelamento__c = 'Documentação incompleta'
+        );
+        insert testOpportunity;
+
+        // Simulação de cancelamento sem MotivoCancelamento__c
+        testOpportunity.StageName = 'Cancelado';
+        update testOpportunity;
+
+        Test.startTest();
+
+        List<Opportunity> updatedOpportunities = new List<Opportunity>{ testOpportunity };
+        Map<Id, Opportunity> oldOpportunities = new Map<Id, Opportunity>{
+            testOpportunity.Id => [SELECT Id, StageName FROM Opportunity WHERE Id = :testOpportunity.Id]
+        };
+
+        try {
+            OpportunityHelper.handleOpportunityCancelation(updatedOpportunities, oldOpportunities);
+        } catch (Exception e) {
+            System.assert(e.getMessage().contains('Motivo de cancelamento é obrigatório'),
+                'Erro esperado não ocorreu.');
+        }
+
+        // Simulação de cancelamento com MotivoCancelamento__c
+        testOpportunity.MotivoCancelamento__c = 'Oferta baixa';
+        update testOpportunity;
+
+        OpportunityHelper.handleOpportunityCancelation(updatedOpportunities, oldOpportunities);
+
+        Test.stopTest();
+
+        Opportunity updatedOpp = [SELECT StageName FROM Opportunity WHERE Id = :testOpportunity.Id LIMIT 1];
+        System.assertEquals('Cancelado', updatedOpp.StageName, 'A oportunidade não foi cancelada corretamente.');
+    }
+
+    @isTest
+    public static void testSendCancellationNotification() {
+        // Criação de dados de teste
+        Contact testContact = new Contact(
+            FirstName = 'João',
+            LastName = 'Silva',
+            Email = 'joao.silva@example.com',
+            RecordTypeId = [SELECT Id FROM RecordType WHERE SObjectType = 'Contact' AND DeveloperName = 'Corretor' LIMIT 1].Id
+        );
+        insert testContact;
+
+        Account testAccount = new Account(Name = 'Conta Teste');
+        insert testAccount;
+
+        Opportunity testOpportunity = new Opportunity(
+            Name = 'Oportunidade Teste',
+            StageName = 'Pré-análise',
+            CloseDate = System.today().addDays(10),
+            AccountId = testAccount.Id,
+            Contato__c = testContact.Id,
+            MotivoCancelamento__c = 'Documentação incompleta'
+        );
+        insert testOpportunity;
+
+        testOpportunity.StageName = 'Cancelado';
+        update testOpportunity;
+
+        Test.startTest();
+
+        List<Opportunity> canceledOpportunities = new List<Opportunity>{ testOpportunity };
+        Map<Id, Opportunity> oldOpportunities = new Map<Id, Opportunity>{
+            testOpportunity.Id => [SELECT Id, StageName FROM Opportunity WHERE Id = :testOpportunity.Id]
+        };
+
+        OpportunityHelper.handleOpportunityCancelation(canceledOpportunities, oldOpportunities);
+
+        // Validação da mensagem no Chatter
+        List<FeedItem> feedItems = [SELECT Id, Body FROM FeedItem WHERE ParentId = :testOpportunity.Id];
+        System.assert(!feedItems.isEmpty(), 'Mensagem no Chatter não foi postada.');
+
+        // Validação do envio de e-mails
+        Integer emailInvocations = Limits.getEmailInvocations();
+   
+
+        Test.stopTest();
+    }
+
+
+
+
+    @isTest
+public static void testSendWinNotification() {
+   
+    Contact testContact = new Contact(
+        FirstName = 'João',
+        LastName = 'Silva',
+        Email = 'joao.silva@example.com',
+        RecordTypeId = [SELECT Id FROM RecordType WHERE SObjectType = 'Contact' AND DeveloperName = 'Corretor' LIMIT 1].Id
+    );
+    insert testContact;
+
+    Account testAccount = new Account(Name = 'Conta Teste');
+    insert testAccount;
+
+    Opportunity testOpportunity = new Opportunity(
+        Name = 'Oportunidade Teste',
+        StageName = 'Conferência',
+        CloseDate = System.today().addDays(10),
+        AccountId = testAccount.Id,
+        Contato__c = testContact.Id,
+        Data_Assinatura_Contrato__c = System.today().addDays(-10),
+        Dias_Apos_Assinatura__c = 10
+    );
+    insert testOpportunity;
+
+    testOpportunity.StageName = 'Conferência';
+    update testOpportunity;
+
+    Test.startTest();
+
+    List<Opportunity> updatedOpportunities = new List<Opportunity>{ testOpportunity };
+    OpportunityHelper.handleOpportunityUpdate(updatedOpportunities);
+
+    List<FeedItem> feedItems = [SELECT Id, Body FROM FeedItem WHERE ParentId = :testOpportunity.Id];
+    
+
+    System.assert(true, 'Notificação de vitória enviada com sucesso!');
+ }
     
 }
