@@ -4,8 +4,16 @@
       <members>geradorVariaveis</members>
       <members>checklistDocumentos</members>
       <members>templateDocumentos</members>
+      <members>picklistPesquisavel</members>
       <members>templateModal</members>
       <name>LightningComponentBundle</name>
    </types>
-   <version>60.0</version> 
+   <types>
+      <members>ObjectController</members>
+	  <members>ObjectControllerTest</members>
+      <members>ObjectHelper</members>
+      <members>ObjectHelperTest</members>
+      <name>ApexClass</name>
+   </types>
+   <version>60.0</version>
 </Package>
