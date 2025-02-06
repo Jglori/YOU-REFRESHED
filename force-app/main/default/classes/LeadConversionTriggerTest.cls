@@ -2,8 +2,10 @@
 public class LeadConversionTriggerTest {
     @isTest static void testLeadConversionTrigger() {
         // Cria um novo Empreendimento__c
-        Empreendimento__c empreendimento = new Empreendimento__c (Name = 'Teste empreendimento', CNPJEmpreendimento__c = '55743778000182');
-        insert empreendimento;
+        Empreendimento__c empreendimento = new Empreendimento__c();  
+        empreendimento.Name = 'Teste empreendimento';  
+        empreendimento.CNPJEmpreendimento__c = '12345678000195'; // Insira um CNPJ válido
+        insert empreendimento; 
 
         // Cria um novo Lead
         Lead testLead = new Lead(
@@ -13,7 +15,9 @@ public class LeadConversionTriggerTest {
             LeadSource = 'Telefone',
             CanalAtendimento__c = 'Chat',
             MobilePhone = '11960387699',
-            Status = 'Novo',
+            Status = 'Convertido',
+            MidiaOriginal__c = 'Radio',
+            CPF__c = '06093292789',
             EmpreendimentoInteresse__c = empreendimento.Id
         );
         insert testLead;
@@ -23,14 +27,14 @@ public class LeadConversionTriggerTest {
         System.assertEquals(null, insertedLead.DataConversao__c);
 
         // Converte o Lead
-        // Database.LeadConvert lc = new Database.LeadConvert();
-        // lc.setLeadId(testLead.Id);
-        // lc.setConvertedStatus('Conversão'); // Definir o status de conversão
-        // Database.LeadConvertResult lcr = Database.convertLead(lc);
-        // System.assert(lcr.isSuccess());
+        Database.LeadConvert lc = new Database.LeadConvert();
+        lc.setLeadId(testLead.Id);
+        lc.setConvertedStatus('Conversão'); // Corrigido para o nome exato do status
+        Database.LeadConvertResult lcr = Database.convertLead(lc);
+        System.assert(lcr.isSuccess());
 
         // Verifica que o campo DataConversao__c foi preenchido
         Lead convertedLead = [SELECT DataConversao__c FROM Lead WHERE Id = :testLead.Id];
-        //System.assertNotEquals(null, convertedLead.DataConversao__c);
+        System.assertNotEquals(null, convertedLead.DataConversao__c);
     }
 }

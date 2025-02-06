@@ -24,6 +24,36 @@
                 <default>false</default>
                 <label>R2V</label>
             </value>
+            <value>
+                <fullName>Comercial</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Comercial</label>
+            </value>
+            <value>
+                <fullName>Hotel</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Hotel</label>
+            </value>
+            <value>
+                <fullName>LJ</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>LJ</label>
+            </value>
+            <value>
+                <fullName>NR</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>NR</label>
+            </value>
+            <value>
+                <fullName>UH</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>UH</label>
+            </value>
         </valueSetDefinition>
     </valueSet>
 </CustomField>

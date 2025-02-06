@@ -8,7 +8,7 @@
         <filterItems>
             <field>Contact.RecordType.Id</field>
             <operation>equals</operation>
-            <value>01289000000ZcX4AAK</value>
+            <value>012bL0000003bkfQAA</value>
         </filterItems>
         <isOptional>false</isOptional>
     </lookupFilter>
@@ -17,5 +17,6 @@
     <relationshipName>Oportunidades</relationshipName>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
     <type>Lookup</type>
 </CustomField>

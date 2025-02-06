@@ -4,6 +4,7 @@
     <label>Canal de Atendimento</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
     <type>Picklist</type>
     <valueSet>
         <restricted>true</restricted>
@@ -38,6 +39,21 @@
                 <fullName>Stand</fullName>
                 <default>false</default>
                 <label>Stand</label>
+            </value>
+            <value>
+                <fullName>Cadastro Manual</fullName>
+                <default>false</default>
+                <label>Cadastro Manual</label>
+            </value>
+            <value>
+                <fullName>Oferta Corretor</fullName>
+                <default>false</default>
+                <label>Oferta Corretor</label>
+            </value>
+            <value>
+                <fullName>SMS</fullName>
+                <default>false</default>
+                <label>SMS</label>
             </value>
         </valueSetDefinition>
     </valueSet>

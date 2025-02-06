@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Contrato</fullName>
+    <active>true</active>
+    <label>Contrato</label>
+    <picklistValues>
+        <picklist>Status</picklist>
+        <values>
+            <fullName>Ativo</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ContratoGerado</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>EmAssinatura</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Rascunho</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+</RecordType>

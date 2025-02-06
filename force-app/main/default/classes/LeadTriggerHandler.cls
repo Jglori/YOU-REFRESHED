@@ -1,7 +1,7 @@
 public with sharing class LeadTriggerHandler extends TriggerHandler {
     
     public override void beforeUpdate() {
-        LeadHelper.verifyCNPJ(Trigger.new);
+      //  LeadHelper.verifyCNPJ(Trigger.new);
         LeadHelper.verifyCPF(Trigger.new);
         LeadHelper.updateLeadConversionDate(Trigger.new, (Map<Id, Lead>) Trigger.oldMap);
         LeadHelper.setInitialEnterpriseInterest(Trigger.new, (Map<Id, Lead>) Trigger.oldMap);
@@ -17,12 +17,13 @@ public with sharing class LeadTriggerHandler extends TriggerHandler {
         LeadHelper.setPrimeiroEmprrendimentoInteresse(Trigger.new, (Map<Id, Lead>) Trigger.oldMap);
         LeadHelper.getContactFromCorretor(Trigger.new);
         LeadHelper.getContactFromOwner(Trigger.new);
-
+       // LeadHelper.verificarDuplicado(Trigger.new);
+       LeadHelper.syncChaveExternaWhatsApp(Trigger.new);
     }
     
     public override void beforeInsert(){
-        LeadHelper.verifyCNPJ(Trigger.new);
-        LeadHelper.verifyCPF(Trigger.new);
+        // LeadHelper.verifyCNPJ(Trigger.new);
+        // LeadHelper.verifyCPF(Trigger.new);
         LeadHelper.setInitialEnterpriseInterest(Trigger.new, null);
         LeadHelper.verifyLeadControlSLA(Trigger.new, (Map<Id, Lead>) Trigger.oldMap);
         LeadHelper.setInterestedEnterprise(Trigger.new);
@@ -31,6 +32,7 @@ public with sharing class LeadTriggerHandler extends TriggerHandler {
         LeadHelper.SetQuantidadeDeReiteracoes(Trigger.new);
         LeadHelper.getContactFromCorretor(Trigger.new);
         LeadHelper.getContactFromOwner(Trigger.new);
+        LeadHelper.syncChaveExternaWhatsApp(Trigger.new);
     }
     public override void afterUpdate(){
         LeadHelper.scheduleLeadChange(Trigger.new, (Map<Id, Lead>) Trigger.oldMap);
@@ -43,6 +45,8 @@ public with sharing class LeadTriggerHandler extends TriggerHandler {
         LeadHelper.scheduleLeadChange(Trigger.new,(Map<Id,Lead>)Trigger.oldMap);
         DistribuirLeadsService.distribuirLeads((List<Lead>)Trigger.new);
         LeadHelper.sendNotificationToUser((List<Lead>)Trigger.new, (Map<Id, Lead>) Trigger.oldMap);
+        // LeadHelper.checkReiterationLead((List<Lead>) Trigger.new);
+
 
     }
  

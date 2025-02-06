@@ -4,6 +4,7 @@
     <label>Tipo De Venda</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
     <type>Picklist</type>
     <valueSet>
         <restricted>true</restricted>
@@ -11,13 +12,31 @@
             <sorted>false</sorted>
             <value>
                 <fullName>Negócio existente</fullName>
-                <default>false</default>
+                <default>true</default>
                 <label>Negócio existente</label>
             </value>
             <value>
                 <fullName>Negócio novo</fullName>
                 <default>false</default>
                 <label>Negócio novo</label>
+            </value>
+            <value>
+                <fullName>Financiamento Bancário</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Financiamento Bancário</label>
+            </value>
+            <value>
+                <fullName>Financiamento Direto</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Financiamento Direto</label>
+            </value>
+            <value>
+                <fullName>Venda a Vista</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Venda a Vista</label>
             </value>
         </valueSetDefinition>
     </valueSet>

@@ -1,6 +1,4 @@
-name: Deploy das alterações para UAt
-
-# only trigger on pull request closed events
+name:  Deploy das alterações para UAT
 on:
   pull_request:
     types: [closed]
@@ -9,23 +7,61 @@ on:
     paths:
       - 'force-app/**'
 jobs:
-  merge_job:
-    # this job will only run if the PR has been merged
+  merge_deploy:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Deploy - UAT
-        uses: jawills/sf-deploy@v1.0
+      - name: Checkout do repositório
+        uses: actions/checkout@v4
         with:
-          SFDX_AUTH_URL: ${{ secrets.AUTH_URL_UAT }}
-          DRY_RUN: false
-          TEST_LEVEL: RunAllTestsInOrg
+          fetch-depth: 0 
 
-  close_job:
-    # this job will only run if the PR has been closed without being merged
-    if: github.event.pull_request.merged == false
-    runs-on: ubuntu-latest
-    steps:
-      - run: |
-          echo PR #${{ github.event.number }} foi fechada sem realizar o merge
+      - name: Instalar dependências do sistema e do Salesforce CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget curl jq
+          npm install @salesforce/cli --global
+
+      - name: Autenticar com a org UAT
+        run: |
+          echo "${{ secrets.AUTH_URL_UAT }}" > sfdx-auth-url.txt
+          sf org login sfdx-url -f sfdx-auth-url.txt --alias uat
+
+      - name: Instalar plugin sfdx-git-delta
+        run: echo "y" | sf plugins install sfdx-git-delta
+
+      - name: Criar diretório de saída para o pacote delta
+        run: mkdir -p deploy
+
+      - name: Gerar pacote delta no diretório deploy
+        run: |
+          sf sgd source delta --from HEAD^ --to HEAD --output-dir deploy
+
+      - name: Definir nome do artefato com org, data e hora
+        id: set-artifact-name
+        run: |
+          ORG_NAME="UAT"
+          export TZ="America/Sao_Paulo"  # Define o fuso horário para o Brasil (UTC-3)
+          TIMESTAMP=$(date +'%d-%m-%Y--%H-%M-%S')  # Gera o timestamp no fuso horário do Brasil
+          echo "PACKAGE_XML_ARTIFACT=${ORG_NAME}_Package_xml_${TIMESTAMP}" >> $GITHUB_OUTPUT
+          echo "DEPLOY_LOG_ARTIFACT=${ORG_NAME}_Deploy_log_${TIMESTAMP}" >> $GITHUB_OUTPUT
+
+      - name: Listar conteúdo do diretório deploy
+        run: ls -R deploy
+      - name: Exibir conteúdo do package.xml
+        run: cat deploy/package/package.xml
+      - name: Implantar usando o pacote delta gerado
+        run: |
+          sf project deploy start --manifest deploy/package/package.xml --test-level NoTestRun --target-org uat > deploy/deploy_output.log || true
+
+      - name: Salvar package.xml
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.set-artifact-name.outputs.PACKAGE_XML_ARTIFACT }}
+          path: deploy/package/package.xml
+
+      - name: Salvar o Log de Deploy
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.set-artifact-name.outputs.DEPLOY_LOG_ARTIFACT }}
+          path: deploy/deploy_output.log

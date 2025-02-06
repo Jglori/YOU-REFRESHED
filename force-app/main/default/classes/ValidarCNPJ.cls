@@ -1,8 +1,11 @@
 public class ValidarCNPJ {
 
     public static Boolean validarCNPJ(String cnpj) {
-    
-            cnpj= cnpj.replaceAll('[^0-9]', '');
+
+        // adicionei essa linha para retorna logo de começo
+        if (String.isBlank(cnpj)) return false;
+        
+        cnpj= cnpj.replaceAll('[^0-9]', '');
 
     
         if (cnpj.length() != 14) {

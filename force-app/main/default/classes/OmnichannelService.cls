@@ -16,84 +16,197 @@ public without sharing class OmnichannelService {
          * o corretor como proprietário.
          */
         public static String aceitarLead(Id idLead) {
-            Database.update(new Lead(Id = idLead, OwnerId = UserInfo.getUserId()));
-    
-            adicionarLeadAoParticipante(idLead);
-    
+        try {
+            // Primeiro obtemos o lead completo com todas as informações necessárias
+            Lead leadToUpdate = [
+                SELECT Id, RoletaLeads__c, Corretor__c, CorretorContato__c
+                FROM Lead 
+                WHERE Id = :idLead
+                LIMIT 1
+            ];
+
+            // Obtém o usuário atual com o ContactId
+            User currentUser = [
+                SELECT Id, ContactId 
+                FROM User 
+                WHERE Id = :UserInfo.getUserId()
+                LIMIT 1
+            ];
+
+            // Se o Corretor__c estiver vazio, precisamos encontrar o ParticipanteRoleta correto
+            if (leadToUpdate.Corretor__c == null) {
+                List<ParticipanteRoleta__c> participantes = [
+                    SELECT Id 
+                    FROM ParticipanteRoleta__c 
+                    WHERE RoletaLeads__c = :leadToUpdate.RoletaLeads__c
+                    AND MembroEquipe__r.Usuario__c = :UserInfo.getUserId()
+                    LIMIT 1
+                ];
+
+                if (!participantes.isEmpty()) {
+                    leadToUpdate.Corretor__c = participantes[0].Id;
+                } else {
+                    throw new AuraHandledException('Participante não encontrado na roleta para este usuário.');
+                }
+            }
+
+            // Atualiza o proprietário do lead
+            leadToUpdate.OwnerId = UserInfo.getUserId();
+            update leadToUpdate;
+
+            // Adiciona o lead ao participante
+            adicionarLeadAoParticipante(leadToUpdate.Id);
+
             return obterLeadsEmNovo();
+        } catch (Exception e) {
+            System.debug('Erro ao aceitar lead: ' + e.getMessage());
+            System.debug('Stack trace: ' + e.getStackTraceString());
+            throw new AuraHandledException('Erro ao aceitar lead: ' + e.getMessage());
         }
+    }
     
         private static void adicionarLeadAoParticipante(Id idLead) {
-            Lead lead = LeadDomain.obterLeadPorId(idLead);
-    
+        try {
+            Lead lead = [
+                SELECT Id, 
+                       CanalAtendimento__c, 
+                       Corretor__c, 
+                       RoletaLeads__c,
+                       Corretor__r.QuantidadeLeadsFaleConosco__c,
+                       Corretor__r.QuantidadeLeadsChat__c,
+                       Corretor__r.QuantidadeLeadsWhatsApp__c,
+                       Corretor__r.QuantidadeLeadsTelefone__c,
+                       Corretor__r.QuantidadeLeadsLoja__c,
+                       Corretor__r.QuantidadeLeadsStand__c
+                FROM Lead 
+                WHERE Id = :idLead
+            ];
+
+         if (lead.Corretor__c == null) { List<ParticipanteRoleta__c> participantes = [SELECT Id FROM ParticipanteRoleta__c WHERE RoletaLeads__c = :lead.RoletaLeads__c AND MembroEquipe__r.Usuario__c = :UserInfo.getUserId() LIMIT 1]; if (!participantes.isEmpty()) { lead.Corretor__c = participantes[0].Id; update lead; lead = [SELECT Id, CanalAtendimento__c, Corretor__c, RoletaLeads__c, Corretor__r.QuantidadeLeadsFaleConosco__c, Corretor__r.QuantidadeLeadsChat__c, Corretor__r.QuantidadeLeadsWhatsApp__c, Corretor__r.QuantidadeLeadsTelefone__c, Corretor__r.QuantidadeLeadsLoja__c, Corretor__r.QuantidadeLeadsStand__c FROM Lead WHERE Id = :idLead]; } }
+
+
             adicionarLeadAoParticipante(lead);
-    
-            Database.update(lead.Corretor__r);
-    
-           // setParticipantePosition(lead.Corretor__c, lead.RoletaLeads__c);
+            
+            if (lead.Corretor__r != null) {
+                Database.update(lead.Corretor__r);
+            }
+            
+            setParticipantePosition(lead.Corretor__c, lead.RoletaLeads__c);} catch (Exception e) {
+            System.debug('Erro em adicionarLeadAoParticipante: ' + e.getMessage());
+            System.debug('Stack trace: ' + e.getStackTraceString());
+            throw new AuraHandledException('Erro ao adicionar lead ao participante: ' + e.getMessage());
         }
+    }
     
-        private static void setParticipantePosition(Id membro, Id roletaId){
-            List<ParticipanteRoleta__c> participantesToUpdte = new List<ParticipanteRoleta__c>();
-            List<ParticipanteRoleta__c>  participantes = ParticipanteRoletaSelector.obterParticipantesPorIdsRoleta(new Set<Id>{roletaId});
-            Map<Decimal, ParticipanteRoleta__c> mapPosition = new Map<Decimal,ParticipanteRoleta__c>();
-    
-            for(ParticipanteRoleta__c participante : participantes){
-                if(participante.MembroEquipe__c == membro){
-                    participante.Posicao__c = 9999999;
+        private static void setParticipantePosition(Id membro, Id roletaId) {
+            List<ParticipanteRoleta__c> participantes = [
+                SELECT Id, Posicao__c, MembroEquipe__c
+                FROM ParticipanteRoleta__c
+                WHERE RoletaLeads__c = :roletaId
+                ORDER BY Posicao__c ASC
+            ];
+        
+            ParticipanteRoleta__c participanteMovido;
+        
+            for (ParticipanteRoleta__c participante : participantes) {
+                if (participante.MembroEquipe__c == membro) {participanteMovido = participante;break;
                 }
-                mapPosition.put(participante.Posicao__c, participante);
             }
-    
-            List<Decimal> sortPositions = new List<Decimal>(mapPosition.keyset());
-            for(Integer newPosition = 0; newPosition < sortPositions.size(); newPosition++){
-                ParticipanteRoleta__c part = mapPosition.get(sortPositions[newPosition]);
-                part.Posicao__c = newPosition + 1;
-                participantesToUpdte.add(part);
+        
+            Integer novaPosicao = 1;
+            for (ParticipanteRoleta__c participante : participantes) {
+                if (participante != participanteMovido) {
+                    participante.Posicao__c = novaPosicao;
+                    novaPosicao++;
+                }
             }
-    
-            if(!participantesToUpdte.isEmpty()){
-                update participantesToUpdte;
+        
+            if (participanteMovido != null) {        participanteMovido.Posicao__c = novaPosicao;
             }
-    
+        
+            Database.update(participantes);
         }
+        
+        
     
         private static void adicionarLeadAoParticipante(Lead lead) {
-            switch on lead.CanalAtendimento__c {
-                when 'Fale conosco' {
-                    lead.Corretor__r.QuantidadeLeadsFaleConosco__c = (lead.Corretor__r.QuantidadeLeadsFaleConosco__c <> null ? 0 : lead.Corretor__r.QuantidadeLeadsFaleConosco__c) + 1;
-                }
-                when 'Chat' {
-                    lead.Corretor__r.QuantidadeLeadsChat__c = (lead.Corretor__r.QuantidadeLeadsChat__c <> null ? 0 : lead.Corretor__r.QuantidadeLeadsChat__c) + 1;
-                }
-                when 'WhatsApp' {
-                    lead.Corretor__r.QuantidadeLeadsWhatsApp__c = (lead.Corretor__r.QuantidadeLeadsWhatsApp__c <> null ? 0 : lead.Corretor__r.QuantidadeLeadsWhatsApp__c) + 1;
-                }
-                when 'Telefone' {
-                    lead.Corretor__r.QuantidadeLeadsTelefone__c = (lead.Corretor__r.QuantidadeLeadsTelefone__c <> null ? 0 : lead.Corretor__r.QuantidadeLeadsTelefone__c) + 1;
-                }
-                when 'Loja' {
-                    lead.Corretor__r.QuantidadeLeadsLoja__c = (lead.Corretor__r.QuantidadeLeadsLoja__c <> null ? 0 : lead.Corretor__r.QuantidadeLeadsLoja__c) + 1;
-                }
-                when 'Stand' {
-                    lead.Corretor__r.QuantidadeLeadsStand__c = (lead.Corretor__r.QuantidadeLeadsStand__c <> null ? 0 : lead.Corretor__r.QuantidadeLeadsStand__c) + 1;
-                }
-                when else {
-                    
-                }
-            }
+        if (lead.Corretor__r == null) {return;
         }
+
+        switch on lead.CanalAtendimento__c {
+            when 'Fale conosco' {
+                lead.Corretor__r.QuantidadeLeadsFaleConosco__c = (lead.Corretor__r.QuantidadeLeadsFaleConosco__c == null ? 1 : lead.Corretor__r.QuantidadeLeadsFaleConosco__c + 1);
+            }
+            when 'Chat' {
+                lead.Corretor__r.QuantidadeLeadsChat__c = (lead.Corretor__r.QuantidadeLeadsChat__c == null ? 1 : lead.Corretor__r.QuantidadeLeadsChat__c + 1);}when 'WhatsApp' { lead.Corretor__r.QuantidadeLeadsWhatsApp__c = (lead.Corretor__r.QuantidadeLeadsWhatsApp__c == null ? 1 : lead.Corretor__r.QuantidadeLeadsWhatsApp__c + 1); } when 'Telefone' { lead.Corretor__r.QuantidadeLeadsTelefone__c = (lead.Corretor__r.QuantidadeLeadsTelefone__c == null ? 1 : lead.Corretor__r.QuantidadeLeadsTelefone__c + 1); } when 'Loja' { lead.Corretor__r.QuantidadeLeadsLoja__c = (lead.Corretor__r.QuantidadeLeadsLoja__c == null ? 1 : lead.Corretor__r.QuantidadeLeadsLoja__c + 1); } when 'Stand' { lead.Corretor__r.QuantidadeLeadsStand__c = (lead.Corretor__r.QuantidadeLeadsStand__c == null ? 1 : lead.Corretor__r.QuantidadeLeadsStand__c + 1); }
+
+        }
+    }
     
         /**
          * Método responsável pela rejeição do lead atribuído ao corretor, limpando a
          * roleta e corretor escolhidos.
          */
-        public static String rejeitarLead(Id idLead) {
+       /* public static String rejeitarLead(Id idLead) {
             Database.update(new Lead(Id = idLead, RoletaLeads__c = null, Corretor__c = null));
     
             return obterLeadsEmNovo();
-        }
+        }*/
     
+        public static String rejeitarLead(Id idLead) {
+            // Obter o lead pelo Id
+            Lead lead = LeadDomain.obterLeadPorId(idLead);
+            Id roletaId = lead.RoletaLeads__c;
+            
+            // Obter todos os participantes da roleta que estão online, ordenados por posição
+            List<ParticipanteRoleta__c> participantes = [
+                SELECT Id, 
+                       MembroEquipe__c,
+                       MembroEquipe__r.Usuario__c,
+                       Posicao__c,
+                       RoletaLeads__c
+                FROM ParticipanteRoleta__c 
+                WHERE RoletaLeads__c = :roletaId 
+                    AND MembroEquipe__r.Usuario__r.Situacao__c = 'Online'  // Verifica se o usuário está online
+                ORDER BY Posicao__c ASC
+            ];
+            
+            // Inicializa variáveis para encontrar o próximo membro disponível
+            Boolean currentMemberFound = false;
+            Id nextMemberUserId = null;
+            
+            // Percorre os participantes para encontrar o próximo corretor
+            for (ParticipanteRoleta__c participante : participantes) {
+                if (currentMemberFound) {
+                    nextMemberUserId = participante.MembroEquipe__r.Usuario__c;
+                    break;
+                }
+                if (participante.MembroEquipe__r.Usuario__c == lead.Corretor__c) {
+                    currentMemberFound = true;
+                }
+            }
+            
+            // Se não encontrou o próximo membro ou chegou ao fim da lista, retorna ao primeiro participante
+            if (nextMemberUserId == null && !participantes.isEmpty()) {
+                nextMemberUserId = participantes[0].MembroEquipe__r.Usuario__c;
+            }
+            
+            // Atualizar o lead para remover a associação com o corretor atual
+            lead.Corretor__c = null;
+        
+            // Atualiza o lead no Salesforce
+            update lead;
+            
+            // Notificar o novo corretor se houver (opcional, conforme sua lógica de negócios)
+            if (nextMemberUserId != null) {
+                notificarPeloChatter(lead.Id, nextMemberUserId);
+                enviarEmailLeadsEmTrabalho(nextMemberUserId, new List<LeadDTO>{new LeadDTO(lead)});
+            }
+        
+            // Retorna os leads que estão em estado "Novo"
+            return obterLeadsEmNovo();
+        }
+        
         /**
          * Método responsável pela alteração da situação do corretor para atualização ou 
          * criação de novos participantes, caso não hajam.
@@ -172,22 +285,103 @@ public without sharing class OmnichannelService {
             }
     
     
-            public static String obterLeadsEmNovo() {
-                CONFIGURACOES_POR_CANAL.putAll(CustomMetadataTypeDomain.obterConfiguracoesPorCanalAntendimento());
-                List<LeadDTO> leadsDTO = new List<LeadDTO>();
-                for(Lead lead : LeadSelector.obterLeadsPorIdsUsuarios(new Set<Id>{ UserInfo.getUserId() })) {
-                    leadsDTO.add(new LeadDTO(lead, CONFIGURACOES_POR_CANAL.get(lead.CanalAtendimento__c)));
-                    notificarPeloChatter(lead.Id, UserInfo.getUserId());
-                }
-                enviarEmailLeadsEmTrabalho(UserInfo.getUserId(), leadsDTO);
-                return JSON.serialize(leadsDTO);
-            }
+          public static String obterLeadsEmNovo() {
+    CONFIGURACOES_POR_CANAL.putAll(CustomMetadataTypeDomain.obterConfiguracoesPorCanalAntendimento());
+    
+    List<LeadDTO> leadsDTO = new List<LeadDTO>();
+    
+    // Obtém o ContactId do usuário logado
+    User currentUser = [
+        SELECT Id, ContactId, Situacao__c 
+        FROM User 
+        WHERE Id = :UserInfo.getUserId()
+    ];
+    
+    // Só processa se o usuário tiver um contato associado e estiver online
+    if (currentUser.ContactId != null && currentUser.Situacao__c == 'Online') {
+        // Query atualizada com todos os campos necessários
+        List<Lead> leads = [
+            SELECT Id, Name, FirstName, LastName, Email, Phone, MobilePhone,
+                   ChaveExternaWhatsApp__c, Status, CreatedDate,
+                   InicioDialogo__c, FimDialogo__c, UltimaMensagem__c,
+                   RemetenteWhatsApp__c, CanalAtendimento__c,
+                   CorretorContato__c,
+                   Owner.Name,
+                   Corretor__r.CargaRestante__c
+            FROM Lead 
+            WHERE CorretorContato__c = :currentUser.ContactId 
+            AND OwnerId != :UserInfo.getUserId()
+            ORDER BY CreatedDate DESC
+        ];
         
+        for (Lead lead : leads) {
+            ConfiguracaoCanalAtendimento__mdt config = CONFIGURACOES_POR_CANAL.get(lead.CanalAtendimento__c);
+            leadsDTO.add(new LeadDTO(lead, config));
+            notificarPeloChatter(lead.Id, UserInfo.getUserId());
+        }
+        
+        if (!leadsDTO.isEmpty()) {
+            enviarEmailLeadsEmTrabalho(UserInfo.getUserId(), leadsDTO);
+        }
+    }
+    
+    return JSON.serialize(leadsDTO);
+
+}
+        
+            public static void atualizarLeadsStatus() {
+                try {
+                    // Consultar leads com hasPendingLead__c = true
+                    List<Lead> leads = [
+                        SELECT Id, hasPendingLead__c, RoletaLeads__c
+                        FROM Lead
+                        WHERE hasPendingLead__c = true
+                    ];
+        
+                    // Set para armazenar roletas que possuem participantes com presença validada
+                    Set<Id> roletasComParticipantesComPresencaValidada = new Set<Id>();
+        
+                    // Iterar sobre os leads para verificar se há participantes com presença validada
+                    for (Lead lead : leads) {
+                        // Criar um Set<Id> para a roleta do lead
+                        Set<Id> roletasRelacionadas = new Set<Id>();
+                        roletasRelacionadas.add(lead.RoletaLeads__c); // Adicionar a roleta do lead
+        
+                        // Consultar participantes da roleta com presença validada
+                        List<ParticipanteRoleta__c> participantes = [
+                            SELECT Id, RoletaLeads__c, PresencaValidada__c
+                            FROM ParticipanteRoleta__c
+                            WHERE RoletaLeads__c IN :roletasRelacionadas AND PresencaValidada__c = true
+                        ];
+        
+                        // Se houver participantes com presença validada, adicionar a roleta ao conjunto
+                        if (!participantes.isEmpty()) {
+                            roletasComParticipantesComPresencaValidada.add(lead.RoletaLeads__c);
+                        }
+                    }
+        
+                    if (!roletasComParticipantesComPresencaValidada.isEmpty()) {  List<Lead> leadsParaAtualizar = [
+                            SELECT Id, RoletaLeads__c
+                            FROM Lead
+                            WHERE RoletaLeads__c IN :roletasComParticipantesComPresencaValidada
+                        ];
+        
+                        for (Lead lead : leadsParaAtualizar) {
+                            lead.hasPendingLead__c = false; // Atualiza o campo
+                        }
+        
+                        update leadsParaAtualizar;
+                    }
+        
+                } catch (Exception e) {
+                    System.debug('Erro ao atualizar o status dos leads: ' + e.getMessage());
+                    throw new AuraHandledException('Erro ao atualizar o status dos leads: ' + e.getMessage());
+                }
+            }
         public static void enviarEmailLeadsEmTrabalho(Id userId, List<LeadDTO> leads) {
             User recipient = [SELECT Id, Email FROM User WHERE Id = :userId];
             List<String> leadDetails = new List<String>();
-            for (LeadDTO lead : leads) {
-                leadDetails.add('Lead: ' + User.FirstName + ' ' + User.LastName);
+            for (LeadDTO lead : leads) { leadDetails.add('Lead: ' + User.FirstName + ' ' + User.LastName);
             }
             String subject = 'Detalhes dos Leads em Trabalho';
             String body = 'Olá,\n\nSegue abaixo os detalhes dos leads em trabalho:\n\n';
@@ -201,11 +395,14 @@ public without sharing class OmnichannelService {
            
             public static void notificarPeloChatter(Id leadId, Id userId) {
                 Lead lead = [SELECT Id, FirstName, LastName FROM Lead WHERE Id = :leadId];
+                System.debug('Lead no metodo notificarPeloChatter' +lead );
                 User user = [SELECT Id, Name FROM User WHERE Id = :userId];
+                System.debug('User no metodo notificarPeloChatter' + user);
+                System.debug('User' + user);
                 FeedItem post = new FeedItem();
                 post.ParentId = lead.Id;
                 post.Body = user.Name + ' aceitou o lead ' + lead.FirstName + ' ' + lead.LastName + '.';
-                post.Type = 'LinkPost';
+                post.Type = 'LinkPost';	
                 insert post;
             }
             

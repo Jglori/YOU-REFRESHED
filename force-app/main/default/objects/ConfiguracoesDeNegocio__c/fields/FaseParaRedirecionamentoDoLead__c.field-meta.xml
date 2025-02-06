@@ -15,11 +15,6 @@
                 <label>Descartado</label>
             </value>
             <value>
-                <fullName>Lead Perdido(não trabalho)</fullName>
-                <default>false</default>
-                <label>Lead Perdido(não trabalho)</label>
-            </value>
-            <value>
                 <fullName>Novo</fullName>
                 <default>false</default>
                 <label>Novo</label>
@@ -53,6 +48,11 @@
                 <fullName>Conversão</fullName>
                 <default>false</default>
                 <label>Conversão</label>
+            </value>
+            <value>
+                <fullName>Lead Perdido(não trabalho)</fullName>
+                <default>false</default>
+                <label>Lead Perdido(não trabalho)</label>
             </value>
             <value>
                 <fullName>Convertido</fullName>

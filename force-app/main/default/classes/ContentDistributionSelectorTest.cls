@@ -1,69 +1,124 @@
 @isTest
-public class ContentDistributionSelectorTest {
+private class ContentDistributionSelectorTest {
 
+    // Cenário 1: Criando uma nova distribuição quando não há uma existente
     @isTest
-    static void testObterDistribuicoesPorIdsArquivos() {
-        // Criar um ContentVersion de teste
+    static void testCriarContentDistribution_SemDistribuicaoExistente() {
         ContentVersion contentVersion = new ContentVersion(
-            Title = 'Arquivo de Teste',
-            PathOnClient = 'testfile.txt',
-            VersionData = Blob.valueOf('Conteúdo do arquivo de teste'),
-            IsMajorVersion = true
+            Title = 'Test Content',
+            PathOnClient = 'test.pdf',
+            VersionData = Blob.valueOf('Test content data')
         );
         insert contentVersion;
 
-        // Criar ContentDistribution para o ContentVersion
-        ContentDistribution contentDistribution = new ContentDistribution(
-            Name = 'Distribuição de Teste',
-            ContentVersionId = contentVersion.Id,
-            PreferencesAllowViewInBrowser = true,
-            PreferencesLinkLatestVersion = true
-        );
-        //insert contentDistribution;
-
-        // Chamar o método obterDistribuicoesPorIdsArquivos
-        Set<Id> idsArquivos = new Set<Id>{contentVersion.Id};
-        Test.startTest();
-        List<ContentDistribution> distribuicoes = ContentDistributionSelector.obterDistribuicoesPorIdsArquivos(idsArquivos);
-        Test.stopTest();
-
-        // Verificar os resultados
-        //System.assertEquals(1, distribuicoes.size(), 'Deveria haver exatamente 1 ContentDistribution');
-        //ContentDistribution distribuicao = distribuicoes[0];
-       // System.assertEquals('Distribuição de Teste', distribuicao.Name, 'O nome do ContentDistribution deve ser igual ao nome fornecido');
-        // Não podemos verificar ContentDownloadUrl e PdfDownloadUrl, pois são campos somente leitura.
+        // Chama o método para criar a distribuição
+        ContentDistribution contentDistribution = ContentDistributionSelector.criarContentDistribution(contentVersion, 'Test Distribution');
+        
+        System.assertNotEquals(contentDistribution, null, 'A distribuição criada não pode ser nula');
+        System.assertNotEquals(contentDistribution.Id, null, 'A distribuição criada deve ter um Id');
     }
 
+    // Cenário 2: Tentando criar uma distribuição duplicada (caso de distribuição já existente)
     @isTest
-    static void testObterDistribuicaoParaURL() {
-        // Criar um ContentVersion de teste
+    static void testCriarContentDistribution_ComDistribuicaoExistente() {
         ContentVersion contentVersion = new ContentVersion(
-            Title = 'Arquivo de Teste',
-            PathOnClient = 'testfile.txt',
-            VersionData = Blob.valueOf('Conteúdo do arquivo de teste'),
-            IsMajorVersion = true
+            Title = 'Test Content',
+            PathOnClient = 'test.pdf',
+            VersionData = Blob.valueOf('Test content data')
         );
         insert contentVersion;
 
-        // Criar ContentDistribution para o ContentVersion
-        ContentDistribution contentDistribution = new ContentDistribution(
-            Name = 'Distribuição de Teste',
-            ContentVersionId = contentVersion.Id,
-            PreferencesAllowViewInBrowser = true,
-            PreferencesLinkLatestVersion = true
-        );
-        //insert contentDistribution;
+        // Criação da primeira distribuição
+        ContentDistribution contentDistribution = ContentDistributionSelector.criarContentDistribution(contentVersion, 'Test Distribution');
+        
+        // Tenta criar uma segunda distribuição para o mesmo ContentVersionId
+        ContentDistribution distribuicaoExistente = ContentDistributionSelector.criarContentDistribution(contentVersion, 'Test Distribution');
+        
+        // Verifique se a distribuição retornada é a mesma da primeira
+        System.assertEquals(contentDistribution.Id, distribuicaoExistente.Id, 'Deve retornar a mesma distribuição');
+    }
 
-        // Chamar o método obterDistribuicaoParaURL
+    // Cenário 3: Verificando a obtenção de uma ContentDistribution por URL
+    @isTest
+    static void testObterDistribuicaoParaURL() {
+        ContentVersion contentVersion = new ContentVersion(
+            Title = 'Test Content',
+            PathOnClient = 'test.pdf',
+            VersionData = Blob.valueOf('Test content data')
+        );
+        insert contentVersion;
+
+        // Criação de uma distribuição para o ContentVersion
+        ContentDistribution contentDistribution = ContentDistributionSelector.criarContentDistribution(contentVersion, 'Test Distribution');
+        
+        // Obtendo a distribuição para a URL
+        ContentDistribution resultado = ContentDistributionSelector.obterDistribuicaoParaURL(contentVersion.Id);
+        
+        System.assertNotEquals(resultado, null, 'Distribuição não encontrada');
+        System.assertEquals(resultado.Id, contentDistribution.Id, 'IDs não coincidem');
+    }
+
+    // Cenário 4: Verificando a obtenção de múltiplas distribuições por IDs de arquivos
+    @isTest
+    static void testObterDistribuicoesPorIdsArquivos() {
+        ContentVersion contentVersion1 = new ContentVersion(
+            Title = 'Test Content 1',
+            PathOnClient = 'test1.pdf',
+            VersionData = Blob.valueOf('Test content data 1')
+        );
+        insert contentVersion1;
+
+        ContentVersion contentVersion2 = new ContentVersion(
+            Title = 'Test Content 2',
+            PathOnClient = 'test2.pdf',
+            VersionData = Blob.valueOf('Test content data 2')
+        );
+        insert contentVersion2;
+
+        // Criação das distribuições para os ContentVersions
+        ContentDistribution contentDistribution1 = ContentDistributionSelector.criarContentDistribution(contentVersion1, 'Test Distribution 1');
+        ContentDistribution contentDistribution2 = ContentDistributionSelector.criarContentDistribution(contentVersion2, 'Test Distribution 2');
+
+        // Obtendo distribuições por IDs de arquivos
+        Set<Id> idsArquivos = new Set<Id>{ contentVersion1.Id, contentVersion2.Id };
+        List<ContentDistribution> distribuicoes = ContentDistributionSelector.obterDistribuicoesPorIdsArquivos(idsArquivos);
+        
+        System.assertEquals(distribuicoes.size(), 2, 'Deve retornar 2 distribuições');
+    }
+
+    // Cenário 5: Erro ao criar ContentDistribution (DmlException)
+    @isTest
+    static void testCriarContentDistribution_DmlException() {
+        ContentVersion contentVersion = new ContentVersion(
+            Title = 'Invalid Content',
+            PathOnClient = 'test_invalid.pdf',
+            VersionData = Blob.valueOf('Invalid data')
+        );
+
         Test.startTest();
         try {
-            ContentDistribution distribuicao = ContentDistributionSelector.obterDistribuicaoParaURL(contentVersion.Id);
-        } catch(Exception ex){}
+            ContentDistributionSelector.criarContentDistribution(contentVersion, null);
+            System.assert(false, 'Deveria ter lançado uma exceção');
+        } catch (DmlException e) {
+            System.assert(true, 'Exceção capturada corretamente');
+        }
         Test.stopTest();
+    }
 
-        // Verificar os resultados
-        // System.assertNotEquals(null, distribuicao, 'ContentDistribution não deve ser nulo');
-        // System.assertEquals('Distribuição de Teste', distribuicao.Name, 'O nome do ContentDistribution deve ser igual ao nome fornecido');
-        // Não podemos verificar ContentDownloadUrl, pois é um campo somente leitura.
+    // Cenário 6: Obtendo distribuição com lista vazia de IDs
+    @isTest
+    static void testObterDistribuicoesPorIdsArquivos_ListaVazia() {
+        Set<Id> idsArquivos = new Set<Id>();
+        List<ContentDistribution> distribuicoes = ContentDistributionSelector.obterDistribuicoesPorIdsArquivos(idsArquivos);
+
+        System.assertEquals(distribuicoes.size(), 0, 'Deve retornar uma lista vazia');
+    }
+
+    // Cenário 7: Obtendo distribuição com ID inválido
+    @isTest
+    static void testObterDistribuicaoParaURL_IdInvalido() {
+        ContentDistribution resultado = ContentDistributionSelector.obterDistribuicaoParaURL('00Q000000000000AAA');
+        
+        System.assertEquals(resultado, null, 'Deve retornar nulo para ID inválido');
     }
 }
