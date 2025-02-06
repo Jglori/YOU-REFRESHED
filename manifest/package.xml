@@ -1,9 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
-	<types>
-		<members>ComparativoService</members>
-    <members>ComparativoServiceTest</members>
-    <members>ComparativoController</members>
-    <members>ComparativoControllerTest</members>
-		<name>ApexClass</name>
-	</types>
-	<version>62.0</version>
+   <types>
+      <members>geradorVariaveis</members>
+      <members>checklistDocumentos</members>
+      <members>templateDocumentos</members>
+      <members>picklistPesquisavel</members>
+      <name>LightningComponentBundle</name>
+   </types>
+   <types>
+      <members>ObjectController</members>
+	  <members>ObjectControllerTest</members>
+      <members>ObjectHelper</members>
+      <members>ObjectHelperTest</members>
+      <name>ApexClass</name>
+   </types>
+   <version>60.0</version>
+</Package>
+
+
