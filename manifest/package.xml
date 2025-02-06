@@ -50,6 +50,12 @@
         <members>UnidadeProdutoVer</members>
         <name>PermissionSet</name>
 </types>
+<types>
+		<members>Product2-Layout de vagas</members>
+		<members>Product2-Product Layout</members>
+		<members>Product2-Unidade</members>
+		<name>Layout</name>
+	</types>
 <types>  
         <members>SeriePagamentos__c</members>  
         <name>CustomTab</name>  
