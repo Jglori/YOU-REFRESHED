@@ -1,0 +1,6 @@
+Encaminhamos para sua aprovação a ficha cadastral da oportunidade {!Opportunity.Name}. Por favor, acesse o link abaixo para revisar a ficha cadastral e verificar os documentos preenchidos e não preenchidos.
+
+Link para a ficha cadastral: {!Opportunity.Link}
+- Nome da Oportunidade: {!Opportunity.Name}
+- Nome do Solicitador: {!User.Name}
+- Descrição do ocorrido: {!ApprovalRequest.Comments}.
