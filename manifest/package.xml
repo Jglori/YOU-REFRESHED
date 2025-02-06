@@ -51,7 +51,6 @@
         <name>PermissionSet</name>
 </types>
 <types>  
-        <members>UnidadeTabelaVendas__c</members>  
         <members>SeriePagamentos__c</members>  
         <name>CustomTab</name>  
     </types>
