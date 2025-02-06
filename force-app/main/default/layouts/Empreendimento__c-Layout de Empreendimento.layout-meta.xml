@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Layout xmlns="http://soap.sforce.com/2006/04/metadata">
+    <excludeButtons>OpenSlackRecordChannel</excludeButtons>
     <excludeButtons>Submit</excludeButtons>
     <layoutSections>
         <customLabel>true</customLabel>
@@ -27,11 +28,11 @@
         <layoutColumns>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>DataEntregaChaves__c</field>
+                <field>DataHabitase__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>DataHabitase__c</field>
+                <field>DataEntregaChaves__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Required</behavior>
@@ -40,6 +41,10 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>DisponivelEspelho__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>DiasDeVencimentoDaParcela__c</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsTopToBottom</style>
@@ -196,12 +201,6 @@
         <style>CustomLinks</style>
     </layoutSections>
     <relatedLists>
-        <fields>FULL_NAME</fields>
-        <fields>LEAD.COMPANY</fields>
-        <fields>LEAD.PHONE</fields>
-        <relatedList>Lead.EmpreendimentoInteresse__c</relatedList>
-    </relatedLists>
-    <relatedLists>
         <fields>NAME</fields>
         <relatedList>Bloco__c.Empreendimento__c</relatedList>
     </relatedLists>
@@ -211,13 +210,26 @@
         <fields>PRODUCT2.DESCRIPTION</fields>
         <relatedList>Product2.Empreendimento__c</relatedList>
     </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
+        <fields>Ativa__c</fields>
+        <fields>DataFim__c</fields>
+        <fields>DataInicio__c</fields>
+        <relatedList>TabelaVendas__c.Empreendimento__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>FULL_NAME</fields>
+        <fields>LEAD.COMPANY</fields>
+        <fields>LEAD.PHONE</fields>
+        <relatedList>Lead.EmpreendimentoInteresse__c</relatedList>
+    </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>
     <showInteractionLogPanel>false</showInteractionLogPanel>
     <showRunAssignmentRulesCheckbox>false</showRunAssignmentRulesCheckbox>
     <showSubmitAndAttachButton>false</showSubmitAndAttachButton>
     <summaryLayout>
-        <masterLabel>00hDw000000arWI</masterLabel>
+        <masterLabel>00hbL000000oCis</masterLabel>
         <sizeX>4</sizeX>
         <sizeY>0</sizeY>
         <summaryLayoutStyle>Default</summaryLayoutStyle>
