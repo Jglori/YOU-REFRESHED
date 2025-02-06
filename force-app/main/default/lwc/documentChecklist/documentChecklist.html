@@ -1,0 +1,155 @@
+<template>
+    <lightning-card>
+        <div class="section-container">
+            <template if:true={isContactRoleEmpty}>
+                <div class="empty-container">
+                    <lightning-icon icon-name="utility:info" alternative-text="Info" size="large"
+                        class="empty-icon"></lightning-icon>
+                    <p class="empty-message">Papéis de contatos não disponíveis</p>
+                </div>
+            </template>
+            <template if:false={isContactRoleEmpty}>
+                <template if:true={isLoading}>
+                    <lightning-spinner alternative-text="Carregando..." size="medium"></lightning-spinner>
+                </template>
+                <template for:each={opportunityContactRole} for:item="contact">
+                    <lightning-accordion key={contact.ContactId} allow-multiple-sections-open>
+                        <lightning-accordion-section name={contact.ContactId} label={contact.ContactName}>
+                            <!-- Documentos Obrigatórios -->
+                            <div class="section">
+                                <h2 class="section-header">Documentos Obrigatórios</h2>
+                                <template for:each={contact.mandatoryDocuments} for:item="doc">
+                                    <div key={doc.Id} class="document-container">
+                                        <div class="document-row">
+                                            <lightning-icon icon-name='doctype:gdoc' alternative-text='gdoc'
+                                                size='large' title='gdoc'></lightning-icon>
+                                            <span>
+                                                <div>
+                                                    <p>{doc.Name}</p>
+                                                    <template if:true={doc.Entregue__c}>
+                                                        <p>{doc.DataEntrega__c}</p>
+                                                    </template>
+                                                </div>
+                                            </span>
+
+                                            <div class="icon-and-buttons-container">
+                                                <template if:true={doc.Entregue__c}>
+                                                    <lightning-button-icon icon-name="utility:delete"
+                                                        alternative-text="Delete" title="Deletar" data-id={doc.Id}
+                                                        onclick={deletarArquivo}></lightning-button-icon>
+
+                                                    <lightning-button-icon icon-name="utility:preview"
+                                                        alternative-text="View" title="Visualizar Documento"
+                                                        data-id={doc.Id} data-contact-id={contact.ContactId}
+                                                        onclick={handleViewClick}></lightning-button-icon>
+
+                                                    <lightning-button-icon icon-name="utility:download"
+                                                        alternative-text="Download" title="Download" data-id={doc.Id}
+                                                        onclick={handleDownloadClick}></lightning-button-icon>
+                                                </template>
+
+                                                <template if:false={doc.Entregue__c}>
+                                                    <div class="upload-container">
+                                                        <lightning-helptext content="Somente Aceitos Arquivos PNG e JPG"
+                                                            class="help-text"></lightning-helptext>
+                                                        <lightning-button-icon icon-name="utility:upload"
+                                                            alternative-text="Upload" title="Upload" data-id={doc.Id}
+                                                            data-contact-id={contact.ContactId} data-nome-id={doc.Name}
+                                                            data-completed="true"
+                                                            onclick={handleUploadClick}></lightning-button-icon>
+                                                    </div>
+                                                </template>
+                                            </div>
+
+                                            <div class="approval-icon-container">
+                                                <template if:true={doc.Entregue__c}>
+                                                    <lightning-icon icon-name='standard:task2' alternative-text='task2'
+                                                        size='medium' title='task2'></lightning-icon>
+                                                </template>
+                                                <template if:false={doc.Entregue__c}>
+                                                    <lightning-icon icon-name="utility:warning"
+                                                        alternative-text="Warning" size='medium'
+                                                        class="warning-icon"></lightning-icon>
+                                                </template>
+                                            </div>
+                                        </div>
+                                        <span class="delivery-date"></span>
+                                    </div>
+                                </template>
+                            </div>
+
+                            <!-- Documentos Opcionais -->
+                            <div class="section">
+                                <h2 class="section-header">Documentos Opcionais</h2>
+                                <template for:each={contact.optionalDocuments} for:item="doc">
+                                    <div key={doc.Id} class="document-container">
+                                        <div class="document-row">
+                                            <lightning-icon icon-name="doctype:unknown" alternative-text="unknown"
+                                                size="large" title="unknown"></lightning-icon>
+                                            <span>
+                                                <div>
+                                                    <p>{doc.Name}</p>
+                                                    <template if:true={doc.Entregue__c}>
+                                                        <p>{doc.DataEntrega__c}</p>
+                                                    </template>
+                                                </div>
+                                            </span>
+
+                                            <!-- Botões e ícones -->
+                                            <div class="icon-and-buttons-container">
+                                                <template if:true={doc.Entregue__c}>
+                                                    <lightning-button-icon icon-name="utility:delete"
+                                                        alternative-text="Delete" title="Deletar" data-id={doc.Id}
+                                                        onclick={deletarArquivo}></lightning-button-icon>
+
+                                                    <lightning-button-icon icon-name="utility:preview"
+                                                        alternative-text="View" title="Visualizar Documento"
+                                                        data-id={doc.Id} data-contact-id={contact.ContactId}
+                                                        onclick={handleViewClick}></lightning-button-icon>
+
+                                                    <lightning-button-icon icon-name="utility:download"
+                                                        alternative-text="Download" title="Download" data-id={doc.Id}
+                                                        onclick={handleDownloadClick}></lightning-button-icon>
+                                                </template>
+
+                                                <template if:false={doc.Entregue__c}>
+                                                    <div class="upload-container">
+                                                        <lightning-helptext content="Somente Aceitos Arquivos PNG e JPG"
+                                                            class="help-text"></lightning-helptext>
+                                                        <lightning-button-icon icon-name="utility:upload"
+                                                            alternative-text="Upload" title="Upload" data-id={doc.Id}
+                                                            data-contact-id={contact.ContactId} data-nome-id={doc.Name}
+                                                            data-completed="true"
+                                                            onclick={handleUploadClick}></lightning-button-icon>
+                                                    </div>
+                                                </template>
+                                            </div>
+                                            <div class="approval-icon-container">
+                                                <template if:true={doc.Entregue__c}>
+                                                    <lightning-icon icon-name='standard:task2' alternative-text='task2'
+                                                        size='medium' title='task2'></lightning-icon>
+                                                </template>
+                                                <template if:false={doc.Entregue__c}>
+                                                    <lightning-icon icon-name="utility:warning"
+                                                        alternative-text="Warning" size='medium'
+                                                        class="warning-icon"></lightning-icon>
+                                                </template>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </lightning-accordion-section>
+                    </lightning-accordion>
+                </template>
+            </template>
+
+        </div>
+
+        <!-- Input de Arquivo Oculto -->
+        <input type="file" id="fileInput"
+            style="opacity: 0; width: 0.1px; height: 0.1px; position: absolute; overflow: hidden; clip: rect(1px, 1px, 1px, 1px);"
+            onchange={handleFileChange} />
+
+    </lightning-card>
+</template>

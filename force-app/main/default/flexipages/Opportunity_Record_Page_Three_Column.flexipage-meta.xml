@@ -565,6 +565,36 @@
                 <identifier>RecordContato__cField</identifier>
             </fieldInstance>
         </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldItem>Record.CotacaoSincronizada__c</fieldItem>
+                <identifier>RecordCotacaoSincronizada__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldItem>Record.Bloco__c</fieldItem>
+                <identifier>RecordBloco__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldItem>Record.StatusDo1Pagamento__c</fieldItem>
+                <identifier>RecordStatusDo1Pagamento__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldItem>Record.MotivoDaDesistencia__c</fieldItem>
+                <identifier>RecordMotivoDaDesistencia__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
+        <itemInstances>
+            <fieldInstance>
+                <fieldItem>Record.Sincronizado__c</fieldItem>
+                <identifier>RecordSincronizado__cField</identifier>
+            </fieldInstance>
+        </itemInstances>
         <name>Facet-bda0868e-f60d-43d1-bc15-da4b2cf8d682</name>
         <type>Facet</type>
     </flexiPageRegions>
