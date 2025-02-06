@@ -4,5 +4,13 @@
 		<members>OpportunityTrigger</members>
 		<name>ApexTrigger</name>
 	</types>
+	<types>
+		<members>Opportunity.Processo Vendas</members>
+		<name>BusinessProcess</name>
+	</types>
+	<types>
+		<members>Default_Opportunity</members>
+		<name>PathAssistant</name>
+	</types>
 	<version>62.0</version>
 </Package>
