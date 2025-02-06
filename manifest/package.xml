@@ -1,16 +1,64 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
-	<types>
-		<members>OpportunityTrigger</members>
-		<name>ApexTrigger</name>
+<fullName>Pacote Empreendimento%2FBloco%2FUnidade</fullName>
+<types>
+<members>Empreendimento_P_gina_de_registro</members>
+<name>FlexiPage</name>
+</types>
+<types>
+<members>Bloco__c-Layout de Bloco</members>
+<members>Empreendimento__c-Layout Empreendimento Comunidade</members>
+<members>Empreendimento__c-Layout de Empreendimento</members>
+<members>Product2-Unidade</members>
+<name>Layout</name>
+</types>
+<types>
+  <members>BlocoCriar</members>
+        <members>BlocoCriar</members>
+        <members>BlocoEditar</members>
+        <members>BlocoLeitura</members>
+        <members>BlocoVerTodos</members>
+        <members>CotacaoCriacao</members>
+        <members>CotacaoEdicao</members>
+        <members>CotacaoEnviarAprovacao</members>
+        <members>CotacaoLeitura</members>
+        <members>CotacaoSincronizacao</members>
+        <members>EmpreendimentoCriar</members>
+        <members>EmpreendimentoEditar</members>
+        <members>EmpreendimentoExcluir</members>
+        <members>EmpreendimentoLeitura</members>
+        <members>EmpreendimentoVer</members>
+        <members>EmpreendimentoVerTodos</members>
+        <members>OportunidadeCriar</members>
+        <members>OportunidadeEditar</members>
+        <members>OportunidadeExcluir</members>
+        <members>OportunidadeVerMeus</members>
+        <members>OportunidadeVerTodos</members>
+        <members>ProdutoCriacaoEdicaoStatus</members>
+        <members>ProdutoCriacaoStatus</members>
+        <members>ProdutoEdicaoStatus</members>
+        <members>ProdutoLeitura</members>
+        <members>ProdutoVisualizacaoCards</members>
+        <members>TorreBlocoAcessoTotal</members>
+        <members>TorreBlocoCriar</members>
+        <members>TorreBlocoEditar</members>
+        <members>TorreBlocoExcluir</members>
+        <members>TorreBlocoVer</members>
+        <members>UnidadeProdutoAcessoTotal</members>
+        <members>UnidadeProdutoCriar</members>
+        <members>UnidadeProdutoEditar</members>
+        <members>UnidadeProdutoExcluir</members>
+        <members>UnidadeProdutoVer</members>
+        <name>PermissionSet</name>
+</types>
+<types>
+		<members>Product2-Layout de vagas</members>
+		<members>Product2-Product Layout</members>
+		<members>Product2-Unidade</members>
+		<name>Layout</name>
 	</types>
-	<types>
-		<members>Opportunity.Processo Vendas</members>
-		<name>BusinessProcess</name>
-	</types>
-	<types>
-		<members>Default_Opportunity</members>
-		<name>PathAssistant</name>
-	</types>
-	<version>62.0</version>
+<types>  
+        <members>SeriePagamentos__c</members>  
+        <name>CustomTab</name>  
+    </types>
+<version>60.0</version>
 </Package>
