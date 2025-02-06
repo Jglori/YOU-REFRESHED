@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>ObjetivoCompra__c</fullName>
-    <label>Objetivo da compra</label>
+    <fullName>MotivoCancelamento__c</fullName>
+    <label>Motivo Do Cancelamento</label>
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>
     <trackHistory>false</trackHistory>
@@ -11,19 +11,24 @@
         <valueSetDefinition>
             <sorted>false</sorted>
             <value>
-                <fullName>Investimento</fullName>
+                <fullName>Motivo da desistência</fullName>
                 <default>false</default>
-                <label>Investimento</label>
+                <label>Motivo da desistência</label>
             </value>
             <value>
-                <fullName>Moradia</fullName>
+                <fullName>Aprovação de Crédito</fullName>
                 <default>false</default>
-                <label>Moradia</label>
+                <label>Aprovação de Crédito</label>
             </value>
             <value>
-                <fullName>Filhos</fullName>
+                <fullName>Oferta baixa</fullName>
                 <default>false</default>
-                <label>Filhos</label>
+                <label>Oferta baixa</label>
+            </value>
+            <value>
+                <fullName>Documentação incompleta</fullName>
+                <default>false</default>
+                <label>Documentação incompleta</label>
             </value>
             <value>
                 <fullName>Outros</fullName>

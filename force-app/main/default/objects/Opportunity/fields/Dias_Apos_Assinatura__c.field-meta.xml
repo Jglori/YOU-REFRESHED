@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Dias_Apos_Assinatura__c</fullName>
+    <description>Este campo servirá para armazenar a quantidade de dias a partir da data de assinatura do contrato que determina quando a Oportunidade deve ser considerada ganha.</description>
+    <externalId>false</externalId>
+    <label>Dias após Assinatura</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

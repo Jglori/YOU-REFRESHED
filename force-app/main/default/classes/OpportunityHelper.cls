@@ -35,37 +35,48 @@ public with sharing class OpportunityHelper {
         }
 
 
-    public static void validateTransitionToFichaCadastral(List<Opportunity> newOpportunities, Map<Id, Opportunity> oldOpportunitiesMap) {
-        for (Opportunity newOpp : newOpportunities) {
-            Opportunity oldOpp = oldOpportunitiesMap.get(newOpp.Id);
-            
-            if (oldOpp.StageName != 'Negociação' || newOpp.StageName != 'Ficha Cadastral') continue;
-
-            boolean hasSyncedQuote = OpportunityDA.hasSyncedQuote(newOpp.Id);
-            boolean hasProducts = hasProducts(newOpp.Id);
-            boolean hasBuyers = hasBuyers(newOpp.Id);
-
-            for (String fieldName : mandatoryFields.keySet()) {
-                if (newOpp.get(fieldName) == null || String.isBlank(String.valueOf(newOpp.get(fieldName)))) {
-                    newOpp.addError(mandatoryFields.get(fieldName) + ' é um campo obrigatório.');
+        public static void validateTransitionToFichaCadastral(List<Opportunity> newOpportunities, Map<Id, Opportunity> oldOpportunitiesMap) {
+            for (Opportunity newOpp : newOpportunities) {
+                Opportunity oldOpp = oldOpportunitiesMap.get(newOpp.Id);
+                
+                // Verificar se a transição não é de "Negociação" para "Cancelado"
+                if (oldOpp.StageName == 'Negociação' && newOpp.StageName == 'Cancelado') {
+                    // Se o estágio for "Cancelado", validar apenas o "Motivo do Cancelamento"
+                    if (String.isBlank(String.valueOf(newOpp.MotivoCancelamento__c))) {
+                        newOpp.addError('Motivo do Cancelamento é um campo obrigatório.');
+                    }
+                    return;  // Não precisa continuar para outras validações
                 }
-            }
-
-            if (!hasSyncedQuote || !hasProducts || !hasBuyers) {
-                String errorMessage = 'Não é possível avançar para a Ficha Cadastral:';
-                if (!hasSyncedQuote) {
-                    errorMessage += '\n- Favor sincronizar uma cotação com a oportunidade.';
+                
+                // Verificar se a transição é de "Negociação" para "Ficha Cadastral"
+                if (oldOpp.StageName == 'Negociação' && newOpp.StageName == 'Ficha Cadastral') {
+                    boolean hasSyncedQuote = OpportunityDA.hasSyncedQuote(newOpp.Id);
+                    boolean hasProducts = hasProducts(newOpp.Id);
+                    boolean hasBuyers = hasBuyers(newOpp.Id);
+        
+                    for (String fieldName : mandatoryFields.keySet()) {
+                        if (newOpp.get(fieldName) == null || String.isBlank(String.valueOf(newOpp.get(fieldName)))) {
+                            newOpp.addError(mandatoryFields.get(fieldName) + ' é um campo obrigatório.');
+                        }
+                    }
+        
+                    if (!hasSyncedQuote || !hasProducts || !hasBuyers) {
+                        String errorMessage = 'Não é possível avançar para a Ficha Cadastral:';
+                        if (!hasSyncedQuote) {
+                            errorMessage += '\n- Favor sincronizar uma cotação com a oportunidade.';
+                        }
+                        if (!hasProducts) {
+                            errorMessage += '\n- Pelo menos um produto da oportunidade deve ser adicionado.';
+                        }
+                        if (!hasBuyers) {
+                            errorMessage += '\n- Pelo menos um comprador (papel de contato) deve ser especificado.';
+                        }
+                        newOpp.addError(errorMessage);
+                    }
                 }
-                if (!hasProducts) {
-                    errorMessage += '\n- Pelo menos um produto da oportunidade deve ser adicionado.';
-                }
-                if (!hasBuyers) {
-                    errorMessage += '\n- Pelo menos um comprador (papel de contato) deve ser especificado.';
-                }
-                newOpp.addError(errorMessage);
             }
         }
-    }
+        
 
     @TestVisible
     private static boolean hasProducts(Id opportunityId) {
@@ -332,4 +343,355 @@ public with sharing class OpportunityHelper {
         }
     }
 
+       /**
+ * Este método prepara e envia notificações de cancelamento de oportunidade.
+ * As notificações incluem e-mails e mensagens no Chatter para os responsáveis e hierarquias relacionadas
+ * quando se move para a fase cancelada na oportunidade.
+ */
+public static void handleOpportunityCancelation(List<Opportunity> newOpps, Map<Id, Opportunity> oldOpps) {
+    List<Opportunity> opportunitiesToNotify = new List<Opportunity>();
+    Set<Id> oppIds = new Set<Id>();
+
+    for (Opportunity opp : newOpps) {
+        Opportunity oldOpp = oldOpps.get(opp.Id);
+
+        // Verifica se a oportunidade foi movida para a fase de "Cancelado"
+        if (opp.StageName == 'Cancelado' && (oldOpp == null || oldOpp.StageName != 'Cancelado')) {
+            if (String.isBlank(opp.MotivoCancelamento__c)) {
+                opp.addError('O campo Motivo de Cancelamento é obrigatório.');
+            } else if (opp.MotivoCancelamento__c == 'Outros' && String.isBlank(opp.Observacao__c)) {
+                opp.addError('O campo Observação é obrigatório quando o motivo de cancelamento for "Outros".');
+            } else {
+                opportunitiesToNotify.add(opp);
+                oppIds.add(opp.Id);
+            }
+        }
+    }
+
+    if (!opportunitiesToNotify.isEmpty()) {
+        List<Opportunity> oppsWithDetails = [
+            SELECT Id, Name, MotivoCancelamento__c, Unidade__c, Unidade__r.Name,
+                   Contato__r.Name, Contato__r.Email, Contato__r.OwnerId,
+                   Contato__r.UsuarioCorretor__r.Name, Contato__r.UsuarioCorretor__r.Email
+             FROM Opportunity
+            WHERE Id IN :oppIds
+        ];
+
+        Map<Id, Opportunity> oppDetailsMap = new Map<Id, Opportunity>(oppsWithDetails);
+
+        for (Opportunity opp : opportunitiesToNotify) {
+            if (oppDetailsMap.containsKey(opp.Id)) {
+                Opportunity detailedOpp = oppDetailsMap.get(opp.Id);
+                opp.Unidade__c = detailedOpp.Unidade__c;
+                opp.Unidade__r = detailedOpp.Unidade__r;
+                opp.Contato__r = detailedOpp.Contato__r;
+            }
+        }
+
+        sendCancelNotification(opportunitiesToNotify);
+    }
+
+    // Impede mudanças de estágio para "Cancelado"
+    for (Opportunity opp : newOpps) {
+        Opportunity oldOpp = oldOpps.get(opp.Id);
+        
+        // Se a oportunidade já está em "Cancelado", impede a mudança para outra fase
+        if (oldOpp != null && oldOpp.StageName == 'Cancelado' && opp.StageName != 'Cancelado') {
+            opp.StageName.addError('A oportunidade está cancelada e não pode ser movida para outra fase.');
+        }
+    }
+}
+
+
+
+
+/**
+* Este método prepara e envia notificações de cancelamento de oportunidade.
+* As notificações incluem e-mails e mensagens no Chatter para os responsáveis e hierarquias relacionadas.
+*/
+
+public static void sendCancelNotification(List<Opportunity> opportunitiesToNotify) {
+    List<Messaging.SingleEmailMessage> emailsToSend = new List<Messaging.SingleEmailMessage>();
+    List<FeedItem> chatterFeedItems = new List<FeedItem>();
+    
+  
+    EmailTemplate emailTemplate = [SELECT Id, Name, HtmlValue 
+                                   FROM EmailTemplate 
+                                   WHERE Name = 'Template Cancelamento da Oportunidade' LIMIT 1];
+    
+    for (Opportunity opp : opportunitiesToNotify) {
+        String subject = 'Notificação de Cancelamento da Oportunidade: ' + opp.Name;
+        
+      
+        String htmlBody = emailTemplate.HtmlValue;
+        if (htmlBody != null) {
+            htmlBody = htmlBody.replace('{{{Opportunity.Name}}}', opp.Name != null ? opp.Name : 'N/A');
+            htmlBody = htmlBody.replace('{{{Product2.Name}}}', opp.Unidade__r != null ? opp.Unidade__r.Name : 'N/A');
+            htmlBody = htmlBody.replace('{{{Opportunity.MotivoCancelamento__c}}}', opp.MotivoCancelamento__c != null ? opp.MotivoCancelamento__c : 'N/A');
+            htmlBody = htmlBody.replace('{{{Opportunity.Observacao__c}}}', opp.Observacao__c != null ? opp.Observacao__c : 'N/A');
+        }
+        
+       
+        String chatterMessage = 'Oportunidade Cancelada\n\n' +
+                                'Oportunidade: ' + opp.Name + '\n' +
+                                'Produto: ' + (opp.Unidade__r != null ? opp.Unidade__r.Name : 'N/A') + '\n' +
+                                'Motivo do Cancelamento: ' + (opp.MotivoCancelamento__c != null ? opp.MotivoCancelamento__c : 'N/A') + '\n' +
+                                'Observação: ' + (opp.Observacao__c != null ? opp.Observacao__c : 'N/A') + '\n\n' +
+                                'Infelizmente, a oportunidade foi cancelada devido ao motivo acima.\n\n' +
+                                'Atenciosamente,\nEquipe de Vendas';
+        
+        FeedItem opportunityChatter = new FeedItem();
+        opportunityChatter.ParentId = opp.Id; 
+        opportunityChatter.Body = chatterMessage;
+        chatterFeedItems.add(opportunityChatter);
+        
+     
+        if (opp.Contato__r != null && opp.Contato__r.OwnerId != null) {
+            User contactOwner = [SELECT Id, Name, Email, Reportase__c 
+                                 FROM User 
+                                 WHERE Id = :opp.Contato__r.OwnerId LIMIT 1];
+            if (contactOwner != null) {
+             
+                if (contactOwner.Email != null) {
+                    Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage();
+                    email.setToAddresses(new String[] {contactOwner.Email});
+                    email.setSubject(subject);
+                    email.setHtmlBody(htmlBody);
+                    emailsToSend.add(email);
+                }
+
+    
+              
+                notifyReportees(contactOwner, opp, subject, htmlBody, chatterFeedItems, emailsToSend);
+            }
+        }
+    }
+    
+  
+    if (!emailsToSend.isEmpty()) {
+        try {
+            Messaging.sendEmail(emailsToSend);
+        } catch (Exception e) {
+            System.debug('Erro ao enviar e-mails: ' + e.getMessage());
+        }
+    }
+    
+    
+    if (!chatterFeedItems.isEmpty()) {
+        try {
+            insert chatterFeedItems;
+        } catch (Exception e) {
+            System.debug('Erro ao inserir mensagens no Chatter: ' + e.getMessage());
+        }
+    }
+}
+
+
+
+/**
+* Este método notifica as hierarquias de usuários relacionadas (como "reportase") em relação ao cancelamento da oportunidade.
+* É chamado recursivamente para notificar usuários hierárquicos.
+*/
+private static void notifyReportees(User currentUser, Opportunity opp, String subject, String htmlBody, 
+                                    List<FeedItem> chatterFeedItems, List<Messaging.SingleEmailMessage> emailsToSend) {
+  
+    if (currentUser.Reportase__c != null) {
+        User reportee = [SELECT Id, Name, Email, Reportase__c 
+                         FROM User 
+                         WHERE Id = :currentUser.Reportase__c LIMIT 1];
+        if (reportee != null) {
+        
+            if (reportee.Email != null) {
+                Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage();
+                email.setToAddresses(new String[] {reportee.Email});
+                email.setSubject(subject);
+                email.setHtmlBody(htmlBody);
+                emailsToSend.add(email);
+            }
+
+    
+          
+            notifyReportees(reportee, opp, subject, htmlBody, chatterFeedItems, emailsToSend);
+        }
+    }
+}
+
+
+
+
+
+
+    /**
+ * Este método prepara e envia notificações de cancelamento de oportunidade.
+ * As notificações incluem e-mails e mensagens no Chatter para os responsáveis e hierarquias relacionadas
+ * gando a oportunidade é movida para ganho de acordo com a parametrização.
+ */
+
+public static void handleOpportunityUpdate(List<Opportunity> updatedOpportunities) {
+    List<Opportunity> opportunitiesToUpdate = new List<Opportunity>();
+    Set<Id> oppIds = new Set<Id>();
+
+    Date today = System.today();
+
+    for (Opportunity opp : updatedOpportunities) {
+        
+        if (opp.StageName == 'Conferência') {
+            if (opp.Data_Assinatura_Contrato__c != null && opp.Dias_Apos_Assinatura__c != null) {
+                Date assinaturaData = opp.Data_Assinatura_Contrato__c;
+                Integer diasAposAssinatura = Integer.valueOf(opp.Dias_Apos_Assinatura__c);  
+                Date dataLimite = assinaturaData.addDays(diasAposAssinatura);
+
+               
+                if (dataLimite <= today) {
+                    Opportunity oppToUpdate = new Opportunity(Id = opp.Id, StageName = 'Ganho');
+                    opportunitiesToUpdate.add(oppToUpdate);
+                    oppIds.add(opp.Id);
+                }
+            }
+        }
+    }
+
+    
+    if (!opportunitiesToUpdate.isEmpty()) {
+      
+        List<Opportunity> oppsWithDetails = [
+            SELECT Id, Name, MotivoCancelamento__c, Unidade__c, Unidade__r.Name,
+                Contato__r.Name, Contato__r.Email, Contato__r.OwnerId,
+                Contato__r.UsuarioCorretor__r.Name, Contato__r.UsuarioCorretor__r.Email, Observacao__c
+            FROM Opportunity
+            WHERE Id IN :oppIds
+        ];
+
+        
+        Map<Id, Opportunity> oppDetailsMap = new Map<Id, Opportunity>(oppsWithDetails);
+
+      
+        for (Opportunity opp : opportunitiesToUpdate) {
+            if (oppDetailsMap.containsKey(opp.Id)) {
+                Opportunity detailedOpp = oppDetailsMap.get(opp.Id);
+                opp.Name = detailedOpp.Name;  
+                opp.Unidade__c = detailedOpp.Unidade__c;
+                opp.Unidade__r = detailedOpp.Unidade__r;
+                opp.Contato__r = detailedOpp.Contato__r;
+                opp.Observacao__c = detailedOpp.Observacao__c;
+                
+            }
+        }
+
+     
+        try {
+            update opportunitiesToUpdate;
+            System.debug('Oportunidades movidas para "Ganho".');
+            sendVictoryNotification(opportunitiesToUpdate);
+        } catch (Exception e) {
+            System.debug('Erro ao atualizar oportunidades: ' + e.getMessage());
+        }
+    }
+}
+
+
+
+
+/**
+* Este método prepara e envia notificações do vencimento da oportunidade.
+* As notificações incluem e-mails e mensagens no Chatter para os responsáveis e hierarquias relacionadas.
+*/
+public static void sendVictoryNotification(List<Opportunity> opportunitiesToUpdate) {
+    List<Messaging.SingleEmailMessage> emailsToSend = new List<Messaging.SingleEmailMessage>();
+    List<FeedItem> chatterFeedItems = new List<FeedItem>();
+
+    EmailTemplate emailTemplate = [SELECT Id, Name, HtmlValue 
+                                   FROM EmailTemplate 
+                                   WHERE Name = 'Template Vitoria da Oportunidade' LIMIT 1];
+
+    for (Opportunity opp : opportunitiesToUpdate) {
+        String subject = 'Notificação de Vitória da Oportunidade: ' + opp.Name;
+
+        String htmlBody = emailTemplate.HtmlValue;
+        if (htmlBody != null) {
+            htmlBody = htmlBody.replace('{{{Opportunity.Name}}}', opp.Name != null ? opp.Name : 'N/A');
+            htmlBody = htmlBody.replace('{{{Product2.Name}}}', opp.Unidade__r != null ? opp.Unidade__r.Name : 'N/A');
+            htmlBody = htmlBody.replace('{{{Opportunity.Observacao__c}}}', opp.Observacao__c != null ? opp.Observacao__c : 'N/A');
+        }
+
+        String chatterMessage = 'Notificação de Vitória da Oportunidade:Parábens! A oportunidade foi ganha.\n\n' +
+                                'Oportunidade: ' + opp.Name + '\n' +
+                                'Produto: ' + (opp.Unidade__r != null ? opp.Unidade__r.Name : 'N/A') + '\n' +
+                                'Observação: ' + (opp.Observacao__c != null ? opp.Observacao__c : 'N/A') + '\n\n' +
+                                'Parabéns, a oportunidade foi vencida com sucesso.\n\n' +
+                                'Atenciosamente,\nEquipe de Vendas';
+
+        FeedItem opportunityChatter = new FeedItem();
+        opportunityChatter.ParentId = opp.Id; 
+        opportunityChatter.Body = chatterMessage;
+        chatterFeedItems.add(opportunityChatter);
+
+        
+        if (opp.Contato__r != null && opp.Contato__r.OwnerId != null) {
+            User contactOwner = [SELECT Id, Name, Email, Reportase__c 
+                                 FROM User 
+                                 WHERE Id = :opp.Contato__r.OwnerId LIMIT 1];
+            if (contactOwner != null) {
+                if (contactOwner.Email != null) {
+                    Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage();
+                    email.setToAddresses(new String[] {contactOwner.Email});
+                    email.setSubject(subject);
+                    email.setHtmlBody(htmlBody);
+                    emailsToSend.add(email);
+                }
+              
+                notifyReporteesRecursively(contactOwner, opp, subject, htmlBody, chatterFeedItems, emailsToSend);
+            }
+        }
+    }
+
+    
+    if (!emailsToSend.isEmpty()) {
+        try {
+            Messaging.sendEmail(emailsToSend);
+        } catch (Exception e) {
+            System.debug('Erro ao enviar e-mails: ' + e.getMessage());
+        }
+    }
+
+    
+    if (!chatterFeedItems.isEmpty()) {
+        try {
+            insert chatterFeedItems;
+        } catch (Exception e) {
+            System.debug('Erro ao inserir mensagens no Chatter: ' + e.getMessage());
+        }
+    }
+}
+
+
+
+
+
+
+
+/**
+* Este método notifica as hierarquias de usuários relacionadas (como "reportase") em relação a conferencia da oportunidade.
+* É chamado recursivamente para notificar usuários hierárquicos quando a oportunidade é ganha.
+*/
+private static void notifyReporteesRecursively(User currentUser, Opportunity opp, String subject, String htmlBody, 
+                                               List<FeedItem> chatterFeedItems, List<Messaging.SingleEmailMessage> emailsToSend) {
+    if (currentUser.Reportase__c != null) {
+        User reportee = [SELECT Id, Name, Email, Reportase__c 
+                         FROM User 
+                         WHERE Id = :currentUser.Reportase__c LIMIT 1];
+        if (reportee != null) {
+            if (reportee.Email != null) {
+                Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage();
+                email.setToAddresses(new String[] {reportee.Email});
+                email.setSubject(subject);
+                email.setHtmlBody(htmlBody);
+                emailsToSend.add(email);
+            }
+
+            
+            notifyReporteesRecursively(reportee, opp, subject, htmlBody, chatterFeedItems, emailsToSend);
+        }
+    } 
+  }
 }
