@@ -171,9 +171,11 @@ public with sharing class AnaliseCreditoHelper {
 
             String message;
             if (analise.Status__c == 'Aprovada') {
-                message = 'A Análise crédito '+analise.Name+' foi aprovada com sucesso!';
+                message = 'A Análise crédito '+ analise.Name +' foi aprovada com sucesso!';
+                System.debug(message);
             } else if (analise.Status__c == 'Reprovada') {
-                message = 'A Análise crédito '+analise.Name+' foi reprovada';
+                message = 'A Análise crédito '+ analise.Name +' foi reprovada';
+                System.debug(message);
             }
 
             for (Id parentId : parentsId) {
@@ -184,6 +186,8 @@ public with sharing class AnaliseCreditoHelper {
                     )
                 );
             }
+
+            System.debug(FeedItem.Body + ' body');
 
             for (String email : emails) {
                 EmailManager.sendMail(email, 'Status Análise Crédito', message);
