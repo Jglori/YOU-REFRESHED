@@ -383,9 +383,7 @@ public with sharing class AnaliseCreditoHelperTest {
         Set<Id> analiseIds = new Set<Id>();
         analiseIds.add(analise.Id);
         analiseIds.add(analiseTest.Id);
-        // opportunityIds.add(analise.Opportunity__c);
-        // opportunityIds.add(analiseTest.Opportunity__c);
-
+        
         Map<Id, AnaliseCredito__c> analisePorOpp = new Map<Id, AnaliseCredito__c>();
         analisePorOpp.put(analise.Opportunity__c, analise);
         analisePorOpp.put(analiseTest.Opportunity__c, analiseTest);
@@ -470,6 +468,9 @@ public with sharing class AnaliseCreditoHelperTest {
         analisePorOpp.put(analise.Opportunity__c, analise);
         analisePorOpp.put(analiseTest.Opportunity__c, analiseTest);
 
+        if (analise.Opportunity__c == null) throw new IllegalArgumentException('Oportunidade da Análise não deve ser null.');
+        if (analise.Status__c == null) throw new IllegalArgumentException('Status da Análise não deve ser null.');
+
         List<Opportunity> opps =  [SELECT Id, 
                 Name, 
                 AccountId, 
@@ -503,7 +504,7 @@ public with sharing class AnaliseCreditoHelperTest {
 
                 String message;
                 if (analise.Status__c == 'Aprovada') {
-                    message = 'A Análise crédito '+analise.Name+' foi aprovada com sucesso!';
+                    message = 'A Análise crédito '+ analise.Name +' foi aprovada com sucesso!';
                 } else if (analise.Status__c == 'Reprovada') {
                     message = 'A Análise crédito '+analise.Name+' foi reprovada';
                 }
@@ -511,14 +512,16 @@ public with sharing class AnaliseCreditoHelperTest {
                 for (Id parentId : parentsId) {
                     feeds.add(
                         new FeedItem(
-                            ParentId = parentId, 
-                            Body = message
+                            Body = 'A Análise crédito foi aprovada com sucesso!',
+                            ParentId = parentId
                         )
                     );
                 }
+                
+                 System.debug(FeedItem.Body + ' body');
 
                 for (String email : emails) {
-                    EmailManager.sendMail(email, 'Status Análise Crédito', message);
+                    EmailManager.sendMail(email, 'Status Análise Crédito', 'A Análise crédito foi aprovada com sucesso!');
                 }
             }
             if (!feeds.isEmpty()) {
