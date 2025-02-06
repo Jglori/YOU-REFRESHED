@@ -1,0 +1,138 @@
+.section-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.section {
+    margin-bottom: 20px;
+    border: 1px solid #dcdcdc; /* Adiciona borda para separar as seções */
+    border-radius: 5px; /* Borda arredondada */
+    padding: 10px; /* Espaçamento interno */
+}
+
+.section-header {
+    margin-left: 14px;
+    font-size: 1.5em;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-weight: bold;
+    margin-bottom: 15px; /* Espaçamento inferior para separar do conteúdo */
+}
+
+.document-container {
+    margin-bottom: 10px; /* Ajuste conforme necessário para o espaçamento desejado */
+}
+
+.document-row {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    padding: 10px; /* Inner padding for the content */
+    background-color: #f9f9f9; /* Background color for better visibility */
+}
+
+.document-row lightning-icon {
+    margin-right: 10px;
+}
+
+.document-row span {
+    flex: 1;
+}
+
+.document-row .delivery-date {
+    color: #888;
+    font-size: 0.9em;
+    margin-left: 10px;
+}
+
+.document-row lightning-button-icon {
+    margin-left: 10px; /* Espaçamento entre os botões */
+    --sds-c-button-icon-size: 2.5rem; /* Tamanho do botão */
+}
+
+.document-row .completed-icon {
+    color: green;
+    margin-left: 10px;
+}
+
+.icon-and-buttons-container {
+    margin-right: 10px; 
+    display: flex;
+    align-items: center; 
+}
+.completed-icon {
+    color: green;
+    margin-left: 5px;
+    height: 1.5rem; 
+    width: 1.5rem;
+}
+
+.slds-modal__container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9001; 
+}
+.approval-icon {
+    --sds-c-icon-size: 1rem;
+}
+
+
+input[type="file"] {
+    opacity: 0;
+    width: 0.1px;
+    height: 0.1px;
+    position: absolute;
+    overflow: hidden;
+    clip: rect(1px, 1px, 1px, 1px);
+}.delivery-date {
+   display: grid;
+    transform: translate(0%, -220%);
+    font-size: 1rem;
+    text-align: center;
+}
+.empty-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%; /* Ajuste conforme necessário */
+    text-align: center;
+    padding: 1rem;
+}
+
+.empty-icon {
+    margin-bottom: 0.5rem;
+}
+
+.empty-message {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #666; /* Ajuste a cor do texto conforme necessário */
+    margin-bottom: 1rem;
+}
+
+.spinner-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.slds-spinner_container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.header-container {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px; 
+    padding: 1rem;
+}
+.help-text {
+    margin-right: 10px; /* Adiciona espaçamento à direita do helptext */
+}
+.refresh-button {
+    --sds-c-button-icon-size: 2rem; /* Ajuste o tamanho do ícone se necessário */
+}
