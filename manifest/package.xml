@@ -1,16 +1,31 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
 	<types>
-		<members>OpportunityTrigger</members>
+		<members>AnaliseCreditoTrigger</members>
+		<members>ContractTrigger</members>
 		<name>ApexTrigger</name>
 	</types>
 	<types>
-		<members>Opportunity.Processo Vendas</members>
-		<name>BusinessProcess</name>
+		<members>OpportunityContactRole.LayoutCompactoPapelContato</members>
+		<members>OpportunityContactRole.PapelContato</members>
+		<name>CompactLayout</name>
 	</types>
 	<types>
-		<members>Default_Opportunity</members>
-		<name>PathAssistant</name>
+		<members>TemplateDocumento__c.RecordTypeId</members>
+		<name>CustomField</name>
+	</types>
+	<types>
+		<members>Template_de_Documentos</members>
+		<name>FlexiPage</name>
+	</types>
+	<types>
+		<members>AnaliseCredito__c-Layout de Análise de Crédito</members>
+		<name>Layout</name>
+	</types>
+	<types>
+		<members>TemplateDocumento__c.DocumentosEmpreendimento</members>
+		<members>TemplateDocumento__c.Outros</members>
+		<name>RecordType</name>
 	</types>
 	<version>62.0</version>
 </Package>
