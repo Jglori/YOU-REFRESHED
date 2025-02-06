@@ -10,9 +10,13 @@
     </types>
         <types>
         <members>ChecklistDA</members>
+        <members>ChecklistDATes</members>
         <members>OpportunityHelper</members>
+        <members>OpportunityHelperTest</members>
         <members>OpportunityTriggerHandler</members>
+        <members>OpportunityTriggerHandlerTest</members>
         <members>ProdutoSelector</members>
+       <members>ProdutoSelectorTest</members>
         <name>ApexClass</name>
     </types>
     <version>62.0</version>
