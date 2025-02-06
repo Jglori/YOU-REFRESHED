@@ -357,4 +357,175 @@ public with sharing class AnaliseCreditoHelperTest {
             );
         }
     }
+
+    @IsTest
+    static void handleDocumentVerificationTest() {
+        Opportunity oppTest = [
+            SELECT Id, StageName
+            FROM Opportunity
+            WHERE StageName = 'Pré-análise'
+        ];
+        
+        AnaliseCredito__c analise = new AnaliseCredito__c();
+        analise.Name = 'Teste';
+        analise.Status__c = 'Em Análise';
+        analise.Opportunity__c = oppTest.Id;
+        analise.DataVencimento__c = Date.today();
+        
+        AnaliseCredito__c analiseTest = new AnaliseCredito__c();
+        analiseTest.Name = 'Teste';
+        analiseTest.Status__c = 'Em Análise';
+        analiseTest.Opportunity__c = oppTest.Id;
+        analiseTest.DataVencimento__c = Date.today();
+        
+        List<AnaliseCredito__c> analisesList = new List<AnaliseCredito__c>{analise, analiseTest};
+
+        Set<Id> analiseIds = new Set<Id>();
+        analiseIds.add(analise.Id);
+        analiseIds.add(analiseTest.Id);
+        // opportunityIds.add(analise.Opportunity__c);
+        // opportunityIds.add(analiseTest.Opportunity__c);
+
+        Map<Id, AnaliseCredito__c> analisePorOpp = new Map<Id, AnaliseCredito__c>();
+        analisePorOpp.put(analise.Opportunity__c, analise);
+        analisePorOpp.put(analiseTest.Opportunity__c, analiseTest);
+
+        List<Opportunity> opps = [SELECT Id, Name, AccountId, Corretor__c, StageName, Type
+        FROM Opportunity
+        WHERE Id IN (
+            SELECT Opportunity__c
+            FROM AnaliseCredito__c
+            WHERE Id IN :analiseIds 
+        )];
+
+        Set<Id> oppIds = new Set<Id>();
+        for (Opportunity opp : opps) {
+            oppIds.add(opp.Id);
+        }
+
+        List<Checklist_de_Documentos__c> checklists = [
+            SELECT Id, Oportunidade__c, Documenta_o__c, 
+                Documenta_o__r.Contato__c,
+                Documenta_o__r.Obrigatorio__c, 
+                Documenta_o__r.Entregue__c,
+                Documenta_o__r.Validado__c,
+                Documenta_o__r.Name,
+                Documenta_o__r.DataEntrega__c
+            FROM Checklist_de_Documentos__c
+            WHERE Oportunidade__c IN :oppIds
+        ];
+
+        Test.startTest();
+            AnaliseCreditoHelper.handleDocumentVerification(analisesList);    
+        Test.stopTest();
+    }
+
+    @IsTest
+    static void handleNotificationTest() {
+        Opportunity oppTest = [
+            SELECT Id, StageName, Name, AccountId, OwnerId, CloseDate
+            FROM Opportunity
+            WHERE StageName = 'Pré-análise'
+        ];
+        
+        AnaliseCredito__c analise = new AnaliseCredito__c();
+        analise.Name = 'Teste';
+        analise.Status__c = 'Em Análise';
+        analise.Opportunity__c = oppTest.Id;
+        analise.DataVencimento__c = Date.today();
+        
+        AnaliseCredito__c analiseTest = new AnaliseCredito__c();
+        analiseTest.Name = 'Teste';
+        analiseTest.Status__c = 'Em Análise';
+        analiseTest.Opportunity__c = oppTest.Id;
+        analiseTest.DataVencimento__c = Date.today();
+
+        Account acc = new Account(
+            Name = 'Test Account',
+            EmailJuridico__c = 'juridico@example.com'
+        );
+        insert acc;
+
+        User owner = new User(
+            FirstName = 'Test',
+            LastName = 'User',
+            Email = 'owner@example.com',
+            Username = 'testuserrrr@example.com',
+            Alias = 'tuser',
+            EmailEncodingKey = 'UTF-8',
+            LanguageLocaleKey = 'en_US',
+            LocaleSidKey = 'en_US',
+            TimeZoneSidKey = 'America/Los_Angeles',
+            ProfileId = [SELECT Id FROM Profile WHERE Name = 'Usuário Padrão'].Id
+        );
+        insert owner;
+        
+        List<AnaliseCredito__c> analisesList = new List<AnaliseCredito__c>{analise, analiseTest};
+
+        Set<Id> oppIds = new Set<Id>();
+        oppIds.add(analise.Opportunity__c);
+        oppIds.add(analiseTest.Opportunity__c);
+
+        Map<Id, AnaliseCredito__c> analisePorOpp = new Map<Id, AnaliseCredito__c>();
+        analisePorOpp.put(analise.Opportunity__c, analise);
+        analisePorOpp.put(analiseTest.Opportunity__c, analiseTest);
+
+        List<Opportunity> opps =  [SELECT Id, 
+                Name, 
+                AccountId, 
+                Account.PersonEmail, 
+                Account.EmailJuridico__c, 
+                Corretor__c, 
+                Corretor__r.Email,
+                Empreendimento__c, 
+                OwnerId, 
+                Owner.Email 
+            FROM Opportunity
+            WHERE Id IN :oppIds
+        ];
+
+        List<FeedItem> feeds = new List<FeedItem>();
+
+        //AnaliseCredito__c analise2 = analisePorOpp.get(analise.Opportunity__c.Id);
+
+        Test.startTest();
+            for (Opportunity opp : opps) {
+                if (opp.AccountId == null) throw new IllegalArgumentException('AccountId da Oportunidade não deve ser null.');
+                if (opp.OwnerId == null) throw new IllegalArgumentException('Owner da Oportunidade não deve ser null.');
+                if (opp.Account.PersonEmail == null && opp.Account.EmailJuridico__c == null) throw new IllegalArgumentException('Email de Account da Oportunidade não deve ser null.');
+                if (opp.Owner.Email == null) throw new IllegalArgumentException('Email do Owner da Oportunidade não deve ser null.');
+
+                AnaliseCredito__c analise3 = analisePorOpp.get(opp.Id);
+                
+                String accEmail = opp.Account.PersonEmail != null ? opp.Account.PersonEmail : opp.Account.EmailJuridico__c; 
+                List<String> emails = new List<String> { accEmail, opp.Owner.Email };
+                List<Id> parentsId = new List<Id>{ opp.OwnerId, opp.AccountId };
+
+                String message;
+                if (analise.Status__c == 'Aprovada') {
+                    message = 'A Análise crédito '+analise.Name+' foi aprovada com sucesso!';
+                } else if (analise.Status__c == 'Reprovada') {
+                    message = 'A Análise crédito '+analise.Name+' foi reprovada';
+                }
+
+                for (Id parentId : parentsId) {
+                    feeds.add(
+                        new FeedItem(
+                            ParentId = parentId, 
+                            Body = message
+                        )
+                    );
+                }
+
+                for (String email : emails) {
+                    EmailManager.sendMail(email, 'Status Análise Crédito', message);
+                }
+            }
+            if (!feeds.isEmpty()) {
+                insert feeds;            
+            }
+
+            AnaliseCreditoHelper.handleNotification(analisesList);   
+        Test.stopTest();
+    }
 }
