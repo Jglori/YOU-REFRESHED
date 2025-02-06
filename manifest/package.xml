@@ -10,7 +10,7 @@
     </types>
         <types>
         <members>ChecklistDA</members>
-        <members>ChecklistDATes</members>
+        <members>ChecklistDATest</members>
         <members>OpportunityHelper</members>
         <members>OpportunityHelperTest</members>
         <members>OpportunityTriggerHandler</members>
