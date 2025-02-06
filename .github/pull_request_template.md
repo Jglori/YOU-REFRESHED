@@ -1,14 +1,43 @@
-#################### Descrição do desenvolvimento ########################
+# 📝 Descrição do Desenvolvimento
+- **Resumo:**  
+  Descreva de forma clara e concisa o desenvolvimento realizado, incluindo os objetivos e as principais alterações implementadas.
 
-- Descrição do desenvolvimento realizado
+---
 
-####################### Ações de pós-deploy ###############################
+# 🔧 Ações de Pós-Deploy
+Após o deploy, as seguintes ações devem ser realizadas:
+- **Registrar Testes:**  
+  Cadastrar um registro específico para testar a funcionalidade implementada.
+  
+- **Preencher Metadados Personalizados:**  
+  Certificar-se de que todos os metadados personalizados necessários estejam preenchidos.
 
-- Caso seja necessário favor incluir ações que serão realizada após o deploy
-- EX: Cadastrar determinado registro para teste, preencher metadado personalizado
+- **Verificar Permissões:**  
+  Validar se as permissões de acesso foram configuradas corretamente para os usuários.
 
-################# Classes de Teste a serem executadas #####################
+---
 
-- Listar classes de testes necessárias para validar o Pacote
+# 🧪 Classes de Teste a serem Executadas
+Abaixo está a lista de classes de teste que precisam ser executadas para validar o pacote:
+- **Nome da Classe de Teste 1:**  
+  Descrição breve do que a classe de teste cobre.
+  
+- **Nome da Classe de Teste 2:**  
+  Descrição breve do que a classe de teste cobre.
+  
+- **Nome da Classe de Teste 3:**  
+  Descrição breve do que a classe de teste cobre.
 
-Revisão pós validação @Mariano-Edu
+---
+
+## 📝 Revisores da PR
+👤 @WillDantasJPG
+👤 @Jglori
+
+---
+
+## ✅ Checklist de Aprovação
+- [ ] Todos os testes passaram com sucesso.
+- [ ] A documentação foi atualizada conforme necessário.
+- [ ] As ações de pós-deploy foram concluídas.
+- [ ] Revisão de código concluída.
