@@ -34,7 +34,8 @@ public with sharing class AnaliseCreditoTriggerHandlerTest {
 
         // Criando um Checklist de Documentos
         Checklist_de_Documentos__c checklists = new Checklist_de_Documentos__c(
-            Oportunidade__c = opp1.Id
+            Oportunidade__c = opp1.Id,
+            Documenta_o__c = doc.Id
         );
         insert checklists;
     }
