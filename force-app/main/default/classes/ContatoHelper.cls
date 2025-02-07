@@ -1,50 +1,43 @@
 public with sharing class ContatoHelper{
 
-     public static Boolean validarCPF(String cpf) {
-        cpf = cpf.replaceAll('[^0-9]', '');
+    public static void verifyCPF(List<Contact> contacts) {
+
+        Id recordTypeCliente = Schema.SObjectType.Contact.getRecordTypeInfosByName().get('Cliente').getRecordTypeId();
     
-        if (cpf.length() == 11) {
-   
+        for (Contact contact : contacts) {
+            if (contact.RecordTypeId == recordTypeCliente) {
+                if (String.isNotBlank(contact.CPF__c) && !ValidarCPF.validarCPF(contact.CPF__c)) {
+                    contact.addError('CPF inválido. Por favor, insira um CPF válido. O CPF deve ser preenchido com 11 dígitos corridos');
+                }
+            } else {
+                System.debug('Não é um cliente, portanto não valida o CPF.');
+            }
+        }
+    }
+    
+    
 
-       if (cpf == '00000000000' || cpf == '11111111111' || cpf == '22222222222' ||
-       cpf == '33333333333' || cpf == '44444444444' || cpf == '55555555555' ||
-       cpf == '66666666666' || cpf == '77777777777' || cpf == '88888888888' ||
-       cpf == '99999999999') {
-       return false;
-       }
+    public static void handleStatusCorretor(List<Contact> contacts) {
+        for (Contact contact : contacts) {
+            if (contact.StatusUsuarioCorretor__c == 'Congelado') {
+                contact.StatusCorretor__c = 'Suspenso';
+            } else if (contact.StatusUsuarioCorretor__c == 'Desativado') {
+                contact.StatusCorretor__c = 'Desligado';
+            }
+        }
+    }
 
-          
-        Integer soma = 0;
-        for (Integer i = 0; i < 9; i++) {
-            soma += Integer.valueOf(cpf.substring(i, i+1)) * (10 - i);
-        }
-        Integer primeiroDigito = 11 - Math.mod(soma, 11);
-        if (primeiroDigito == 10 || primeiroDigito == 11) {
-            primeiroDigito = 0;
-        }
+    public static void handleCRECIStatus(List<Contact> contacts) {
+        Date dataAtual = Date.today();
         
-        if (primeiroDigito != Integer.valueOf(cpf.substring(9, 10))) {
-            return false;
+        for (Contact contact : contacts) {
+            if (contact.DatadeVencimento__c != null) {                
+                if (contact.DatadeVencimento__c >= dataAtual) {
+                    contact.CRECIAtivo__c = true;
+                } else {
+                    contact.CRECIAtivo__c = false;
+                }
+            }
         }
-        
-        soma = 0;
-        for (Integer i = 0; i < 10; i++) {
-            soma += Integer.valueOf(cpf.substring(i, i+1)) * (11 - i);
-        }
-        Integer segundoDigito = 11 - Math.mod(soma, 11);
-        if (segundoDigito == 10 || segundoDigito == 11) {
-            segundoDigito = 0;
-        }
-        
-        if (segundoDigito != Integer.valueOf(cpf.substring(10, 11))) {
-            return false;
-        }
-        
-        return true;
-       } else {
-       
-            return false;
-        }
-       
-      }
+    }
 }

@@ -113,7 +113,6 @@ public with sharing class DocumentacaoHelperTest {
 
         List<Checklist_de_Documentos__c> checklistList = new List<Checklist_de_Documentos__c>();
 
-
         for (Documentacao__c docChck : docsList) {
             checklistList.add(new Checklist_de_Documentos__c(
                 Oportunidade__c = oppChck.Id,
@@ -201,6 +200,7 @@ public with sharing class DocumentacaoHelperTest {
         Documentacao__c doc = [
             SELECT Id, Validado__c
             FROM Documentacao__c LIMIT 1
+
         ];
         doc.Validado__c = false;
         update doc;

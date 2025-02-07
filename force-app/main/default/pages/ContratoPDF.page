@@ -1,0 +1,3 @@
+<apex:page renderAs="pdf" applyBodyTag="false" controller="GerarContratoController">
+    <apex:outputText escape="false" value="{!conteudo}"/>
+</apex:page>

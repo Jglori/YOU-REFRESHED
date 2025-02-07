@@ -22,6 +22,10 @@
             <default>false</default>
         </values>
         <values>
+            <fullName>Lead Perdido%28não trabalho%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
             <fullName>Novo</fullName>
             <default>false</default>
         </values>

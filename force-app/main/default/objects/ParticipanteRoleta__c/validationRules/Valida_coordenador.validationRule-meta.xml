@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Valida_coordenador</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+    ISCHANGED(PresencaValidada__c),
+    NOT(
+        OR(
+            $User.Id = RoletaLeads__r.Coordenador__r.Id,
+            $Profile.Name = &quot;Recepcionista Comunidade&quot;
+        )
+    )
+)</errorConditionFormula>
+    <errorMessage>Somente o Coordenador da RoletaLeads ou a Recepcionista Comunidade podem alterar a presença</errorMessage>
+</ValidationRule>

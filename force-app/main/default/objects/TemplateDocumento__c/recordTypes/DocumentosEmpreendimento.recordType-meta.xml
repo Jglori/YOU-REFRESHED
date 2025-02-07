@@ -3,15 +3,4 @@
     <fullName>DocumentosEmpreendimento</fullName>
     <active>true</active>
     <label>Documentos do Empreendimento</label>
-    <picklistValues>
-        <picklist>TipoTemplate__c</picklist>
-        <values>
-            <fullName>Contrato</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Outro Documento</fullName>
-            <default>false</default>
-        </values>
-    </picklistValues>
 </RecordType>

@@ -35,6 +35,10 @@
                 <behavior>Edit</behavior>
                 <field>FracaoIdeal__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>DataDeReserva__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>

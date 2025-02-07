@@ -39,6 +39,10 @@
                 <behavior>Edit</behavior>
                 <field>Coeficiente__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>DataDeReserva__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>

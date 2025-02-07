@@ -69,10 +69,6 @@
     <picklistValues>
         <picklist>Situacao__c</picklist>
         <values>
-            <fullName>Livre</fullName>
-            <default>false</default>
-        </values>
-        <values>
             <fullName>Reservada</fullName>
             <default>false</default>
         </values>
@@ -90,10 +86,6 @@
     </picklistValues>
     <picklistValues>
         <picklist>Status__c</picklist>
-        <values>
-            <fullName>Livre</fullName>
-            <default>false</default>
-        </values>
         <values>
             <fullName>Reservada</fullName>
             <default>false</default>

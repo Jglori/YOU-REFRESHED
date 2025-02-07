@@ -3,10 +3,10 @@ public class LeadDATest {
     @isTest
     static void testGetLeadsById() {
         // Criação do empreendimento fictício
-        Empreendimento__c empreendimento = new Empreendimento__c();
-        empreendimento.Name = 'Teste empreendimento';
-        empreendimento.CNPJEmpreendimento__c = '36658601000133';
-        insert empreendimento;
+        Empreendimento__c empreendimento = new Empreendimento__c();  
+        empreendimento.Name = 'Teste empreendimento';  
+        empreendimento.CNPJEmpreendimento__c = '12345678000195'; // Substitua por um CNPJ válido  
+        insert empreendimento;  
 
         // Criação e inserção do primeiro lead
         Lead lead1 = new Lead(
@@ -64,27 +64,28 @@ public class LeadDATest {
 
         // Definição dos IDs dos leads e campos a serem consultados
         Set<Id> leadsIds = new Set<Id>{lead1.Id, lead2.Id};
-        Set<String> camposLead = new Set<String>{'Id', 'Status'};
+        Set<String> camposLead = new Set<String>{'Id', 'Status', 'EmpreendimentoInteresse__c'}; // Removido TotalDeAtividadesFaseAtual__c
 
         // Chamada aos métodos de consulta da classe LeadDA
         List<Lead> queriedLeads1 = LeadDA.getLeadsAgendamentoById(leadsIds);
         List<Lead> queriedLeads2 = LeadDA.getLeadsByIds(leadsIds);
         List<Lead> queriedLeads3 = LeadDA.getLeadScheduledById(camposLead, leadsIds);
-
+     
         // Verificação do tamanho das listas retornadas
-        // System.assertEquals(2, queriedLeads1.size());
-        // System.assertEquals(2, queriedLeads2.size());
-        // System.assertEquals(2, queriedLeads3.size());
+        System.assertEquals(2, queriedLeads2.size());
 
-        // // Verificação da consistência dos IDs dos leads retornados
-        // for (Lead queriedLead : queriedLeads1) {
-        //     System.assert(leadsIds.contains(queriedLead.Id));
-        // }
-        // for (Lead queriedLead : queriedLeads2) {
-        //     System.assert(leadsIds.contains(queriedLead.Id));
-        // }
-        // for (Lead queriedLead : queriedLeads3) {
-        //     System.assert(leadsIds.contains(queriedLead.Id));
-        // }
+        // Verificação da consistência dos IDs dos leads retornados
+        for (Lead queriedLead : queriedLeads1) {
+            System.assert(leadsIds.contains(queriedLead.Id));
+        }
+        for (Lead queriedLead : queriedLeads2) {
+            System.assert(leadsIds.contains(queriedLead.Id));
+        }
+
+        // Verificação do retorno do método getLeadScheduledById
+        System.assertEquals(2, queriedLeads3.size());
+        for (Lead queriedLead : queriedLeads3) {
+            System.assert(leadsIds.contains(queriedLead.Id));
+        }
     }
 }

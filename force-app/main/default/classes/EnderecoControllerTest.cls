@@ -21,7 +21,8 @@ public class EnderecoControllerTest {
             BillingStreet = RUA,
             BillingCity = CIDADE,
             BillingState = ESTADO,
-            BillingPostalCode = CEP
+            BillingPostalCode = CEP,
+            CNPJ__c = '12345678000195' // Exemplo de CNPJ válido
         );
         insert conta;
     }
@@ -41,12 +42,10 @@ public class EnderecoControllerTest {
 
         Assert.areEqual(enderecoEsperado.logradouro, endereco.logradouro, 'Logradouro obtido via CEP.');
 
-        EnderecoService.EnderecoRequest req =  new EnderecoService.EnderecoRequest();
+        EnderecoService.EnderecoRequest req = new EnderecoService.EnderecoRequest();
         req.cep = '13332121';
         
-        EnderecoService.buscarEnderecoInvocable(new List<EnderecoService.EnderecoRequest>{req});
-
-
+        EnderecoService.buscarEnderecoInvocable(new List<EnderecoService.EnderecoRequest>{ req });
     }
 
     @isTest
@@ -66,7 +65,7 @@ public class EnderecoControllerTest {
 
     @isTest
     static void testModificarEndereco() {
-        Account conta = [SELECT BillingStreet, BillingCity, BillingState, BillingCountry, BillingPostalCode FROM Account LIMIT 1];
+        Account conta = [SELECT Id, BillingStreet, BillingCity, BillingState, BillingCountry, BillingPostalCode, CNPJ__c FROM Account LIMIT 1];
 
         EnderecoController.modificarEndereco(JSON.serialize(ENDERECO), OBJECT_API_NAME, conta.Id);
 

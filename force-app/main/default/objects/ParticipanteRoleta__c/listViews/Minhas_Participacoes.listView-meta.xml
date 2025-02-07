@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Minhas_Participacoes</fullName>
+    <columns>NAME</columns>
+    <columns>RoletaLeads__c</columns>
+    <columns>Posicao__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Participante_Vigente__c</field>
+        <operation>equals</operation>
+        <value>1</value>
+    </filters>
+    <label>Minhas Participações</label>
+</ListView>

@@ -5,7 +5,8 @@ public without sharing class ParticipanteRoletaSelector {
                 MembroEquipe__c, 
                 MembroEquipe__r.Usuario__r.Situacao__c,
                 RegistroIndisponibilidade__c,
-                RoletaLeads__c 
+                RoletaLeads__c,
+                Saida__c 
             FROM ParticipanteRoleta__c 
             WHERE 
                 RoletaLeads__r.Ativa__c = true AND 
@@ -13,13 +14,26 @@ public without sharing class ParticipanteRoletaSelector {
                 MembroEquipe__c IN :idsMembros
         ];
     }
-
     public static List<ParticipanteRoleta__c> obterParticipantesPorIdsRoleta(Set<Id> idsRoletas) {
-        return [SELECT  RoletaLeads__c, Posicao__c, MembroEquipe__c FROM ParticipanteRoleta__c WHERE RoletaLeads__c IN :idsRoletas];
+        if (idsRoletas == null || idsRoletas.isEmpty()) {
+            return new List<ParticipanteRoleta__c>(); 
+        }
+    
+        List<ParticipanteRoleta__c> participantes = [
+            SELECT RoletaLeads__c, Posicao__c, MembroEquipe__c, Saida__c, RegistroIndisponibilidade__c 
+            FROM ParticipanteRoleta__c 
+            WHERE RoletaLeads__c IN :idsRoletas
+        ];
+    
+        return participantes;
     }
-
+    
     public static List<ParticipanteRoleta__c> obterParticipantesPorIds(Set<Id> idsParticipantes) {
-        return [
+        if (idsParticipantes == null || idsParticipantes.isEmpty()) {
+            return new List<ParticipanteRoleta__c>(); // Retorna uma lista vazia se não houver IDs
+        }
+    
+        List<ParticipanteRoleta__c> participantes = [
             SELECT 
                 MembroEquipe__c, 
                 MembroEquipe__r.ExigeValidacaoCoordenador__c, 
@@ -34,7 +48,10 @@ public without sharing class ParticipanteRoletaSelector {
             FROM ParticipanteRoleta__c 
             WHERE Id IN :idsParticipantes
         ];
+    
+        return participantes;
     }
+    
 
     public static List<ParticipanteRoleta__c> obterParticipantesPorUserID(Id userId) {
         return [SELECT  RoletaLeads__c, Posicao__c, MembroEquipe__c,MembroEquipe__r.Usuario__c FROM ParticipanteRoleta__c WHERE MembroEquipe__r.Usuario__c =: userId];

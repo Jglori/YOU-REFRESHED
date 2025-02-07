@@ -1,0 +1,24 @@
+<template>
+    <div class="slds-col slds-p-horizontal_large slds-box" variant="narrow">                
+        <div class="slds-grid slds-wrap">
+            <div class="slds-text-heading_small slds-col slds-size_1-of-1">
+                <lightning-icon icon-name="standard:list_fee" alternative-text="Event" title="Event"></lightning-icon>
+                <span class="slds-p-left_small">
+                    <b>Serie Mês a Mês</b>
+                </span>
+            </div>
+            <div class="slds-text-title slds-col slds-size_1-of-1 slds-p-top_small">
+                <span>Revise as condições de pagamento Mês a Mês!</span>
+            </div>
+
+            <div class="slds-size_1-of-1 slds-col" style="height: 250px;">
+                <lightning-datatable
+                    key-field="id"
+                    data={data}
+                    columns={columns}
+                    hide-checkbox-column="true">
+                </lightning-datatable>
+            </div>
+        </div>
+    </div>
+</template>

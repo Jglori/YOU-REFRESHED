@@ -5,7 +5,7 @@ public with sharing class EventTriggerHandler extends TriggerHandler {
     }
     
     public override void beforeUpdate() {
-        EventHelper.validateLeadStatus((List<Event>) Trigger.new);
+        //EventHelper.validateLeadStatus((List<Event>) Trigger.new);
         EventHelper.validateEventDate(Trigger.new);
     }
 

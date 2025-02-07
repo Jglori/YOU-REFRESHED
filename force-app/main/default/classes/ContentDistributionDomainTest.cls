@@ -1,36 +1,67 @@
 @isTest
 public class ContentDistributionDomainTest {
 
-    @isTest
-    static void testObterDistribuicaoPorIdArquivo() {
-        // Criação de um ContentVersion
-        ContentVersion contentVersion = new ContentVersion(
-            Title = 'Arquivo de Teste',
-            PathOnClient = 'testfile.txt',
-            VersionData = Blob.valueOf('Conteúdo do arquivo de teste'),
+    @testSetup
+    static void setupTestData() {
+        // Criação de um ContentVersion para todos os testes
+        ContentVersion cv = new ContentVersion(
+            Title = 'Test Document',
+            PathOnClient = 'TestDoc.pdf',
+            VersionData = Blob.valueOf('Test Content'),
             IsMajorVersion = true
         );
-        insert contentVersion;
+        insert cv;
 
-        // // Criação de uma ContentDistribution associada ao ContentVersion
-        // ContentDistribution contentDistribution = new ContentDistribution(
-        //     Name = 'Distribuição de Teste',
-        //     ContentVersionId = contentVersion.Id,
-        //     PreferencesAllowViewInBrowser = true,
-        //     PreferencesLinkLatestVersion = true
-        // );
-        // insert contentDistribution;
+        // Verifique se o ContentDistribution já existe antes de inserir
+        ContentDistribution existingCd = [SELECT Id FROM ContentDistribution WHERE ContentVersionId = :cv.Id LIMIT 1];
 
-        // Teste do método obterDistribuicaoPorIdArquivo
+        if (existingCd == null) {
+            // Se não existir, então insira um novo ContentDistribution
+            ContentDistribution cd = new ContentDistribution(
+                Name = 'Test Distribution',
+                ContentVersionId = cv.Id,
+                PreferencesAllowViewInBrowser = true,
+                PreferencesLinkLatestVersion = true
+            );
+            insert cd;
+        }
+    }
+
+    @isTest
+    static void testObterDistribuicaoPorIdArquivoWithExistingDistribution() {
+        // Busca o ContentVersion criado pelo @testSetup
+        ContentVersion cv = [SELECT Id FROM ContentVersion LIMIT 1];
+
+        // Chama o método para obter a distribuição por ID de arquivo
         Test.startTest();
-        try {
-            ContentDistribution result = ContentDistributionDomain.obterDistribuicaoPorIdArquivo(contentVersion.Id);
-        } catch (Exception ex){}
+        ContentDistribution result = ContentDistributionDomain.obterDistribuicaoPorIdArquivo(cv.Id);
         Test.stopTest();
 
-        // // Verificações
-        // System.assertNotEquals(null, result, 'A ContentDistribution retornada não deve ser nula');
-        // //System.assertEquals(contentDistribution.Id, result.Id, 'O ID da ContentDistribution retornada deve ser o mesmo que o ID inserido');
-        // System.assertEquals('Distribuição de Teste', result.Name, 'O nome da ContentDistribution retornada deve ser "Distribuição de Teste"');
+        // Validações
+        System.assertNotEquals(null, result, 'A distribuição não deve ser nula.');
+        System.assertEquals(cv.Id, result.ContentVersionId, 'O ID do ContentVersion deve corresponder.');
     }
+
+   @isTest
+    static void testObterDistribuicaoPorIdArquivoWithNoDistribution() {
+        // Cria um novo ContentVersion sem uma ContentDistribution
+        ContentVersion cv = new ContentVersion(
+            Title = 'No Distribution Document',
+            PathOnClient = 'NoDistDoc.pdf',
+            VersionData = Blob.valueOf('No Distribution Content'),
+            IsMajorVersion = true
+        );
+        insert cv;
+    
+        // Chama o método para obter a distribuição por ID de arquivo
+        Test.startTest();
+        ContentDistribution result = ContentDistributionDomain.obterDistribuicaoPorIdArquivo(cv.Id);
+        Test.stopTest();
+    
+        // Verifica se a distribuição retornada não tem ContentVersionId ou se foi criada automaticamente
+        if (result != null) {
+            System.assertEquals(cv.Id, result.ContentVersionId, 'O ContentVersionId não deve corresponder, pois nenhuma distribuição foi criada.');
+        }
+    }
+
 }

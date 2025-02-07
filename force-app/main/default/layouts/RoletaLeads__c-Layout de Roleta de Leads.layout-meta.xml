@@ -2,7 +2,6 @@
 <Layout xmlns="http://soap.sforce.com/2006/04/metadata">
     <excludeButtons>ChangeOwnerOne</excludeButtons>
     <excludeButtons>ChangeRecordType</excludeButtons>
-    <excludeButtons>OpenSlackRecordChannel</excludeButtons>
     <excludeButtons>PrintableView</excludeButtons>
     <excludeButtons>RecordShareHierarchy</excludeButtons>
     <excludeButtons>Share</excludeButtons>
@@ -137,13 +136,15 @@
     <relatedLists>
         <excludeButtons>MassChangeOwner</excludeButtons>
         <fields>NAME</fields>
-        <fields>MembroEquipe__c</fields>
         <fields>PresencaValidada__c</fields>
         <fields>Situacao__c</fields>
         <fields>Posicao__c</fields>
         <fields>Gerente_Salao__c</fields>
         <fields>Superintendente__c</fields>
         <fields>Diretor_geral__c</fields>
+        <quickActions>ParticipanteRoleta__c.Ativar_Recepcao_de_Leads</quickActions>
+        <quickActions>ParticipanteRoleta__c.Desativar_Recep_o_de_Leads</quickActions>
+        <quickActions>ParticipanteRoleta__c.Excluir_Participante</quickActions>
         <relatedList>ParticipanteRoleta__c.RoletaLeads__c</relatedList>
         <sortField>Posicao__c</sortField>
         <sortOrder>Asc</sortOrder>
@@ -157,7 +158,7 @@
     <showRunAssignmentRulesCheckbox>false</showRunAssignmentRulesCheckbox>
     <showSubmitAndAttachButton>false</showSubmitAndAttachButton>
     <summaryLayout>
-        <masterLabel>00hDy000000iFH5</masterLabel>
+        <masterLabel>00hbL000000oCiy</masterLabel>
         <sizeX>4</sizeX>
         <sizeY>0</sizeY>
         <summaryLayoutStyle>Default</summaryLayoutStyle>

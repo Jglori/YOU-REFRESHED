@@ -7,7 +7,7 @@ public class EventTriggerHandlerTest {
     }
 
     private static void doCreateData(){
-        Empreendimento__c empreendimento = new Empreendimento__c(Name = 'Teste empreendimento',CNPJEmpreendimento__c ='07135796000139');
+        Empreendimento__c empreendimento = new Empreendimento__c(Name = 'Teste empreendimento',CNPJEmpreendimento__c ='68505201000184');
         insert empreendimento;
         
    
@@ -19,7 +19,8 @@ public class EventTriggerHandlerTest {
             CanalAtendimento__c = 'Chat',
             MobilePhone = '11960387699',
             Status = 'Novo',
-            EmpreendimentoInteresse__c = empreendimento.Id
+            EmpreendimentoInteresse__c = empreendimento.Id,
+            CPF__c = '28798378040'
         );
 
         insert testLead;

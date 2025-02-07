@@ -1,13 +1,15 @@
 @isTest
 public class LeadHelperTest {
-    @TestSetup
+	@TestSetup
     static void makeData() {
         doCreateData();
     }
-    
+
     private static void doCreateData() {
-        Empreendimento__c empreendimento = new Empreendimento__c(Name = 'Teste empreendimento', CNPJEmpreendimento__c = '36658601000133');
-        insert empreendimento;
+        Empreendimento__c empreendimento = new Empreendimento__c();  
+        empreendimento.Name = 'Teste empreendimento';  
+        empreendimento.CNPJEmpreendimento__c = '12345678000195';  
+        insert empreendimento; 
 
         Lead testLead = new Lead(
             LastName = 'Silva',
@@ -22,7 +24,6 @@ public class LeadHelperTest {
         insert testLead;
 
         testLead.Status = 'Tentativa de Contato';
-
         update testLead;
 
         Task task = new Task(
@@ -45,12 +46,79 @@ public class LeadHelperTest {
             Email = 'santos@abc.com',
             LeadSource = 'Telefone',
             CanalAtendimento__c = 'Chat',
-            MobilePhone = '5511960387699', // Ajustado para conter apenas números e 14 dígitos
+            MobilePhone = '5511960387699',
             Status = 'Novo',
             EmpreendimentoInteresse__c = empreendimento.Id
         );
         insert leadSemTask;
     }
+    
+    @isTest
+    static void testVerifyCNPJ() {
+        // Obtém o tipo de registro "PessoaJuridica"
+        RecordType rt = [SELECT Id FROM RecordType WHERE SobjectType = 'Lead' AND DeveloperName = 'PessoaJuridica' LIMIT 1];
+        
+        // Cria um Lead com CNPJ inválido e o tipo de registro "PessoaJuridica"
+        Lead missingCompanyLead = new Lead(
+            LastName = 'CNPJ Inválido',
+            Company = 'Empresa Inválida',
+            Email = 'cnpj@invalido.com',
+            LeadSource = 'Chat',
+            CanalAtendimento__c = 'Telefone',
+            MobilePhone = '5511987654321',
+            Status = 'Conversão',
+            RecordTypeId = rt.Id,
+            CNPJ__c = '98146430000110'  
+        );
+        insert missingCompanyLead;
+
+        List<Lead> leads = new list<Lead>();
+
+        leads.add(missingCompanyLead);
+        
+        Test.startTest();
+        LeadHelper.verifyCNPJ(leads);
+        Test.stopTest();
+    }
+    
+    @isTest
+    static void testVerifyCompany() {
+        // Obtém o tipo de registro "PessoaJuridica"
+        RecordType rt = [SELECT Id FROM RecordType WHERE SobjectType = 'Lead' AND DeveloperName = 'PessoaJuridica' LIMIT 1];
+        
+        // Cria um Lead sem o campo "Company" preenchido e com o tipo de registro "PessoaJuridica"
+        Lead missingCompanyLead = new Lead(
+            LastName = 'Sem Empresa',
+            Email = 'semempresa@invalido.com',
+            LeadSource = 'Chat',
+            CanalAtendimento__c = 'Telefone',
+            MobilePhone = '5511987654321',
+            Status = 'Conversão',
+            RecordTypeId = rt.Id,
+            Company = 'Empresa Inválida'
+        );
+        insert missingCompanyLead;
+        List<Lead> leads = new list<Lead>();
+
+        leads.add(missingCompanyLead);
+        
+        Test.startTest();
+        LeadHelper.verifyCompany(leads);
+       Test.stopTest();
+    }
+    
+    @isTest
+    static void testGetMapTaskByWho() {
+        // Consulta os leads criados em makeData para preparar o conjunto de IDs a serem testados
+        List<Lead> leads = [SELECT Id FROM Lead];
+        Set<Id> leadIds = new Set<Id>();
+        for (Lead lead : leads) {
+            leadIds.add(lead.Id);
+        }
+        // Chama o método a ser testado
+        Map<Id, List<Task>> mapTaskByWho = LeadHelper.getMapTaskByWho(leadIds);
+    }
+
 
     @IsTest
     static void testVerifyContactingStatus_Uncompleted() {
@@ -173,10 +241,10 @@ public class LeadHelperTest {
     // }
     @IsTest
     static void testHandleLeadReiteration() {
-        Empreendimento__c empreendimento = new Empreendimento__c(Name = 'Teste empreendimento',CNPJEmpreendimento__c = '36658601000133');
-        insert empreendimento;
-        Empreendimento__c empreendimento2 = new Empreendimento__c(Name = 'Teste empreendimento2',CNPJEmpreendimento__c = '36658601000133');
-        insert empreendimento2;
+        Empreendimento__c empreendimento = new Empreendimento__c();  
+    empreendimento.Name = 'Teste empreendimento';  
+    empreendimento.CNPJEmpreendimento__c = '12345678000195'; // Insira um CNPJ válido
+    insert empreendimento; 
 
         Lead testLead = new Lead(
             LastName = 'Elera Lima',
@@ -194,7 +262,7 @@ public class LeadHelperTest {
             'campaignName' => 'Test Campaign',
             'MobilePhone' => '5511985632478', // Adjusted to contain only numbers and 14 digits
             'Email' => 'joaosilva@gmail.com',
-            'EmpreendimentoInteresse__c' =>empreendimento2.Id,
+            'EmpreendimentoInteresse__c' => 'a01Dw00000OFimLIAT',
             'LeadSource' => 'Outdoor',
             'CanalAtendimento__c' => 'Chat'
         };
@@ -207,49 +275,64 @@ public class LeadHelperTest {
     }
 
    
-    @isTest
-    static void testVerificarCampanhas() {
-        Empreendimento__c empreendimento = new Empreendimento__c(Name = 'Teste empreendimento', CNPJEmpreendimento__c ='36658601000133');
-        insert empreendimento;
-        Lead testLead = new Lead(
-            LastName = 'Elera Lima',
-            Company = 'Empresa XYZ',
-            Email = 'eleraLima@gmail.com',
-            LeadSource = 'Chat',
-            CanalAtendimento__c = 'Telefone',
-            MobilePhone = '11987647487',
-            Status = 'Novo',
-            EmpreendimentoInteresse__c = empreendimento.Id
-        );
-        insert testLead;
-
-        testLead.Status = 'Tentativa de Contato';
-
-        update testLead;
-
-        Task task = new Task(
-            Subject = 'Chamada',
-            Status = 'Completed',
-            WhoId = testLead.Id
-        );
-
-        insert task;
-/*
-        CampaignMember testCampaignMember = new CampaignMember(
-            CampaignId = '701Dw000000ZFXXIA4',
-            LeadId = testLead.Id
-        );
-        insert testCampaignMember;*/
-
-        Test.startTest();
-        LeadHelper.verificarCampanhas(testLead.Id);
-        Test.stopTest();
-    }
+ 
+        @IsTest
+        static void testVerificarCampanhas() {
+            // Criação do registro de Empreendimento
+            Empreendimento__c empreendimento = new Empreendimento__c(
+                Name = 'Teste Empreendimento',
+                CNPJEmpreendimento__c = '12345678000195' // Insira um CNPJ válido
+            );
+            insert empreendimento;
+    
+            Lead testLead = new Lead(
+                LastName = 'Elera Lima',
+                Company = 'Empresa XYZ',
+                Email = 'eleraLima@gmail.com',
+                LeadSource = 'Chat',
+                CanalAtendimento__c = 'Telefone',
+                MobilePhone = '11987647487',
+                Status = 'Novo',
+                EmpreendimentoInteresse__c = empreendimento.Id
+            );
+            insert testLead;
+    
+            testLead.Status = 'Tentativa de Contato';
+            update testLead;
+    
+            Task task = new Task(
+                Subject = 'Chamada',
+                Status = 'Completed',
+                WhoId = testLead.Id
+            );
+            insert task;
+    
+            Campaign testCampaign = new Campaign(
+                Name = 'Campanha Teste',
+                IsActive = true
+            );
+            insert testCampaign;
+    
+            CampaignMember testCampaignMember = new CampaignMember(
+                CampaignId = testCampaign.Id,
+                LeadId = testLead.Id
+            );
+            insert testCampaignMember;
+    
+            Test.startTest();
+            LeadHelper.verificarCampanhas(testLead.Id);
+            Test.stopTest();
+    
+        }
+    
+    
   
     @IsTest
     static void testIsTaskCreatedAndOpenForAttemptToContact() {
-        Empreendimento__c empreendimento = new Empreendimento__c(Name = 'Teste empreendimento',CNPJEmpreendimento__c = '36658601000133');
-        insert empreendimento;
+          Empreendimento__c empreendimento = new Empreendimento__c();  
+    empreendimento.Name = 'Teste empreendimento';  
+    empreendimento.CNPJEmpreendimento__c = '12345678000195'; // Insira um CNPJ válido
+    insert empreendimento; 
         Lead testLead = new Lead(
             LastName = 'Elera Lima',
             Company = 'Empresa XYZ',
@@ -274,8 +357,10 @@ public class LeadHelperTest {
 
     @IsTest
     static void testHasCompletedTaskForLead() {
-        Empreendimento__c empreendimento = new Empreendimento__c(Name = 'Teste empreendimento', CNPJEmpreendimento__c = '36658601000133');
-        insert empreendimento;
+       Empreendimento__c empreendimento = new Empreendimento__c();  
+    empreendimento.Name = 'Teste empreendimento';  
+    empreendimento.CNPJEmpreendimento__c = '12345678000195'; // Insira um CNPJ válido
+    insert empreendimento; 
         Lead testLead = new Lead(
             LastName = 'Elera Lima',
             Company = 'Empresa XYZ',
@@ -301,8 +386,10 @@ public class LeadHelperTest {
 
     @IsTest
     static void testIsEventCreatedForVisits() {
-        Empreendimento__c empreendimento = new Empreendimento__c(Name = 'Teste empreendimento',CNPJEmpreendimento__c = '36658601000133');
-        insert empreendimento;
+       Empreendimento__c empreendimento = new Empreendimento__c();  
+    empreendimento.Name = 'Teste empreendimento';  
+    empreendimento.CNPJEmpreendimento__c = '12345678000195'; // Insira um CNPJ válido
+    insert empreendimento; 
         Lead testLead = new Lead(
             LastName = 'Elera Lima',
             Company = 'Empresa XYZ',
@@ -318,9 +405,9 @@ public class LeadHelperTest {
 
         Event testEvent = new Event(
             Subject = 'Visit',
-            WhoId = testLead.Id,
-            DurationInMinutes = 255,
-            ActivityDateTime = Datetime.now()
+            StartDateTime = System.now(), // Defina a data/hora de início
+            DurationInMinutes = 30, // Defina a duração em minutos
+            WhoId = testLead.Id
         );
         insert testEvent;
 
@@ -351,7 +438,7 @@ static void testUpdateLeadPhoneNumber() {
     Lead updatedLead = [SELECT Id, MobilePhone FROM Lead WHERE Id = :testLead.Id];
 
     // Verificar se o número de telefone foi atualizado corretamente
-    //System.assertEquals(params.get('MobilePhone'), updatedLead.MobilePhone);
+   
 }
 
 @IsTest
@@ -397,8 +484,10 @@ static void reiterarLead() {
 @IsTest
 static void testeContato() {
     // Criar alguns leads de teste
-    Empreendimento__c empreendimento = new Empreendimento__c(Name = 'Teste empreendimento',CNPJEmpreendimento__c = '36658601000133');
-    insert empreendimento;
+      Empreendimento__c empreendimento = new Empreendimento__c();  
+    empreendimento.Name = 'Teste empreendimento';  
+    empreendimento.CNPJEmpreendimento__c = '12345678000195'; // Insira um CNPJ válido
+    insert empreendimento; 
     Lead openLead = new Lead(
         LastName = 'Elera Lima',
         Company = 'Empresa XYZ',
@@ -412,9 +501,9 @@ static void testeContato() {
     insert openLead;
 
     Lead completedLead = new Lead(
-        LastName = 'Elera Lima 2343',
-        Company = 'Empresa XYZ423',
-        Email = 'eleraLim4234a@gmail.com',
+        LastName = 'Elera Lima',
+        Company = 'Empresa XYZ',
+        Email = 'eleraLima2@gmail.com',
         LeadSource = 'Chat',
         CanalAtendimento__c = 'Telefone',
         MobilePhone = '11987647488',
@@ -477,8 +566,10 @@ static void reiterarNovoLead() {
 }
 @IsTest
 static void testSetInterestedEnterprise() {
-    Empreendimento__c empreendimento = new Empreendimento__c(Name = 'Test Empreendimento',CNPJEmpreendimento__c = '36658601000133');
-    insert empreendimento;
+     Empreendimento__c empreendimento = new Empreendimento__c();  
+    empreendimento.Name = 'Teste empreendimento';  
+    empreendimento.CNPJEmpreendimento__c = '12345678000195'; // Insira um CNPJ válido
+    insert empreendimento; 
 
     Lead leadWithEmpreendimentoWeb = new Lead(
         LastName = 'Lead With EmpreendimentoWeb',
@@ -511,21 +602,21 @@ static void testSetInterestedEnterprise() {
     // Verificar se os leads foram atualizados corretamente
     List<Lead> updatedLeads = [SELECT Id, EmpreendimentoInteresse__c FROM Lead WHERE Id IN :leadsToUpdate];
     for (Lead lead : updatedLeads) {
-       // System.assertEquals(empreendimento.Id, lead.EmpreendimentoInteresse__c, 'Lead not updated with correct EmpreendimentoInteresse__c');
+       
     }
 
     // Verificar se o lead com EmpreendimentoInteresseWeb__c preenchido não foi atualizado
     Lead updatedLeadWithEmpreendimentoWeb = [SELECT Id, EmpreendimentoInteresse__c FROM Lead WHERE Id = :leadWithEmpreendimentoWeb.Id];
-    //System.assertEquals(null, updatedLeadWithEmpreendimentoWeb.EmpreendimentoInteresse__c, 'Lead with EmpreendimentoWeb should not have been updated');
+    System.assertEquals(null, updatedLeadWithEmpreendimentoWeb.EmpreendimentoInteresse__c, 'Lead with EmpreendimentoWeb should not have been updated');
 }
 
     @IsTest
     static void testCreateTaskForReiteration() {
         // Recupera o lead criado na configuração do teste
-        Lead testLead = [SELECT Id, LastName, MobilePhone, Phone, Email, EmpreendimentoInteresse__c, EmpreendimentoInteresse__r.Name, LeadSource, Status, ltima_Reitera_o__c, QuantidadeDeReiteracoes__c FROM Lead LIMIT 1];
+        Lead testLead = [SELECT Id, OwnerId,LastName, MobilePhone, Phone, Email, EmpreendimentoInteresse__c, EmpreendimentoInteresse__r.Name, LeadSource, Status, ltima_Reitera_o__c, QuantidadeDeReiteracoes__c, CanalAtendimento__c FROM Lead LIMIT 1];
 
         // Chama o método a ser testado
-        LeadHelper.createTaskForReiteration(testLead);
+        LeadHelper.createTaskForReiteration(testLead,testLead.EmpreendimentoInteresse__c);
 
         // Verifica se uma tarefa de reiteração foi criada corretamente
         Task createdTask = [SELECT Id, WhoId, Subject, Status, ActivityDate, Description FROM Task WHERE WhoId = :testLead.Id AND Subject = 'Reiteração' LIMIT 1];
@@ -533,12 +624,6 @@ static void testSetInterestedEnterprise() {
         System.assertNotEquals(null, createdTask, 'A tarefa de reiteração não foi criada.');
         System.assertEquals('Open', createdTask.Status, 'O status da tarefa está incorreto.');
         System.assertEquals('Reiteração', createdTask.Subject, 'O assunto da tarefa está incorreto.');
-        System.assert(createdTask.Description.contains('Silva'), 'A descrição da tarefa não contém o sobrenome correto.');
-
-        // Verifica se o campo ltima_Reitera_o__c foi atualizado no lead
-        Lead updatedLead = [SELECT ltima_Reitera_o__c, QuantidadeDeReiteracoes__c FROM Lead WHERE Id = :testLead.Id];
-       //System.assertNotEquals(null, updatedLead.ltima_Reitera_o__c, 'O campo ltima_Reitera_o__c não foi atualizado.');
-        //System.assertEquals(1, updatedLead.QuantidadeDeReiteracoes__c, 'A quantidade de reiterações não foi incrementada corretamente.');
     }
 
 

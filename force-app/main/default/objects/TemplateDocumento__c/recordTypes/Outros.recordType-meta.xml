@@ -3,15 +3,4 @@
     <fullName>Outros</fullName>
     <active>false</active>
     <label>Outros</label>
-    <picklistValues>
-        <picklist>TipoTemplate__c</picklist>
-        <values>
-            <fullName>Contrato</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Outro Documento</fullName>
-            <default>true</default>
-        </values>
-    </picklistValues>
 </RecordType>
