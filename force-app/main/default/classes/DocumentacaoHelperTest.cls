@@ -3,41 +3,61 @@ public with sharing class DocumentacaoHelperTest {
     
     @TestSetup
     static void setup() {        
-        Opportunity opp = new Opportunity();
-        opp.Name = 'Teste';
-        opp.Amount = 1000;
-        opp.CanalAtendimento__c = 'WhatsApp';
-        opp.Probability = 20;
-        opp.TipoVenda__c = 'Negócio novo';
-        opp.CloseDate = System.today().addDays(15);
-        opp.StageName = 'Pré-análise';
-        insert opp;
+        Opportunity opp = new Opportunity(
+            Name = 'Teste Pré-análise',
+            Amount = 1000,
+            CanalAtendimento__c = 'Loja',
+            Probability = 20,
+            TipoVenda__c = 'Negócio novo',
+            CloseDate = System.today().addDays(15),
+            StageName = 'Ficha Cadastral'
+        );
 
-        Contact ctt = new Contact();
-        ctt.FirstName = 'Elera';
-        ctt.LastName = 'Teste';
-        ctt.Email = 'teste.dev@elera.io';
-        insert ctt;
+        Opportunity oppChck = new Opportunity(
+            Name = 'Teste',
+            Amount = 1000,
+            CanalAtendimento__c = 'WhatsApp',
+            Probability = 20,
+            TipoVenda__c = 'Negócio novo',
+            CloseDate = System.today().addDays(15),
+            StageName = 'Ficha Cadastral'
+        );
+
+        Contact ctt = new Contact(
+            FirstName = 'Elera',
+            LastName = 'Teste',
+            Email = 'teste.dev@elera.io'
+        );
+
+        Contact cttChk = new Contact(
+            FirstName = 'Elera',
+            LastName = 'Teste Check',
+            Email = 'teste.dev@check.io'
+        );
+
+        List<SObject> recordsToInsert = new List<SObject>{opp, oppChck, ctt, cttChk};
+        insert recordsToInsert;
 
         OpportunityContactRole contactRole = new OpportunityContactRole(
             OpportunityId = opp.Id,
             ContactId = ctt.Id,
             Role = 'Comprador'
         );
-        insert contactRole;
-        
-        AnaliseCredito__c analise = new AnaliseCredito__c();
-        analise.Name = 'Teste';
-        analise.Status__c = 'Em Análise';
-        analise.Opportunity__c = opp.Id;
-        analise.DataVencimento__c = Date.today();
 
-        insert analise;
+        OpportunityContactRole ctrCheck = new OpportunityContactRole(
+            OpportunityId = oppChck.Id,
+            ContactId = cttChk.Id,
+            Role = 'Comprador'
+        );
 
-        ContentVersion contentVersion = new ContentVersion();
-        contentVersion.Title = 'RG';
-        contentVersion.PathOnClient = 'image/jpeg';
-        contentVersion.VersionData = EncodingUtil.base64Decode('This is version data');
+        insert new List<SObject>{contactRole, ctrCheck };
+
+        ContentVersion contentVersion = new ContentVersion(
+            Title = 'RG',
+            PathOnClient = 'image/jpeg',
+            VersionData = EncodingUtil.base64Decode('This is version data')
+        );
+
         insert contentVersion;
 
         ContentVersion cv = [
@@ -46,31 +66,72 @@ public with sharing class DocumentacaoHelperTest {
             WHERE Id = :contentVersion.Id
         ];
 
-        ContentDocumentLink contentDocumentLink = new ContentDocumentLink();
-        contentDocumentLink.ContentDocumentId = cv.ContentDocumentId;
-        contentDocumentLink.LinkedEntityId = opp.Id;
-        contentDocumentLink.ShareType = 'I'; 
-        contentDocumentLink.Visibility = 'AllUsers';
-        insert contentDocumentLink;
-
-        Documentacao__c doc = new Documentacao__c(
-            Obrigatorio__c = true,
-            Entregue__c = true,
-            Name = 'RG',
-            ContentDocumentId_c__c = cv.ContentDocumentId,
-            DataEntrega__c = Date.today(),
-            Contato__c = ctt.Id,
-            Validado__c = false
+        ContentDocumentLink contentDocumentLink = new ContentDocumentLink(
+            ContentDocumentId = cv.ContentDocumentId,
+            LinkedEntityId = opp.Id,
+            ShareType = 'I', 
+            Visibility = 'AllUsers'
         );
 
-        insert doc;
+        insert contentDocumentLink;
+
+        List<Documentacao__c> docsList = new List<Documentacao__c>{
+            new Documentacao__c(
+                Obrigatorio__c = true,
+                Entregue__c = true,
+                Name = 'RG',
+                ContentDocumentId_c__c = cv.ContentDocumentId,
+                DataEntrega__c = Date.today(),
+                Contato__c = ctt.Id,
+                Validado__c = false
+            )
+        };
+
+        List<String> docsObrigatorios = new List<String>{'Comprovante de Renda', 'CPF', 'RG'};
+
+        for (String docName : docsObrigatorios) {
+            docsList.add(new Documentacao__c(
+                Name = docName,
+                Contato__c = ctrCheck.ContactId,
+                Obrigatorio__c = true,
+                Entregue__c = true,
+                Validado__c = true
+            ));
+        }
+
+        for (String docName : docsObrigatorios) {
+            docsList.add(new Documentacao__c(
+                Name = docName,
+                Contato__c = contactRole.ContactId,
+                Obrigatorio__c = true,
+                Entregue__c = true,
+                Validado__c = true
+            ));
+        }
         
-        Checklist_de_Documentos__c checklist = new Checklist_de_Documentos__c();
-        checklist.Oportunidade__c = opp.Id;
-        checklist.Documenta_o__c = doc.Id;
-        checklist.Contato__c = ctt.Id;
-        insert checklist;
+        insert docsList;
+
+        List<Checklist_de_Documentos__c> checklistList = new List<Checklist_de_Documentos__c>();
+
+        for (Documentacao__c docChck : docsList) {
+            checklistList.add(new Checklist_de_Documentos__c(
+                Oportunidade__c = oppChck.Id,
+                Documenta_o__c = docChck.Id,
+                Contato__c = cttChk.Id
+            ));
+        }
+
+        for (Documentacao__c docChck : docsList) {
+            checklistList.add(new Checklist_de_Documentos__c(
+                Oportunidade__c = opp.Id,
+                Documenta_o__c = docChck.Id,
+                Contato__c = ctt.Id
+            ));
+        }
+
+        insert checklistList;
     }
+
     
     @IsTest
     static void testCriarDocumentacao() {
@@ -95,7 +156,8 @@ public with sharing class DocumentacaoHelperTest {
         String base64 = EncodingUtil.base64Encode(Blob.valueOf('Test File Content'));
         String title = 'RG';
         Documento__mdt docMdt = DocumentacaoDA.getMetadasByName(new Set<String>{title})[0];
-        Opportunity opportunity = [SELECT Id FROM Opportunity LIMIT 1];
+        Opportunity opportunity = [SELECT Id FROM Opportunity WHERE StageName = 'Ficha Cadastral' LIMIT 1];
+
         Contact contato = [SELECT Id FROM Contact LIMIT 1];
 
         Test.startTest();
@@ -107,10 +169,19 @@ public with sharing class DocumentacaoHelperTest {
     
     @IsTest
     static void testGetByAnaliseCreditoValidate() {
-        AnaliseCredito__c analise = [
-            SELECT Id
-            FROM AnaliseCredito__c
-        ];
+        Opportunity opp = [SELECT Id FROM Opportunity WHERE CanalAtendimento__c = 'Loja' LIMIT 1];
+        opp.FarolChecklistDocumento__c = 'Verde';
+        opp.StageName = 'Pré-análise';
+        update opp;
+
+        AnaliseCredito__c analise = new AnaliseCredito__c(
+            Name = 'Teste',
+            Status__c = 'Em Análise',
+            Opportunity__c = opp.Id,
+            DataVencimento__c = Date.today()
+        );
+
+        insert analise;
         
         Test.startTest();
         List<Documentacao__c> docs = DocumentacaoHelper.getByAnaliseCredito(analise.Id);
@@ -128,7 +199,8 @@ public with sharing class DocumentacaoHelperTest {
     static void testValidateDocuments() {
         Documentacao__c doc = [
             SELECT Id, Validado__c
-            FROM Documentacao__c
+            FROM Documentacao__c LIMIT 1
+
         ];
         doc.Validado__c = false;
         update doc;
@@ -139,7 +211,7 @@ public with sharing class DocumentacaoHelperTest {
         
         List<Documentacao__c> expected = [
             SELECT Id, Name, Contato__c, ContentDocumentId_c__c, Entregue__c, Validado__c
-        	FROM Documentacao__c
+        	FROM Documentacao__c LIMIT 1
         ];
         
         System.assertEquals(expected, docs, 'Deveria retornar uma lista de Documentos válidos.');
@@ -149,7 +221,7 @@ public with sharing class DocumentacaoHelperTest {
     static void testInvalidateDocuments() {
         Documentacao__c doc = [
             SELECT Id, Validado__c
-            FROM Documentacao__c
+            FROM Documentacao__c LIMIT 1
         ];
         doc.Validado__c = true;
         update doc;
@@ -160,7 +232,7 @@ public with sharing class DocumentacaoHelperTest {
         
         List<Documentacao__c> expected = [
             SELECT Id, Name, Contato__c, ContentDocumentId_c__c, Entregue__c, Validado__c
-        	FROM Documentacao__c
+        	FROM Documentacao__c LIMIT 1
         ];
         
         System.assertEquals(expected, docs, 'Deveria retornar uma lista de Documentos inválidos.');
@@ -181,7 +253,7 @@ public with sharing class DocumentacaoHelperTest {
 
     @IsTest
     static void testGetDocumentsFromOppToContactRoles() {
-        Opportunity opp = [SELECT Id FROM Opportunity LIMIT 1];
+        Opportunity opp = [SELECT Id FROM Opportunity WHERE StageName = 'Ficha Cadastral' LIMIT 1];
 
         System.debug(opp);
 
@@ -197,7 +269,7 @@ public with sharing class DocumentacaoHelperTest {
 
     @IsTest
     static void testGetByOpportunityId() {
-        Opportunity opps = [SELECT Id FROM Opportunity];
+        Opportunity opps = [SELECT Id FROM Opportunity WHERE StageName = 'Ficha Cadastral' LIMIT 1];
 
         Set<Id> oppsIds = new Set<Id>();
         oppsIds.add(opps.Id);
@@ -220,7 +292,7 @@ public with sharing class DocumentacaoHelperTest {
 
     @IsTest 
     static void testGetByOpportunityIdFilteredByRole() {
-        Opportunity opps = [SELECT Id FROM Opportunity LIMIT 1];
+        Opportunity opps = [SELECT Id FROM Opportunity WHERE StageName = 'Ficha Cadastral' LIMIT 1];
 
         Set<Id> oppsIds = new Set<Id>();
         oppsIds.add(opps.Id);
