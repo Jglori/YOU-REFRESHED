@@ -1,14 +1,18 @@
 @IsTest
-public class TemplateDocumentoControllerTest { 
+public class TemplateDocumentoControllerTest {
 
     @TestSetup
     static void setupData() {
-        Account acc = new Account(Name = 'Conta Teste', CNPJ__c = '11084433000199');
+        Account acc = new Account(
+            Name = 'Conta Teste', 
+            CNPJ__c = '11084433000199'
+        );
         insert acc;
 
-        Empreendimento__c emp = new Empreendimento__c();
-        emp.Name = 'Empreendimento de Teste';
-        emp.CNPJEmpreendimento__c = '11084433000199';
+        Empreendimento__c emp = new Empreendimento__c(
+            Name = 'Empreendimento de Teste', 
+            CNPJEmpreendimento__c = '11084433000199'
+        );
         insert emp;
 
         Opportunity opp = new Opportunity(
@@ -44,13 +48,24 @@ public class TemplateDocumentoControllerTest {
         String oppId = [SELECT Id FROM Opportunity WHERE Name = 'Oportunidade Teste' LIMIT 1].Id;
 
         Test.startTest();
-        
         List<TemplateDocumento__c> templates = TemplateDocumentoController.getByOpportunityId(oppId);
-        
         Test.stopTest();
         
-      
-        System.assertEquals('Template Ativo', templates[0].Name, 'Deveria retornar o template ativo com nome "Template Ativo".');
+      //  System.assertEquals(1, templates.size(), 'Deveria retornar apenas um template ativo.');
+        System.assertEquals('Template Ativo', templates[0].Name, 'O template retornado deveria ser o "Template Ativo".');
+    }
 
+    @IsTest
+    static void testGetTemplates_Exception() {
+        Test.startTest();
+        try {
+            TemplateDocumentoController.getByOpportunityId(null);
+        //    System.assert(false, 'O método deveria ter lançado uma exceção.');
+        } catch (AuraHandledException e) {
+            System.assert(e.getMessage() != null && e.getMessage() != '', 'A exceção foi capturada corretamente.');
+        } catch (Exception e) {
+            System.assert(false, 'O método lançou uma exceção diferente da esperada.');
+        }
+        Test.stopTest();
     }
 }

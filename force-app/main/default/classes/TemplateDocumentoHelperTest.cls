@@ -95,7 +95,7 @@ public class TemplateDocumentoHelperTest {
         try {
             List<TemplateDocumento__c> templates = TemplateDocumentoHelper.getByOpportunityId(newOpp.Id);  // Chamando o helper
             System.assert(false, 'O método deveria ter lançado uma exceção devido à ausência de templates.');
-        } catch (AuraHandledException e) { 
+        } catch (AuraHandledException e) {
           //  System.assertEquals(e.getMessage(), 'Nenhum template encontrado para o Empreendimento associado.', 'A exceção lançada está correta.');
         }
         Test.stopTest();

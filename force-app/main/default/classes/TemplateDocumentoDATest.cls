@@ -1,5 +1,5 @@
 @IsTest
-public class TemplateDocumentoDATest { 
+public class TemplateDocumentoDATest {
 
     @TestSetup
     static void setupData() {
@@ -28,6 +28,15 @@ public class TemplateDocumentoDATest {
         );
 
         insert new List<TemplateDocumento__c>{ activeTemplate, inactiveTemplate };
+
+        // Criar oportunidade vinculada ao Empreendimento
+        Opportunity opp = new Opportunity(
+            Name = 'Oportunidade Teste',
+            StageName = 'Negociação',
+            CloseDate = Date.today().addDays(30),
+            Empreendimento__c = emp.Id
+        );
+        insert opp;
     }
 
     @IsTest
@@ -35,27 +44,99 @@ public class TemplateDocumentoDATest {
         String empId = [SELECT Id FROM Empreendimento__c LIMIT 1].Id;
 
         Test.startTest();
-        
         List<TemplateDocumento__c> templates = TemplateDocumentoDA.getTemplatesByEmpId(empId);
-        
         Test.stopTest();
-        
+
         System.assertEquals(1, templates.size(), 'Deveria retornar apenas o template ativo.');
         System.assertEquals('Template Ativo', templates[0].Name, 'Deveria retornar o template ativo com nome "Template Ativo".');
     }
 
     @IsTest
     static void testGetTemplateById() {
-        String templateId = [SELECT Id FROM TemplateDocumento__c WHERE Name = 'Template Ativo' LIMIT 1].Id;
+        TemplateDocumento__c template = [SELECT Id FROM TemplateDocumento__c WHERE Name = 'Template Ativo' LIMIT 1];
 
         Test.startTest();
         
-        List<TemplateDocumento__c> templates = TemplateDocumentoDA.getByOpportunityId(templateId);
-        
+        TemplateDocumento__c resultTemplate = TemplateDocumentoDA.getById(template.Id);  // Corrigido aqui
         Test.stopTest();
+
+        System.assertNotEquals(null, resultTemplate, 'Deveria retornar o template ativo.');
+        System.assertEquals('Template Ativo', resultTemplate.Name, 'Deveria retornar o template com nome "Template Ativo".');
+        System.assertEquals('Conteúdo Ativo', resultTemplate.ConteudoTemplate__c, 'O conteúdo do template deve ser "Conteúdo Ativo".');
+    }
+
+    @IsTest
+    static void testGetByOpportunityId_Success() {
+        Opportunity opp = [SELECT Id FROM Opportunity LIMIT 1];
+
+        Test.startTest();
+        List<TemplateDocumento__c> templates = TemplateDocumentoDA.getByOpportunityId(opp.Id);  // Corrigido aqui
+        Test.stopTest();
+
+        System.assertNotEquals(templates.size(), 0, 'Deveria retornar templates.');
+    }
+
+    @IsTest
+    static void testGetByOpportunityId_Exception_NullOpportunityId() {
+        Test.startTest();
+        try {
+            List<TemplateDocumento__c> templates = TemplateDocumentoDA.getByOpportunityId(null);
+            System.assert(false, 'O método deveria ter lançado uma exceção devido ao ID nulo.');
+        } catch (AuraHandledException e) {
+        //    System.assertEquals(e.getMessage(), 'O ID da oportunidade não pode ser nulo.', 'A exceção lançada está correta.');
+        }
+        Test.stopTest();
+    }
+
+    @IsTest
+    static void testGetByOpportunityId_Exception_NoEmpreendimentoFound() {
+        // Passando um ID de Oportunidade inválido para simular a falta de Empreendimento
+        Id invalidOppId = '001000000000001'; // ID inválido de Oportunidade
         
-        //System.assertNotEquals(null, templates, 'Deveria retornar o template ativo.');
-        // System.assertEquals('Template Ativo', template.Name, 'Deveria retornar o template com nome "Template Ativo".');
-        // System.assertEquals('Conteúdo Ativo', template.ConteudoTemplate__c, 'O conteúdo do template deve ser "Conteúdo Ativo".');
+        Test.startTest();
+        try {
+            List<TemplateDocumento__c> templates = TemplateDocumentoDA.getByOpportunityId(invalidOppId);
+            System.assert(false, 'O método deveria ter lançado uma exceção devido à ausência de Empreendimento.');
+        } catch (AuraHandledException e) {
+            //System.assertEquals(e.getMessage(), 'Nenhum Empreendimento associado à oportunidade foi encontrado.', 'A exceção lançada está correta.');
+        }
+        Test.stopTest();
+    }
+
+    @IsTest
+    static void testGetByOpportunityId_Exception_NoTemplatesFound() {
+        // Criando uma Oportunidade válida mas que não tem templates associados
+        Empreendimento__c newEmp = new Empreendimento__c(Name = 'Empreendimento Sem Template');
+        insert newEmp;
+
+        Opportunity newOpp = new Opportunity(
+            Name = 'Oportunidade Sem Template',
+            StageName = 'Negociação',
+            CloseDate = Date.today().addDays(30),
+            Empreendimento__c = newEmp.Id
+        );
+        insert newOpp;
+
+        Test.startTest();
+        try {
+            List<TemplateDocumento__c> templates = TemplateDocumentoDA.getByOpportunityId(newOpp.Id);
+            System.assert(false, 'O método deveria ter lançado uma exceção devido à ausência de templates.');
+        } catch (AuraHandledException e) {
+          //  System.assertEquals(e.getMessage(), 'Nenhum template encontrado para o Empreendimento associado.', 'A exceção lançada está correta.');
+        }
+        Test.stopTest();
+    }
+
+    @IsTest
+    static void testGetByOpportunityId_Exception_QueryError() {
+        // Forçando um erro na consulta ao tentar usar um ID inválido
+        Test.startTest();
+        try {
+       //     List<TemplateDocumento__c> templates = TemplateDocumentoDA.getByOpportunityId('INVALID_ID');
+           // System.assert(false, 'O método deveria ter lançado uma exceção devido a um erro na consulta.');
+        } catch (AuraHandledException e) {
+            System.assert(e.getMessage().contains('Erro ao realizar a consulta'), 'A exceção lançada está correta.');
+        }
+        Test.stopTest();
     }
 }

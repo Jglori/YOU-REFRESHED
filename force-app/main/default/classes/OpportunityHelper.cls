@@ -17,6 +17,8 @@ public with sharing class OpportunityHelper {
         'Fechado Ganho/Desistência'
     };
 
+    
+
     public static List<Opportunity> getByIds(Set<Id> ids) {
         if (ids == null) throw new IllegalArgumentException('A lista de ids não deve null.');
 
