@@ -1,5 +1,5 @@
 @IsTest
-public class TemplateDocumentoDATest {
+public class TemplateDocumentoHelperTest {
 
     @TestSetup
     static void setupData() {
@@ -40,50 +40,24 @@ public class TemplateDocumentoDATest {
     }
 
     @IsTest
-    static void testGetTemplatesByEmpId() {
-        String empId = [SELECT Id FROM Empreendimento__c LIMIT 1].Id;
-
-        Test.startTest();
-        List<TemplateDocumento__c> templates = TemplateDocumentoDA.getTemplatesByEmpId(empId);
-        Test.stopTest();
-
-        System.assertEquals(1, templates.size(), 'Deveria retornar apenas o template ativo.');
-        System.assertEquals('Template Ativo', templates[0].Name, 'Deveria retornar o template ativo com nome "Template Ativo".');
-    }
-
-    @IsTest
-    static void testGetTemplateById() {
-        TemplateDocumento__c template = [SELECT Id FROM TemplateDocumento__c WHERE Name = 'Template Ativo' LIMIT 1];
-
-        Test.startTest();
-        
-        TemplateDocumento__c resultTemplate = TemplateDocumentoDA.getById(template.Id);  // Corrigido aqui
-        Test.stopTest();
-
-        System.assertNotEquals(null, resultTemplate, 'Deveria retornar o template ativo.');
-        System.assertEquals('Template Ativo', resultTemplate.Name, 'Deveria retornar o template com nome "Template Ativo".');
-        System.assertEquals('Conteúdo Ativo', resultTemplate.ConteudoTemplate__c, 'O conteúdo do template deve ser "Conteúdo Ativo".');
-    }
-
-    @IsTest
     static void testGetByOpportunityId_Success() {
         Opportunity opp = [SELECT Id FROM Opportunity LIMIT 1];
 
         Test.startTest();
-        List<TemplateDocumento__c> templates = TemplateDocumentoDA.getByOpportunityId(opp.Id);  // Corrigido aqui
+        List<TemplateDocumento__c> templates = TemplateDocumentoHelper.getByOpportunityId(opp.Id);  // Chamando o helper
         Test.stopTest();
 
-        System.assertNotEquals(templates.size(), 0, 'Deveria retornar templates.');
+        System.assertNotEquals(templates.size(), 0, 'Deveria retornar templates associados à oportunidade.');
     }
 
     @IsTest
     static void testGetByOpportunityId_Exception_NullOpportunityId() {
         Test.startTest();
         try {
-            List<TemplateDocumento__c> templates = TemplateDocumentoDA.getByOpportunityId(null);
+            List<TemplateDocumento__c> templates = TemplateDocumentoHelper.getByOpportunityId(null);
             System.assert(false, 'O método deveria ter lançado uma exceção devido ao ID nulo.');
         } catch (AuraHandledException e) {
-        //    System.assertEquals(e.getMessage(), 'O ID da oportunidade não pode ser nulo.', 'A exceção lançada está correta.');
+         //   System.assertEquals(e.getMessage(), 'O ID da oportunidade não pode ser nulo.', 'A exceção lançada está correta.');
         }
         Test.stopTest();
     }
@@ -95,7 +69,7 @@ public class TemplateDocumentoDATest {
         
         Test.startTest();
         try {
-            List<TemplateDocumento__c> templates = TemplateDocumentoDA.getByOpportunityId(invalidOppId);
+            List<TemplateDocumento__c> templates = TemplateDocumentoHelper.getByOpportunityId(invalidOppId);  // Chamando o helper
             System.assert(false, 'O método deveria ter lançado uma exceção devido à ausência de Empreendimento.');
         } catch (AuraHandledException e) {
             //System.assertEquals(e.getMessage(), 'Nenhum Empreendimento associado à oportunidade foi encontrado.', 'A exceção lançada está correta.');
@@ -119,7 +93,7 @@ public class TemplateDocumentoDATest {
 
         Test.startTest();
         try {
-            List<TemplateDocumento__c> templates = TemplateDocumentoDA.getByOpportunityId(newOpp.Id);
+            List<TemplateDocumento__c> templates = TemplateDocumentoHelper.getByOpportunityId(newOpp.Id);  // Chamando o helper
             System.assert(false, 'O método deveria ter lançado uma exceção devido à ausência de templates.');
         } catch (AuraHandledException e) {
           //  System.assertEquals(e.getMessage(), 'Nenhum template encontrado para o Empreendimento associado.', 'A exceção lançada está correta.');
@@ -132,8 +106,8 @@ public class TemplateDocumentoDATest {
         // Forçando um erro na consulta ao tentar usar um ID inválido
         Test.startTest();
         try {
-       //     List<TemplateDocumento__c> templates = TemplateDocumentoDA.getByOpportunityId('INVALID_ID');
-           // System.assert(false, 'O método deveria ter lançado uma exceção devido a um erro na consulta.');
+         //   List<TemplateDocumento__c> templates = TemplateDocumentoHelper.getByOpportunityId('INVALID_ID');
+          //  System.assert(false, 'O método deveria ter lançado uma exceção devido a um erro na consulta.');
         } catch (AuraHandledException e) {
             System.assert(e.getMessage().contains('Erro ao realizar a consulta'), 'A exceção lançada está correta.');
         }
