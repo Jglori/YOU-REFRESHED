@@ -14,8 +14,10 @@ public with sharing class OpportunityHelper {
         'Geração de Contrato',
         'Conferência',
         'Pagadoria',
-        'Fechado Ganho/Desistência'
+        'Ganho'
     };
+
+    
 
     public static List<Opportunity> getByIds(Set<Id> ids) {
         if (ids == null) throw new IllegalArgumentException('A lista de ids não deve null.');
@@ -39,43 +41,34 @@ public with sharing class OpportunityHelper {
             for (Opportunity newOpp : newOpportunities) {
                 Opportunity oldOpp = oldOpportunitiesMap.get(newOpp.Id);
                 
-                // Verificar se a transição não é de "Negociação" para "Cancelado"
-                if (oldOpp.StageName == 'Negociação' && newOpp.StageName == 'Cancelado') {
-                    // Se o estágio for "Cancelado", validar apenas o "Motivo do Cancelamento"
-                    if (String.isBlank(String.valueOf(newOpp.MotivoCancelamento__c))) {
-                        newOpp.addError('Motivo do Cancelamento é um campo obrigatório.');
+                if (oldOpp.StageName != 'Negociação' || newOpp.StageName != 'Ficha Cadastral') continue;
+    
+                boolean hasSyncedQuote = OpportunityDA.hasSyncedQuote(newOpp.Id);
+                boolean hasProducts = hasProducts(newOpp.Id);
+                boolean hasBuyers = hasBuyers(newOpp.Id);
+    
+                for (String fieldName : mandatoryFields.keySet()) {
+                    if (newOpp.get(fieldName) == null || String.isBlank(String.valueOf(newOpp.get(fieldName)))) {
+                        newOpp.addError(mandatoryFields.get(fieldName) + ' é um campo obrigatório.');
                     }
-                    return;  // Não precisa continuar para outras validações
                 }
-                
-                // Verificar se a transição é de "Negociação" para "Ficha Cadastral"
-                if (oldOpp.StageName == 'Negociação' && newOpp.StageName == 'Ficha Cadastral') {
-                    boolean hasSyncedQuote = OpportunityDA.hasSyncedQuote(newOpp.Id);
-                    boolean hasProducts = hasProducts(newOpp.Id);
-                    boolean hasBuyers = hasBuyers(newOpp.Id);
-        
-                    for (String fieldName : mandatoryFields.keySet()) {
-                        if (newOpp.get(fieldName) == null || String.isBlank(String.valueOf(newOpp.get(fieldName)))) {
-                            newOpp.addError(mandatoryFields.get(fieldName) + ' é um campo obrigatório.');
-                        }
+    
+                if (!hasSyncedQuote || !hasProducts || !hasBuyers) {
+                    String errorMessage = 'Não é possível avançar para a Ficha Cadastral:';
+                    if (!hasSyncedQuote) {
+                        errorMessage += '\n- Favor sincronizar uma cotação com a oportunidade.';
                     }
-        
-                    if (!hasSyncedQuote || !hasProducts || !hasBuyers) {
-                        String errorMessage = 'Não é possível avançar para a Ficha Cadastral:';
-                        if (!hasSyncedQuote) {
-                            errorMessage += '\n- Favor sincronizar uma cotação com a oportunidade.';
-                        }
-                        if (!hasProducts) {
-                            errorMessage += '\n- Pelo menos um produto da oportunidade deve ser adicionado.';
-                        }
-                        if (!hasBuyers) {
-                            errorMessage += '\n- Pelo menos um comprador (papel de contato) deve ser especificado.';
-                        }
-                        newOpp.addError(errorMessage);
+                    if (!hasProducts) {
+                        errorMessage += '\n- Pelo menos um produto da oportunidade deve ser adicionado.';
                     }
+                    if (!hasBuyers) {
+                        errorMessage += '\n- Pelo menos um comprador (papel de contato) deve ser especificado.';
+                    }
+                    newOpp.addError(errorMessage);
                 }
             }
         }
+    
         
 
     @TestVisible
@@ -389,16 +382,6 @@ public static void handleOpportunityCancelation(List<Opportunity> newOpps, Map<I
         }
 
         sendCancelNotification(opportunitiesToNotify);
-    }
-
-    // Impede mudanças de estágio para "Cancelado"
-    for (Opportunity opp : newOpps) {
-        Opportunity oldOpp = oldOpps.get(opp.Id);
-        
-        // Se a oportunidade já está em "Cancelado", impede a mudança para outra fase
-        if (oldOpp != null && oldOpp.StageName == 'Cancelado' && opp.StageName != 'Cancelado') {
-            opp.StageName.addError('A oportunidade está cancelada e não pode ser movida para outra fase.');
-        }
     }
 }
 

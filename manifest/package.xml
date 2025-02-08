@@ -1,14 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
-	<types>
-		<members>AnaliseCredito__c-Análise de Crédito Layout</members>
-		<members>AnaliseCredito__c-Layout de Análise de Crédito</members>
-		<name>Layout</name>
-	</types>
-	<types>
-		<members>Opportunity.EditionRequiredGanho</members>
-		<members>OpportunityLineItem.ValidationProductOpp</members>
-		<name>ValidationRule</name>
-	</types>
-	<version>62.0</version>
+    <types>
+        <members>Product2.DataDeReserva__c</members>
+        <name>CustomField</name>
+    </types>
+    <types>
+        <members>OpportunityTrigger</members>
+        <name>ApexTrigger</name>
+    </types>
+        <types>
+        <members>ChecklistDA</members>
+        <members>ChecklistDATest</members>
+        <members>OpportunityHelper</members>
+        <members>OpportunityHelperTest</members>
+        <members>OpportunityTriggerHandler</members>
+        <members>OpportunityTriggerHandlerTest</members>
+        <members>ProdutoSelector</members>
+       <members>ProdutoSelectorTest</members>
+        <name>ApexClass</name>
+    </types>
+    <version>62.0</version>
 </Package>
