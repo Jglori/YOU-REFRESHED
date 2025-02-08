@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
 	<types>
-		<members>TemplateDocumentoHelperTest</members>
-		<members>TemplateDocumentoControllerTest</members>
-		<members>TemplateDocumentoDA</members>
-		<members>TemplateDocumentoDATest</members>
-		<name>ApexClass</name>
+		<members>AnaliseCredito__c-Análise de Crédito Layout</members>
+		<members>AnaliseCredito__c-Layout de Análise de Crédito</members>
+		<name>Layout</name>
+	</types>
+	<types>
+		<members>Opportunity.EditionRequiredGanho</members>
+		<members>OpportunityLineItem.ValidationProductOpp</members>
+		<name>ValidationRule</name>
 	</types>
 	<version>62.0</version>
 </Package>
