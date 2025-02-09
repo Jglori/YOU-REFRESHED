@@ -14,6 +14,7 @@
         <members>OpportunityHelper</members>
          <members>OpportunityDATest</members>
         <members>OpportunityHelperTest</members>
+        <members>ChecklistHelperTest</members>
         <members>OpportunityTriggerHandlerTest</members>
         <members>OpportunityTriggerHandler</members>
         <members>OpportunityTriggerHandlerTest</members>

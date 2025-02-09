@@ -1,6 +1,7 @@
-ChecklistDATest
-OpportunityHelperTest
-OpportunityTriggerHandlerTest
-ProdutoSelectorTest
-OpportunityDATest
+ChecklistDATest,
+OpportunityHelperTest,
+OpportunityTriggerHandlerTest,
+ProdutoSelectorTest,
+OpportunityDATest,
+ChecklistHelperTest,
 OpportunityTriggerHandlerTest
