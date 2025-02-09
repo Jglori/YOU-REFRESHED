@@ -51,7 +51,7 @@ jobs:
       - name: Implantar e rodar testes específicos
         run: |
           TEST_CLASSES="ChecklistDATest OpportunityHelperTest OpportunityTriggerHandlerTest ProdutoSelectorTest OpportunityDATest ChecklistHelperTest OpportunityTriggerHandlerTest"
-          sf project deploy start --manifest deploy/package/package.xml --test-level RunSpecifiedTests --tests "$TEST_CLASSES" --target-org qa > deploy/deploy_output.log || true
+          sf project deploy start --manifest deploy/package/package.xml --test-level RunSpecifiedTests --tests "$TEST_CLASSES" --target-org qa --resultformat human > deploy/deploy_output.log || true
           cat deploy/deploy_output.log
 
       - name: Verificar falhas de componentes no log de deploy
