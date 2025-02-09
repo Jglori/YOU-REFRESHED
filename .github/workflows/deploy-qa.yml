@@ -56,7 +56,8 @@ jobs:
       - name: Implantar e rodar testes específicos
         run: |
           TEST_CLASSES=$(cat specified-tests.txt | tr '\n' ' ') 
-          sf project deploy start --manifest deploy/package/package.xml --test-level RunSpecifiedTests --tests $TEST_CLASSES --target-org qa --coverage --resultformat human > deploy/deploy_output.log || true
+           sf project deploy start --manifest deploy/package/package.xml --test-level RunSpecifiedTests --tests "$TEST_CLASSES" --target-org qa > deploy/deploy_output.log || true
+          cat deploy/deploy_output.log
 
 
       - name: Salvar package.xml
