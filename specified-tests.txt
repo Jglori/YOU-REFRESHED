@@ -1,0 +1,4 @@
+ChecklistDATest
+OpportunityHelperTest
+OpportunityTriggerHandlerTest
+ProdutoSelectorTest
