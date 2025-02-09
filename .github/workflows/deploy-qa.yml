@@ -6,6 +6,7 @@ on:
       - qa
     paths:
       - 'force-app/**'
+
 jobs:
   merge_deploy:
     if: github.event.pull_request.merged == true
@@ -41,18 +42,21 @@ jobs:
         id: set-artifact-name
         run: |
           ORG_NAME="QA"
-          export TZ="America/Sao_Paulo"  # Define o fuso horário para o Brasil (UTC-3)
-          TIMESTAMP=$(date +'%d-%m-%Y--%H-%M-%S')  # Gera o timestamp no fuso horário do Brasil
+          export TZ="America/Sao_Paulo"
+          TIMESTAMP=$(date +'%d-%m-%Y--%H-%M-%S')
           echo "PACKAGE_XML_ARTIFACT=${ORG_NAME}_Package_xml_${TIMESTAMP}" >> $GITHUB_OUTPUT
           echo "DEPLOY_LOG_ARTIFACT=${ORG_NAME}_Deploy_log_${TIMESTAMP}" >> $GITHUB_OUTPUT
 
       - name: Listar conteúdo do diretório deploy
         run: ls -R deploy
+
       - name: Exibir conteúdo do package.xml
         run: cat deploy/package/package.xml
-      - name: Implantar usando o pacote delta gerado
+
+      - name: Implantar e rodar testes específicos
         run: |
-          sf project deploy start --manifest deploy/package/package.xml --test-level NoTestRun --target-org qa > deploy/deploy_output.log || true
+          TEST_CLASSES=$(cat specified-tests.txt | tr '\n' ',')
+          sf project deploy start --manifest deploy/package/package.xml --test-level RunSpecifiedTests --tests "$TEST_CLASSES" --target-org qa > deploy/deploy_output.log || true
 
       - name: Salvar package.xml
         uses: actions/upload-artifact@v4
@@ -65,4 +69,3 @@ jobs:
         with:
           name: ${{ steps.set-artifact-name.outputs.DEPLOY_LOG_ARTIFACT }}
           path: deploy/deploy_output.log
-
