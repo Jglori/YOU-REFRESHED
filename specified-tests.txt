@@ -2,3 +2,4 @@ ChecklistDATest
 OpportunityHelperTest
 OpportunityTriggerHandlerTest
 ProdutoSelectorTest
+OpportunityDATest
