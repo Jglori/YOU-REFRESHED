@@ -3,3 +3,4 @@ OpportunityHelperTest
 OpportunityTriggerHandlerTest
 ProdutoSelectorTest
 OpportunityDATest
+OpportunityTriggerHandlerTest
