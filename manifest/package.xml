@@ -16,8 +16,8 @@
         <members>OpportunityHelperTest</members>
         <members>OpportunityTriggerHandler</members>
         <members>OpportunityTriggerHandlerTest</members>
-        <members>ProdutoSelector</members>
-       <members>ProdutoSelectorTest</members>
+        <members>ChecklistDA</members>
+       <members>ChecklistDATest</members>
         <name>ApexClass</name>
     </types>
     <version>62.0</version>
