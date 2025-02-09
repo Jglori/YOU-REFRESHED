@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ValorMulta__c</fullName>
+    <formula>IF(
+	TEXT(StatusDo1Pagamento__c) = &apos;Não Pago&apos;,
+	(Amount * 1.02) - Amount , 0
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <inlineHelpText>Acresenta 2% no valor do produto</inlineHelpText>
+    <label>Valor da Multa</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <type>Currency</type>
+</CustomField>

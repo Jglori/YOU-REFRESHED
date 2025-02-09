@@ -1,0 +1,17 @@
+<html>
+<head>
+	<title></title>
+</head>
+<body style="height: auto; min-height: auto;"><strong>Notificação de Vitória da Oportunidade: Parabéns! A oportunidade foi ganha.<br />
+<br />
+Oportunidade: {{{Opportunity.Name}}}<br />
+<br />
+Produto: {{{Product2.Name}}}<br />
+<br />
+Observação {{{Opportunity.Observacao__c}}}<br />
+<br />
+Parabéns, a oportunidade foi vencida com sucesso.<br />
+<br />
+Atenciosamente,<br />
+Equipe de Vendas</strong></body>
+</html>

@@ -1,0 +1,18 @@
+<template>
+    <lightning-modal-header label={label}></lightning-modal-header>
+    <lightning-modal-body> 
+        <template if:true={image}>
+            <img src={image.src} alt={image.alt} style='width: 100%; height: auto;' />
+        </template>
+        {content} 
+    </lightning-modal-body>
+    <lightning-modal-footer>
+        <template if:true={isOneButton}>
+            <lightning-button variant="brand" label="Fechar" onclick={handleClose}></lightning-button>
+        </template>
+        <template if:false={isOneButton}>
+            <lightning-button variant="brand" label="Confirmar" onclick={handleConfirm}></lightning-button>
+            <lightning-button variant="neutral" label="Cancelar" onclick={handleClose}></lightning-button>
+        </template>
+    </lightning-modal-footer>
+</template>

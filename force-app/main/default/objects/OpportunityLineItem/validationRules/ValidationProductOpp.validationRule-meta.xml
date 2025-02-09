@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ValidationProductOpp</fullName>
+    <active>true</active>
+    <errorConditionFormula>OR(
+ISCHANGED(Quantity),
+ISCHANGED(PricebookEntryId),
+ISCHANGED(Discount),
+ISCHANGED(ListPrice),
+ISCHANGED(UnitPrice),
+ISCHANGED(TotalPrice)
+)</errorConditionFormula>
+    <errorMessage>Produtos só podem ser alterados ou excluídos por meio de uma Cotação.	True</errorMessage>
+</ValidationRule>

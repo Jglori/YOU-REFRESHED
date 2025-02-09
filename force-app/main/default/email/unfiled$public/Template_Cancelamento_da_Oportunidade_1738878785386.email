@@ -1,0 +1,16 @@
+<html>
+<head>
+	<title></title>
+</head>
+<body style="height: auto; min-height: auto;"><strong>Oportunidade Cancelada<br />
+<br />
+Oportunidade: {{{Opportunity.Name}}}<br />
+Produto: {{{Product2.Name}}}<br />
+Motivo do Cancelamento: {{{Opportunity.MotivoCancelamento__c}}}<br />
+Observação: {{{Opportunity.Observacao__c}}}<br />
+<br />
+Infelizmente, a oportunidade foi cancelada devido ao motivo acima.<br />
+<br />
+Atenciosamente,<br />
+Equipe de Vendas</strong></body>
+</html>

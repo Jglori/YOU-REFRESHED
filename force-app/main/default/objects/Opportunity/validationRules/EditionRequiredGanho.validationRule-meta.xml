@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>EditionRequiredGanho</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+ISPICKVAL(PRIORVALUE(StageName), &quot;Ganho&quot;),
+NOT(ISPICKVAL(StageName, &quot;Ganho&quot;))
+)</errorConditionFormula>
+    <errorMessage>Não é possível alterar a fase da oportunidade após o status for &apos;Ganho&apos;</errorMessage>
+</ValidationRule>

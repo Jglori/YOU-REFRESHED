@@ -66,6 +66,10 @@
                 <behavior>Readonly</behavior>
                 <field>CorVendida__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>DataDeReserva__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
